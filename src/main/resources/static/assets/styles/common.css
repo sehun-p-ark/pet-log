@@ -17,7 +17,6 @@ body {
   font-weight: 400;
   line-height: 1;
   margin: initial;
-  padding: 1.5rem;
   user-select: none; }
   body > * {
     flex-grow: 0;
@@ -54,5 +53,92 @@ ol, ul {
   list-style-type: none;
   margin-block: 0;
   padding-inline: 0; }
+
+#topNavigator {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-start;
+  background-color: #89CC96;
+  overflow: hidden;
+  width: 100%;
+  height: 5rem;
+  padding: 0 2rem; }
+  #topNavigator > * {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  #topNavigator > .-flex-stretch {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  #topNavigator > .nav-wrapper {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: flex-start;
+    width: 100%; }
+    #topNavigator > .nav-wrapper > * {
+      flex-grow: 0;
+      flex-shrink: 0; }
+    #topNavigator > .nav-wrapper > .-flex-stretch {
+      flex-grow: 1;
+      flex-shrink: 1; }
+    #topNavigator > .nav-wrapper > .logo {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: flex-start;
+      color: #FFFFFF;
+      font-size: 1.5rem;
+      font-weight: 600; }
+      #topNavigator > .nav-wrapper > .logo > * {
+        flex-grow: 0;
+        flex-shrink: 0; }
+      #topNavigator > .nav-wrapper > .logo > .-flex-stretch {
+        flex-grow: 1;
+        flex-shrink: 1; }
+    #topNavigator > .nav-wrapper > .category {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: flex-start; }
+      #topNavigator > .nav-wrapper > .category > * {
+        flex-grow: 0;
+        flex-shrink: 0; }
+      #topNavigator > .nav-wrapper > .category > .-flex-stretch {
+        flex-grow: 1;
+        flex-shrink: 1; }
+      #topNavigator > .nav-wrapper > .category > .item {
+        font-size: 1.3rem;
+        color: #FFFFFF;
+        font-weight: 600;
+        padding: 0.5rem; }
+        #topNavigator > .nav-wrapper > .category > .item:hover, #topNavigator > .nav-wrapper > .category > .item:active {
+          color: #FEDC98;
+          cursor: pointer; }
+    #topNavigator > .nav-wrapper > .user {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: flex-start;
+      margin-left: auto; }
+      #topNavigator > .nav-wrapper > .user > * {
+        flex-grow: 0;
+        flex-shrink: 0; }
+      #topNavigator > .nav-wrapper > .user > .-flex-stretch {
+        flex-grow: 1;
+        flex-shrink: 1; }
+      #topNavigator > .nav-wrapper > .user > .item {
+        font-size: 1.3rem;
+        color: #FFFFFF;
+        font-weight: 600;
+        padding: 0.5rem; }
+        #topNavigator > .nav-wrapper > .user > .item:hover, #topNavigator > .nav-wrapper > .user > .item:active {
+          color: #FEDC98;
+          cursor: pointer; }
 
 /*# sourceMappingURL=common.css.map */

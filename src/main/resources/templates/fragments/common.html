@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<nav id="topNavigator" th:fragment="topNavigator" th:with="isSigned = ${session.sessionUser != null}">
+    <div class="nav-wrapper">
+        <div class="logo">Pet-Log</div>
+        <div class="category">
+            <div class="item">지도</div>
+            <div class="item">피드</div>
+            <div class="item">쇼핑</div>
+        </div>
+        <div class="user">
+            <div class="item">채팅</div>
+            <div class="item">친구</div>
+            <div class="item">마이페이지</div>
+            <div class="item">로그아웃</div>
+            <div class="item">로그인</div>
+            <div class="item">고객센터</div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

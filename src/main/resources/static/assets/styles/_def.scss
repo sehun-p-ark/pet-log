@@ -1,13 +1,15 @@
 // 1. 메인 색상
 $global-background-color: #F0F8F3; // 매안 배경 색상
 $global-button-color: #FDD072;    // 버튼
-$global-content-background-color: #F9F9F9;  // 카드 배경, 배경색
+$global-content-background-color: #F9F9F9;  // 카드 배경, 배경
 $global-follow-background-color: #FEDC98; // 팔로우 버튼
+$global-nav-background-color: #89CC96; // 네비게이션 배경
 
 // 2. 텍스트
 $global-main-text-color: #000000; // 메인 텍스트 검정
 $global-map-search-text-color: #FFFFFF; // 검색 텍스트
 $global-section-text-color: #5F6466; // 섹션 카테고리 기본 텍스트
+$global-nav-text-color: #FFFFFF; // 네비게이션 기본 텍스트 색상
 
 // 3. 섹션 색상
 $global-map-section-background-color: #F9F9F9; // 섹션 카테고리 기본 배경
