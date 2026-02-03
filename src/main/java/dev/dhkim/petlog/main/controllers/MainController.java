@@ -1,4 +1,4 @@
-package dev.dhkim.petlog.controllers;
+package dev.dhkim.petlog.main.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

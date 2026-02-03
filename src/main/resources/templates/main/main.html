@@ -7,8 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=fcba3e006a75a5ca358a3e500b551116&libraries=services&autoload=false"></script>
 
-    <script src="/main/assets/scripts/main.js"></script>
+    <script defer src="/main/assets/scripts/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
     <script src="/main/assets/scripts/map.js"></script>
+
     <script src="/assets/scripts/fragment.js"></script>
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/main/assets/styles/main.css">
@@ -25,14 +27,38 @@
                     <img src="/main/assets/images/search.png" alt="" class="search-icon">
                 </button>
             </div>
+            <!-- 카테고리 필터 버튼들 -->
+            <div class="category-filter" id="categoryFilter">
+                <button class="category-btn" data-category="cafe">
+                    <img src="/main/assets/images/cafe-white.png" alt="">
+                    <span>카페</span>
+                </button>
+                <button class="category-btn" data-category="hospital">
+                    <img src="/main/assets/images/hospital-white.png" alt="">
+                    <span>병원</span>
+                </button>
+                <button class="category-btn" data-category="salon">
+                    <img src="/main/assets/images/hair.png" alt="">
+                    <span>미용실</span>
+                </button>
+                <button class="category-btn" data-category="park">
+                    <img src="/main/assets/images/park.png" alt="">
+                    <span>공원</span>
+                </button>
+                <button class="category-btn" data-category="camping">
+                    <img src="/main/assets/images/camp.png" alt="">
+                    <span>캠핑장</span>
+                </button>
+            </div>
+
         </div>
         <div class="tab-list-container">
             <div class="tabs">
-                <button id="friendTab" class="tab friend-tab active">친구</button>
+                <button id="friendTab" class="tab friend-tab">친구</button>
                 <button id="storeTab" class="tab store-tab">장소</button>
             </div>
-            <div class="list">
-                <ul class="friend list">
+            <div class="list" id="list">
+                <ul class="friend-list">
                     <li class="item">
                         <div class="item-wrapper">
                             <div class="image"></div>
@@ -111,55 +137,62 @@
                                 <span class="caption">골든 리트리버</span>
                             </div>
                             <button class="button follow">팔로우</button>
-                        </div>
-                    </li>
-                    <li class="item">
-                        <div class="item-wrapper">
-                            <div class="image"></div>
-                            <div class="text-wrapper">
-                                <span class="nickname">몽몽</span>
-                                <span class="caption">푸들</span>
-                            </div>
-                            <button class="button following">팔로잉</button>
-                        </div>
-                    </li>
-                    <li class="item">
-                        <div class="item-wrapper">
-                            <div class="image"></div>
-                            <div class="text-wrapper">
-                                <span class="nickname">몽몽</span>
-                                <span class="caption">푸들</span>
-                            </div>
-                            <button class="button following">팔로잉</button>
                         </div>
                     </li>
                 </ul>
-              <!--  <ul class="store-list hidden">
+                <ul class="store-list">
                     <li class="item">
-                        <div class="text-wrapper">
-                            <div class="image"></div>
+                        <div class="item-wrapper">
                             <div class="text-wrapper">
-                                <span class="nickname">카페 스타</span>
-                                <span class="caption">서울 강남</span>
+                                <div class="nickname">가게 이름</div>
+                                <div class="address">주소: 서울특별시 ...</div>
+                                <div class="phone">전화: 02-123-4567</div>
                             </div>
-                            <button class="button">팔로우</button>
+                        </div>
+
+                    </li>
+                    <li class="item">
+                        <div class="item-wrapper">
+                            <div class="text-wrapper">
+                                <div class="nickname">가게 이름</div>
+                                <div class="address">주소: 부산광역시 ...</div>
+                                <div class="phone">전화: 02-123-4567</div>
+                            </div>
                         </div>
                     </li>
                     <li class="item">
                         <div class="item-wrapper">
-                            <div class="image"></div>
                             <div class="text-wrapper">
-                                <span class="nickname">도그파크</span>
-                                <span class="caption">서울 송파</span>
+                                <div class="nickname">가게 이름</div>
+                                <div class="address">주소: 강원도 ...</div>
+                                <div class="phone">전화: 02-123-4567</div>
                             </div>
-                            <button class="button following">팔로잉</button>
                         </div>
                     </li>
-                </ul>-->
+                </ul>
+            </div>
+            <div class="description" id="description">
+                <button type="button" class="close-btn" aria-label="닫기">
+                    <img src="/main/assets/images/close.png" alt="" class="close">
+                </button>
+                <div class="text-wrapper">
+                    <div class="image"></div>
+                    <span class="nickname">먀먀</span>
+                </div>
+                <div class="pet-card">
+                    <div class="tag">우리 집 반려동물</div>
+                    <div class="caption-wrapper">
+                        <div><strong>이름:</strong> <span>먀먀</span></div>
+                        <div><strong>타입:</strong> <span>개</span></div>
+                        <div><strong>종류:</strong> <span>골든 리트리버</span></div>
+                        <div><strong>나이:</strong> <span>7살 (19.10.05)</span></div>
+                        <div><strong>소개:</strong> <span>저는 뼈다귀가 좋아용!</span></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 </main>
 </body>
 </html>
+

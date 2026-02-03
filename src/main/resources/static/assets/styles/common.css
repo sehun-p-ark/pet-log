@@ -22,7 +22,7 @@ body > .-flex-stretch {
 body {
   min-height: 100%;
   background-color: #F0F8F3;
-  color: #000000;
+  color: #F0F8F3;
   cursor: default;
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   font-size: 0.95rem;
@@ -83,6 +83,7 @@ ol, ul {
 }
 #topNavigator {
   background-color: #89CC96;
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.15);
   font-family: "Chewy", system-ui;
   overflow: hidden;
   width: 100%;
@@ -123,9 +124,18 @@ ol, ul {
   flex-shrink: 1;
 }
 #topNavigator > .nav-wrapper > .logo {
-  color: #FFFFFF;
-  font-size: 2rem;
+  /*color: $global-nav-text-color;*/
+  font-size: 2.5rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+#topNavigator > .nav-wrapper > .logo:hover {
+  transform: translateY(-0.1rem);
+  opacity: 0.9;
+}
+#topNavigator > .nav-wrapper > .logo:active {
+  transform: scale(0.96);
 }
 #topNavigator > .nav-wrapper > .category {
   align-items: center;
@@ -145,27 +155,16 @@ ol, ul {
 #topNavigator > .nav-wrapper > .category > .item {
   font-size: 1.3rem;
   color: #FFFFFF;
+  cursor: pointer;
   font-weight: 600;
   padding: 0.5rem;
   letter-spacing: -0.02rem;
   position: relative;
-}
-#topNavigator > .nav-wrapper > .category > .item:hover {
-  color: #FEDC98;
-  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 #topNavigator > .nav-wrapper > .category > .item.is-active {
   color: #FEDC98;
-}
-#topNavigator > .nav-wrapper > .category > .item.is-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.4rem;
-  width: 100%;
-  height: 0.2rem;
-  background-color: #FEDC98;
-  border-radius: 0.1rem;
+  transform: translateY(-0.125rem);
 }
 #topNavigator > .nav-wrapper > .user {
   align-items: center;
@@ -188,26 +187,15 @@ ol, ul {
 #topNavigator > .nav-wrapper > .user > .item {
   font-size: 1.3rem;
   color: #FFFFFF;
+  cursor: pointer;
   font-weight: 600;
   padding: 0.5rem;
   position: relative;
-}
-#topNavigator > .nav-wrapper > .user > .item:hover {
-  color: #FEDC98;
-  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 #topNavigator > .nav-wrapper > .user > .item.is-active {
   color: #FEDC98;
-}
-#topNavigator > .nav-wrapper > .user > .item.is-active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -0.4rem;
-  width: 100%;
-  height: 0.2rem;
-  background-color: #FEDC98;
-  border-radius: 0.1rem;
+  transform: translateY(-0.125rem);
 }
 
 /*# sourceMappingURL=common.css.map */

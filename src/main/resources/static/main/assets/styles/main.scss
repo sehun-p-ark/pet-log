@@ -1,5 +1,7 @@
 @import "../../../assets/styles/def";
 
+
+
 #main {
   padding: 2.5rem 4rem;
 
@@ -8,17 +10,26 @@
     height: calc(100vh - 11rem);
     @include flex(row, flex-start, center, 1rem);
 
-    > .map {
+    .map {
       position: relative;
-      border: $global-map-section-action-background-color solid 0.0625rem;
-      border-radius: 0.3rem;
+      border: $global-border-green-color solid 0.0625rem;
+      border-radius: 0.5rem;
       width: 70%;
       height: 100%;
+      background-color: #fff;
+
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+
+      &:hover {
+        box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.18);
+        transform: translateY(-0.2rem);
+      }
 
       > .search-box {
         position: absolute;
         top: 2rem; // 지도 위쪽에서 1rem 아래
-        left: 50%; // 가로 중앙
+        left: 30%; // 가로 중앙
         transform: translateX(-50%);
         display: flex;
         align-items: center;
@@ -29,34 +40,86 @@
         z-index: 999;
 
         > .search-input {
+          color: $global-black-text-color;
           width: 40rem;
           height: 2.5rem;
           padding: 0 0.8rem;
           font-size: 0.9rem;
 
         }
-        >.search-btn{
-        > .search-icon {
-          position: absolute;
-          right: 0.7rem; // input 오른쪽 끝에 고정
-          top: 50%; // 세로 중앙
-          transform: translateY(-50%);
-          width: 1.6rem; // 아이콘 크기
-          height: 1.6rem;
-          cursor: pointer;
+
+        > .search-btn {
+          > .search-icon {
+            position: absolute;
+            right: 0.7rem; // input 오른쪽 끝에 고정
+            top: 50%; // 세로 중앙
+            transform: translateY(-50%);
+            width: 1.6rem; // 아이콘 크기
+            height: 1.6rem;
+            cursor: pointer;
+          }
         }
+      }
+      .category-filter {
+        position: absolute;
+        top: 2.5rem;
+        left: 72%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.3rem;
+        z-index: 10;
+      }
+
+      /* 버튼 기본 */
+      .category-btn {
+        @include flex(row,center,center,0.4rem);
+        padding: 0.4rem 0.8rem;
+        border-radius: 2rem;
+        border: none;
+        background: #ffffff;
+        box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        color:#000000;
+        font-size: 0.95rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+
+        &:hover{
+          color: #2b7fff;
         }
+        .category-btn.active {
+          background: #ff6b6b;
+          color: #fff;
+        }
+
+      }
+
+      .category-btn img {
+        width: 1.3rem;
+        height: 1.3rem;
+      }
+
+      /* 활성화 상태 */
+      .category-btn.active {
+        background: #ff7a00;
+        color: #fff;
+      }
+
+      .category-btn.active img {
+        filter: brightness(0) invert(1);
       }
     }
 
     /* 오른쪽 탭+리스트 영역 */
     .tab-list-container {
-      width: 20%;
-      height: 100%;
       display: flex;
       flex-direction: column;
+      height: 100%; // 부모 기준 전체 높이
+      width: 25rem;
+      border-radius: 1rem;
+      box-shadow: 0 0.75rem 2rem #0000001f;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
 
-      /* 탭 스타일 */
       .tabs {
         display: flex;
         height: 6%;
@@ -73,37 +136,53 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        background-color: $global-map-section-background-color;
-        border: 0.0625rem solid $global-map-section-action-background-color;
-        color: $global-section-text-color;
+        background-color: $global-background-color;
+        border: 0.0625rem solid $global-border-green-color;
+        color: $global-gray-text-color;
       }
 
-      .tab.friend-tab {
+      .tab.friend-tab{
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
         font-size: 1.15rem;
+        font-weight: 500;
       }
 
       .tab.store-tab {
         border-top-right-radius: 1rem;
         border-top-left-radius: 1rem;
         font-size: 1.15rem;
+        font-weight: 500;
       }
 
       .tab.active {
-        background-color: $global-map-section-action-background-color;
-        color: $global-map-search-text-color;
+        background-color: $global-green-background-color;
+        color: $global-white-text-color;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 20%;
+          bottom: 0;
+          width: 60%;
+          height: 0.25rem;
+          background-color: $global-white-text-color; // 🔹 기존 컬러 활용
+          border-radius: 1rem;
+        }
       }
 
 
       > .list {
-        background-color: #FFFFFF;
-        border: $global-map-section-action-background-color solid 0.0625rem;
+        background-color: #f9fafb;
+        padding: 0.75rem 0;
+        border: $global-border-green-color solid 0.0625rem;
         border-radius: 0.3rem;
         height: 45rem;
-        overflow: scroll;
+        flex: 1; // 남은 공간 다 차지
+        overflow-y: scroll; // 스크롤 가능
 
-        .friend.list {
+        .friend-list,
+        .store-list{
           list-style: none;
           padding: 0;
           margin: 0;
@@ -111,71 +190,293 @@
 
           > .item {
             padding: 0.5rem 1.5rem;
+            color: $global-black-text-color;
           }
+
+        }
+        // .hidden 클래스 수정
+        .friend-list.hidden,
+        .store-list.hidden {
+          display: none !important;
         }
 
+        .friend-list {
         .item-wrapper {
           @include flex(row, center, space-between);
           padding: 0.625rem;
           border-bottom: 0.0625rem solid #eee;
-        }
-
-        .image {
-          width: 2.5rem;
-          height: 2.5rem;
-          border-radius: 50%;
-          background-color: #ccc;
-          margin-right: 0.625rem;
+          background-color: #ffffff;
+          border-radius: 0.75rem;
+          box-shadow: 0 0.25rem 0.75rem #00000014;
           cursor: pointer;
-        }
-
-        .text-wrapper {
-          @include flex(column, flex-start, center, 0.3rem);
-          flex: 1;
-        }
-
-        .nickname {
-          font-weight: bold;
-          font-size: 1rem;
-          cursor: pointer;
-        }
-
-        .caption {
-          font-size: 0.75rem;
-          color: #777;
-        }
-
-        .button {
-          padding: 0.5rem 0.7rem;
-          border: none;
-          border-radius: 0.3125rem;
-          background-color: #e9e9e9;
-          cursor: pointer;
-          font-size: 0.875rem;
-
-
-        }
-
-        .button.follow {
-          padding: 0.5rem 0.7rem;
-          border: none;
-          border-radius: 0.3125rem;
-          background-color: $global-follow-background-color;
-          cursor: pointer;
-          font-size: 0.875rem;
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
 
           &:hover {
-            background-color: $global-button-hover-color;
+            transform: translateY(-0.15rem);
+            box-shadow: 0 0.5rem 1.2rem #0000001f;
+          }
+
+          .image {
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 0.625rem;
+            cursor: pointer;
+          }
+
+          .text-wrapper {
+            @include flex(column, flex-start, center, 0.3rem);
+            flex: 1;
+          }
+
+          .nickname {
+            font-weight: bold;
+            font-size: 1rem;
+            position: relative;
+
+            &:hover {
+              cursor: pointer;
+            }
+
+            &:active {
+              border-bottom: $global-border-color solid 0.0625rem;
+            }
+
+            &.is-selected {
+              font-size: 1.3rem;
+              cursor: pointer;
+
+              &::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -0.1rem; // 글자 아래 간격
+                width: 100%;
+                height: 0.05rem; // 밑줄 두께
+                background-color: $global-yellow-text-color;
+                border-radius: 0.1rem;
+              }
+            }
+          }
+
+          .caption {
+            font-size: 0.75rem;
+            color: #777;
+          }
+
+          .button {
+            padding: 0.5rem 0.7rem;
+            border: none;
+            border-radius: 0.3125rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            width: 6rem;
+          }
+        }
+        }
+
+
+
+
+        /* 장소 리스트 전용 */
+        .store-list {
+          .item-wrapper {
+            @include flex(column, flex-start, flex-start);
+            padding: 0.75rem;
+            border-bottom: 0.0625rem solid #eee;
+            background-color: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.25rem 0.75rem #00000014;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+
+            &:hover {
+              transform: translateY(-0.15rem);
+              box-shadow: 0 0.5rem 1.2rem #0000001f;
+            }
+
+            .text-wrapper {
+              @include flex(column, flex-start, flex-start, 0.25rem);
+              width: 100%;
+            }
+
+            .nickname {
+              font-weight: bold;
+              font-size: 1rem;
+              line-height: 1.3rem;
+            }
+
+            .address,
+            .phone {
+              font-size: 0.875rem;
+              color: #666;
+              line-height: 1.2rem;
+            }
+          }
+        }
+        /* 기본 상태 (팔로우) */
+        .button.follow {
+          background-color: $global-color-follow;
+          color: #FFFFFF;
+          font-weight: 500;
+
+          &:hover {
+            background-color: $global-color-hover;
           }
 
           &:active {
-            background-color: $global-follow-button-active-color;
+            background-color: $global-color-action;
           }
         }
 
+        /* 팔로잉 상태 */
+        .button.following {
+          background-color: #e9e9e9;
+          color: #333;
+
+          &:hover {
+            background-color: #e0e0e0;
+          }
+
+          &:active {
+            background-color: #d5d5d5;
+          }
+        }
+
+
+        &.hidden { display: none;
+        }
+
+      }
+
+      > .description {
+        background-color: $global-description-color;
+        border: $global-border-color solid 0.0625rem;
+        @include flex(column, center, center, 1.5rem);
+        padding: 1rem;
+        height: 20rem;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+
+
+        >.close-btn{
+          top: 0.5rem;
+          left: 21.5rem;
+          position: relative;
+          cursor: pointer;
+          transition: transform 0.15s ease, opacity 0.15s ease;
+
+          >.close{
+            width: 1rem;
+            height: 0.8rem;
+
+            &:hover {
+              opacity: 0.7;
+            }
+
+            &:active {
+              transform: scale(0.9);
+              opacity: 0.5;
+            }
+          }
+        }
+
+        &[data-visible] {
+          display: block;
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        > .text-wrapper {
+          @include flex(column, center, center, 0.3rem);
+
+          > .image {
+            background-color: #565656;
+            border-radius: 5rem;
+            width: 5rem;
+            height: 5rem;
+          }
+
+          > .nickname {
+            color: $global-black-text-color;
+          }
+        }
+
+        .pet-card {
+          border: 0.05rem solid #ddd;
+          border-bottom-left-radius: 1rem;
+          border-top-right-radius: 1rem;
+          border-bottom-right-radius: 1rem;
+          background-color: $global-white-text-color;
+          position: relative; /*!* tag를 absolute로 위치시키기 위한 기준 *!*/
+          padding: 1rem;
+          top:2rem;
+
+        }
+
+        .tag {
+          position: absolute;
+          top: -2.4rem;
+          left: 0;
+          background-color: $global-green-background-color;
+          padding: 0.7rem 0.5rem;
+          border-top-left-radius: 0.5rem;
+          border-top-right-radius: 0.5rem;
+          font-weight: 800;
+          font-size: 0.9rem;
+        }
+
+        .caption-wrapper {
+          @include flex(column, flex-start, flex-start, 0.5rem);
+          background-color: $global-white-text-color;
+          color: $global-black-text-color;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  #main > .content-wrapper {
+
+    .map {
+      width: 100%; // 지도 전체 폭
+    }
+
+    .tab-list-container {
+      display: none; // 오른쪽 리스트 숨김
+    }
+
+    // 검색박스 크기 조정
+    .map > .search-box {
+      left: 50%; // 지도 중앙에 고정
+      transform: translateX(-50%);
+      padding: 0.25rem 1rem;
+
+      > .search-input {
+        width: 20rem; // 화면 줄어들면 input 너비 축소
       }
     }
 
-
+      /*카테고리 필터를 검색창 아래로 */
+      .map > .category-filter {
+        position: absolute;
+        top: 4.5rem; // 검색창 아래 위치 (search-box 높이에 맞게 조절)
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: row;
+      /*  flex-wrap: wrap;*/
+        justify-content: center;
+        gap: 0.5rem;
+        z-index: 10;
+        padding: 0.5rem 0.75rem;
+        border-radius: 1rem;
+      }
+    }
   }
-}
+
+

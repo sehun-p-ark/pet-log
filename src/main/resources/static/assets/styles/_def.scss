@@ -1,31 +1,28 @@
-// 1. 메인 색상
+// 1. 메인 배경 색상
 $global-background-color: #F0F8F3; // 매안 배경 색상
-$global-button-color: #FDD072;    // 버튼
-$global-content-background-color: #F9F9F9;  // 카드 배경, 배경
-$global-follow-background-color: #FEDC98; // 팔로우 버튼
-$global-nav-background-color: #89CC96; // 네비게이션 배경
+$global-gray-background-color: #F9F9F9;  // 카드 배경, 배경
+$global-green-background-color: #89CC96; // 네비게이션 배경
+$global-description-color:#DBF0DF;
 
 // 2. 텍스트
-$global-main-text-color: #000000; // 메인 텍스트 검정
-$global-map-search-text-color: #FFFFFF; // 검색 텍스트
-$global-section-text-color: #5F6466; // 섹션 카테고리 기본 텍스트
-$global-nav-text-color: #FFFFFF; // 네비게이션 기본 텍스트 색상
+$global-black-text-color: #000000; // 메인 텍스트 검정
+$global-white-text-color: #FFFFFF; // 검색 텍스트
+$global-gray-text-color: #565656; // 섹션 카테고리 기본 텍스트
+$global-yellow-text-color: #FEDC98; // 네비게이션 호버 텍스트
 
-// 3. 섹션 색상
-$global-map-section-background-color: #F9F9F9; // 섹션 카테고리 기본 배경
+// 3. 버튼
+$global-color-concept: #FDD072;
+$global-color-follow: #FEDC98; // 팔로우 버튼
+$global-color-hover: #FFD787; // 팔로우 호버 버튼
+$global-color-action: #FFCE6C; // 팔로우 호버 버튼
+$global-color-highlight: #2b7fff;
+$global-color-invalid: #ff6467;
+$global-color-warning: #ff8904;
+$global-color-disabled: #E7E7E7; // 비활성화
 
-// 4. 버튼 상태별 색상
-$global-button-hover-color: #FDC756;    // 호버
-$global-button-active-color: #FFC751;    // 액티브
-$global-follow-button-hover-color: #FFD787; // 팔로우 버튼 호버
-$global-follow-button-active-color: #FFCE6C; // 팔로우 버튼 호버
-
-// 5. 텍스트 상태별 색상
-$global-nav-action-color: #FEDC98; // 호버 및 액티브
-
-// 6. 섹션 상태별 색상
-$global-map-section-action-background-color: #89CC96; // 섹션 카테고리 액션 시 배경
-$global-map-section-text-color: #FFFFFF; // 섹션 카테고리 액션 시 텍스트
+// 4. border
+$global-border-color: #e7e5e4;
+$global-border-green-color: #CAE2CF;
 
 @mixin flex($flex-direction, $align-items, $justify-content, $gap: 0) {
   align-items: $align-items;
