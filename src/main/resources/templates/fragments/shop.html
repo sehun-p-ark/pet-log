@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<div id="category" class="category" th:fragment="category">
+    <div class="menu">
+        <div class="main">
+            <div class="list">
+                <label class="item" data-target="all">
+                    <input type="radio" name="category" value="전체" checked> 전체
+                </label>
+                <div class="menu-item-wrapper">
+                    <label class="item" data-target="dog">
+                        <input type="radio" name="category" value="강아지"> 강아지
+                    </label>
+                    <div class="submenu dog">
+                        <div class="list">
+                            <label class="item">
+                                <input type="radio" name="dog-sub" value="전체"> 전체
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="dog-sub" value="BEST"> BEST
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="dog-sub" value="사료"> 사료
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="dog-sub" value="간식"> 간식
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="dog-sub" value="용품"> 용품
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item-wrapper">
+                    <label class="item" data-target="cat">
+                        <input type="radio" name="category" value="고양이"> 고양이
+                    </label>
+                    <div class="submenu cat">
+                        <div class="list">
+                            <label class="item">
+                                <input type="radio" name="cat-sub" value="전체"> 전체
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="cat-sub" value="BEST"> BEST
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="cat-sub" value="사료"> 사료
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="cat-sub" value="간식"> 간식
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="cat-sub" value="용품"> 용품
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="menu-item-wrapper">
+                    <label class="item" data-target="etc">
+                        <input type="radio" name="category" value="기타"> 기타
+                    </label>
+                    <div class="submenu etc">
+                        <div class="list">
+                            <label class="item">
+                                <input type="radio" name="etc-sub" value="전체"> 전체
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="etc-sub" value="BEST"> BEST
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="etc-sub" value="사료"> 사료
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="etc-sub" value="간식"> 간식
+                            </label>
+                            <label class="item">
+                                <input type="radio" name="etc-sub" value="용품"> 용품
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="search">
+        <label class="search-wrapper">
+            <input class="search-box" placeholder="어떤 상품을 찾으시나요?" type="text">
+        </label>
+        <button class="submit" type="submit">
+            <img class="image" src="/shop/assets/images/shop-search.png" alt="돋보기">
+        </button>
+    </form>
+</div>
+</body>
+</html>

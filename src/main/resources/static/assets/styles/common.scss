@@ -6,7 +6,7 @@
 }
 
 body {
-  @include flex(column, stretch, flex-start, 1rem);
+  @include flex(column, stretch, flex-start);
   min-height: 100%;
   background-color: $global-background-color;
   color: $global-black-text-color;
@@ -104,6 +104,245 @@ ol, ul {
           color: $global-yellow-text-color;
           cursor: pointer;
         }
+      }
+    }
+  }
+}
+
+#category {
+  @include flex(row, flex-end, space-between, clamp(0.5rem, 2vw, 1rem));
+  width: 100%;
+
+  > .menu {
+    position: relative;
+    flex-shrink: 0;
+
+    > .main{
+      > .list {
+        @include flex(row, flex-start, flex-start, 1rem);
+
+        > .item {
+          font-size: 1.2rem;
+          color: $global-gray-right-text-color;
+          font-weight: 600;
+          position: relative;
+          padding: 0 1rem 0.5rem 1rem;
+          cursor: pointer;
+
+          &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 0.15rem;
+            background-color: #38A34C;
+            transition: width 0.2s ease;
+          }
+
+          > input[type="radio"]{
+            display: none;
+          }
+
+          &:hover{
+            font-weight: 700;
+            color: $global-gray-text-color;
+
+            &::after {
+              width: 100%;
+            }
+          }
+
+          &:has(input[type="radio"]:checked) {
+            font-weight: 700;
+            color: $global-gray-text-color;
+
+            &::after {
+              width: 100%;
+            }
+          }
+        }
+
+        > .menu-item-wrapper {
+          position: relative;
+
+          > .item {
+            font-size: 1.2rem;
+            color: $global-gray-right-text-color;
+            font-weight: 600;
+            position: relative;
+            padding: 0 1rem 0.5rem 1rem;
+            cursor: pointer;
+
+            &::after {
+              content: "";
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              width: 0;
+              height: 0.15rem;
+              background-color: #38A34C;
+              transition: width 0.2s ease;
+            }
+
+            > input[type="radio"]{
+              display: none;
+            }
+
+            &:hover{
+              font-weight: 700;
+              color: $global-gray-text-color;
+
+              &::after {
+                width: 100%;
+              }
+            }
+
+            &:has(input[type="radio"]:checked) {
+              font-weight: 700;
+              color: $global-gray-text-color;
+
+              &::after {
+                width: 100%;
+              }
+            }
+          }
+
+          > .submenu {
+            @include flex(row, center, center, 1rem);
+            display: none;
+            position: absolute;
+            z-index: 999;
+            width: 24rem;
+            height: 3rem;
+            background-color: $global-white-text-color;
+            top: calc(100% + 0.6rem);
+            left: 0;
+
+            > .list{
+              @include flex(row, center, center, 1rem);
+              padding: 1rem 3rem;
+              width: 100%;
+
+              > .item{
+                font-size: 1rem;
+                color: $global-gray-right-text-color;
+                font-weight: 600;
+                cursor: pointer;
+                margin: 0 1rem;
+                position: relative;
+
+                > input[type="radio"]{
+                  display: none;
+                }
+
+                &:hover,
+                &:has(input[type="radio"]:checked){
+                  color: $global-gray-text-color;
+                }
+
+                &::after{
+                  content: "";
+                  position: absolute;
+                  right: -1.5rem;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  width: 0.0625rem;
+                  height: 1rem;
+                  background-color: #00000020;
+                }
+
+                &:last-child::after{
+                  display: none;
+                }
+              }
+            }
+          }
+
+          &:has(.item[data-target="dog"]:hover),
+          &:has(.submenu.dog:hover){
+            .submenu.dog {
+              display: flex;
+            }
+
+            > .item[data-target="dog"]{
+              font-weight: 700;
+              color: $global-gray-text-color;
+
+              &::after{
+                width: 100%;
+              }
+            }
+          }
+
+          &:has(.item[data-target="cat"]:hover),
+          &:has(.submenu.cat:hover){
+            .submenu.cat {
+              display: flex;
+            }
+
+            > .item[data-target="cat"]{
+              font-weight: 700;
+              color: $global-gray-text-color;
+
+              &::after{
+                width: 100%;
+              }
+            }
+          }
+
+          &:has(.item[data-target="etc"]:hover),
+          &:has(.submenu.etc:hover){
+            .submenu.etc {
+              display: flex;
+            }
+
+            > .item[data-target="etc"]{
+              font-weight: 700;
+              color: $global-gray-text-color;
+
+              &::after{
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  > .search{
+    @include flex(row, stretch, flex-start);
+    border: 0.0625rem solid #5F646620;
+    border-radius: 999rem;
+    height: 2.7rem;
+    width: clamp(15rem, 35vw, 30rem);
+    overflow: hidden;
+
+    > .search-wrapper{
+      @include flex(row, flex-start, stretch);
+      flex: 1;
+      background-color: #ffffff;
+      height: 100%;
+      padding: 0 2rem;
+
+      > .search-box{
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
+    > .submit{
+      @include flex(row, center, center);
+      width: 3rem;
+      height: 100%;
+      background-color: #89CC96;
+      padding: 0 0.7rem;
+      cursor: pointer;
+
+      > .image{
+        width: 1.5rem;
       }
     }
   }

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/styles/common.css">
+    <link rel="stylesheet" href="/shop/assets/styles/cart.css">
+    <script defer src="/shop/assets/scripts/main.js"></script>
+    <script defer src="/shop/assets/scripts/cart.js"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
+<div id="cart">
+    <div class="list-wrapper">
+        <div class="cart-header">
+            <label class="select-label">
+                <input class="select-all" id="select-all" type="checkbox">
+                <span class="text">모두선택</span>
+            </label>
+            <div class="header-actions">
+                <button class="action all-delete">전체삭제</button>
+                <button class="action choice-delete">선택삭제</button>
+            </div>
+        </div>
+        <div class="cart-list">
+            <div class="cart-item">
+                <label class="checkbox-label">
+                    <input class="item-checkbox" type="checkbox">
+                </label>
+                <img class="image" src="/shop/assets/images/product.png" alt="">
+                <div class="item-info">
+                    <div class="product">
+                        <span class="brand">[레토]</span>
+                        <span class="product-name">강아지 장난감 노즈워크 음직이는 스낵볼</span>
+                    </div>
+                    <div class="ship">무료배송</div>
+                    <div class="option-wrapper">
+                        <span class="title">옵션:</span>
+                        <span class="option">노란색</span>
+                    </div>
+                    <div class="change-wrapper">
+                        <button class="option-change" type="button">옵션변경</button>
+                        <label class="quantity-control">
+                            <button class="quantity-btn minus" type="button">-</button>
+                            <input class="quantity-input" type="text" value="1">
+                            <button class="quantity-btn plus" type="button">+</button>
+                        </label>
+                        <div class="single-price">8,900원</div>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-item">
+                <label class="checkbox-label">
+                    <input class="item-checkbox" type="checkbox">
+                </label>
+                <img class="image" src="/shop/assets/images/product.png" alt="">
+                <div class="item-info">
+                    <div class="product">
+                        <span class="brand">[레토]</span>
+                        <span class="product-name">강아지 장난감 노즈워크 음직이는 스낵볼</span>
+                    </div>
+                    <div class="ship">무료배송</div>
+                    <div class="option-wrapper">
+                        <span class="title">옵션:</span>
+                        <span class="option">파란색</span>
+                    </div>
+                    <div class="change-wrapper">
+                        <button class="option-change" type="button">옵션변경</button>
+                        <label class="quantity-control">
+                            <button class="quantity-btn minus" type="button">-</button>
+                            <input class="quantity-input" type="text" value="1">
+                            <button class="quantity-btn plus" type="button">+</button>
+                        </label>
+                        <div class="single-price">8,900원</div>
+                    </div>
+                </div>
+            </div>
+            <div class="empty-cart" style="display: none;">
+                <p>장바구니가 비어있습니다.</p>
+            </div>
+        </div>
+    </div>
+    <div class="summary-wrapper">
+        <div class="summary">
+            <div class="price all">
+                <div class="title">총 상품금액</div>
+                <div class="result">0원</div>
+            </div>
+            <div class="price ship-price">
+                <div class="title">총 배송비</div>
+                <div class="result">+0원</div>
+            </div>
+            <div class="price discount-price">
+                <div class="title">총 할인금액</div>
+                <div class="result">0원</div>
+            </div>
+            <div class="price payment-price">
+                <div class="title">결제금액</div>
+                <div class="result">0원</div>
+            </div>
+        </div>
+        <button class="payment" type="button">상품을 선택해주세요.</button>
+    </div>
+</div>
+</body>
+</html>

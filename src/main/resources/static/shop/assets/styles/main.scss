@@ -4,54 +4,181 @@
   @include flex(column, center, flex-start, 1rem);
   width: 100%;
   height: 100%;
-  padding: 0.5rem 14rem;
+  padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
+  margin: 0 0 2rem 0;
 
-  > .category{
-    @include flex(row, center, space-between, 1rem);
+  > .banner-wrapper{
+    @include flex(row, center, center);
+    position: relative;
+    overflow: hidden;
     width: 100%;
 
-    > .list{
-      @include flex(row, flex-start, flex-start, 1rem);
+    > .button{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      background-color: rgba(darken($global-white-text-color, 1%), 60%);
+      padding: 1rem 0.3rem;
+      cursor: pointer;
 
-      > .item{
-        font-size: 1.2rem;
-        color: $global-black-text-color;
+      > .image{
+        width: 2rem;
       }
     }
 
-    > .search{
-      @include flex(row, stretch, flex-start);
-      border: 0.0625rem solid #5F646620;
-      border-radius: 0.25rem;
-      height: 2.7rem;
-      width: 30rem;
-      overflow: hidden;
+    > .previous{
+      left: 0;
+      border-bottom-right-radius: 1rem;
+      border-top-right-radius: 1rem;
+    }
 
+    > .next{
+      right: 0;
+      border-bottom-left-radius: 1rem;
+      border-top-left-radius: 1rem;
+    }
 
-      > .search-wrapper{
-        @include flex(row, flex-start, stretch);
-        flex: 1;
-        background-color: #ffffff;
-        height: 100%;
+    > .img-wrapper{
+      @include flex(row, center, flex-start);
+      width: 100%;
+      transition: transform 0.5s ease;
+      z-index: 1;
 
-        > .search-box{
-          border-radius: 0.25rem;
-          height: 100%;
+      > .item{
+        @include flex(row, center, center);
+        min-width: 100%;
+        object-fit: cover;
+        flex: 0 0 100%;
+        cursor: pointer;
+
+        > .picture{
           width: 100%;
-          box-sizing: border-box;
-          margin: 0 1rem;
+          display: flex;
+
+          > .image{
+            width: 100%;
+            height: 20rem;
+          }
         }
       }
+    }
 
-      > .submit{
-        @include flex(row, center, center);
-        width: 3rem;
-        height: 100%;
-        background-color: #89CC96;
-        padding: 0 0.7rem;
+    > .page{
+      @include flex(row, center, center, 0.3rem);
+      position: absolute;
+      min-width: 4rem;
+      background-color: rgba(darken($global-gray-background-color, 30%), 50%);
+      padding: 0.5rem 1rem;
+      border-radius: 999rem;
+      font-size: 0.9rem;
+      right: 1%;
+      bottom: 4%;
+      color: $global-white-text-color;
+      z-index: 10;
 
-        > .image{
-          width: 1.5rem;
+      > .total{
+        color: rgba(lighten($global-white-text-color, 10%), 50%);
+      }
+    }
+  }
+
+  > .new-product,
+  > .best-product {
+    @include flex(column, flex-start, flex-start, 1rem);
+    width: 100%;
+    margin-top: 1rem;
+
+    > .category-wrapper{
+      @include flex(row, center, center, 1rem);
+
+      > .caption {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: $global-gray-text-color;
+      }
+
+      > .category{
+        @include flex(row, center, center, 0.5rem);
+
+        > .item{
+          @include flex(row, center, center);
+          font-size: 0.9rem;
+          font-weight: 500;
+          background-color: $global-color-disabled;
+          padding: 0.3rem 0.8rem;
+          border-radius: 999rem;
+          cursor: pointer;
+
+          > input[type="radio"]{
+            display: none;
+          }
+
+          &:hover{
+            background-color: darken($global-color-follow, 10%);
+            color: $global-white-text-color;
+          }
+
+          &:has(input[type="radio"]:checked){
+            background-color: darken($global-color-concept, 15%);
+            color: $global-white-text-color;
+          }
+        }
+      }
+    }
+
+    > .product {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 0.5rem;
+      width: 100%;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      > .item {
+        @include flex(column, flex-start, flex-start);
+        cursor: pointer;
+        padding-bottom: 0.5rem;
+
+        > .image {
+          width: 100%;
+          aspect-ratio: 1;
+          object-fit: cover;
+          border-radius: 0.2rem;
+          background-color: $global-green-background-color;
+        }
+
+        > .name {
+          padding: 0.4rem 0 0.3rem 0;
+          font-size: 1rem;
+          color: $global-gray-text-color;
+        }
+
+        > .discount{
+          @include flex(row, center, center, 0.3rem);
+
+          > .percent{
+            font-size: 0.9rem;
+            padding-bottom: 0.2rem;
+            font-weight: 600;
+            color: $global-green-text-color;
+          }
+
+          > .number{
+            font-size: 0.8rem;
+            padding-bottom: 0.2rem;
+            text-decoration: line-through;
+            font-weight: 600;
+            color: lighten($global-gray-right-text-color, 10%);
+          }
+        }
+
+        > .price {
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: $global-black-text-color;
         }
       }
     }

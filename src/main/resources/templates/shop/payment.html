@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/styles/common.css">
+    <link rel="stylesheet" href="/shop/assets/styles/payment.css">
+    <script defer src="/shop/assets/scripts/main.js"></script>
+    <script defer src="/shop/assets/scripts/payment.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
+<div class="cover"></div>
+<div class="address-container" id="address-wrapper">
+    <button type="button" class="button">
+        <img class="image" src="/shop/assets/images/cancelButton.png" alt="">
+    </button>
+    <div id="address-container"></div>
+</div>
+
+<!--배송지 변경 모달-->
+<div class="delivery-change-modal" id="delivery-change-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="title">배송지 변경</h2>
+            <button type="button" class="close-btn">
+                <img class="image" src="/shop/assets/images/cancelButton.png" alt="">
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="delivery-list">
+                <div class="delivery-item">
+                    <div class="item-content">
+                        <div class="item-header">
+                            <span class="delivery-name">우리집</span>
+                            <span class="default-badge">기본배송지</span>
+                        </div>
+                        <div class="recipient">뎌뎌</div>
+                        <div class="address">
+                            <span class="postal">[12345]</span>
+                            <span class="addr">대구광역시 동구 화랑로 51 동대구비스타동원</span>
+                        </div>
+                        <div class="detail-addr">1호</div>
+                        <div class="phone">010-1234-5678</div>
+                        <div class="item-actions">
+                            <div class="left-actions">
+                                <button type="button" class="delete-btn">삭제</button>
+                                <button type="button" class="edit-btn">수정</button>
+                            </div>
+                            <button type="button" class="select-btn">선택</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="delivery-item">
+                    <div class="item-content">
+                        <div class="item-header">
+                            <span class="delivery-name">회사</span>
+                        </div>
+                        <div class="recipient">학원임사실</div>
+                        <div class="address">
+                            <span class="postal">[11111]</span>
+                            <span class="addr">대구광역시 중구 어딘가</span>
+                        </div>
+                        <div class="detail-addr">10층</div>
+                        <div class="phone">010-1234-5678</div>
+                        <div class="item-actions">
+                            <div class="left-actions">
+                                <button type="button" class="delete-btn">삭제</button>
+                                <button type="button" class="edit-btn">수정</button>
+                            </div>
+                            <button type="button" class="select-btn">선택</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="add-btn">추가하기</button>
+        </div>
+    </div>
+</div>
+
+<form id="payment">
+    <div class="info-wrapper">
+        <h1 class="title">주문/결제</h1>
+        <div class="orderer-info">
+            <div class="title">주문자</div>
+            <label class="name-wrapper">
+                <span class="title">이름</span>
+                <input class="input" type="text">
+            </label>
+            <label class="email-wrapper">
+                <span class="title">이메일</span>
+                <span class="field">
+                    <input class="front-email" type="text">
+                    <span class="at">@</span>
+                    <span class="back-wrapper">
+                        <input class="direct" type="text">
+                        <select class="back-email">
+                            <option class="" disabled selected hidden>선택해주세요</option>
+                            <option class="item">naver.com</option>
+                            <option class="item">hanmail.net</option>
+                            <option class="item">daum.net</option>
+                            <option class="item">gmail.com</option>
+                            <option class="item">kakao.com</option>
+                            <option class="item">nate.com</option>
+                            <option class="item">hotmail.com</option>
+                            <option class="item">outlook.com</option>
+                            <option class="item">icloud.com</option>
+                            <option class="custom">직접 입력</option>
+                    </select>
+                    </span>
+                </span>
+            </label>
+            <label class="phone-wrapper">
+                <span class="title">전화번호</span>
+                <select class="num-select">
+                    <option class="item">010</option>
+                    <option class="item">011</option>
+                    <option class="item">016</option>
+                    <option class="item">017</option>
+                    <option class="item">018</option>
+                    <option class="item">019</option>
+                </select>
+                <input class="input" type="text">
+            </label>
+        </div>
+        <div class="delivery-info">
+            <div class="delivery-header">
+                <span class="title">배송지</span>
+                <span class="change">변경</span>
+            </div>
+            <label class="delivery-name">
+                <span class="title">배송지명</span>
+                <input class="input" type="text">
+            </label>
+            <label class="orderer-name">
+                <span class="title">받는 사람</span>
+                <input class="input" type="text">
+            </label>
+            <label class="phone-num">
+                <span class="title">전화번호</span>
+                <select class="num-select">
+                    <option class="item">010</option>
+                    <option class="item">011</option>
+                    <option class="item">016</option>
+                    <option class="item">017</option>
+                    <option class="item">018</option>
+                    <option class="item">019</option>
+                </select>
+                <input class="input" type="text">
+            </label>
+            <div class="address-info" id="addressInfo">
+                <div class="title">주소</div>
+                <div class="address-wrapper">
+                    <div class="header-wrapper">
+                    <span class="field">
+                        <button class="search-btn" type="button">주소찾기</button>
+                        <span class="postal-code"></span>
+                    </span>
+                    </div>
+                    <div class="about-address"></div>
+                    <label class="detail-address">
+                        <input class="detail" type="text">
+                    </label>
+                    <label class="delivery-message">
+                        <span class="message-wrapper">
+                            <input class="direct" type="text">
+                            <select class="message-label">
+                                <option class="" disabled selected hidden>배송시 요청사항을 선택해주세요.</option>
+                                <option class="item">부재시 문앞에 놓아주세요</option>
+                                <option class="item">배송전에 미리 연락주세요</option>
+                                <option class="item">부재시 경비실에 맡겨 주세요</option>
+                                <option class="item">부재시 전화주시거나 문자 남겨 주세요</option>
+                                <option class="custom">직접 입력</option>
+                            </select>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="order-product">
+            <div class="title">주문상품</div>
+            <div class="product-wrapper">
+                <img class="image" src="/shop/assets/images/product.png" alt="">
+                <div class="product-info">
+                    <div class="product-name">
+                        <span class="brand">[레토]</span>
+                        <span class="name">강아지 장난감 노즈워크 움직이는 스낵몰</span>
+                    </div>
+                    <div class="option">노란색</div>
+                    <div class="price-info">
+                        <span class="price">1,800원</span>
+                        <span class="quantity">1개</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="discount">
+            <div class="title">쿠폰 및 포인트</div>
+            <label class="coupon">
+                <span class="title">쿠폰</span>
+                <select class="coupon-list">
+                    <option class="" disabled selected hidden>사용 할 쿠폰을 선택해주세요.</option>
+                    <option class="option">첫 가입 쿠폰 3천원 할인</option>
+                    <option class="option">(사용불가) 용품 1천원 할인</option>
+                </select>
+            </label>
+            <div class="point">
+                <div class="title">포인트</div>
+                <div class="point-wrapper">
+                    <label class="point-input">
+                        <input class="input" type="text" placeholder="0">
+                        <button class="button" type="button">전액 사용</button>
+                    </label>
+                    <div class="remain">
+                        <span class="title">사용 가능 포인트</span>
+                        <span class="amount">1,560P</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="payment-method">
+            <div class="title">결제수단</div>
+            <div class="btn-wrapper">
+                <button class="card">
+                    <img class="image" src="/shop/assets/images/card.png" alt="">
+                    <span class="description">신용/체크카드</span>
+                </button>
+                <button class="phone">
+                    <img class="image" src="/shop/assets/images/phone.png" alt="">
+                    <span class="description">휴대폰 결제</span>
+                </button>
+                <button class="transfer">
+                    <img class="image" src="/shop/assets/images/transfer.png" alt="">
+                    <span class="description">계좌이체</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="summary-wrapper">
+        <div class="summary">
+            <div class="price all">
+                <div class="title">총 상품금액</div>
+                <div class="result">0원</div>
+            </div>
+            <div class="price ship-price">
+                <div class="title">배송비</div>
+                <div class="result">0원</div>
+            </div>
+            <div class="price discount-coupon">
+                <div class="title">쿠폰 사용</div>
+                <div class="result">0원</div>
+            </div>
+            <div class="price discount-point">
+                <div class="title">포인트 사용</div>
+                <div class="result">0원</div>
+            </div>
+            <div class="price payment-price">
+                <div class="title">결제금액</div>
+                <div class="result">0원</div>
+            </div>
+        </div>
+        <button class="payment" type="button">19,303원 결제하기</button>
+    </div>
+</form>
+</body>
+</html>

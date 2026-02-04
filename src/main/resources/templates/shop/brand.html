@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/styles/common.css">
+    <link rel="stylesheet" href="/shop/assets/styles/list.css">
+    <script defer src="/shop/assets/scripts/main.js"></script>
+</head>
+<body>
+<th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
+<div id="brand">
+    <th:block th:replace="~{/fragments/shop.html :: category}"></th:block>
+    <div class="product">
+        <div class="banner-wrapper">
+            <img class="image" src="" alt="">
+        </div>
+        <div class="best-product">
+            <div class="caption">BEST</div>
+            <div class="product">
+                <div class="item">
+                    <img class="image" src="https://images.pet-friends.co.kr/storage/pet_friends/product/id/4/b/1/a/a/b/8/4b1aab88b1fe597181c2eb02c0ee8883/10000/b853e1efb357de1e59f512c65c823162.png" alt="상품1">
+                    <div class="name">강아지 사료 1kg</div>
+                    <div class="discount">
+                        <div class="percent">20%</div>
+                        <div class="number">25,000원</div>
+                    </div>
+                    <div class="price">25,000원</div>
+                </div>
+                <div class="item">
+                    <img class="image" src="https://images.pet-friends.co.kr/storage/pet_friends/product/id/4/b/1/a/a/b/8/4b1aab88b1fe597181c2eb02c0ee8883/10000/b853e1efb357de1e59f512c65c823162.png" alt="상품1">
+                    <div class="name">강아지 사료 1kg</div>
+                    <div class="discount">
+                        <div class="percent">20%</div>
+                        <div class="number">25,000원</div>
+                    </div>
+                    <div class="price">25,000원</div>
+                </div>
+            </div>
+        </div>
+        <div class="all-product">
+            <div class="navi">
+                <div class="title">
+                    <div class="text">전체</div>
+                    <div class="count">32개</div>
+                </div>
+                <label class="filter">
+                    <select class="product-filter">
+                        <option class="item" value="popular">인기순</option>
+                    </select>
+                </label>
+            </div>
+            <div class="product-wrapper">
+                <div class="item">
+                    <img class="image" src="https://images.pet-friends.co.kr/storage/pet_friends/product/id/4/b/1/a/a/b/8/4b1aab88b1fe597181c2eb02c0ee8883/10000/b853e1efb357de1e59f512c65c823162.png" alt="상품1">
+                    <div class="name">강아지 사료 1kg</div>
+                    <div class="discount">
+                        <div class="percent">20%</div>
+                        <div class="number">25,000원</div>
+                    </div>
+                    <div class="price">25,000원</div>
+                </div>
+                <div class="item">
+                    <img class="image" src="https://images.pet-friends.co.kr/storage/pet_friends/product/id/4/b/1/a/a/b/8/4b1aab88b1fe597181c2eb02c0ee8883/10000/b853e1efb357de1e59f512c65c823162.png" alt="상품1">
+                    <div class="name">강아지 사료 1kg</div>
+                    <div class="discount">
+                        <div class="percent">20%</div>
+                        <div class="number">25,000원</div>
+                    </div>
+                    <div class="price">25,000원</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

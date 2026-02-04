@@ -17,4 +17,36 @@ public class ShopController {
         modelAndView.setViewName("shop/main");
         return modelAndView;
     }
+
+    @RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getList(ModelAndView modelAndView, Model model){
+        modelAndView.setViewName("shop/list");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "product", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getProduct(ModelAndView modelAndView, Model model){
+        modelAndView.setViewName("shop/product");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "cart", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getCart(ModelAndView modelAndView, Model model) {
+        modelAndView.setViewName("shop/cart");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "payment", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getPayment(ModelAndView modelAndView, Model model) {
+        modelAndView.setViewName("shop/payment");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "brand", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getBrand(ModelAndView modelAndView, Model model) {
+        modelAndView.setViewName("shop/brand");
+        return modelAndView;
+    }
+
 }
+

@@ -1,0 +1,53 @@
+@use "sass:color"; // 이거 써둬야 darken()사용가능
+@import "../def";
+@import "./def";
+
+[data-object="input"] {
+  width: 100%;
+  height: $input-height;
+  background-color: #ffffff;
+  border: 0.0625rem solid $global-border-color;
+  border-radius: 0.25rem;
+  color: lighten($global-black-text-color, 30%);
+  padding: 0 $input-padding-horizontal;
+  transition-duration: 175ms;
+  transition-property: border-color, color;
+
+  &:hover {
+    border-color: darken($global-border-color, 10%);
+    color: lighten($global-black-text-color, 15%);
+  }
+
+  &:focus {
+    border-color: darken($global-border-color, 20%);
+    color: $global-black-text-color;
+  }
+
+  &:disabled {
+    background-color: $global-background-color !important;
+    border-color: $global-border-color !important;
+    color: lighten($global-black-text-color, 40%) !important;
+  }
+}
+
+textarea[data-object="input"] {
+  height: unset;
+  padding: $input-padding-horizontal;
+
+  &[data-resize="none"] {
+    resize: none;
+  }
+
+  &[data-resize="horizontal"] {
+    resize: horizontal;
+  }
+
+  &[data-resize="vertical"] {
+    resize: vertical;
+  }
+
+  &[data-resize="both"] {
+    resize: both;
+  }
+
+}

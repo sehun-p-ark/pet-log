@@ -1,0 +1,98 @@
+@import "../../../assets/styles/def";
+
+#list{
+  @include flex(column, center, flex-start, 1rem);
+  width: 100%;
+  height: 100%;
+  padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
+  margin: 0 0 2rem 0;
+
+  > .product {
+    @include flex(column, flex-start, flex-start, 1rem);
+    width: 100%;
+    margin-top: 1rem;
+
+    > .category-wrapper{
+      @include flex(row, center, center, 1rem);
+
+      > .caption {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: $global-gray-text-color;
+      }
+
+      > .category{
+        @include flex(row, center, center, 0.5rem);
+
+        > .item{
+          @include flex(row, center, center);
+          font-size: 0.9rem;
+          font-weight: 500;
+          background-color: $global-color-disabled;
+          padding: 0.3rem 0.8rem;
+          border-radius: 999rem;
+          cursor: pointer;
+
+          > input[type="radio"]{
+            display: none;
+          }
+
+          &:hover{
+            background-color: darken($global-color-follow, 10%);
+            color: $global-white-text-color;
+          }
+
+          &:has(input[type="radio"]:checked){
+            background-color: darken($global-color-concept, 15%);
+            color: $global-white-text-color;
+          }
+        }
+      }
+    }
+
+    > .product {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 0.5rem;
+      width: 100%;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      > .item {
+        @include flex(column, flex-start, flex-start);
+        cursor: pointer;
+        padding-bottom: 0.5rem;
+
+        > .image {
+          width: 100%;
+          aspect-ratio: 1;
+          object-fit: cover;
+          border-radius: 0.2rem;
+          background-color: $global-green-background-color;
+        }
+
+        > .name {
+          padding: 0.4rem 0;
+          font-size: 0.9rem;
+          color: $global-gray-text-color;
+        }
+
+        > .discount{
+          font-size: 0.8rem;
+          padding-bottom: 0.2rem;
+          text-decoration: line-through;
+          font-weight: 600;
+          color: lighten($global-gray-right-text-color, 10%);
+        }
+
+        > .price {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: $global-green-text-color;
+        }
+      }
+    }
+  }
+}
