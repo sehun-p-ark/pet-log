@@ -4,21 +4,20 @@
     <meta charset="UTF-8">
     <title></title>
     <script defer src="/assets/scripts/fragment.js"></script>
-    <script defer src="/assets/scripts/header.js"></script>
 </head>
 <body>
 <nav id="topNavigator" th:fragment="topNavigator" th:with="isSigned = ${session.sessionUser != null}">
     <div class="nav-wrapper">
         <div class="logo">Pet-Log</div>
         <div class="category">
-            <div class="item">지도</div>
-            <a class="item" href="/feed/explore">피드</a>
-            <div class="item">쇼핑</div>
+            <a href="/main" class="item">지도</a>
+            <a href="#" class="item">피드</a>
+            <a href="/shop/main" class="item">쇼핑</a>
         </div>
         <div class="user">
-            <div class="item">채팅</div>
-            <div class="item">친구</div>
-            <div class="item">장바구니</div> <!--쇼핑몰에 노출-->
+            <a href="#" class="item">채팅</a>
+            <a href="#" class="item">친구</a>
+            <a href="/shop/cart" class="item">장바구니</a> <!--쇼핑몰에 노출-->
             <div class="item friend-wrapper">
                 <button type="button" class="view-btn">친구</button>
 
@@ -63,10 +62,10 @@
                     </div>
                 </div>
             </div>
-            <div class="item">마이페이지</div>
-            <div class="item">로그아웃</div>
-            <div class="item">로그인</div>
-            <div class="item">고객센터</div>
+            <a href="#" class="item">마이페이지</a>
+            <a href="#" class="item">로그아웃</a>
+            <a href="/user/login" class="item">로그인</a>
+            <a href="#" class="item">고객센터</a>
         </div>
     </div>
 </nav>

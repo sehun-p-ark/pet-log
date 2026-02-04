@@ -572,7 +572,8 @@ ol, ul {
         padding: 0.5rem;
         letter-spacing: -0.02rem;
         position: relative;
-        transition: color 0.2s ease, transform 0.2s ease; }
+        transition: color 0.2s ease, transform 0.2s ease;
+        text-decoration: none; }
         #topNavigator > .nav-wrapper > .category > .item.is-active {
           color: #FEDC98;
           transform: translateY(-0.125rem); }
@@ -596,7 +597,8 @@ ol, ul {
         font-weight: 600;
         padding: 0.5rem;
         position: relative;
-        transition: color 0.2s ease, transform 0.2s ease; }
+        transition: color 0.2s ease, transform 0.2s ease;
+        text-decoration: none; }
         #topNavigator > .nav-wrapper > .user > .item.is-active {
           color: #FEDC98;
           transform: translateY(-0.125rem); }

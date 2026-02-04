@@ -439,6 +439,10 @@ function resetDialogSecond() {
     });
     preview.src = '';
     circle.classList.remove('visible');
+    $petDialogSecondPetTypeWrapper.classList.remove('visible');
+    birthWrappers.forEach(wrapper => {
+        wrapper.classList.remove('visible');
+    });
     $petDialogSecondNextButton.setAttribute('disabled', '');
 }
 
@@ -540,6 +544,10 @@ const $petDialogPreviousButton = $petDialogSecond.querySelector(':scope > .previ
 $petDialogPreviousButton.addEventListener('click', () => {
     currentStep = 1;
     openDialog(1);
+    $petDialogSecondPetTypeWrapper.classList.remove('visible');
+    birthWrappers.forEach(wrapper => {
+        wrapper.classList.remove('visible');
+    });
 });
 
 // 애완동물 DialogSecond에서 다음버튼을 눌렀을 때
@@ -1025,6 +1033,7 @@ $petDialogThirdCompleteButton.addEventListener('click', () => {
     const genderInput = $petDialogThird.querySelector(':scope input[name="gender"]:checked');
     const year = petYear.value || petYear.placeholder;
     const weight = $petDialogThird.querySelector(':scope > .petWeightLabel > .weight-wrapper > .weight');
+    const introduction = $petDialogSecond.querySelector(':scope > .introduction > .introduce');
     const pet = {
         petId: petId++,
         petImage: fileInput.files.length > 0 ? preview.src : '/user/assets/images/defaultPetImage.png',
@@ -1032,7 +1041,8 @@ $petDialogThirdCompleteButton.addEventListener('click', () => {
         species: $petDialogSecondSelectType.querySelector(':scope > .petType').value,
         gender: genderInput ? genderInput.classList.contains('male') ? '남아' : '여아' : null,
         birth: `${year}생`,
-        weight: weight.value
+        weight: weight.value,
+        introduction: introduction.value
     }
     pets.push(pet);
     addPetToList(pet);
@@ -1048,25 +1058,25 @@ function addPetToList(pet) {
     const genderIcon = pet.gender === '남아' ? '/user/assets/images/male.png' : '/user/assets/images/female.png';
     const petImage = pet.petImage;
     li.innerHTML = `
-    <label class="remember">
-        <input hidden class="checkbox" type="radio" name="primary" value="${pet.petId}">
-        <span class="circle">
-                <img class="image" src="/user/assets/images/loginCheck.png" alt="">
-        </span>
-        <span class="text">대표 동물</span>
-    </label>
     <div class="petInformation">
-        <div class="image-wrapper">
-            <img class="petImage" src="${petImage}" alt="">
+        <div class="side-wrapper">
+            <div class="image-wrapper">
+                <img class="petImage" src="${petImage}" alt="">
+            </div>
+            <label class="remember">
+                <input hidden class="checkbox" type="radio" name="primary" value="${pet.petId}">
+                <span class="text"></span>
+            </label>
         </div>
         <div class="detail">
             <span class="petName">
                 ${pet.name}
                 <img class="gender" src="${genderIcon}" alt="">
             </span>
-            <span class="species">${pet.species}</span>
-            <span class="birth">${pet.birth}</span>
-            <span class="weight">${pet.weight}kg</span>
+            <span class="species">품종 : ${pet.species}</span>
+            <span class="birth">생일 : ${pet.birth}</span>
+            <span class="weight">몸무게 : ${pet.weight}kg</span>
+            <span class="introduction">소개 : ${pet.introduction}</span>
         </div>
     </div>`;
     if (pets.length === 1) {

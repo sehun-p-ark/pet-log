@@ -113,6 +113,7 @@ ol, ul {
         transition:
                 color 0.2s ease,
                 transform 0.2s ease;
+        text-decoration: none;
 
         &.is-active {
           color: $global-yellow-text-color;
@@ -135,6 +136,7 @@ ol, ul {
         transition:
                 color 0.2s ease,
                 transform 0.2s ease;
+        text-decoration: none;
 
 
         &.is-active {

@@ -647,55 +647,8 @@ body:has(> .address-wrapper.visible) > .cover {
         background-color: #ffffff;
         border: 0.0625rem solid #e7e5e4;
         border-radius: 0.35rem;
-        padding: 2rem;
+        padding: 1rem 2rem;
         position: relative; }
-        .register-container > .register-forth > .pet-list > .pet > .remember {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-          gap: 0;
-          justify-content: flex-start;
-          top: 4%;
-          left: 1%;
-          width: 1.25rem;
-          height: 1.25rem;
-          align-self: flex-start;
-          cursor: pointer;
-          position: absolute; }
-          .register-container > .register-forth > .pet-list > .pet > .remember > * {
-            flex-grow: 0;
-            flex-shrink: 0; }
-          .register-container > .register-forth > .pet-list > .pet > .remember > .-flex-stretch {
-            flex-grow: 1;
-            flex-shrink: 1; }
-          .register-container > .register-forth > .pet-list > .pet > .remember:has(> .checkbox:checked) > .circle {
-            background-color: #38A34C; }
-            .register-container > .register-forth > .pet-list > .pet > .remember:has(> .checkbox:checked) > .circle > .image {
-              width: 1.25rem;
-              height: 1.25rem;
-              display: block; }
-          .register-container > .register-forth > .pet-list > .pet > .remember > .circle {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            justify-content: center;
-            border: 0.0625rem solid #38A34C;
-            border-radius: 0.5rem;
-            width: 1.4375rem;
-            height: 1.4375rem; }
-            .register-container > .register-forth > .pet-list > .pet > .remember > .circle > * {
-              flex-grow: 0;
-              flex-shrink: 0; }
-            .register-container > .register-forth > .pet-list > .pet > .remember > .circle > .-flex-stretch {
-              flex-grow: 1;
-              flex-shrink: 1; }
-            .register-container > .register-forth > .pet-list > .pet > .remember > .circle > .image {
-              display: none;
-              width: 1rem;
-              height: 1rem; }
-          .register-container > .register-forth > .pet-list > .pet > .remember > .text {
-            margin-left: 0.5rem; }
         .register-container > .register-forth > .pet-list > .pet > .petInformation {
           align-items: stretch;
           display: flex;
@@ -708,35 +661,75 @@ body:has(> .address-wrapper.visible) > .cover {
           .register-container > .register-forth > .pet-list > .pet > .petInformation > .-flex-stretch {
             flex-grow: 1;
             flex-shrink: 1; }
-          .register-container > .register-forth > .pet-list > .pet > .petInformation > .image-wrapper {
+          .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper {
             align-items: center;
             display: flex;
             flex-direction: column;
-            gap: 0;
-            justify-content: center;
-            background-color: #ffffff;
-            border-radius: 999rem;
-            width: 6rem;
-            height: 6rem;
-            border: 0.0625rem solid #e7e5e4; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .image-wrapper > * {
+            gap: 1rem;
+            justify-content: flex-start; }
+            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > * {
               flex-grow: 0;
               flex-shrink: 0; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .image-wrapper > .-flex-stretch {
+            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .-flex-stretch {
               flex-grow: 1;
               flex-shrink: 1; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .image-wrapper > .petImage {
-              width: 5rem;
-              height: 5rem;
-              object-fit: cover;
-              border-radius: 999rem; }
+            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper {
+              align-items: center;
+              display: flex;
+              flex-direction: column;
+              gap: 0;
+              justify-content: center;
+              background-color: #ffffff;
+              border-radius: 999rem;
+              width: 6rem;
+              height: 6rem;
+              border: 0.0625rem solid #e7e5e4; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > * {
+                flex-grow: 0;
+                flex-shrink: 0; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .-flex-stretch {
+                flex-grow: 1;
+                flex-shrink: 1; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .petImage {
+                width: 5rem;
+                height: 5rem;
+                object-fit: cover;
+                border-radius: 999rem; }
+            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .remember {
+              align-items: center;
+              display: flex;
+              flex-direction: row;
+              gap: 0;
+              justify-content: center;
+              width: 7rem;
+              height: 1.75rem;
+              cursor: pointer;
+              background-color: #F9F9F9;
+              border: 0.0625rem solid #e7e5e4;
+              border-radius: 0.35rem;
+              color: #000000; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .remember > * {
+                flex-grow: 0;
+                flex-shrink: 0; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .remember > .-flex-stretch {
+                flex-grow: 1;
+                flex-shrink: 1; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .remember > .text::before {
+                content: '대표지정'; }
+              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .remember:has(> .checkbox:checked) {
+                background-color: #38A34C;
+                color: #FFFFFF; }
+                .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .remember:has(> .checkbox:checked) > .text::before {
+                  content: '대표동물'; }
           .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail {
             align-items: stretch;
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
             justify-content: flex-start;
-            margin-left: 3rem; }
+            margin-left: 3rem;
+            min-width: 0;
+            flex: 1; }
             .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > * {
               flex-grow: 0;
               flex-shrink: 0; }
@@ -749,6 +742,13 @@ body:has(> .address-wrapper.visible) > .cover {
               .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .petName > .gender {
                 width: 1rem;
                 height: 1rem; }
+            .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .introduction {
+              display: block;
+              max-width: 14rem;
+              white-space: normal;
+              word-break: break-word;
+              overflow-wrap: break-word;
+              margin-bottom: 1.5rem; }
     .register-container > .register-forth > .warning {
       font-size: 0.8rem;
       font-weight: 300;
@@ -884,7 +884,8 @@ body:has(> .address-wrapper.visible) > .cover {
           background-color: #287A39; }
 
 body:has(> .dialog.visible) .cover {
-  opacity: 1; }
+  opacity: 1;
+  pointer-events: auto; }
 
 .cover {
   content: "";
@@ -1187,8 +1188,7 @@ body:has(> .dialog.visible) .cover {
     flex-direction: column;
     gap: 0.35rem;
     justify-content: flex-start;
-    margin-top: 2.5rem;
-    pointer-events: auto; }
+    margin-top: 2.5rem; }
     .dialog-second > .selectedPetType > * {
       flex-grow: 0;
       flex-shrink: 0; }
@@ -1291,7 +1291,7 @@ body:has(> .dialog.visible) .cover {
           flex-grow: 1;
           flex-shrink: 1; }
         .dialog-second > .selectPetType > .typeList > .type:hover {
-          background-color: #F0F8F3;
+          background-color: #F9F9F9;
           font-weight: 500; }
         .dialog-second > .selectPetType > .typeList > .type:first-child {
           border-top: none; }
