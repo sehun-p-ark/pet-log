@@ -6,7 +6,7 @@
 }
 
 body {
-  @include flex(column, stretch, flex-start, 1rem);
+  @include flex(column, stretch, flex-start);
   min-height: 100%;
   background-color: $global-background-color;
   color: $global-black-text-color;
@@ -104,6 +104,7 @@ ol, ul {
           color: $global-yellow-text-color;
           cursor: pointer;
         }
+
       }
     }
   }

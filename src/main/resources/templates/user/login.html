@@ -7,10 +7,133 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/user/assets/styles/login.css">
+    <script defer src="/user/assets/scripts/login.js"></script>
     <title>로그인</title>
 </head>
 <body>
 <th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
-
+<div class="cover"></div>
+<div class="register-message" id="register-message">
+    <button type="button" class="button">확인</button>
+</div>
+<div class="main" id="main">
+    <div class="dialogLoginSearchResult dialog">
+        <span class="text">김명섭 회원님의 아이디는</span>
+        <span class="text -flex-stretch">
+            '<span class="id">msubi0831</span>' 입니다.</span>
+        <button class="button" type="button">확인</button>
+    </div>
+    <div class="dialogPasswordChangeResult dialog">
+        <span class="text">비밀번호를</span>
+        <span class="text -flex-stretch">성공적으로 변경하였습니다.</span>
+        <button class="button" type="button">확인</button>
+    </div>
+    <div class="searchId">
+        <span class="title">
+            <span class="text">아이디 찾기</span>
+            <button class="cancel" type="button">
+                <img class="image" src="/user/assets/images/cancelButton.png" alt="">
+            </button>
+        </span>
+        <label class="nameLabel label">
+            <span class="text">이름</span>
+            <input class="name input" placeholder="실명을 입력해주세요." type="text">
+        </label>
+        <label class="emailLabel label">
+            <span class="text">이메일</span>
+            <span class="email-wrapper wrapper">
+                <input class="email input" placeholder="이메일을 입력해주세요." type="email">
+                <button class="emailSendButton button" type="button">인증번호 전송</button>
+            </span>
+        </label>
+        <label class="emailVerifyLabel label">
+            <span class="text">인증번호</span>
+            <span class="emailVerify-wrapper wrapper">
+                <input disabled class="emailVerify input" placeholder="인증번호를 입력해주세요." type="text">
+                <button disabled class="emailVerifyButton button" type="button">인증번호 확인</button>
+            </span>
+        </label>
+    </div>
+    <div class="searchPassword">
+        <span class="title">
+            <span class="text">비밀번호 찾기</span>
+            <button class="cancel" type="button">
+                <img class="image" src="/user/assets/images/cancelButton.png" alt="">
+            </button>
+        </span>
+        <div class="verifyForSearchPassword-wrapper visible">
+            <label class="idLabel label">
+                <span class="text">아이디</span>
+                <input class="id input" placeholder="아이디를 입력해주세요." type="text">
+            </label>
+            <label class="emailLabel label">
+                <span class="text">이메일</span>
+                <span class="email-wrapper wrapper">
+                    <input class="email input" placeholder="이메일을 입력해주세요." type="email">
+                    <button class="emailSendButton button" type="button">인증번호 전송</button>
+                </span>
+            </label>
+            <label class="emailVerifyLabel label -flex-stretch">
+                <span class="text">인증번호</span>
+                <span class="emailVerify-wrapper wrapper">
+                    <input disabled class="emailVerify input" placeholder="인증번호를 입력해주세요." type="text">
+                    <button disabled class="emailVerifyButton button" type="button">인증번호 확인</button>
+                </span>
+            </label>
+        </div>
+        <div class="changePassword-wrapper">
+            <label class="changePasswordLabel label">
+                <span class="text">새로운 비밀번호</span>
+                <input class="password input" placeholder="비밀번호를 입력해주세요." type="password">
+            </label>
+            <label class="changePasswordCheckLabel label">
+                <span class="text">비밀번호 재입력</span>
+                <input class="passwordCheck input" placeholder="비밀번호를 한 번 더 입력해주세요." type="password">
+            </label>
+            <button class="changePasswordButton" type="button">비밀번호 재설정</button>
+        </div>
+    </div>
+    <div class="image-wrapper">
+        <img class="image" src="/user/assets/images/loginImage.jpg" alt="">
+    </div>
+    <form class="login-form" id="login-form" name="loginForm">
+        <h2 class="title">로그인</h2>
+        <label class="label">
+            <span class="text">아이디</span>
+            <input class="id" name="id" placeholder="아이디를 입력해 주세요." type="text">
+        </label>
+        <label class="label">
+            <span class="text">비밀번호</span>
+            <input class="password" name="password" placeholder="비밀번호를 입력해 주세요." type="password">
+        </label>
+        <label class="remember">
+            <input hidden class="checkbox" type="checkbox">
+            <span class="circle">
+                <img class="image" src="/user/assets/images/loginCheck.png" alt="">
+            </span>
+            <span class="text">아이디를 기억하시겠습니까?</span>
+        </label>
+        <button class="login-button" type="submit">로그인</button>
+        <div class="sns">
+            <span class="text">SNS LOGIN</span>
+        </div>
+        <span class="button-wrapper">
+            <button class="kakao">
+            <img class="image" src="/user/assets/images/kakao.png" alt="">
+            </button>
+            <button class="naver">
+                <img class="image" src="/user/assets/images/naver.png" alt="">
+            </button>
+            <button class="google">
+                <img class="image" src="/user/assets/images/google.png" alt="">
+            </button>
+        </span>
+        <span class="bottom-link-wrapper">
+            <a class="link register" href="/user/register">회원가입</a>
+            <button class="link idSearch" type="button">아이디 찾기</button>
+            <button class="link passwordSearch" type="button">비밀번호 찾기</button>
+        </span>
+    </form>
+</div>
 </body>
 </html>

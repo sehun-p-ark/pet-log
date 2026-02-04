@@ -1,1 +1,559 @@
 @import "../../../assets/styles/def";
+
+.cover {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #212121a0;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+body:has(> .register-message.visible) > .cover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.register-message {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  min-width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button {
+    background-color: #38A34C;
+    border-radius: 0.35rem;
+    color: #ffffff;
+    cursor: pointer;
+    height: 2.25rem;
+    margin-top: 1rem;
+  }
+}
+
+.main {
+  width: 70rem;
+  height: 40rem;
+  margin: auto;
+  background-color: #f9f9f9;
+  border-radius: 0.75rem;
+  border: 0.0625rem solid $global-border-color;
+  overflow: hidden;
+  position: relative;
+
+  > .dialog {
+    @include flex(column, stretch, center);
+    background-color: #ffffff;
+    border: 0.0625rem solid #e7e5e4;
+    border-radius: 0.75rem;
+    width: 17rem;
+    height: 12rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 11;
+    padding: 3rem 3rem 2rem 3rem;
+    line-height: 1.4;
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .text {
+      text-align: center;
+
+      > .id {
+        color: #38A34C;
+      }
+    }
+
+    > .button {
+      height: 2rem;
+      border-radius: 0.35rem;
+      background-color: $global-green-background-color;
+      color: #ffffff;
+      cursor: pointer;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #78C38A;
+      }
+
+      &:active {
+        background-color: #66B879;
+      }
+    }
+  }
+
+  &:has(> .searchId.visible) > .searchPassword {
+    opacity: 0;
+  }
+
+  &:has(> .searchPassword.visible) > .searchId {
+    opacity: 0;
+  }
+
+  > .searchPassword {
+    min-height: 55rem;
+  }
+
+  > .searchId,
+  > .searchPassword {
+    @include flex(column, stretch, center, 0.5rem);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    padding: 0 5rem;
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+
+      > .verifyForSearchPassword-wrapper {
+        transform: translateY(0);
+        opacity: 1;
+        transition-duration: 250ms;
+        transition-property: transform;
+        pointer-events: auto;
+      }
+
+      &:has(> .changePassword-wrapper.visible) > .verifyForSearchPassword-wrapper {
+        opacity: 0;
+        transform: translateY(-20%);
+        pointer-events: none;
+      }
+    }
+
+    > .title {
+      @include flex(row, center, space-between);
+      margin-bottom: 1.5rem;
+
+      > .text {
+        font-size: 1.35rem;
+        font-weight: 500;
+      }
+
+      > .cancel {
+        @include flex(row, center, center);
+        cursor: pointer;
+
+        > .image {
+          width: 1.25rem;
+          height: 1.25rem;
+          filter: brightness(70%);
+        }
+      }
+    }
+
+    > .changePassword-wrapper {
+      @include flex(column, stretch, center);
+      opacity: 0;
+      transform: translateY(0);
+      transition-duration: 250ms;
+      transition-property: transform;
+      pointer-events: none;
+
+      > .changePasswordButton {
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        cursor: pointer;
+        transition-duration: 250ms;
+        transition-property: background-color;
+        flex-grow: 1;
+        margin-top: 2rem;
+
+        &:hover {
+          background-color: #78C38A;
+        }
+
+        &:active {
+          background-color: #66B879;
+        }
+      }
+    }
+
+    > .changePassword-wrapper.visible {
+      opacity: 1;
+      transform: translateY(-100%);
+      pointer-events: auto;
+    }
+
+    > .verifyForSearchPassword-wrapper > .label,
+    > .changePassword-wrapper > .label,
+    > .label {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      margin-top: 1rem;
+
+      > .text {
+        font-size: 0.85rem;
+        font-weight: 300;
+      }
+
+      > .input {
+        border: 0.0625rem solid #e7e5e4;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        padding-left: 0.75rem;
+        transition-duration: 250ms;
+        transition-property: border-color;
+
+        &:disabled {
+          background-color: lighten($global-gray-text-color, 55%);
+
+          &::placeholder {
+            color: lighten($global-gray-text-color, 20%);
+          }
+        }
+
+        &:hover {
+          border-color: darken(#e7e5e4, 5%);
+        }
+
+        &:active {
+          border-color: darken(#e7e5e4, 10%);
+        }
+
+        &:focus-within {
+          border-color: darken(#e7e5e4, 10%);
+        }
+      }
+
+      > .wrapper {
+        @include flex(row, stretch, flex-start, 0.5rem);
+
+        > .input {
+          border: 0.0625rem solid #e7e5e4;
+          height: 2.5rem;
+          border-radius: 0.35rem;
+          padding-left: 0.75rem;
+          transition-duration: 250ms;
+          transition-property: border-color;
+
+          &:disabled {
+            border-color: $global-border-color !important;
+            background-color: lighten($global-gray-text-color, 55%);
+
+            &::placeholder {
+              color: lighten($global-gray-text-color, 20%);
+            }
+          }
+
+          &:hover {
+            border-color: darken(#e7e5e4, 5%);
+          }
+
+          &:active {
+            border-color: darken(#e7e5e4, 10%);
+          }
+
+          &:focus-within {
+            border-color: darken(#e7e5e4, 10%);
+          }
+
+          &.email,
+          &.emailVerify {
+            flex-grow: 1;
+          }
+        }
+
+        > .button {
+          min-width: 7rem;
+          height: 2.5rem;
+          background-color: $global-green-background-color;
+          border-radius: 0.35rem;
+          color: #ffffff;
+          cursor: pointer;
+          transition-duration: 250ms;
+          transition-property: background-color;
+
+          &:disabled {
+            border-color: $global-border-color !important;
+            background-color: lighten($global-gray-text-color, 55%) !important;
+            color: lighten($global-gray-text-color, 20%);
+            cursor: revert;
+          }
+
+          &:hover {
+            background-color: #78C38A;
+          }
+
+          &:active {
+            background-color: #66B879;
+          }
+        }
+      }
+    }
+  }
+
+  > .image-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 3;
+    transition-duration: 450ms;
+    transition-property: transform;
+
+    > .image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  > .searchId.visible ~ .image-wrapper,
+  > .searchPassword.visible ~ .image-wrapper {
+    transform: translateX(100%);
+  }
+
+  > .searchId.visible ~ .login-form,
+  > .searchPassword.visible ~ .login-form {
+    opacity: 0;
+  }
+
+  > .login-form {
+    @include flex(column, stretch, flex-start, 0.5rem);
+    padding: 7rem 6rem 2rem 6rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    z-index: 2;
+
+    > .title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 3rem;
+    }
+
+    > .label {
+      @include flex(column, stretch, center, 0.5rem);
+
+      > .text {
+        color: #565656;
+        font-size: 0.9rem;
+        margin-left: 0.25rem;
+      }
+
+      > .id,
+      > .password {
+        width: 100%;
+        height: 3rem;
+        border: 0.0625rem solid #e7e5e4;
+        border-radius: 1rem;
+        padding-left: 1rem;
+        font-size: 0.9rem;
+        transition-duration: 250ms;
+        transition-property: border-color;
+
+        &:hover {
+          border-color: #cac8c7;
+        }
+      }
+    }
+
+    > .remember {
+      @include flex(row, center, flex-start);
+      align-self: flex-start;
+      cursor: pointer;
+
+      > .text {
+        color: #565656;
+        font-size: 0.9rem;
+      }
+
+      &:has(> .checkbox:checked) {
+        > .circle {
+          background-color: #38A34C;
+
+          > .image {
+            display: block;
+          }
+        }
+      }
+
+      > .circle {
+        @include flex(column, center, center);
+        border: 0.0625rem solid #38A34C;
+        border-radius: 0.5rem;
+        width: 1.4375rem;
+        height: 1.4375rem;
+
+        > .image {
+          display: none;
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+
+      > .text {
+        margin-left: 0.5rem;
+      }
+    }
+
+    > .login-button {
+      background-color: #FDD072;
+      border-radius: 1rem;
+      cursor: pointer;
+      height: 2.5rem;
+      margin-top: 1rem;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition-duration: 400ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #f8ca6c;
+      }
+
+      &:active {
+        background-color: #f6c767;
+      }
+    }
+
+    > .sns {
+      @include flex(row, center, center);
+      margin-top: 0.5rem;
+
+      &::before,
+      &::after {
+        content: "";
+        width: 5rem;
+        flex-grow: 1;
+        height: 0.0625rem;
+        padding: 0 0.25rem;
+        background-color: darken(#e7e5e4, 20%);
+      }
+
+      > .text {
+        color: darken(#e7e5e4, 20%);
+        font-size: 0.9rem;
+        padding: 0 0.25rem;
+      }
+    }
+
+    > .button-wrapper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 0.5rem;
+      justify-items: center;
+      align-items: flex-start;
+
+
+      > .kakao,
+      > .naver,
+      > .google{
+        cursor: pointer;
+        width: fit-content;
+
+        > .image {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 999rem;
+        }
+      }
+    }
+
+    > .bottom-link-wrapper {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      justify-items: center;
+      margin-top: 2rem;
+
+      > .link {
+        width: fit-content;
+        font-size: 0.85rem;
+        text-decoration: none;
+        border: none;
+        color: #c8c8c8;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 75rem), screen and (max-height: 45rem) {
+  #topNavigator {
+    display: none;
+  }
+
+  .main {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    transform: translate(0, 0);
+    overflow: hidden auto;
+  }
+}
+
+@media screen and (max-width: 58.75rem) {
+  .main {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+    margin: 0;
+
+    > .image-wrapper {
+      display: none;
+    }
+
+    > .login-form {
+      width: 100vw;
+    }
+  }
+}
