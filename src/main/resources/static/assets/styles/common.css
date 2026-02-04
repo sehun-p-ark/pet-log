@@ -1,4 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Chewy&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 * {
   box-sizing: border-box; }
 
@@ -10,7 +11,7 @@ body {
   justify-content: flex-start;
   min-height: 100%;
   background-color: #F0F8F3;
-  color: #000000;
+  color: #F0F8F3;
   cursor: default;
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   font-size: 0.95rem;
@@ -58,13 +59,15 @@ ol, ul {
   align-items: center;
   display: flex;
   flex-direction: row;
-  gap: 1rem;
+  gap: 2rem;
   justify-content: flex-start;
   background-color: #89CC96;
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.15);
+  font-family: "Chewy", system-ui;
   overflow: hidden;
   width: 100%;
   height: 5rem;
-  padding: 0 2rem; }
+  padding: 0 14rem; }
   #topNavigator > * {
     flex-grow: 0;
     flex-shrink: 0; }
@@ -90,15 +93,22 @@ ol, ul {
       flex-direction: row;
       gap: 1rem;
       justify-content: flex-start;
-      color: #FFFFFF;
-      font-size: 1.5rem;
-      font-weight: 600; }
+      /*color: $global-nav-text-color;*/
+      font-size: 2.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease; }
       #topNavigator > .nav-wrapper > .logo > * {
         flex-grow: 0;
         flex-shrink: 0; }
       #topNavigator > .nav-wrapper > .logo > .-flex-stretch {
         flex-grow: 1;
         flex-shrink: 1; }
+      #topNavigator > .nav-wrapper > .logo:hover {
+        transform: translateY(-0.1rem);
+        opacity: 0.9; }
+      #topNavigator > .nav-wrapper > .logo:active {
+        transform: scale(0.96); }
     #topNavigator > .nav-wrapper > .category {
       align-items: center;
       display: flex;
@@ -114,11 +124,15 @@ ol, ul {
       #topNavigator > .nav-wrapper > .category > .item {
         font-size: 1.3rem;
         color: #FFFFFF;
+        cursor: pointer;
         font-weight: 600;
-        padding: 0.5rem; }
-        #topNavigator > .nav-wrapper > .category > .item:hover, #topNavigator > .nav-wrapper > .category > .item:active {
+        padding: 0.5rem;
+        letter-spacing: -0.02rem;
+        position: relative;
+        transition: color 0.2s ease, transform 0.2s ease; }
+        #topNavigator > .nav-wrapper > .category > .item.is-active {
           color: #FEDC98;
-          cursor: pointer; }
+          transform: translateY(-0.125rem); }
     #topNavigator > .nav-wrapper > .user {
       align-items: center;
       display: flex;
@@ -135,11 +149,14 @@ ol, ul {
       #topNavigator > .nav-wrapper > .user > .item {
         font-size: 1.3rem;
         color: #FFFFFF;
+        cursor: pointer;
         font-weight: 600;
-        padding: 0.5rem; }
-        #topNavigator > .nav-wrapper > .user > .item:hover, #topNavigator > .nav-wrapper > .user > .item:active {
+        padding: 0.5rem;
+        position: relative;
+        transition: color 0.2s ease, transform 0.2s ease; }
+        #topNavigator > .nav-wrapper > .user > .item.is-active {
           color: #FEDC98;
-          cursor: pointer; }
+          transform: translateY(-0.125rem); }
 
 #category {
   align-items: flex-end;

@@ -1,5 +1,6 @@
 @import "def";
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Chewy&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 * {
   box-sizing: border-box;
@@ -9,7 +10,7 @@ body {
   @include flex(column, stretch, flex-start);
   min-height: 100%;
   background-color: $global-background-color;
-  color: $global-black-text-color;
+  color: $global-background-color;
   cursor: default;
   font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   font-size: 0.95rem;
@@ -53,56 +54,81 @@ ol, ul {
   padding-inline: 0;
 }
 
-#topNavigator{
-  @include flex(row, center, flex-start, 1rem);
+#topNavigator {
+  @include flex(row, center, flex-start, 2rem);
   background-color: $global-green-background-color;
+  box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.15);
+  font-family: "Chewy", system-ui;
   overflow: hidden;
   width: 100%;
   height: 5rem;
-  padding: 0 2rem;
+  padding: 0 14rem;
 
-  > .nav-wrapper{
+
+  > .nav-wrapper {
     @include flex(row, center, flex-start, 1rem);
     width: 100%;
 
-    > .logo{
+    > .logo {
       @include flex(row, center, flex-start, 1rem);
-      color: $global-white-text-color;
-      font-size: 1.5rem;
+      /*color: $global-nav-text-color;*/
+      font-size: 2.5rem;
       font-weight: 600;
+      cursor: pointer;
+
+      transition: transform 0.2s ease, opacity 0.2s ease;
+
+      &:hover {
+        transform: translateY(-0.1rem);
+        opacity: 0.9;
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
     }
 
-    > .category{
+    > .category {
       @include flex(row, center, flex-start, 1rem);
 
-      > .item{
+      > .item {
         font-size: 1.3rem;
         color: $global-white-text-color;
+        cursor: pointer;
         font-weight: 600;
         padding: 0.5rem;
+        letter-spacing: -0.02rem;
+        position: relative;
+        transition:
+                color 0.2s ease,
+                transform 0.2s ease;
 
-        &:hover,
-        &:active{
+        &.is-active {
           color: $global-yellow-text-color;
-          cursor: pointer;
+          transform: translateY(-0.125rem);
         }
       }
     }
 
-    > .user{
+    > .user {
       @include flex(row, center, flex-start, 1rem);
       margin-left: auto;
 
-      > .item{
+      > .item {
         font-size: 1.3rem;
-        color: $global-white-text-color;
+        color:  $global-white-text-color;
+        cursor: pointer;
         font-weight: 600;
         padding: 0.5rem;
+        position: relative;
+        transition:
+                color 0.2s ease,
+                transform 0.2s ease;
 
-        &:hover,
-        &:active{
+
+        &.is-active {
           color: $global-yellow-text-color;
-          cursor: pointer;
+          transform: translateY(-0.125rem);
         }
       }
     }
