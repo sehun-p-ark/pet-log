@@ -708,73 +708,63 @@ body:has(> .address-wrapper.visible) > .cover {
         background-color: #ffffff;
         border: 0.0625rem solid $global-border-color;
         border-radius: 0.35rem;
-        padding: 2rem;
+        padding: 1rem 2rem;
         position: relative;
-
-        > .remember {
-          @include flex(row, center, flex-start);
-          top: 4%;
-          left: 1%;
-          width: 1.25rem;
-          height: 1.25rem;
-          align-self: flex-start;
-          cursor: pointer;
-          position: absolute;
-
-          &:has(> .checkbox:checked) {
-            > .circle {
-              background-color: #38A34C;
-
-              > .image {
-                width: 1.25rem;
-                height: 1.25rem;
-                display: block;
-              }
-            }
-          }
-
-          > .circle {
-            @include flex(column, center, center);
-            border: 0.0625rem solid #38A34C;
-            border-radius: 0.5rem;
-            width: 1.4375rem;
-            height: 1.4375rem;
-
-            > .image {
-              display: none;
-              width: 1rem;
-              height: 1rem;
-            }
-          }
-
-          > .text {
-            margin-left: 0.5rem;
-          }
-        }
 
         > .petInformation {
           @include flex(row, stretch, flex-start);
 
-          > .image-wrapper {
-            @include flex(column, center, center);
-            background-color: #ffffff;
-            border-radius: 999rem;
-            width: 6rem;
-            height: 6rem;
-            border: 0.0625rem solid $global-border-color;
+          > .side-wrapper {
+            @include flex(column, center ,flex-start, 1rem);
 
-            > .petImage {
-              width: 5rem;
-              height: 5rem;
-              object-fit: cover;
+            > .image-wrapper {
+              @include flex(column, center, center);
+              background-color: #ffffff;
               border-radius: 999rem;
+              width: 6rem;
+              height: 6rem;
+              border: 0.0625rem solid $global-border-color;
 
+              > .petImage {
+                width: 5rem;
+                height: 5rem;
+                object-fit: cover;
+                border-radius: 999rem;
+
+              }
+            }
+
+            > .remember {
+              @include flex(row, center, center);
+              width: 7rem;
+              height: 1.75rem;
+              cursor: pointer;
+              background-color: $global-gray-background-color;
+              border: 0.0625rem solid $global-border-color;
+              border-radius: 0.35rem;
+              color: $global-black-text-color;
+
+              > .text::before {
+                content: '대표지정';
+              }
+
+
+              &:has(> .checkbox:checked) {
+                background-color: $global-green-text-color;
+                color: $global-white-text-color;
+
+                > .text::before {
+                  content: '대표동물';
+                }
+              }
             }
           }
 
           > .detail {
             @include flex(column, stretch, flex-start, 0.25rem);
             margin-left: 3rem;
+            min-width: 0;
+            flex: 1;
 
             > .petName {
               font-size: 1.1rem;
@@ -784,6 +774,15 @@ body:has(> .address-wrapper.visible) > .cover {
                 width: 1rem;
                 height: 1rem;
               }
+            }
+
+            > .introduction {
+              display: block;
+              max-width: 14rem;
+              white-space: normal;
+              word-break: break-word;
+              overflow-wrap: break-word;
+              margin-bottom: 1.5rem;
             }
           }
         }
@@ -956,6 +955,7 @@ body:has(> .address-wrapper.visible) > .cover {
 body:has(> .dialog.visible) {
   .cover {
     opacity: 1;
+    pointer-events: auto;
   }
 }
 
@@ -1271,7 +1271,6 @@ body:has(> .dialog.visible) {
   > .selectedPetType {
     @include flex(column, stretch, flex-start, 0.35rem);
     margin-top: 2.5rem;
-    pointer-events: auto;
 
     &.hidden {
       display: none;
@@ -1365,7 +1364,7 @@ body:has(> .dialog.visible) {
         margin-left: 0.5rem;
 
         &:hover {
-          background-color: $global-background-color;
+          background-color: $global-gray-background-color;
           font-weight: 500;
         }
 
