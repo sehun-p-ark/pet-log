@@ -148,11 +148,30 @@
     grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
     gap: 1.5rem;
     width: 100%;
+
+    // 스크롤 감지 기준
+    > #scroll-sentinel {
+        height: 1px;
+    }
 }
-// 스크롤 감지 기준
-#scroll-sentinel {
-    height: 1px;
+
+.reload-wrapper {
+    text-align: center;
+    margin-bottom: 3rem;
+    > .reload-btn{
+        @include flex(row, center, center, 0.3rem);
+        color: $global-gray-text-color;
+        font-size: 0.875rem;
+        > .reload-icon {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+    }
+    &.hidden {
+        display: none;
+    }
 }
+
 @media (max-width: 1023px) {
     #feed-container {
         grid-template-columns: repeat(3, minmax(0, 1fr));

@@ -4,7 +4,6 @@ const $trigger = $dropdown.querySelector("[data-object=button]");
 const $valueEl = $dropdown.querySelector(".value");
 const $options = $dropdown.querySelectorAll("li");
 
-
 // 정렬 탭 열기, 닫기
 $trigger.addEventListener("click", () => {
     $dropdown.dataset.open =
@@ -31,14 +30,14 @@ const sentinel = document.getElementById("scroll-sentinel");
 let lastFeedId = null;
 let loading = false;
 let hasNext = true;
-const size = 10;
+const size = 20;
 
 // 피드 불러오기
 async function loadFeeds(reset = false) {
-    if (loading || (!hasNext && !reset)) return;
+    if (loading || (!hasNext && !reset)) return; // 로딩 중이거나 마지막에 도달했을 시 중복 로딩 금지
     loading = true;
 
-    if (reset) {
+    if (reset) { // reset = true : 처음부터 로딩
         const cards = container.querySelectorAll(".feed-card");
         cards.forEach(card => card.remove());
 
@@ -46,20 +45,26 @@ async function loadFeeds(reset = false) {
         hasNext = true;
     }
 
-    let url = `/api/feed/?size=${size}`;
+    let url = `/api/feed/?size=${size}`; // 처음요청 size만
     if (lastFeedId !== null) {
-        url += `&lastFeedId=${lastFeedId}`;
+        url += `&lastFeedId=${lastFeedId}`; // 마지막 게시물부터 요청
     }
 
-    const res = await fetch(url);
-    const data = await res.json();
+    const res = await fetch(url); // fetch 요청 보내기
+    const data = await res.json(); // 가져온 응답 JSON으로 변경
 
     renderFeeds(data.feedResponseVos);
 
     hasNext = data.hasNext;
     lastFeedId = data.lastFeedId;
 
-    loading = false;
+    if(!hasNext) {
+        reloadWrapper.classList.remove('hidden');
+    } else {
+        reloadWrapper.classList.add('hidden');
+    }
+
+    loading = false; // 다 가져온 후 loading 상태 풀기
 }
 
 // 피드 화면에 추가
@@ -67,12 +72,13 @@ function renderFeeds(feeds) {
     feeds.forEach(feed => {
         const card = document.createElement("article");
         card.className = "feed-card";
+        card.dataset.id = feed.id;
 
         card.innerHTML = `
             <header class="feed-user">
                 <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
                 <div class="meta">
-                    <span class="nickname">user_${feed.userId}</span>
+                    <span class="nickname">${feed.nickname}</span>
                     <span class="place">서울</span>
                 </div>
             </header>
@@ -116,7 +122,28 @@ const observer = new IntersectionObserver(entries => {
 
 observer.observe(sentinel);
 
+// 새로고침 버튼 클릭 시
+const reloadWrapper = document.querySelector(".reload-wrapper");
+const reloadBtn = document.querySelector(".reload-btn");
+
+reloadBtn.addEventListener("click", () => {
+    reloadWrapper.classList.add('hidden');
+    loadFeeds(true);
+    window.scrollTo({ top: 0, behavior: "smooth" }); // (추천)
+})
+
+/* ================= 카드 클릭 시 상세 페이지 ================= */
+container.addEventListener("click", (e) => {
+    const card = e.target.closest(".feed-card");
+    if (!card) return;
+
+    const feedId = card.dataset.id;
+
+    window.location.href = `/feed/${feedId}`;
+})
+
+/* ================= 상세 페이지 갔다가 다시오기 ================= */
+
 
 /* ================= 첫 페이지 로딩 ================= */
 loadFeeds();
-setTimeout(() => loadFeeds(), 100);
