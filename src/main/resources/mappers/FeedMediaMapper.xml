@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="dev.dhkim.petlog.mappers.FeedMediaMapper">
     <insert id="insertFeedMediaList">
-        INSERT INTO `pet_log`.`feed_media` (feed_id, media_url, media_type, sort_order, source)
+        INSERT INTO `petlog`.`feed_media` (feed_id, media_url, media_type, sort_order, source)
         VALUES
             <foreach collection="list" item="item" separator=",">
                 (#{item.feedId},
@@ -19,7 +19,7 @@
                `media_type` AS `mediaType`,
                `sort_order` AS `sortOrder`,
                `source` AS `source`
-        FROM `pet_log`.`feed_media`
+        FROM `petlog`.`feed_media`
         WHERE feed_id IN
         <foreach collection="feedIds" item="id" open="(" separator="," close=")">
             #{id}

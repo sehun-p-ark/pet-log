@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="dev.dhkim.petlog.mappers.FeedMapper">
     <insert id="insertFeed" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO `pet_log`.`feed`
+        INSERT INTO `petlog`.`feed`
             (user_id, title, content, like_count, comment_count, created_at, updated_at)
         VALUES
             (#{userId}, #{title}, #{content}, #{likeCount}, #{commentCount}, #{createdAt}, null)
@@ -16,7 +16,7 @@
                `comment_count` AS `commentCount`,
                `created_at` AS `createdAt`,
                `updated_at` AS `updatedAt`
-        FROM `pet_log`.`feed`
+        FROM `petlog`.`feed`
         <where>
             <if test = "lastFeedId != null">
                 id &lt; #{lastFeedId}
