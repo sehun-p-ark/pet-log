@@ -69,10 +69,10 @@ ol, ul {
   background-color: $global-green-background-color;
   box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.15);
   font-family: "Chewy", system-ui;
-  overflow: hidden;
+  /*overflow: hidden;*/
   width: 100%;
   height: 5rem;
-  padding: 0 14rem;
+  padding: 0 8%;
 
 
   > .nav-wrapper {

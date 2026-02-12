@@ -1,0 +1,334 @@
+@charset "UTF-8";
+/* ============================= */
+/*        전체 레이아웃          */
+/* ============================= */
+.support {
+  width: 100%;
+  max-width: 75rem;
+  margin: 3rem auto;
+  padding: 0 3rem;
+}
+
+/* ============================= */
+/*            헤더               */
+/* ============================= */
+.support-header {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  justify-content: center;
+}
+.support-header > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.support-header > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.support-header .title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #000000;
+}
+.support-header .subtitle {
+  font-size: 1rem;
+  color: #565656;
+}
+
+/* ============================= */
+/*           카드 공통           */
+/* ============================= */
+.faq.card {
+  width: 100%;
+  background-color: #FFFFFF;
+  padding: 2.5rem 3rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.0588235294);
+  max-height: 20rem;
+  overflow-y: scroll;
+}
+
+.card {
+  width: 100%;
+  background-color: #FFFFFF;
+  padding: 2.5rem 3rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.0588235294);
+}
+
+/* ============================= */
+/*             FAQ               */
+/* ============================= */
+.faq {
+  margin-bottom: 3.5rem;
+}
+.faq h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.8rem;
+  font-weight: 700;
+}
+.faq details {
+  padding: 0.5rem 0;
+  border-bottom: 0.0625rem solid #e7e5e4;
+}
+.faq details summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.05rem;
+  list-style: none;
+}
+.faq details summary::marker {
+  display: none;
+}
+.faq details p {
+  margin-top: 0.5rem;
+  color: #565656;
+  line-height: 1.7;
+  font-size: 0.95rem;
+}
+.faq details[open] summary {
+  color: #38A34C;
+}
+
+/* ============================= */
+/*     문의 + 고객센터 정보      */
+/* ============================= */
+.support-bottom {
+  display: flex;
+  gap: 0.7rem;
+  align-items: stretch;
+  margin-bottom: 3.5rem;
+}
+.support-bottom .inquiry,
+.support-bottom .support-info {
+  flex: 1;
+}
+
+/* ============================= */
+/*           문의 CTA            */
+/* ============================= */
+.inquiry {
+  background-color: #89CC96;
+  color: #FFFFFF;
+  padding: 3.5rem 3rem;
+  border-radius: 1.2rem;
+  text-align: center;
+}
+.inquiry h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.inquiry p {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+.inquiry .btn-group {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1.3rem;
+  justify-content: center;
+}
+.inquiry .btn-group > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.inquiry .btn-group > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.inquiry .btn-group .btn-primary {
+  margin-top: 1.8rem;
+  padding: 0.5625rem 1.75rem;
+  border-radius: 3rem;
+  background-color: #FFFFFF;
+  color: #38A34C;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.inquiry .btn-group .btn-primary:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.1490196078);
+}
+.inquiry .btn-group .btn-primary:active {
+  transform: translateY(0);
+}
+
+/* ============================= */
+/*         고객센터 정보         */
+/* ============================= */
+.support-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+.support-info div {
+  padding-top: 1rem;
+  border-bottom: 0.0625rem solid #e7e5e4;
+}
+.support-info div strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.support-info div span {
+  color: #565656;
+  font-size: 0.95rem;
+}
+
+/* ============================= */
+/*       문의내역 슬라이드        */
+/* ============================= */
+.inquiry-list {
+  position: fixed;
+  top: 6.25rem;
+  right: -100%;
+  width: 30rem;
+  height: 50rem;
+  background: #ffffff;
+  box-shadow: -0.3125rem 0 1.25rem rgba(0, 0, 0, 0.1019607843);
+  border-radius: 0.3125rem 0 0 0.3125rem;
+  transition: right 0.3s ease;
+  z-index: 2000;
+}
+
+.inquiry-list.active {
+  right: 0;
+}
+
+/* ============================= */
+/*            반응형             */
+/* ============================= */
+@media (max-width: 64rem) {
+  .support {
+    padding: 0 2rem;
+  }
+  .card {
+    padding: 2rem;
+  }
+}
+@media (max-width: 48rem) {
+  .support {
+    padding: 0 1.2rem;
+  }
+  .support-bottom {
+    flex-direction: column;
+  }
+  .support-info {
+    grid-template-columns: 1fr;
+  }
+}
+/* ============================= */
+/*            모달 영역          */
+/* ============================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4509803922);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal {
+  width: 100%;
+  max-width: 31.25rem;
+  background: #ffffff;
+  border-radius: 1.2rem;
+  box-shadow: 0 1.25rem 3.125rem rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: modalFade 0.25s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-0.625rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.modal-header {
+  padding: 0.9375rem 2rem;
+  border-bottom: 0.0625rem solid #e7e5e4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-header h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.modal-header .modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+.modal-body .form-group {
+  margin-bottom: 1.5rem;
+}
+.modal-body .form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.modal-body .form-group input,
+.modal-body .form-group textarea {
+  width: 100%;
+  padding: 0.5625rem 0.625rem;
+  border-radius: 0.75rem;
+  border: 0.0625rem solid #e7e5e4;
+  font-size: 0.95rem;
+  resize: none;
+}
+.modal-body .form-group input:focus,
+.modal-body .form-group textarea:focus {
+  border-color: #89CC96;
+  outline: none;
+  box-shadow: 0 0 0 0.1875rem #89cc96;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.0625rem;
+}
+
+.btn-cancel {
+  padding: 0.4375rem 0.9375rem;
+  border-radius: 2rem;
+  border: 0.0625rem solid #e7e5e4;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.btn-submit {
+  padding: 0.4375rem 1.125rem;
+  border-radius: 2rem;
+  border: none;
+  background: #89CC96;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=cs.css.map */

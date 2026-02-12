@@ -302,12 +302,12 @@ textarea[data-object=input][data-resize=both] {
   pointer-events: none;
   z-index: 8;
   opacity: 0;
-  transition-property: translate, opacity;
+  transition-property: transform, opacity;
   transition-duration: 150ms;
-  transform: translateY(-20%);
+  transform: translateY(0);
 }
 #topNavigator > .nav-wrapper > .user > .friend-wrapper > .view.active {
-  transform: translateY(0);
+  transform: translateY(1.5rem);
   cursor: default;
   pointer-events: auto;
   opacity: 1;
@@ -665,10 +665,10 @@ ol, ul {
   background-color: #89CC96;
   box-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.15);
   font-family: "Chewy", system-ui;
-  overflow: hidden;
+  /*overflow: hidden;*/
   width: 100%;
   height: 5rem;
-  padding: 0 14rem;
+  padding: 0 8%;
 }
 #topNavigator > .nav-wrapper {
   align-items: center;

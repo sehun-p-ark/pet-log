@@ -1,10 +1,10 @@
-package dev.dhkim.petlog.services;
+package dev.dhkim.petlog.services.main;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.dhkim.petlog.dto.HospitalDto;
-import dev.dhkim.petlog.entities.HospitalEntity;
-import dev.dhkim.petlog.repository.HospitalRepository;
+import dev.dhkim.petlog.dto.main.HospitalDto;
+import dev.dhkim.petlog.entities.main.HospitalEntity;
+import dev.dhkim.petlog.mappers.HospitalMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,9 +22,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class HospitalService {
-
-    private final HospitalRepository hospitalRepository;
+    private final HospitalMapper hospitalMapper;
+    //공공데이터 API 자체를 호출할 수 없음
     private final RestTemplate restTemplate = new RestTemplate();
+    //json 문자 -> 자바로 파싱
     private final ObjectMapper mapper = new ObjectMapper();
 
     private static final int NUM_OF_ROWS = 10;
@@ -35,38 +36,32 @@ public class HospitalService {
 
     /**
      * 전체 데이터 삭제 (테스트용)
-     *//*
-    public void deleteAllHospitals() {
-        hospitalRepository.deleteAll();
-        System.out.println("DB 모든 병원 데이터 삭제 완료");
-    }*/
+     */
+    public String deleteAllHospitals() {
+        hospitalMapper.deleteAllHospitals();
+        return "DB 모든 병원 데이터 삭제 완료";
+    }
 
 
-    /* 전체 데이터를 API에서 끝까지 긁어와 DB에 저장하는 메인 로직*/
     public int fetchAndSaveHospitals() throws Exception {
-        //전체 저장 개수를 저장하는 변수
+
         int totalSaved = 0;
 
-        // 1 첫 페이지에서 전체 건수 확인
         JsonNode firstBody = getBodyNode(1);
-        //api에 totalCount": 10453 값에 접근
         int totalCount = firstBody.path("totalCount").asInt();
         int totalPages = (totalCount + NUM_OF_ROWS - 1) / NUM_OF_ROWS;
 
         System.out.println("총 데이터 수: " + totalCount);
         System.out.println("총 페이지 수: " + totalPages);
 
-        // 2페이지 반복
         for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
 
             JsonNode body = getBodyNode(pageNo);
             JsonNode itemsNode = body.path("items").path("item");
 
-            //item이 없거나 ""이면 중단 (API 버그 대응)
-            if (itemsNode.isMissingNode() ||
-                    itemsNode.isNull() ||
-                    (itemsNode.isTextual() && itemsNode.asText().isEmpty())) {
-
+            if (itemsNode.isMissingNode()
+                    || itemsNode.isNull()
+                    || (itemsNode.isTextual() && itemsNode.asText().isEmpty())) {
                 System.out.println("페이지 " + pageNo + " 데이터 없음 → 중단");
                 break;
             }
@@ -81,8 +76,17 @@ public class HospitalService {
                 batch.add(convertToEntity(itemsNode));
             }
 
-            hospitalRepository.saveAll(batch);
-            totalSaved += batch.size();
+            // 여기 핵심
+            for (HospitalEntity hospital : batch) {
+
+                // 중복 체크
+                if (hospitalMapper.existsByManageNo(hospital.getManageNo())) {
+                    continue;
+                }
+
+                hospitalMapper.insertHospital(hospital);
+                totalSaved++;
+            }
 
             System.out.println("페이지 " + pageNo + " 저장 완료 (" + batch.size() + "건)");
         }
@@ -90,7 +94,6 @@ public class HospitalService {
         System.out.println("전체 저장 완료: " + totalSaved + "건");
         return totalSaved;
     }
-
     //“API에서 받은 JSON 병원 1건 → DB에 저장할 HospitalEntity 객체로 변환
     private HospitalEntity convertToEntity(JsonNode node) {
         return HospitalEntity.builder()
@@ -108,12 +111,6 @@ public class HospitalService {
                 .build();
     }
 
-    // api 형태는 text 라서 crdX,crdY 값을 double 로 변환 해줘야 함
-    //필드(json에 키 값)을 특정 하지말고 범용적으로 사용
-    private Double parseDoubleOrNull(JsonNode node, String field) {
-        String s = node.path(field).asText();
-        return s.isBlank() ? null : Double.parseDouble(s);
-    }
 
     /**
      * 특정 페이지 body JSON 가져오기
@@ -137,6 +134,14 @@ public class HospitalService {
                 + "&numOfRows=" + NUM_OF_ROWS
                 + "&returnType=json";
     }
+
+    // api 형태는 text 라서 crdX,crdY 값을 double 로 변환 해줘야 함
+    //필드(json에 키 값)을 특정 하지말고 범용적으로 사용
+    private Double parseDoubleOrNull(JsonNode node, String field) {
+        String s = node.path(field).asText();
+        return s.isBlank() ? null : Double.parseDouble(s);
+    }
+
 
     /**
      * TM 좌표(EPSG:5179) → WGS84 변환 (카카오 Local API)
@@ -217,29 +222,33 @@ public class HospitalService {
     }
 
     /**
-     * DB 전체 병원 데이터 변환
+     * DB 전체 병원 데이터 위도 경도 변환
      */
     @Transactional
     public void updateAllHospitalsLatLng() {
 
-        List<HospitalEntity> hospitals = hospitalRepository
-                .findByLatIsNullOrLngIsNullOrLatEqualsOrLngEquals(0.0, 0.0);
+        List<HospitalEntity> hospitals =
+                hospitalMapper.findInvalidCoords(0.0, 0.0);
 
-        System.out.println("업데이트 대상 병원 수: " + hospitals.size());
         for (HospitalEntity hospital : hospitals) {
             try {
                 updateLatLng(hospital);
-                hospitalRepository.save(hospital);
+                hospitalMapper.updateLatLng(
+                        hospital.getId(),
+                        hospital.getLat(),
+                        hospital.getLng()
+                );
             } catch (Exception e) {
                 System.out.println("Failed to update hospital ID: " + hospital.getId());
                 e.printStackTrace();
             }
         }
+
     }
 
     //백에서 받은 값을 프론트로 전달
         public List<HospitalDto> getAllHospitalsForMap() {
-            return hospitalRepository.findAll().stream()
+            return hospitalMapper.findAll().stream()
                     .map(h -> new HospitalDto(
                             h.getName(),
                             h.getAddress(),

@@ -1,4 +1,4 @@
-package dev.dhkim.petlog.dto;
+package dev.dhkim.petlog.dto.main;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 //api에서 값을 꺼내서 db 에 저장하기 위한 (화면에 표시할 내용이 꼭 담겨있어야 함)
+//값들이 대문자인 이유 api 에 맞춰서 바로 쓰기 위해, JS에서 가공 없이 바로 사용 가능
 public class HospitalDto {
     private String BIZPLC_NM; //병원 이름
     private String ROAD_NM_ADDR; // 도로명 주소
