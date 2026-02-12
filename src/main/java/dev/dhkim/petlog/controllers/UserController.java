@@ -1,26 +1,205 @@
 package dev.dhkim.petlog.controllers;
 
 import ch.qos.logback.core.model.Model;
+import dev.dhkim.petlog.dto.user.RegisterDto;
+import dev.dhkim.petlog.dto.user.SessionUser;
+import dev.dhkim.petlog.entities.user.BusinessUserEntity;
+import dev.dhkim.petlog.entities.user.PersonalUserEntity;
+import dev.dhkim.petlog.entities.user.UserEntity;
+import dev.dhkim.petlog.enums.user.EmailVerificationType;
+import dev.dhkim.petlog.mappers.user.UserMapper;
+import dev.dhkim.petlog.results.*;
+import dev.dhkim.petlog.services.user.UserService;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value="/user")
 public class UserController {
-    @RequestMapping(value="/login",method = RequestMethod.GET,produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getLogin(ModelAndView modelAndView, Model model){
+    private final UserService userService;
+    private final UserMapper userMapper;
+
+    @RequestMapping(value="/login", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getLogin(ModelAndView modelAndView,
+                                 @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser != null) {
+            modelAndView.setViewName("redirect:/main");
+            return modelAndView;
+        }
         modelAndView.setViewName("user/login");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getLogout(HttpSession session) {
+        Object sessionUser = session.getAttribute("sessionUser");
+        if (sessionUser != null) {
+            session.removeAttribute("sessionUser");
+        }
+        return "redirect:/user/login";
+    }
+
 
     @RequestMapping(value="/register",method = RequestMethod.GET,produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getRegister(ModelAndView modelAndView, Model model){
         modelAndView.setViewName("user/register");
         return modelAndView;
     }
+
+    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postUser(@RequestBody RegisterDto dto) {
+        Map<String, Object> response = new HashMap<>();
+        RegisterResult result = userService.register(dto);
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/email", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postEmail(@RequestParam(value = "email") String email,
+                                         @RequestParam(value = "type")EmailVerificationType type) throws MessagingException {
+
+        Map<String, Object> response = new HashMap<>();
+        EmailVerificationResult result = this.userService.sendEmail(email, type);
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/email/verify", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> patchEmail(@RequestParam(value = "email") String email,
+                                          @RequestParam(value = "code") String code,
+                                          @RequestParam(value = "type") EmailVerificationType type) {
+        EmailVerificationResult result = userService.verifyEmail(email, code, type);
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/loginId/verify", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> patchFindId(@RequestParam(value = "email") String email,
+                                          @RequestParam(value = "code") String code,
+                                          @RequestParam(value = "type") EmailVerificationType type) {
+        EmailVerificationResult result = userService.verifyEmail(email, code, type);
+        Map<String, Object> response = new HashMap<>();
+        if (result == EmailVerificationResult.SUCCESS) {
+            UserEntity dbUser = this.userMapper.selectByEmail(email);
+            if (dbUser.getUserType().equals("personal")) {
+                PersonalUserEntity dbPersonalUser = this.userMapper.selectByPersonalUserId(dbUser.getId());
+                response.put("name", dbPersonalUser.getName());
+                response.put("loginId", dbUser.getLoginId());
+            }
+            if (dbUser.getUserType().equals("business")) {
+                BusinessUserEntity dbBusinessUser = this.userMapper.selectByBusinessUserId(dbUser.getId());
+                response.put("name", dbBusinessUser.getRepresentativeName());
+                response.put("loginId", dbUser.getLoginId());
+            }
+        }
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/nickname", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getNicknameStatus(@RequestParam(value = "nickname") String nickname) {
+        CheckResult result = this.userService.checkNickname(nickname);
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/loginId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getLoginIdStatus(@RequestParam(value = "loginId") String loginId) {
+        CheckResult result = this.userService.checkLoginId(loginId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/phone", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getPhoneStatus(@RequestParam(value = "phone") String phone) {
+        CheckResult result = this.userService.checkPhone(phone);
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/businessId", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getBusinessIdStatus(@RequestParam(value = "businessId") String businessId) {
+        CheckResult result = this.userService.checkBusinessId(businessId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result.name());
+        return response;
+    }
+
+
+    // 로그인
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postLogin(@RequestParam(value = "loginId") String loginId,
+                                         @RequestParam(value = "password") String password,
+                                         HttpSession session) {
+        Pair<LoginResult, UserEntity> result = this.userService.login(loginId, password);
+        if (result.getLeft() == LoginResult.SUCCESS) {
+            UserEntity user = result.getRight();
+            SessionUser sessionUser = new SessionUser(user.getId(), user.getUserType());
+            session.setAttribute("sessionUser", sessionUser);
+        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("result", result.getLeft().name());
+        return response;
+    }
+
+    // 아이디 찾기
+    @RequestMapping(value = "/findId", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> sendFindIdEmail(@RequestParam(value = "name") String name,
+                                         @RequestParam(value = "email") String email,
+                                               EmailVerificationType type) throws MessagingException {
+        Map<String, Object> response = new HashMap<>();
+        EmailVerificationResult result = this.userService.sendFindIdEmail(name, email, type);
+        response.put("result", result.name());
+        return response;
+    }
+
+    // 비밀번호 찾기
+    @RequestMapping(value = "/findPassword", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> sendFindPasswordEmail(@RequestParam(value = "email") String email,
+                                                     @RequestParam(value = "loginId") String loginId,
+                                                     @RequestParam(value = "type") EmailVerificationType type) throws MessagingException {
+
+        Map<String, Object> response = new HashMap<>();
+        EmailVerificationResult result = this.userService.sendFindPasswordEmail(email, loginId, type);
+        response.put("result", result.name());
+        return response;
+    }
+
+    @RequestMapping(value = "/changePassword", method = RequestMethod.PATCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> patchChangePassword(@RequestParam(value = "loginId") String loginId,
+                                                   @RequestParam(value = "email") String email,
+                                                   @RequestParam(value = "password") String password) {
+
+        Map<String, Object> response = new HashMap<>();
+        FindPasswordResult result = this.userService.changePassword(loginId, email, password);
+        response.put("result", result.name());
+        return response;
+    }
+
 }

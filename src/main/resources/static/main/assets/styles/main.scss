@@ -89,18 +89,18 @@
             color: #fff;
           }
 
-        }
+      }
 
-        .category-btn img {
-          width: 1.3rem;
-          height: 1.3rem;
-        }
+      .category-btn img {
+        width: 1.3rem;
+        height: 1.3rem;
+      }
 
-        /* 활성화 상태 */
-        .category-btn.active {
-          background: #ff7a00;
-          color: #fff;
-        }
+      /* 활성화 상태 */
+      .category-btn.active {
+        background: #ff7a00;
+        color: #fff;
+      }
 
         .category-btn.active img {
           filter: brightness(0) invert(1);

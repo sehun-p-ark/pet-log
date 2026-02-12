@@ -13,14 +13,18 @@
 <body>
 <th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
 <div class="cover"></div>
+<div class="loading" id="loading">
+    <div class="icon"></div>
+    <div class="message"></div>
+</div>
 <div class="register-message" id="register-message">
     <button type="button" class="button">확인</button>
 </div>
 <div class="main" id="main">
     <div class="dialogLoginSearchResult dialog">
-        <span class="text">김명섭 회원님의 아이디는</span>
+        <span class="text nameResult"></span>
         <span class="text -flex-stretch">
-            '<span class="id">msubi0831</span>' 입니다.</span>
+            '<span class="id"></span>' 입니다.</span>
         <button class="button" type="button">확인</button>
     </div>
     <div class="dialogPasswordChangeResult dialog">
@@ -36,7 +40,7 @@
             </button>
         </span>
         <label class="nameLabel label">
-            <span class="text">이름</span>
+            <span class="text">이름(사업자회원일 경우 대표자명)</span>
             <input class="name input" placeholder="실명을 입력해주세요." type="text">
         </label>
         <label class="emailLabel label">

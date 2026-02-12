@@ -1,9 +1,28 @@
 @use "sass:color";
 @import "../../../assets/styles/def";
 
-body:has(> .register-message.visible) > .cover {
+body:has(> .register-message.visible) > .cover,
+body:has(> .petDeleteMessage.visible) > .cover,
+body:has(> .checkMessage.visible) > .cover {
   opacity: 1;
   pointer-events: auto;
+}
+
+.loading {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #212121a0;
+  z-index: 29;
+  opacity: 0;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+  }
 }
 
 /*body:has(> .address-wrapper.visible) > *:not(.address-wrapper) {
@@ -44,7 +63,129 @@ body:has(> .address-wrapper.visible) > .cover {
   }
 }
 
+.checkMessage {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .yes {
+      background-color: #38A34C;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #2F8F43;
+      }
+
+      &:active {
+        background-color: #287A39;
+      }
+    }
+
+    > .no {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
+  }
+}
+
 .register-message {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  min-width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  > .button {
+    background-color: #38A34C;
+    border-radius: 0.35rem;
+    color: #ffffff;
+    cursor: pointer;
+    height: 2.25rem;
+    transition-duration: 250ms;
+    transition-property: background-color;
+
+    &:hover {
+      background-color: #2F8F43;
+    }
+
+    &:active {
+      background-color: #287A39;
+    }
+  }
+}
+
+
+.petDeleteMessage {
   @include flex(column, stertch, flex-start, 1rem);
   top: 50%;
   left: 50%;
@@ -72,15 +213,53 @@ body:has(> .address-wrapper.visible) > .cover {
     font-size: 1rem;
   }
 
-  > .button {
-    background-color: #38A34C;
-    border-radius: 0.35rem;
-    color: #ffffff;
-    cursor: pointer;
-    height: 2.25rem;
-    margin-top: 1rem;
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .delete {
+      background-color: #38A34C;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+      flex-grow: 1;
+
+      &:hover {
+        background-color: #2F8F43;
+      }
+
+      &:active {
+        background-color: #287A39;
+      }
+    }
+
+    > .cancel {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+      flex-grow: 1;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
   }
 }
+
 
 .register-container {
   @include flex(row, center, center);
@@ -417,7 +596,7 @@ body:has(> .address-wrapper.visible) > .cover {
   }
 
   > .register-third {
-    @include flex(column, stretch, flex-start, 1rem);
+    @include flex(column, stretch, flex-start, 1.5rem);
     width: 100%;
     max-width: 45rem;
     max-height: calc(100vh - 11rem);
@@ -505,18 +684,110 @@ body:has(> .address-wrapper.visible) > .cover {
         font-weight: 500;
       }
 
-      > .firstNumber {
-        width: 6rem;
-        height: 2.35rem;
-        border: 0.0625rem solid #e7e5e4;
+      > .id-wrapper {
+        @include flex(column, stretch, flex-start, 0.25rem);
+        margin-top: 1.5rem;
         flex-grow: 1;
-        color: #565656;
+
+        > .text {
+          opacity: 0;
+          color: #ff4646;
+          pointer-events: none;
+          padding: 0.5rem 0 0 0;
+          margin-top: 0;
+          transition-duration: 250ms;
+          transition-property: opacity;
+
+          &.visible {
+            opacity: 1;
+          }
+        }
       }
 
-      > .input {
+      > .phone-wrapper {
+        @include flex(column, stretch, flex-start, 0.25rem);
+        margin-top: 1.5rem;
+        flex-grow: 1;
+
+        > .number-wrapper {
+          @include flex(row, center, flex-start, 1rem);
+
+          > .firstNumber {
+            width: 6rem;
+            height: 2.35rem;
+            border: 0.0625rem solid #e7e5e4;
+            flex-grow: 1;
+            color: #565656;
+          }
+
+          > .contactNumber {
+            width: 6rem;
+            flex-grow: 1;
+          }
+        }
+
+        > .text {
+          opacity: 0;
+          color: #ff4646;
+          pointer-events: none;
+          padding: 0.5rem 0 0 0;
+          margin-top: 0;
+          transition-duration: 250ms;
+          transition-property: opacity;
+
+          &.visible {
+            opacity: 1;
+          }
+        }
+      }
+
+      > .nickname-wrapper {
+        @include flex(column, stretch, flex-start, 0.25rem);
+        margin-top: 1.5rem;
+        flex-grow: 1;
+
+        > .text {
+          opacity: 0;
+          color: #ff4646;
+          pointer-events: none;
+          padding: 0.5rem 0 0 0;
+          margin-top: 0;
+          transition-duration: 250ms;
+          transition-property: opacity;
+
+          &.visible {
+            opacity: 1;
+          }
+        }
+      }
+
+      > .businessId-wrapper {
+        @include flex(column, stretch, flex-start, 0.25rem);
+        margin-top: 1.5rem;
+        flex-grow: 1;
+
+        > .text {
+          opacity: 0;
+          color: #ff4646;
+          pointer-events: none;
+          padding: 0.5rem 0 0 0;
+          margin-top: 0;
+          transition-duration: 250ms;
+          transition-property: opacity;
+
+          &.visible {
+            opacity: 1;
+          }
+        }
+      }
+
+      > .input,
+      > .id-wrapper > .input,
+      > .phone-wrapper > .number-wrapper > .input,
+      > .nickname-wrapper > .input,
+      > .businessId-wrapper > .input {
         border-bottom: 0.1rem solid #E7E5E4;
         height: 2rem;
-        /*width: 17.5rem;*/
         font-size: 1rem;
         transition-duration: 300ms;
         transition-property: border-bottom-color;
@@ -529,11 +800,6 @@ body:has(> .address-wrapper.visible) > .cover {
           &::placeholder {
             color: lighten($global-gray-text-color, 20%);
           }
-        }
-
-        &.contactNumber {
-          width: 6rem;
-          flex-grow: 1;
         }
 
         &:hover {
@@ -561,7 +827,7 @@ body:has(> .address-wrapper.visible) > .cover {
           border-color: #e7e5e4 !important;
           background-color: rgb(226.25, 226.25, 226.25) !important;
           color: #898989;
-          cursor: default;
+          cursor: revert;
         }
 
         &:hover {
@@ -704,6 +970,7 @@ body:has(> .address-wrapper.visible) > .cover {
       @include flex(column, stretch, flex-start, 0.5rem);
 
       > .pet {
+        @include flex(column, stretch, flex-start, 1rem);
         flex-grow: 1;
         background-color: #ffffff;
         border: 0.0625rem solid $global-border-color;
@@ -724,44 +991,19 @@ body:has(> .address-wrapper.visible) > .cover {
               width: 6rem;
               height: 6rem;
               border: 0.0625rem solid $global-border-color;
+              margin-left: 0.5rem;
 
               > .petImage {
                 width: 5rem;
                 height: 5rem;
                 object-fit: cover;
                 border-radius: 999rem;
-
-              }
-            }
-
-            > .remember {
-              @include flex(row, center, center);
-              width: 7rem;
-              height: 1.75rem;
-              cursor: pointer;
-              background-color: $global-gray-background-color;
-              border: 0.0625rem solid $global-border-color;
-              border-radius: 0.35rem;
-              color: $global-black-text-color;
-
-              > .text::before {
-                content: '대표지정';
-              }
-
-
-              &:has(> .checkbox:checked) {
-                background-color: $global-green-text-color;
-                color: $global-white-text-color;
-
-                > .text::before {
-                  content: '대표동물';
-                }
               }
             }
           }
 
           > .detail {
-            @include flex(column, stretch, flex-start, 0.25rem);
+            @include flex(column, stretch, flex-start, 0.5rem);
             margin-left: 3rem;
             min-width: 0;
             flex: 1;
@@ -782,8 +1024,46 @@ body:has(> .address-wrapper.visible) > .cover {
               white-space: normal;
               word-break: break-word;
               overflow-wrap: break-word;
-              margin-bottom: 1.5rem;
             }
+          }
+        }
+
+        > .bottom-wrapper {
+          @include flex(row, stretch, flex-start, 0.5rem);
+
+          > .remember {
+            @include flex(row, center, center);
+            width: 7rem;
+            height: 1.75rem;
+            cursor: pointer;
+            background-color: $global-gray-background-color;
+            border: 0.0625rem solid $global-border-color;
+            border-radius: 0.35rem;
+            color: $global-black-text-color;
+
+            > .text::before {
+              content: '대표지정';
+            }
+
+
+            &:has(> .checkbox:checked) {
+              background-color: $global-green-text-color;
+              color: $global-white-text-color;
+
+              > .text::before {
+                content: '대표동물';
+              }
+            }
+          }
+
+          > .modify {
+            cursor: pointer;
+            color: $global-gray-text-color;
+          }
+
+          > .delete {
+            cursor: pointer;
+            color: $global-gray-text-color;
           }
         }
       }
@@ -807,6 +1087,14 @@ body:has(> .address-wrapper.visible) > .cover {
 
       > .next-warning {
         margin-left: 0.35rem;
+      }
+    }
+
+    &.business {
+      > .semiTitle::after {
+        content: '(선택)';
+        font-size: 1rem;
+        color: $global-gray-text-color;
       }
     }
 
@@ -972,6 +1260,57 @@ body:has(> .dialog.visible) {
   pointer-events: none;
 }
 
+.loading {
+  @include flex(column, center, center, 1.5rem);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #212121a0;
+  opacity: 0;
+  z-index: 29;
+  pointer-events: none;
+  transition-duration: 175ms;
+  transition-property: opacity;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .icon {
+    @keyframes anim {
+      from {
+        transform: rotateZ(0deg);
+      }
+      to {
+        transform: rotateZ(360deg);
+      }
+    }
+    width: 3.5rem;
+    height: 3.5rem;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-name: anim;
+    animation-timing-function: linear;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0,0,256,256'%3E%3Cg fill='%23ffffff' fill-rule='nonzero' stroke='none' stroke-width='1' stroke-linecap='butt' stroke-linejoin='miter' stroke-miterlimit='10' stroke-dasharray='' stroke-dashoffset='0' font-family='none' font-weight='none' font-size='none' text-anchor='none' style='mix-blend-mode: normal'%3E%3Cg transform='scale(5.12,5.12)'%3E%3Cpath d='M25.00586,2.00195c-9.51246,0 -17.67532,5.78862 -21.17187,14.03711c-0.02548,0.04319 -0.04768,0.08824 -0.06641,0.13477c-0.0838,0.20186 -0.15089,0.40642 -0.22852,0.60938c-0.105,0.27404 -0.21585,0.54525 -0.31055,0.82422c-0.17304,0.5093 -0.32878,1.02156 -0.46484,1.53516c-0.00134,0.0052 -0.00265,0.01041 -0.00391,0.01563c-0.00813,0.03105 -0.01934,0.06069 -0.02734,0.0918c-0.1379,0.53496 0.1839,1.08044 0.71882,1.21848c0.53492,0.13804 1.08049,-0.1836 1.21868,-0.71848c0.00372,-0.01446 0.00797,-0.02852 0.01172,-0.04297c0.12864,-0.49539 0.2802,-0.98045 0.44336,-1.46094c0.08624,-0.25364 0.18664,-0.50564 0.2832,-0.75781c3.02232,-7.88054 10.64077,-13.48633 19.59766,-13.48633c11.60854,0 20.99805,9.3895 20.99805,20.99805c-0.0051,0.36064 0.18438,0.69608 0.49587,0.87789c0.3115,0.18181 0.69676,0.18181 1.00825,0c0.3115,-0.18181 0.50097,-0.51725 0.49587,-0.87789c0,-12.68946 -10.30859,-22.99805 -22.99805,-22.99805zM2.70898,24.0918l-0.64453,0.62305l-0.05664,0.34766l0.01563,0.94141l0.00195,0.0293l0.00195,0.02734l0.0918,1.24805l0.00195,0.0293l0.00391,0.02734l0.16406,1.23828l0.00391,0.02734l0.00586,0.02734l0.23047,1.22461l0.00586,0.02734l0.00781,0.02734l0.24609,0.99219l0.58398,0.68164l0.89453,-0.06055l0.48633,-0.75195l-0.02344,-0.35156l-0.24219,-0.97266l-0.2168,-1.13281l-0.00195,-0.01758l-0.15625,-1.18945l-0.08984,-1.20508l-0.00195,-0.01758l-0.01367,-0.88281l-0.41406,-0.79492zM6.05273,34.95508l-0.84375,0.30664l-0.25977,0.85742l0.12109,0.33008l0.35547,0.61523l0.01563,0.02539l0.01367,0.02344l0.68359,1.03906l0.01563,0.02344l0.01758,0.02344l0.74219,1.00195l0.01563,0.02344l0.01953,0.02148l0.79883,0.96094l0.01953,0.02148l0.01953,0.02148l0.85742,0.91797l0.83984,0.31055l0.75195,-0.48633l0.06055,-0.89453l-0.19141,-0.29492l-0.8457,-0.9043l-0.01172,-0.01367l-0.74609,-0.89844l-0.69141,-0.93164l-0.65234,-0.99023l-0.00586,-0.01172l-0.35156,-0.60547zM40.38867,39.71094c-0.25937,0.00517 -0.50658,0.11091 -0.68945,0.29492c-0.22789,0.22312 -0.45979,0.44062 -0.69727,0.65234c-0.28155,0.23352 -0.41315,0.60213 -0.34315,0.96117c0.07,0.35903 0.33043,0.65121 0.67909,0.76186c0.34866,0.11065 0.72991,0.02213 0.99414,-0.23084c0.26052,-0.23227 0.51552,-0.46997 0.76563,-0.71484c0.29905,-0.2844 0.3927,-0.72327 0.23578,-1.10497c-0.15691,-0.38169 -0.53216,-0.62781 -0.94477,-0.61964zM13.80859,42.9707c-0.44313,0.02511 -0.81671,0.33927 -0.91743,0.77154c-0.10073,0.43226 0.09549,0.8792 0.48189,1.09761c0.89063,0.52058 1.82698,0.98916 2.80664,1.39648c0.01804,0.00704 0.03627,0.01355 0.05469,0.01953c0.306,0.12682 0.61334,0.24763 0.92188,0.35938c0.33773,0.12869 0.71862,0.06514 0.99629,-0.16622c0.27767,-0.23136 0.4089,-0.59452 0.34328,-0.94993c-0.06562,-0.35541 -0.3179,-0.64776 -0.65988,-0.76471c-0.29715,-0.10762 -0.5927,-0.22296 -0.88672,-0.3457c-0.00065,0 -0.0013,0 -0.00195,0c-0.89634,-0.37268 -1.75108,-0.79997 -2.56445,-1.27539c-0.17265,-0.10435 -0.37281,-0.15405 -0.57422,-0.14258zM34.22656,43.94727l-0.3418,0.08008l-1.02734,0.44531l-0.01367,0.00586l-0.90234,0.32422l-0.61719,0.65039l0.15039,0.88281l0.79883,0.4082l0.3457,-0.05859l0.91602,-0.33008l0.0293,-0.01172l0.0293,-0.01172l1.08398,-0.46875l0.57617,-0.6875l-0.20508,-0.87109zM25.90234,45.96875l-0.49805,0.0293l-1.55469,-0.02734v0.02148l-0.78711,0.30859l-0.23633,0.86328l0.55078,0.70703l0.33984,0.09375l0.02734,0.00195l0.03711,0.00391h0.03711l1.60938,0.02734h0.03711l0.03711,-0.00195l0.51563,-0.0293l0.77734,-0.44727l0.10742,-0.88867l-0.64844,-0.61914z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  > .message {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 300;
+
+    &:before {
+      content: '잠시만 기다려 주세요.';
+    }
+  }
+}
+
 .dialog {
   @include flex(column, stretch, flex-start);
   top: 50%;
@@ -989,6 +1328,27 @@ body:has(> .dialog.visible) {
   opacity: 0;
   pointer-events: none;
   overflow: hidden;
+
+  > .dialogCover {
+    z-index: 31;
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #212121a0;
+    opacity: 0;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+      border-color: #212121a0;
+    }
+  }
 
   > .cancel {
     position: absolute;
@@ -1139,10 +1499,10 @@ body:has(> .dialog.visible) {
       border-color: $global-border-color !important;
       background-color: lighten($global-gray-text-color, 55%) !important;
       color: lighten($global-gray-text-color, 20%);
-      cursor: default;
+      cursor: revert;
 
       &:hover {
-        cursor: default;
+        cursor: revert;
       }
     }
 
@@ -1184,8 +1544,10 @@ body:has(> .dialog.visible) {
 
 .dialog-first:has(> .select-wrapper > .another > input:checked) {
   > .anotherType-wrapper {
-    opacity: 1;
-    pointer-events: auto;
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 

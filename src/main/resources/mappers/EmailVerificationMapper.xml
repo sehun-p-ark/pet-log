@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.user.EmailVerificationMapper">
+    <insert id="insert">
+        INSERT INTO `petlog`.`email_verification` (type, email, code, is_verified , expires_at, created_at)
+        VALUES (#{type},
+                #{email},
+                #{code},
+                #{isVerified},
+                #{expiresAt},
+                #{createdAt})
+    </insert>
+    <update id="update">
+        UPDATE `petlog`.`email_verification`
+        SET `is_verified` = #{emailVerification.isVerified}
+        WHERE `email` = #{emailVerification.email}
+          AND `code` = #{emailVerification.code}
+          AND `type` = #{emailVerification.type}
+        LIMIT 1
+
+    </update>
+    <select id="select" resultType="dev.dhkim.petlog.entities.user.EmailVerificationEntity">
+        SELECT `verification_id` AS verificationId,
+               `type`            AS type,
+               `email`           AS email,
+               `code`            AS code,
+               `is_verified`     AS isVerified,
+               `expires_at`      AS expiresAt,
+               `created_at`      AS createdAt
+        FROM `petlog`.`email_verification`
+        WHERE email = #{email}
+          AND code = #{code}
+          AND type = #{type}
+        LIMIT 1
+    </select>
+</mapper>

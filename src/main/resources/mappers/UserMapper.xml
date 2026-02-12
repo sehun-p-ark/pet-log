@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.user.UserMapper">
+
+    <insert id="insertUser"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO `petlog`.`users` (email, login_id, password, phone, user_type)
+        VALUES (#{email},
+                #{loginId},
+                #{password},
+                #{phone},
+                #{userType})
+    </insert>
+    <insert id="insertPersonalUser">
+        INSERT INTO `petlog`.`personal_user` (user_id, name, nickname)
+        VALUES (#{userId},
+                #{dto.name},
+                #{dto.nickname})
+    </insert>
+    <insert id="insertBusinessUser">
+        INSERT INTO `petlog`.`business_user` (user_id, company_name, representative_name, business_number)
+        VALUES (#{userId},
+                #{dto.companyName},
+                #{dto.representativeName},
+                #{dto.businessNumber})
+    </insert>
+    <insert id="insertPet">
+        INSERT INTO `petlog`.`pets` (user_id, name, species, birth_date, gender, weight, body_type, image_url, is_primary)
+        VALUES (#{userId},
+                #{pet.name},
+                #{pet.species},
+                #{pet.birthDate},
+                #{pet.gender},
+                #{pet.weight},
+                #{pet.bodyType},
+                #{pet.imageUrl},
+                #{isPrimary})
+    </insert>
+    <insert id="insertAddress">
+        INSERT INTO `petlog`.`address` (user_id, receiver_name, phone, postal_code, address_primary, address_secondary, is_default)
+        VALUES (#{userId},
+                #{address.receiverName},
+                #{address.phone},
+                #{address.postalCode},
+                #{address.addressPrimary},
+                #{address.addressSecondary},
+                #{isDefault})
+    </insert>
+    <insert id="insertTerm">
+        INSERT INTO `petlog`.`user_terms_agreement` (user_id, terms_id, agreed)
+        VALUES (#{userId},
+                #{termsId},
+                TRUE)
+    </insert>
+    <insert id="insertStore">
+        INSERT INTO `petlog`.`store` (user_id, store_name, postal_code, address_primary, address_secondary, category)
+        VALUES (#{userId},
+                #{store.storeName},
+                #{store.postalCode},
+                #{store.addressPrimary},
+                #{store.addressSecondary},
+                #{store.category})
+    </insert>
+    <update id="updatePassword">
+        UPDATE `petlog`.`users`
+        SET `password` = #{password},
+            `updated_at`= NOW()
+        WHERE `login_id` = #{loginId}
+          AND `email` = #{email}
+    </update>
+    <select id="selectByNickname" resultType="dev.dhkim.petlog.entities.user.PersonalUserEntity">
+        SELECT `user_id`  AS userId,
+               `name`     AS name,
+               `nickname` AS nickname
+        FROM `petlog`.`personal_user`
+        WHERE `nickname` = #{nickname}
+        LIMIT 1
+    </select>
+    <select id="selectByLoginId" resultType="dev.dhkim.petlog.entities.user.UserEntity">
+        SELECT `id`         AS id,
+               `email`      AS email,
+               `login_id`   AS loginId,
+               `password`   AS password,
+               `phone`      AS phone,
+               `user_type`  AS userType,
+               `shop_point` AS shopPoint,
+               `created_at` AS createdAt
+        FROM `petlog`.`users`
+        WHERE `login_id` = #{loginId}
+        LIMIT 1
+    </select>
+    <select id="selectByEmail" resultType="dev.dhkim.petlog.entities.user.UserEntity">
+        SELECT `id`         AS id,
+               `email`      AS email,
+               `login_id`   AS loginId,
+               `password`   AS password,
+               `phone`      AS phone,
+               `user_type`  AS userType,
+               `shop_point` AS shopPoint,
+               `created_at` AS createdAt
+        FROM `petlog`.`users`
+        WHERE `email` = #{email}
+        LIMIT 1
+    </select>
+    <select id="selectByPhone" resultType="dev.dhkim.petlog.entities.user.UserEntity">
+        SELECT `id`         AS id,
+               `email`      AS email,
+               `login_id`   AS loginId,
+               `password`   AS password,
+               `phone`      AS phone,
+               `user_type`  AS userType,
+               `shop_point` AS shopPoint,
+               `created_at` AS createdAt
+        FROM `petlog`.`users`
+        WHERE `phone` = #{phone}
+        LIMIT 1
+    </select>
+    <select id="selectByBusinessId" resultType="dev.dhkim.petlog.entities.user.BusinessUserEntity">
+        SELECT `user_id`             AS userId,
+               `company_name`        AS companyName,
+               `representative_name` AS representativeName,
+               `business_number`     AS businessNumber
+        FROM `petlog`.`business_user`
+        WHERE `business_number` = #{businessId}
+        LIMIT 1
+    </select>
+    <select id="selectByLoginIdAndEmail" resultType="dev.dhkim.petlog.entities.user.UserEntity">
+        SELECT `id`         AS id,
+               `email`      AS email,
+               `login_id`   AS loginId,
+               `password`   AS password,
+               `phone`      AS phone,
+               `user_type`  AS userType,
+               `shop_point` AS shopPoint,
+               `created_at` AS createdAt
+        FROM `petlog`.`users`
+        WHERE `login_id` = #{loginId}
+          AND `email` = #{email}
+        LIMIT 1
+    </select>
+    <select id="selectByPersonalNameAndEmail" resultType="dev.dhkim.petlog.entities.user.UserEntity">
+        SELECT `id`         AS id,
+               `email`      AS email,
+               `login_id`   AS loginId,
+               `password`   AS password,
+               `phone`      AS phone,
+               `user_type`  AS userType,
+               `shop_point` AS shopPoint,
+               `created_at` AS createdAt,
+               `user_id`    AS userId,
+               `name`       AS name,
+               `nickname`   AS nickname
+        FROM `petlog`.`users` AS `t1`
+                 LEFT JOIN `petlog`.`personal_user` `t2` on `t1`.`id` = `t2`.`user_id`
+        WHERE `t1`.`email` = #{email}
+          AND `t2`.`name` = #{name}
+        LIMIT 1
+    </select>
+    <select id="selectByBusinessNameAndEmail" resultType="dev.dhkim.petlog.entities.user.UserEntity">
+        SELECT `id`                  AS id,
+               `email`               AS email,
+               `login_id`            AS loginId,
+               `password`            AS password,
+               `phone`               AS phone,
+               `user_type`           AS userType,
+               `shop_point`          AS shopPoint,
+               `created_at`          AS createdAt,
+               `user_id`             AS userId,
+               `company_name`        AS companyName,
+               `representative_name` AS representativeName,
+               `business_number`     AS businessNumber
+        FROM `petlog`.`users` AS `t1`
+                 LEFT JOIN `petlog`.`business_user` `t2` on `t1`.`id` = `t2`.`user_id`
+        WHERE `t1`.`email` = #{email}
+          AND `t2`.`representative_name` = #{name}
+        LIMIT 1
+    </select>
+    <select id="selectByPersonalUserId" resultType="dev.dhkim.petlog.entities.user.PersonalUserEntity">
+        SELECT `user_id`  AS userId,
+               `name`     AS name,
+               `nickname` AS nickname
+        FROM `petlog`.`personal_user`
+        WHERE `user_id` = #{userId}
+        LIMIT 1
+    </select>
+    <select id="selectByBusinessUserId" resultType="dev.dhkim.petlog.entities.user.BusinessUserEntity">
+        SELECT `user_id`             AS userId,
+               `company_name`        AS companyName,
+               `representative_name` AS representativeName,
+               `business_number`     AS businessNumber
+        FROM `petlog`.`business_user`
+        WHERE `user_id` = #{userId}
+        LIMIT 1
+    </select>
+
+</mapper>

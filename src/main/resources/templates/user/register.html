@@ -14,8 +14,24 @@
 <body>
 <th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
 <div class="cover"></div>
+<div class="loading" id="loading">
+    <div class="icon"></div>
+    <div class="message"></div>
+</div>
 <div class="register-message" id="register-message">
     <button type="button" class="button">확인</button>
+</div>
+<div class="checkMessage" id="checkMessage">
+    <div class="button-wrapper">
+        <button type="button" class="no">취소</button>
+        <button type="button" class="yes">확인</button>
+    </div>
+</div>
+<div class="petDeleteMessage" id="petDeleteMessage">
+    <div class="button-wrapper">
+        <button type="button" class="cancel">취소</button>
+        <button type="button" class="delete">삭제</button>
+    </div>
 </div>
 <div class="address-wrapper" id="address-wrapper">
     <button type="button" class="button">
@@ -24,6 +40,7 @@
     <div id="address-container"></div>
 </div>
 <div class="dialog dialog-first " id="petFirst">
+    <div class="dialogCover"></div>
     <button class="cancel" type="button">
         <img class="cancelButton" src="/user/assets/images/cancelButton.png" alt="">
     </button>
@@ -52,19 +69,21 @@
     <label class="anotherType-wrapper -flex-stretch">
         <span class="text">어떤 동물인지 알려주세요.</span>
         <select class="typeSelect" name="type" id="">
-            <option value="">곤충</option>
-            <option value="">기타 포유류</option>
-            <option value="">설치류</option>
-            <option value="">수생동물</option>
-            <option value="">연체동물</option>
-            <option value="">조류</option>
-            <option value="">절지동물</option>
-            <option value="">파충류</option>
+            <option value="" disabled selected>종류를 선택해주세요</option>
+            <option value="곤충">곤충</option>
+            <option value="기타 포유류">기타 포유류</option>
+            <option value="설치류">설치류</option>
+            <option value="수생동물">수생동물</option>
+            <option value="연체동물">연체동물</option>
+            <option value="조류">조류</option>
+            <option value="절지동물">절지동물</option>
+            <option value="파충류">파충류</option>
         </select>
     </label>
     <button disabled type="button" class="button">다음</button>
 </div>
 <div class="dialog dialog-second" id="petSecond">
+    <div class="dialogCover"></div>
     <button class="previous" type="button">
         <img class="image" src="/user/assets/images/previousButton.png" alt="">
     </button>
@@ -134,6 +153,7 @@
     </div>
 </div>
 <div class="dialog dialog-third " id="petThird">
+    <div class="dialogCover"></div>
     <button class="previous" type="button">
         <img class="image" src="/user/assets/images/previousButton.png" alt="">
     </button>
@@ -166,21 +186,21 @@
         <div class="weightType-wrapper">
             <label class="slim label">
                 <span class="text">날씬해요</span>
-                <input class="input" hidden name="weightType" type="radio">
+                <input class="input slim" hidden name="weightType" type="radio">
             </label>
             <label class="normal label">
                 <span class="text">적당해요</span>
-                <input class="input" hidden name="weightType" type="radio">
+                <input class="input normal" hidden name="weightType" type="radio">
             </label>
             <label class="chubby label">
                 <span class="text">통통해요</span>
-                <input class="input" hidden name="weightType" type="radio">
+                <input class="input chubby" hidden name="weightType" type="radio">
             </label>
         </div>
     </div>
     <button disabled type="button" class="complete">작성완료</button>
 </div>
-<div class="register-container" id="registerContainer">
+<form class="register-container" id="registerContainer">
     <div class="register-first hidden">
         <h1 class="title">회원가입</h1>
         <span class="text">회원 유형</span>
@@ -221,7 +241,7 @@
                     <span>회사는 천재지변 등 불가항력으로 인한 서비스 장애에 대해 책임을 지지 않습니다.</span>
                 </div>
                 <label class="agreement-check required">
-                    <input required hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="1">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -255,7 +275,7 @@
                     <span>개인정보는 목적 달성 후 지체 없이 파기하며, 전자적 파일은 복구 불가능한 방식으로 삭제합니다.</span>
                 </div>
                 <label class="agreement-check required">
-                    <input required hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="2">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -283,7 +303,7 @@
                     <span>회원은 위치정보 이용에 대한 동의를 거부할 수 있으며, 동의하지 않더라도 기본적인 서비스 이용에는 제한이 없습니다.</span>
                 </div>
                 <label class="agreement-check optional">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="4">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -316,7 +336,7 @@
                     <span>회원은 언제든지 마케팅 정보 수신에 대한 동의를 철회할 수 있으며, 동의 철회 시에도 서비스 이용에는 어떠한 불이익도 없습니다.</span>
                 </div>
                 <label class="agreement-check optional">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="5">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -349,7 +369,7 @@
                     <span>회사는 천재지변 등 불가항력으로 인한 서비스 장애에 대해 책임을 지지 않습니다.</span>
                 </div>
                 <label class="agreement-check required">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="1">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -383,7 +403,7 @@
                     <span>개인정보는 목적 달성 후 지체 없이 파기하며, 전자적 파일은 복구 불가능한 방식으로 삭제합니다.</span>
                 </div>
                 <label class="agreement-check required">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="2">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -403,7 +423,7 @@
                     <span>회사는 약관 위반 시 서비스 이용을 제한할 수 있습니다.</span><br>
                 </div>
                 <label class="agreement-check required">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="3">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -431,7 +451,7 @@
                     <span>회원은 위치정보 이용에 대한 동의를 거부할 수 있으며, 동의하지 않더라도 기본적인 서비스 이용에는 제한이 없습니다.</span>
                 </div>
                 <label class="agreement-check optional">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="4">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -464,7 +484,7 @@
                     <span>회원은 언제든지 마케팅 정보 수신에 대한 동의를 철회할 수 있으며, 동의 철회 시에도 서비스 이용에는 어떠한 불이익도 없습니다.</span>
                 </div>
                 <label class="agreement-check optional">
-                    <input hidden type="checkbox" class="checkbox">
+                    <input hidden type="checkbox" class="checkbox" data-terms-id="5">
                     <span class="circle">
                         <img class="image" src="/user/assets/images/register-check.png" alt="">
                     </span>
@@ -484,7 +504,7 @@
         <span class="semiTitle">로그인 정보</span>
         <label class="emailSendLabel label">
             <span class="caption ">이메일</span>
-            <input class="email input" placeholder="이메일을 입력해 주세요." type="email">
+            <input class="email input" id="email" placeholder="이메일을 입력해 주세요." type="email">
             <button type="button" class="button">인증번호 전송</button>
         </label>
         <label class="emailVerifyLabel label">
@@ -494,11 +514,14 @@
         </label>
         <label class="IdLabel label">
             <span class="caption ">아이디</span>
-            <input class="id input" placeholder="사용하실 아이디를 입력해 주세요." type="text">
+            <span class="id-wrapper">
+                <input class="id input" id="loginId" placeholder="사용하실 아이디를 입력해 주세요." type="text">
+                <span class="text">이미 존재하는 아이디 입니다.</span>
+            </span>
         </label>
         <label class="passwordLabel label">
             <span class="caption ">비밀번호</span>
-            <input class="password input" placeholder="사용하실 비밀번호를 입력해 주세요." type="password">
+            <input class="password input" id="password" placeholder="사용하실 비밀번호를 입력해 주세요." type="password">
         </label>
         <label class="passwordCheckLabel label">
             <span class="caption ">비밀번호 확인</span>
@@ -507,35 +530,43 @@
         <span class="semiTitle">회원 정보</span>
         <label class="nameLabel label">
             <span class="caption">이름</span>
-            <input class="name input" placeholder="이름(실명)을 입력해 주세요." type="text">
+            <input class="name input" id="name" placeholder="이름(실명)을 입력해 주세요." type="text">
         </label>
         <label class="contactNumberLabel label">
             <span class="caption">전화번호</span>
-            <select class="firstNumber" name="" id="">
-                <option value="">010</option>
-            </select>
-            <span>-</span>
-            <input class="contactNumber input" placeholder="0000" type="text">
-            <span>-</span>
-            <input class="contactNumber input" placeholder="0000" type="text">
+            <span class="phone-wrapper">
+                <span class="number-wrapper">
+                    <select class="firstNumber" name="" id="">
+                        <option selected value="010">010</option>
+                    </select>
+                    <span>-</span>
+                    <input class="contactNumber first input" maxlength="4" minlength="4" placeholder="0000" type="text">
+                    <span>-</span>
+                    <input class="contactNumber second input" maxlength="4" minlength="4" placeholder="0000" type="text">
+                </span>
+                <span class="text">이미 존재하는 전화번호 입니다.</span>
+            </span>
         </label>
         <label class="nicknameLabel label">
             <span class="caption">닉네임</span>
-            <input class="nickname input" placeholder="닉네임을 입력해 주세요." type="text">
-            <button type="button" class="button">중복 확인</button>
+            <span class="nickname-wrapper">
+                <input class="nickname input" id="nickname" placeholder="닉네임을 입력해 주세요." type="text">
+                <span class="text">이미 존재하는 닉네임 입니다.</span>
+            </span>
+
         </label>
         <label class="addressLabel label">
             <span class="caption">주소</span>
-            <input disabled readonly class="postalNumber input" placeholder="우편번호" type="text">
+            <input readonly class="postalNumber input" id="postalCode" placeholder="우편번호" type="text">
             <button type="button" class="button">주소 검색</button>
         </label>
         <label class="primaryAddressLabel label">
             <span class="caption"></span>
-            <input disabled class="primaryAddress input" placeholder="기본 주소('주소 검색' 버튼을 클릭해 주세요.)" type="text">
+            <input readonly class="primaryAddress input" id="addressPrimary" placeholder="기본 주소('주소 검색' 버튼을 클릭해 주세요.)" type="text">
         </label>
         <label class="detailAddressLabel label">
             <span class="caption"></span>
-            <input class="detailAddress input" placeholder="상세 주소(건물명 동, 호 등)" type="text">
+            <input class="detailAddress input" id="addressSecondary" placeholder="상세 주소(건물명 동, 호 등)" type="text">
         </label>
         <div class="button-wrapper">
             <button type="button" class="cancel">취소</button>
@@ -549,34 +580,42 @@
         <span class="semiTitle">사업자 정보</span>
         <label class="companyNameLabel label">
             <span class="caption">기업명</span>
-            <input class="companyName input" placeholder="기업명을 입력해 주세요." type="text">
+            <input class="companyName input" id="companyName" placeholder="기업명을 입력해 주세요." type="text">
         </label>
         <label class="representativeNameLabel label">
             <span class="caption">대표자명</span>
-            <input class="representativeName input" placeholder="대표자명을 입력해 주세요." type="text">
+            <input class="representativeName input" id="representativeName" placeholder="대표자명을 입력해 주세요." type="text">
         </label>
-        <label class="contactNumber label">
+        <label class="contactNumberLabel label">
             <span class="caption">대표자 전화번호</span>
-            <select class="firstNumber" name="" id="">
-                <option value="">010</option>
-            </select>
-            <span>-</span>
-            <input class="contactNumber input" placeholder="0000" type="text">
-            <span>-</span>
-            <input class="contactNumber input" placeholder="0000" type="text">
+            <span class="phone-wrapper">
+                <span class="number-wrapper">
+                    <select class="firstNumber" name="" id="">
+                        <option selected value="010">010</option>
+                    </select>
+                    <span>-</span>
+                    <input class="contactNumber first input" maxlength="4" minlength="4" placeholder="0000" type="text">
+                    <span>-</span>
+                    <input class="contactNumber second input" maxlength="4" minlength="4" placeholder="0000" type="text">
+                </span>
+                <span class="text">이미 가입된 전화번호 입니다.</span>
+            </span>
         </label>
         <label class="businessId label">
             <span class="caption">사업자 등록번호</span>
-            <input class="businessId input" placeholder="사업자 등록번호를 입력해 주세요." type="text">
+            <span class="businessId-wrapper">
+                <input class="businessId businessNumber input" id="businessNumber" placeholder="사업자 등록번호를 입력해 주세요." type="text">
+                <span class="text">사용할 수 없는 사업자 등록번호입니다.</span>
+            </span>
         </label>
         <label class="addressLabel label">
             <span class="caption">사업자등록상 주소</span>
-            <input disabled readonly class="postalNumber input" placeholder="우편번호" type="text">
+            <input readonly class="postalNumber input" placeholder="우편번호" type="text">
             <button type="button" class="button">주소 검색</button>
         </label>
         <label class="primaryAddressLabel label">
             <span class="caption"></span>
-            <input disabled class="primaryAddress input" placeholder="기본 주소('주소 검색' 버튼을 클릭해 주세요.)" type="text">
+            <input readonly class="primaryAddress input" placeholder="기본 주소('주소 검색' 버튼을 클릭해 주세요.)" type="text">
         </label>
         <label class="detailAddressLabel label">
             <span class="caption"></span>
@@ -595,11 +634,14 @@
         </label>
         <label class="IdLabel label">
             <span class="caption ">아이디</span>
-            <input class="id input" placeholder="사용하실 아이디를 입력해 주세요." type="text">
+            <span class="id-wrapper">
+                <input class="id input" autocomplete="off" placeholder="사용하실 아이디를 입력해 주세요." type="text">
+                <span class="text">사용할 수 없는 아이디 입니다.</span>
+            </span>
         </label>
         <label class="passwordLabel label">
             <span class="caption ">비밀번호</span>
-            <input class="password input" placeholder="비밀번호를 입력해 주세요." type="password">
+            <input class="password input" autocomplete="off" placeholder="비밀번호를 입력해 주세요." type="password">
         </label>
         <label class="passwordCheckLabel label">
             <span class="caption ">비밀번호 확인</span>
@@ -612,7 +654,7 @@
             <button type="button" class="next">다음</button>
         </div>
     </div>
-    <div class="register-forth personal ">
+    <div class="register-forth personal hidden">
         <h1 class="title">일반 회원가입</h1>
         <span class="semiTitle">애완동물 정보</span>
         <button class="petRegistration" type="button">+ 애완동물 등록</button>
@@ -622,10 +664,10 @@
             <button type="button" class="cancel">취소</button>
             <span class="-flex-stretch"></span>
             <button type="button" class="previous">이전</button>
-            <button type="button" class="complete">가입완료</button>
+            <button type="submit" class="complete">가입완료</button>
         </div>
     </div>
-    <div class="register-forth business hidden">
+    <div class="register-forth business ">
         <h1 class="title">사업자 회원가입</h1>
         <span class="warning">아래에 입력하신 정보는 서비스 이용자에게 보여지는 정보입니다. 이용자에게 안내될 내용을 입력해 주세요.</span>
         <span class="semiTitle">가게 정보</span>
@@ -649,10 +691,10 @@
         <label class="storeCategory label">
             <span class="caption">업종 카테고리</span>
             <select class="category" name="category" id="">
-                <option value="hospital">애견 병원</option>
-                <option value="hairShop">애견 미용</option>
-                <option value="store">애견 용품</option>
-                <option value="careShop">애견 관리</option>
+                <option value="hospital">병원</option>
+                <option value="cafe">카페</option>
+                <option value="salon">미용실</option>
+                <option value="school">유치원</option>
                 <option value="another">그 외</option>
             </select>
         </label>
@@ -660,9 +702,9 @@
             <button type="button" class="cancel">취소</button>
             <span class="-flex-stretch"></span>
             <button type="button" class="previous">이전</button>
-            <button type="button" class="complete">가입완료</button>
+            <button type="submit" class="complete">가입완료</button>
         </div>
     </div>
-</div>
+</form>
 </body>
 </html>

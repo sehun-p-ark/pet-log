@@ -64,24 +64,82 @@ $searchIdEmailSendButton.addEventListener('click', () => {
         showMessage("이메일을 입력해주세요.")
         return;
     }
-    $searchIdNameInput.setAttribute('disabled', '');
-    $searchIdEmailInput.setAttribute('disabled','');
-    $searchIdEmailSendButton.setAttribute('disabled', '');
-    $searchIdEmailVerifyInput.removeAttribute('disabled');
-    $searchIdEmailVerifyButton.removeAttribute('disabled');
+    loading.classList.add('visible');
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('name', $searchIdNameInput.value);
+    formData.append('email', $searchIdEmailInput.value);
+    formData.append('type', 'FIND_ID')
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState !== XMLHttpRequest.DONE){
+            return;
+        }
+        loading.classList.remove('visible');
+        if(xhr.status < 200 || xhr.status >= 400){
+            console.log('서버 오류남 200~400')
+            return;
+        }
+        const response = JSON.parse(xhr.responseText);
+        switch (response.result) {
+            case 'FAILURE':
+                showMessage('이름 또는 이메일을 다시 확인해주세요.');
+                break;
+            case 'SUCCESS':
+                showMessage('작성하신 이메일로 인증번호를 발송하였습니다. \n 인증번호는 5분간만 유효하니 유의해주세요.');
+                $searchIdNameInput.setAttribute('disabled', '');
+                $searchIdEmailInput.setAttribute('disabled','');
+                $searchIdEmailSendButton.setAttribute('disabled', '');
+                $searchIdEmailVerifyInput.removeAttribute('disabled');
+                $searchIdEmailVerifyButton.removeAttribute('disabled');
+                break;
+            default:
+        }
+    };
+    xhr.open('POST', '/user/findId');
+    xhr.send(formData);
 });
 
 const $searchIdEmailVerifyInput = $searchIdForm.querySelector(':scope > .emailVerifyLabel > .emailVerify-wrapper > .emailVerify');
+const nameResult = $idSearchResult.querySelector('.nameResult');
+const idResult = $idSearchResult.querySelector('.id');
 // 아이디 찾기에서 인증번호 확인버튼 눌렀을 때
 $searchIdEmailVerifyButton.addEventListener('click', () => {
     if ($searchIdEmailVerifyInput.value === '') {
         showMessage("인증번호를 입력해주세요.");
         return
     }
-    $searchIdEmailVerifyInput.setAttribute('disabled', '');
-    $searchIdEmailVerifyButton.setAttribute('disabled', '');
-    $idSearchResult.classList.add('visible');
-    openCover();
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('email', $searchIdEmailInput.value);
+    formData.append('code', $searchIdEmailVerifyInput.value);
+    formData.append('type', 'FIND_ID');
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState !== XMLHttpRequest.DONE){
+            return;
+        }
+        if(xhr.status < 200 || xhr.status >= 400){
+
+            return;
+        }
+        const response = JSON.parse(xhr.responseText);
+        console.log(response)
+        switch (response.result) {
+            case 'FAILURE':
+                showMessage('인증번호가 맞지 않습니다. 다시 입력해주세요.');
+                break;
+            case 'SUCCESS':
+                nameResult.innerText = `${response.name} 회원님의 아이디는`;
+                idResult.innerText = `${response.loginId}`
+                $searchIdEmailVerifyInput.setAttribute('disabled', '');
+                $searchIdEmailVerifyButton.setAttribute('disabled', '');
+                $idSearchResult.classList.add('visible');
+                openCover();
+                break;
+            default:
+        }
+    };
+    xhr.open('PATCH', '/user/loginId/verify');
+    xhr.send(formData);
 });
 
 // 아이디 찾기 결과에서 로그인으로 돌아가기 버튼 눌렀을 때
@@ -140,7 +198,7 @@ $searchPasswordCancelButton.addEventListener('click', () => {
     closeSearchPassword();
 });
 
-// 비밀번호 찾기에서 인증번호 전송을 눌렀을 때
+// region 비밀번호 찾기에서 인증번호 전송을 눌렀을 때
 const $searchPasswordIdInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .idLabel > .id');
 const $searchPasswordEmailInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .emailLabel > .email-wrapper > .email');
 $searchPasswordEmailSendButton.addEventListener('click', () => {
@@ -152,26 +210,82 @@ $searchPasswordEmailSendButton.addEventListener('click', () => {
         showMessage("이메일을 입력해주세요.");
         return;
     }
-    $searchPasswordIdInput.setAttribute('disabled', '');
-    $searchPasswordEmailInput.setAttribute('disabled', '');
-    $searchPasswordEmailSendButton.setAttribute('disabled', '');
-    $emailVerifyNumberInput.removeAttribute('disabled');
-    $searchPasswordEmailVerifyButton.removeAttribute('disabled');
-});
+    loading.classList.add('visible');
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('loginId', $searchPasswordIdInput.value);
+    formData.append('email', $searchPasswordEmailInput.value);
+    formData.append('type', 'CHANGE_PASSWORD');
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState !== XMLHttpRequest.DONE){
+            return;
+        }
+        loading.classList.remove('visible');
+        if(xhr.status < 200 || xhr.status >= 400){
 
-// 비밀번호 찾기에서 인증번호 확인버튼을 눌렀을 때
+            return;
+        }
+        const response = JSON.parse(xhr.responseText);
+        switch (response.result) {
+            case 'FAILURE':
+                showMessage('아이디 또는 이메일을 다시 확인해주세요.');
+                break;
+            case 'SUCCESS':
+                showMessage('작성하신 이메일로 인증번호를 발송하였습니다. \n 인증번호는 5분간만 유효하니 유의해주세요.');
+                $searchPasswordIdInput.setAttribute('disabled', '');
+                $searchPasswordEmailInput.setAttribute('disabled', '');
+                $searchPasswordEmailSendButton.setAttribute('disabled', '');
+                $emailVerifyNumberInput.removeAttribute('disabled');
+                $searchPasswordEmailVerifyButton.removeAttribute('disabled');
+                break;
+            default:
+        }
+    };
+    xhr.open('POST', '/user/findPassword');
+    xhr.send(formData);
+});
+// endregion
+
+// region 비밀번호 찾기에서 인증번호 확인버튼을 눌렀을 때
 const $searchPasswordEmailVerifyInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .emailVerifyLabel > .emailVerify-wrapper > .emailVerify');
 $searchPasswordEmailVerifyButton.addEventListener('click', () => {
     if ($searchPasswordEmailVerifyInput.value === '') {
         showMessage("인증번호를 입력해주세요.");
         return;
     }
-    $searchPasswordEmailVerifyInput.setAttribute('disabled', '');
-    $searchPasswordEmailVerifyButton.setAttribute('disabled', '');
-    $searchPasswordChangePasswordInput.removeAttribute('disabled');
-    $searchPasswordChangePasswordCheckInput.removeAttribute('disabled');
-    $changePasswordLabel.classList.add('visible');
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('email', $searchPasswordEmailInput.value);
+    formData.append('code', $searchPasswordEmailVerifyInput.value);
+    formData.append('type', 'CHANGE_PASSWORD');
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState !== XMLHttpRequest.DONE){
+            return;
+        }
+        if(xhr.status < 200 || xhr.status >= 400){
+            
+            return;
+        }
+        const response = JSON.parse(xhr.responseText);
+        switch (response.result) {
+            case 'FAILURE':
+                showMessage('인증번호가 맞지 않습니다.. 다시 입력해주세요.');
+                break;
+            case 'SUCCESS':
+                $searchPasswordEmailVerifyInput.setAttribute('disabled', '');
+                $searchPasswordEmailVerifyButton.setAttribute('disabled', '');
+                $searchPasswordChangePasswordInput.removeAttribute('disabled');
+                $searchPasswordChangePasswordCheckInput.removeAttribute('disabled');
+                $changePasswordLabel.classList.add('visible');
+                break;
+            default:
+        }
+        
+    };
+    xhr.open('PATCH', '/user/email/verify');
+    xhr.send(formData);
 });
+// endregion
 
 // 비밀번호 찾기에서 비밀번호 재설정 버튼을 눌렀을 때
 const $searchPasswordChangePasswordInput = $searchPasswordForm.querySelector(':scope > .changePassword-wrapper > .changePasswordLabel > .password');
@@ -189,10 +303,38 @@ $changePasswordButton.addEventListener('click', () => {
         showMessage("변경하실 비밀번호가 서로 일치하지 않습니다. 다시 확인해주세요.");
         return;
     }
-    $searchPasswordChangePasswordInput.setAttribute('disabled', '');
-    $searchPasswordChangePasswordCheckInput.setAttribute('disabled', '');
-    $passwordChangeResult.classList.add('visible');
-    openCover();
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('loginId', $searchPasswordIdInput.value);
+    formData.append('email', $searchPasswordEmailInput.value);
+    formData.append('password', $searchPasswordChangePasswordInput.value);
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState !== XMLHttpRequest.DONE){
+            return;
+        }
+        if(xhr.status < 200 || xhr.status >= 400){
+            
+            return;
+        }
+        const response = JSON.parse(xhr.responseText);
+        switch (response.result) {
+            case 'FAILURE':
+                break;
+            case 'FAILURE_IS_USED':
+                showMessage('현재 사용 중인 비밀번호와 같습니다.');
+                break;
+            case 'SUCCESS':
+                $searchPasswordChangePasswordInput.setAttribute('disabled', '');
+                $searchPasswordChangePasswordCheckInput.setAttribute('disabled', '');
+                $passwordChangeResult.classList.add('visible');
+                openCover();
+                break;
+            default:
+        }
+    };
+    xhr.open('PATCH', '/user/changePassword');
+    xhr.send(formData);
+
 });
 
 // 비밀번호 변경 완료 다이얼로그에서 확인 버튼 눌렀을 때
@@ -234,3 +376,53 @@ function resetSearchPasswordForm() {
     // 단계 UI 숨김
     $changePasswordLabel.classList.remove('visible');
 }
+
+
+
+// region 로그인 버튼 누를때
+const loginButton = $loginForm.querySelector(':scope > .login-button');
+const loginIdInput = $loginForm.querySelector(':scope > .label > .id');
+const passwordInput = $loginForm.querySelector(':scope > .label > .password');
+loginButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (loginIdInput.value === '') {
+        showMessage('아이디를 입력해주세요.');
+        return;
+    }
+    if (passwordInput.value === '') {
+        showMessage('비밀번호를 입력해주세요.');
+        return;
+    }
+    const xhr = new XMLHttpRequest();
+    const formData = new FormData();
+    formData.append('loginId', loginIdInput.value);
+    formData.append('password', passwordInput.value);
+    xhr.onreadystatechange = () => {
+        if(xhr.readyState !== XMLHttpRequest.DONE){
+            return;
+        }
+        if(xhr.status < 200 || xhr.status >= 400){
+
+            return;
+        }
+        const response = JSON.parse(xhr.responseText);
+        switch (response.result) {
+            case 'FAILURE':
+                showMessage('아이디 또는 비밀번호를 다시 입력해주세요.');
+                break;
+            case 'SUCCESS':
+                location.href = '/main';
+                break;
+            default:
+        }
+    };
+    xhr.open('POST', '/user/login');
+    xhr.send(formData);
+});
+// endregion
+
+
+// region 비밀번호 찾기
+
+
+// endregion

@@ -82,7 +82,7 @@ function goToStep(stepNumber) {
     }
 }
 
-// 회원가입 필수 입력부분 미입력시 알림창
+// 회원가입 필수 입력부분 미입력시 알림창 (로그인이랑 중복이긴한데 common.js안만들거라 그냥 중복시키기)
 const registerMessage = document.getElementById('register-message');
 const $title = document.createElement('span');
 const $text = document.createElement('span');
@@ -98,6 +98,22 @@ function showMessage(text) {
 warningButton.addEventListener('click', () => {
     registerMessage.classList.remove('visible');
 });
+
+const checkMessage = document.getElementById('checkMessage');
+const checkTitle = document.createElement('span');
+const checkText = document.createElement('span');
+const yesButton = checkMessage.querySelector(':scope > .button-wrapper > .yes');
+const noButton = checkMessage.querySelector(':scope > .button-wrapper > .no');
+
+checkTitle.classList.add('title');
+checkText.classList.add('text');
+checkTitle.innerText = '알림';
+checkMessage.prepend(checkTitle, checkText);
+function showCheckMessage(text) {
+    checkMessage.classList.add('visible');
+    checkText.innerText = text;
+
+}
 
 
 
@@ -178,26 +194,6 @@ $registerThirdSteps.forEach(step => {
     const emailVerifyNumberInput = step.querySelector(':scope > .emailVerifyLabel > .emailVerifyNumber');
     const emailVerifyButton = step.querySelector(':scope > .emailVerifyLabel > .button');
 
-    emailSendButton.addEventListener('click', () => {
-        if (emailInput.value === '') {
-            showMessage('이메일을 입력해주세요.');
-            return;
-        }
-        emailInput.setAttribute('disabled', '');
-        emailSendButton.setAttribute('disabled', '');
-        emailVerifyNumberInput.removeAttribute('disabled');
-        emailVerifyButton.removeAttribute('disabled');
-    });
-    emailVerifyButton.addEventListener('click', () => {
-        if (emailVerifyNumberInput.value === '') {
-            showMessage('인증번호를 입력해주세요.');
-            return;
-        }
-        emailVerifyNumberInput.setAttribute('disabled', '');
-        emailVerifyButton.setAttribute('disabled', '');
-        showMessage('인증을 완료하였습니다.');
-        isEmailVerified = true;
-    })
 });
 
 
@@ -254,19 +250,6 @@ $registerThirdSteps.forEach(step => {
 });
 
 /*============회원가입 세번째 단계(개인)================*/
-const registerThirdPersonalNicknameInput = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname');
-const registerThirdPersonalNicknameButton = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .button');
-let isNicknameChecked = false;
-registerThirdPersonalNicknameButton.addEventListener('click', () => {
-    if (registerThirdPersonalNicknameInput.value === '') {
-        showMessage('닉네임을 입력해주세요.');
-        return;
-    }
-    isNicknameChecked = true;
-    showMessage('사용할 수 있는 닉네임입니다.');
-    registerThirdPersonalNicknameInput.setAttribute('disabled', '');
-    registerThirdPersonalNicknameButton.setAttribute('disabled', '');
-});
 
 // 세번째 단계에서 다음버튼을 눌렀을 때 정보 미입력 시 경고모달 띄우기
 const ThirdPersonalNextButton = $registerThirdPersonalStep.querySelector(':scope > .button-wrapper > .next');
@@ -295,12 +278,51 @@ ThirdPersonalNextButton.addEventListener('click', () => {
         showMessage('비밀번호가 서로 일치하지 않습니다. 다시 확인해주세요.');
         return;
     }
-    if (!isNicknameChecked) {
-        showMessage('닉네임 중복 확인을 완료해주세요.');
+    const checkVisible = $registerThirdPersonalStep.querySelector('.text.visible');
+    if (checkVisible) {
+        showMessage('정보를 다시 확인해 주세요.');
         return;
     }
     goToStep(4);
 });
+
+/*============회원가입 세번째 단계(사업자)================*/
+const ThirdBusinessNextButton = $registerThirdBusinessStep.querySelector(':scope > .button-wrapper > .next');
+const ThirdBusinessInputs = $registerThirdBusinessStep.querySelectorAll('.input');
+const ThirdBusinessPasswordInput = $registerThirdBusinessStep.querySelector(':scope > .passwordLabel > .password');
+const ThirdBusinessPasswordCheckInput = $registerThirdBusinessStep.querySelector(':scope > .passwordCheckLabel > .passwordCheck');
+ThirdBusinessNextButton.addEventListener('click', () => {
+    const findEmptyInput = [...ThirdBusinessInputs].find(input => {
+        return !input.disabled && !input.classList.contains('detailAddress') && input.value.trim() === '';
+    });
+
+    if (findEmptyInput) {
+        showMessage('정보를 모두 입력 후 다음 단계로 넘어갈 수 있습니다.');
+        findEmptyInput.focus();
+        findEmptyInput.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+        return;
+    }
+    if (!isEmailVerified) {
+        showMessage('이메일 인증을 완료해주세요.');
+        return;
+    }
+    if (ThirdBusinessPasswordInput.value !== ThirdBusinessPasswordCheckInput.value) {
+        showMessage('비밀번호가 서로 일치하지 않습니다. 다시 확인해주세요.');
+        return;
+    }
+    const checkVisible = $registerThirdBusinessStep.querySelector('.text.visible');
+    if (checkVisible) {
+        showMessage('정보를 다시 확인해 주세요.');
+        return;
+    }
+    goToStep(4);
+});
+
+
+
 
 
 
@@ -349,16 +371,12 @@ $registerForthSteps.forEach(step => {
 
 $registerForthSteps.forEach(step => {
     const completeButton = step.querySelector(':scope > .button-wrapper > .complete');
-
-    completeButton.addEventListener('click', () => {
-        location.href = '/user/login';
-    });
 });
 
 
 
 
-
+// region 회원가입 네번쨰 단계(개인+애완동물 로직)
 
 /*============회원가입 네번째 단계(개인)================*/
 
@@ -377,6 +395,16 @@ function closeAllPetDialogs() {
     $petDialogs.forEach(dialog => {
         dialog.classList.remove('visible');
     });
+    closeWrapper()
+}
+
+// dialog 내 모든 wrapper 닫기
+function closeWrapper() {
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper').classList.remove('visible');
+    $petDialogSecondPetTypeWrapper.classList.remove('visible');
+    yearWrapper.classList.remove('visible');
+    monthWrapper.classList.remove('visible');
+    dateWrapper.classList.remove('visible');
 }
 
 // dialog 하나만 열게하기
@@ -429,9 +457,11 @@ function resetDialogFirst() {
         radio.checked = false;
     });
     $petDialogFirst.querySelector(':scope > .petName-wrapper > .petName').value = '';
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper').classList.remove('visible');
     selectType = null;
     $petDialogFirstNextButton.setAttribute('disabled', '');
 }
+
 
 function resetDialogSecond() {
     $petDialogSecond.querySelectorAll('input').forEach(input => {
@@ -444,6 +474,7 @@ function resetDialogSecond() {
         wrapper.classList.remove('visible');
     });
     $petDialogSecondNextButton.setAttribute('disabled', '');
+    dialogSecondNextButton();
 }
 
 function resetDialogThird() {
@@ -465,8 +496,11 @@ function resetAllDialog() {
     resetDialogThird()
 }
 
+let editMod = null;
+
 // 회원가입 네번째 단계에서 애완동물 등록버튼을 눌렀을 때
 $petRegistrationButton.addEventListener('click', () => {
+    editMod = null;
     resetAllDialog();
     openDialog(1);
 });
@@ -475,11 +509,15 @@ $petRegistrationButton.addEventListener('click', () => {
 $petDialogs.forEach(step => {
     const dialogCancelButton = step.querySelector(':scope > .cancel');
 
-    dialogCancelButton.addEventListener('click', () => {
+    dialogCancelButton.onclick = () => {
         closeAllPetDialogs()
-        resetAllDialog()
+        // 등록 모드일 때만 초기화
+        if (!editMod) {
+            resetAllDialog();
+        }
         currentStep = 1;
-    });
+        editMod = null; // 취소하면 editMod 초기화
+    };
 });
 
 
@@ -490,37 +528,71 @@ const anotherSelect = $petDialogFirst.querySelector(':scope > .select-wrapper > 
 dogSelect.addEventListener('click', () => {
     selectType = 'dog';
     dialogFirstNextButton()
-    resetDialogSecond()
-    resetDialogThird()
+    if (!editMod) {
+        resetDialogSecond();
+        resetDialogThird();
+    }
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper').classList.remove('visible');
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper > .typeSelect').value = '';
+    $petDialogSecond.querySelector(':scope > .selectedPetType > .petType').value = '';
+    dialogSecondNextButton();
 });
 catSelect.addEventListener('click', () => {
     selectType = 'cat';
     dialogFirstNextButton()
-    resetDialogSecond()
-    resetDialogThird()
+    if (!editMod) {
+        resetDialogSecond();
+        resetDialogThird();
+    }
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper').classList.remove('visible');
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper > .typeSelect').value = '';
+    $petDialogSecond.querySelector(':scope > .selectedPetType > .petType').value = '';
+    dialogSecondNextButton();
 });
 anotherSelect.addEventListener('click', () => {
     selectType = 'another';
     dialogFirstNextButton()
-    resetDialogSecond()
-    resetDialogThird()
+
+    $petDialogFirst.querySelector(':scope > .anotherType-wrapper').classList.add('visible');
+    $petDialogSecond.querySelector(':scope > .selectedPetType > .petType').value = '';
+    $petDialogSecondPetTypeWrapper.classList.remove('visible');
+    if (!editMod) {
+        resetDialogSecond();
+        resetDialogThird();
+    }
+    dialogSecondNextButton();
 });
 
+
 function dialogFirstNextButton() {
-    if (selectType != null) {
-        if (petNameInput.value.trim() !== '') {
-            $petDialogFirstNextButton.removeAttribute('disabled');
-        } else {
-            $petDialogFirstNextButton.setAttribute('disabled', '');
-        }
-    } else {
+    // 공통: 이름은 필수
+    if (!selectType || petNameInput.value.trim() === '') {
         $petDialogFirstNextButton.setAttribute('disabled', '');
+        return;
     }
+    // another일 경우: 종류 선택도 필수
+    if (selectType === 'another') {
+        const anotherSelect = $petDialogFirst
+            .querySelector(':scope > .anotherType-wrapper > .typeSelect');
+        if (!anotherSelect.value) {
+            $petDialogFirstNextButton.setAttribute('disabled', '');
+            return;
+        }
+    }
+    // 조건 다 만족하면 활성화
+    $petDialogFirstNextButton.removeAttribute('disabled');
 }
+
 
 const petNameInput = $petDialogFirst.querySelector(':scope > .petName-wrapper > .petName');
 petNameInput.addEventListener('input', () => {
     dialogFirstNextButton()
+});
+
+
+const anotherTypeSelect = $petDialogFirst.querySelector(':scope > .anotherType-wrapper > .typeSelect');
+anotherTypeSelect.addEventListener('change', () => {
+    dialogFirstNextButton();
 });
 
 // 애완동물 DialogFirst에서 다음버튼을 눌렀을 때
@@ -860,17 +932,19 @@ function getTypeList(types) {
 
 const dialogSecondPetTypeInput = $petDialogSecondSelectType.querySelector(':scope > .petType');
 function dialogSecondNextButton() {
-    if (selectType !== 'another') {
-        if (dialogSecondPetTypeInput.value.trim() !== '') {
-            $petDialogSecondNextButton.removeAttribute('disabled');
-        } else {
-            $petDialogSecondNextButton.setAttribute('disabled', '');
-        }
-    }
     if (selectType === 'another') {
         $petDialogSecondNextButton.removeAttribute('disabled');
+        return;
+    }
+
+    // selectType이 dog/cat인 경우
+    if (dialogSecondPetTypeInput.value.trim() !== '') {
+        $petDialogSecondNextButton.removeAttribute('disabled');
+    } else {
+        $petDialogSecondNextButton.setAttribute('disabled', '');
     }
 }
+
 
 // 애완동물 종 검색기능
 const typeSearch = $petDialogSecondPetTypeWrapper.querySelector(':scope > .typeSearch');
@@ -1026,58 +1100,128 @@ $petDialogThirdPreviousButton.addEventListener('click', () => {
 const pets = [];
 const petList = $registerForthPersonalStep.querySelector(':scope > .pet-list');
 
+// 새 petId 계산 함수
+function getNextPetId() {
+    const usedIds = pets.map(p => p.petId);
+    let id = 1;
+    while (usedIds.includes(id)) {
+        id++;
+    }
+    return id;
+}
+
 // 애완동물 DialogThird에서 작성완료 버튼을 눌렀을 때
-let petId = 1;
 $petDialogThirdCompleteButton.addEventListener('click', () => {
     const petNameInput = $petDialogFirst.querySelector(':scope > .petName-wrapper > .petName');
-    const genderInput = $petDialogThird.querySelector(':scope input[name="gender"]:checked');
+    const genderInput = $petDialogThird.querySelector('input[name="gender"]:checked');
     const year = petYear.value || petYear.placeholder;
     const weight = $petDialogThird.querySelector(':scope > .petWeightLabel > .weight-wrapper > .weight');
+    const weightTypeInput = $petDialogThird.querySelector('input[name="weightType"]:checked');
     const introduction = $petDialogSecond.querySelector(':scope > .introduction > .introduce');
-    const pet = {
-        petId: petId++,
-        petImage: fileInput.files.length > 0 ? preview.src : '/user/assets/images/defaultPetImage.png',
-        name: petNameInput.value,
-        species: $petDialogSecondSelectType.querySelector(':scope > .petType').value,
-        gender: genderInput ? genderInput.classList.contains('male') ? '남아' : '여아' : null,
-        birth: `${year}생`,
-        weight: weight.value,
-        introduction: introduction.value
+    const age = currentYear - parseInt(year);
+
+    let species = null;
+    if (selectType === 'another') {
+        species = $petDialogFirst
+            .querySelector(':scope > .anotherType-wrapper > .typeSelect')
+            .value;
+    } else {
+        species = $petDialogSecondSelectType
+            .querySelector(':scope > .petType')
+            .value;
     }
-    pets.push(pet);
-    addPetToList(pet);
-    closeAllPetDialogs();
-    resetAllDialog();
-    currentStep = 1;
+
+    const petData = {
+        petId: editMod ? editMod.petId : getNextPetId(),
+        selectType: selectType,
+        name: petNameInput.value,
+        petImage: fileInput.files.length > 0
+            ? preview.src
+            : editMod
+                ? editMod.petImage
+                : '/user/assets/images/defaultPetImage.png',
+        species: species,
+        birthYear: petYear.value || petYear.placeholder,
+        birthMonth: petMonth.value || petMonth.placeholder,
+        birthDate: petDate.value || petDate.placeholder,
+        age: `${age}살`,
+        introduction: introduction.value,
+        gender: genderInput ? genderInput.classList.contains('male') ? '남아' : '여아' : null,
+        weight: weight.value,
+        weightType: weightTypeInput
+            ? weightTypeInput.classList.contains('slim') ? 'slim'
+            : weightTypeInput.classList.contains('normal') ? 'normal'
+            : 'chubby'
+            : null
+    }
+
+    if (editMod) {
+        // 수정모드
+        const index = pets.findIndex(p => p.petId === editMod.petId);
+        pets[index] = petData;
+
+        const li = petList.querySelector(`li[data-pet-id="${editMod.petId}"]`);
+        if (li) {
+            li.querySelector('.petName').firstChild.textContent = petData.name;
+            li.querySelector('.petName .gender').src = petData.gender === '남아'
+                ? '/user/assets/images/male.png'
+                : '/user/assets/images/female.png';
+            li.querySelector('.species').textContent = `품종 : ${petData.species}`;
+            li.querySelector('.birth').textContent = `나이 : ${petData.age}`;
+            li.querySelector('.weight').textContent = `몸무게 : ${petData.weight}kg`;
+            li.querySelector('.introduction').textContent = `소개 : ${petData.introduction}`;
+            li.querySelector('.petImage').src = petData.petImage;
+        }
+
+        // 화면 닫고 초기화
+        editMod = null;
+        closeAllPetDialogs();
+        // 수정모드는 resetAllDialog 호출 안함
+        currentStep = 1;
+    } else {
+        // 등록모드
+        pets.push(petData);
+        addPetToList(petData);
+
+        // 화면 닫고 초기화
+        closeAllPetDialogs();
+        resetAllDialog();
+        currentStep = 1;
+    }
 });
 
-
-function addPetToList(pet) {
+function addPetToList(petData) {
     const li = document.createElement('li');
     li.classList.add('pet');
-    const genderIcon = pet.gender === '남아' ? '/user/assets/images/male.png' : '/user/assets/images/female.png';
-    const petImage = pet.petImage;
+    li.dataset.petId = petData.petId;
+    const genderIcon = petData.gender === '남아' ? '/user/assets/images/male.png' : '/user/assets/images/female.png';
+    const petImage = petData.petImage;
     li.innerHTML = `
     <div class="petInformation">
         <div class="side-wrapper">
             <div class="image-wrapper">
                 <img class="petImage" src="${petImage}" alt="">
             </div>
-            <label class="remember">
-                <input hidden class="checkbox" type="radio" name="primary" value="${pet.petId}">
-                <span class="text"></span>
-            </label>
         </div>
         <div class="detail">
             <span class="petName">
-                ${pet.name}
+                ${petData.name}
                 <img class="gender" src="${genderIcon}" alt="">
             </span>
-            <span class="species">품종 : ${pet.species}</span>
-            <span class="birth">생일 : ${pet.birth}</span>
-            <span class="weight">몸무게 : ${pet.weight}kg</span>
-            <span class="introduction">소개 : ${pet.introduction}</span>
+            <span class="species">종류 : ${petData.species}</span>
+            <span class="birth">나이 : ${petData.age}</span>
+            <span class="weight">몸무게 : ${petData.weight}kg</span>
+            <span class="introduction">한 줄 소개 : ${petData.introduction}</span>
         </div>
+    </div>
+    <div class="bottom-wrapper">
+        <label class="remember">
+            <input hidden class="checkbox" type="radio" name="primary" value="${petData.petId}">
+            <span class="text"></span>
+        </label>
+        <span class="-flex-stretch"></span>
+        <button class="modify" type="button">수정</button>
+        <button class="delete" type="button">삭제</button>
     </div>`;
     if (pets.length === 1) {
         li.querySelector('input[name="primary"]').checked = true;
@@ -1087,6 +1231,199 @@ function addPetToList(pet) {
 
 
 
+// region ============회원가입 네번째 단계(개인) 애완동물 수정 ================
+
+// 수정버튼 눌렀을 때 모달 띄우면서 정보 불러오기
+petList.addEventListener('click', (e) => {
+    const modifyButton = e.target.classList.contains('modify');
+    if (!modifyButton) {
+        return;
+    }
+    const petItems = petList.querySelectorAll(':scope > .pet');
+
+    let findLi = null;
+    petItems.forEach(item => {
+        if (item.contains(e.target)) {
+            findLi = item;
+        }
+    });
+    if (!findLi) {
+        return;
+    }
+    const petId = parseInt(findLi.dataset.petId);
+    const petData = pets.find(p => p.petId === petId);
+    if (!petData) {
+        return;
+    }
+    editMod = petData; // 수정모드 Yes
+    loadPetDialog(petData);
+    openDialog(1);
+});
+
+// 삭제눌렀을 때 띄울 모달
+const petDeleteMessage = document.getElementById('petDeleteMessage');
+const deleteMessageTitle = document.createElement('span');
+const deleteMessageText = document.createElement('span');
+const deleteButton = petDeleteMessage.querySelector(':scope > .button-wrapper > .delete');
+const cancelButton = petDeleteMessage.querySelector(':scope > .button-wrapper > .cancel');
+deleteMessageTitle.classList.add('title');
+deleteMessageText.classList.add('text');
+petDeleteMessage.prepend(deleteMessageTitle, deleteMessageText);
+
+
+// 삭제버튼 눌렀을 때 모달 띄우면서 정보 삭제하기
+petList.addEventListener('click', (e) => {
+    const deleteButton = e.target.classList.contains('delete');
+    if (!deleteButton) {
+        return;
+    }
+    const petItems = petList.querySelectorAll(':scope > .pet');
+
+    let findLi = null;
+    petItems.forEach(item => {
+        if (item.contains(e.target)) {
+            findLi = item;
+        }
+    });
+    if (!findLi) {
+        return;
+    }
+    showDeleteMessage('경고', '정말로 삭제하시겠습니까?', findLi);
+
+});
+
+let deleteLi = null;
+function showDeleteMessage(title, text, findLi) {
+    deleteLi = findLi;
+    petDeleteMessage.classList.add('visible');
+    deleteMessageTitle.innerText = title;
+    deleteMessageText.innerText = text;
+}
+
+deleteButton.addEventListener('click', () => {
+    if (!deleteLi) return;
+
+    // 삭제할 petId
+    const removeId = Number(deleteLi.dataset.petId);
+
+    // pets 배열에서 제거
+    const removeIndex = pets.findIndex(p => p.petId === removeId);
+    if (removeIndex !== -1) {
+        pets.splice(removeIndex, 1);
+    }
+
+    //  화면에서 제거
+    deleteLi.remove();
+    deleteLi = null;
+    petDeleteMessage.classList.remove('visible');
+
+    // 남아있는 li 기준으로 다시 번호 매기기
+    const petItems = petList.querySelectorAll(':scope > li.pet');
+    petItems.forEach((li, index) => {
+        const newId = index + 1;
+
+        // li의 data-pet-id 재설정
+        li.dataset.petId = newId;
+        // radio value 재설정
+        const radio = li.querySelector('input[name="primary"]');
+        if (radio) {
+            radio.value = newId;
+        }
+        // pets 배열도 같은 순서로 petId 재설정
+        if (pets[index]) {
+            pets[index].petId = newId;
+        }
+    });
+    // 대표동물 처리
+    const checked = petList.querySelector('input[name="primary"]:checked');
+    if (!checked && petItems.length > 0) {
+        petItems[0]
+            .querySelector('input[name="primary"]')
+            .checked = true;
+    }
+});
+
+cancelButton.addEventListener('click', () => {
+    deleteLi = null;
+    petDeleteMessage.classList.remove('visible');
+});
+
+function loadPetDialog(petData) {
+    // 첫번째 dialog
+    const dogInput = $petDialogFirst.querySelector('.dog input[type="radio"]');
+    const catInput = $petDialogFirst.querySelector('.cat input[type="radio"]');
+    const anotherInput = $petDialogFirst.querySelector('.another input[type="radio"]');
+
+    selectType = petData.selectType;
+    if (selectType === 'dog') {
+        dogInput.checked = true;
+    }
+    if (selectType === 'cat') {
+        catInput.checked = true;
+    }
+    if (selectType === 'another') {
+        anotherInput.checked = true;
+        $petDialogFirst.querySelector(':scope > .anotherType-wrapper').classList.add('visible');
+    }
+    petNameInput.value = petData.name;
+    dialogFirstNextButton(); // 버튼 상태 갱신
+
+    // 두번째 dialog
+    const petSpecies = $petDialogSecond.querySelector(':scope > .selectedPetType > .petType');
+    const introduce = $petDialogSecond.querySelector(':scope > .introduction > .introduce');
+    const isDefaultImage =
+        petData.petImage === '/user/assets/images/defaultPetImage.png';
+    preview.src = petData.petImage;
+    if (isDefaultImage) {
+        circle.classList.remove('visible'); // 기본이미지면 미리보기 숨김
+    } else {
+        circle.classList.add('visible');    // 실제 업로드 이미지면 보이기
+    }
+    petSpecies.value = petData.species;
+    petYear.value = petData.birthYear;
+    petMonth.value = petData.birthMonth;
+    petDate.value = petData.birthDate;
+    introduce.value = petData.introduction;
+
+    // 세번째 dialog
+    const maleInput = $petDialogThird.querySelector(':scope > .genderLabel > .gender-wrapper > .maleLabel > .male');
+    const femaleInput = $petDialogThird.querySelector(':scope > .genderLabel > .gender-wrapper > .femaleLabel > .female');
+    if (petData.gender === "남아") {
+        maleInput.checked = true;
+    }
+    if (petData.gender === '여아') {
+        femaleInput.checked = true;
+    }
+
+    weightInput.value = petData.weight;
+
+    const slimInput = $petDialogThird.querySelector(':scope > .weightTypeLabel > .weightType-wrapper > .slim > .slim');
+    const normalInput = $petDialogThird.querySelector(':scope > .weightTypeLabel > .weightType-wrapper > .normal > .normal');
+    const chubbyInput = $petDialogThird.querySelector(':scope > .weightTypeLabel > .weightType-wrapper > .chubby > .chubby');
+
+    if (petData.weightType === 'slim') {
+        slimInput.checked = true;
+    }
+    else if (petData.weightType === 'normal') {
+        normalInput.checked = true;
+    }
+    else if (petData.weightType === 'chubby') {
+        chubbyInput.checked = true;
+    }
+
+    // 버튼 상태 갱신
+    dialogSecondNextButton();
+    dialogThirdCompleteButton();
+}
+
+// endregion
+
+
+// endregion
+
+
+
+/*============회원가입 네번째 단계(사업자)================*/
 
 
 
@@ -1099,11 +1436,395 @@ function addPetToList(pet) {
 
 
 
-/*
-* 현재 해결해야할거
-* 아직 정보들 초기화 하는걸 안만들어놔서 나중에 회원가입 완료할떄 개인,사업자 회원 둘다 시도한다면
-* 둘의정보가 동시에 저장될 우려가 있음
-* 또 공용으로 쓴 함수들이 많기 때문에 헷갈릴 우려가 있다*/
+
+/* 회원가입 완료 전송 */
+$registerContainer.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    let phone;
+    let store;
+    if (selectedMemberType === 'personal') {
+        phone = $registerThirdPersonalStep.querySelector('.firstNumber').value + '-' + $registerThirdPersonalStep.querySelector('.contactNumber.first').value + '-' + $registerThirdPersonalStep.querySelector('.contactNumber.second').value;
+    }
+    if (selectedMemberType === 'business') {
+        phone = $registerThirdBusinessStep.querySelector('.firstNumber').value + '-' + $registerThirdBusinessStep.querySelector('.contactNumber.first').value + '-' + $registerThirdBusinessStep.querySelector('.contactNumber.second').value;
+
+        store = {
+            storeName: $registerForthBusinessStep.querySelector('.storeName.input').value,
+            category: $registerForthBusinessStep.querySelector('.category').value,
+            postalCode: $registerForthBusinessStep.querySelector('.postalNumber').value,
+            addressPrimary: $registerForthBusinessStep.querySelector('.primaryAddress').value,
+            addressSecondary: $registerForthBusinessStep.querySelector('.detailAddress').value
+        }
+    }
+
+    const petsDtoArray = pets.map(pet => {
+        // 문자열에 '년', '월', '일'이 붙어있다면 제거
+        const year = Number(pet.birthYear.toString().replace(/\D/g,''));
+        const month = Number(pet.birthMonth.toString().replace(/\D/g,''));
+        const day = Number(pet.birthDate.toString().replace(/\D/g,''));
+
+        // 숫자가 제대로 파싱되지 않으면 에러
+        if (!year || !month || !day) {
+            console.error('잘못된 생년월일', pet.birthYear, pet.birthMonth, pet.birthDate);
+        }
+
+        const birthDate = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+
+        return {
+            name: pet.name,
+            species: pet.species,
+            birthDate: birthDate,  // yyyy-MM-dd
+            gender: pet.gender,
+            weight: pet.weight,
+            bodyType: pet.weightType,
+            imageUrl: pet.petImage
+        };
+    });
+
+
+    const form = selectedMemberType === 'personal' ? $registerThirdPersonalStep : $registerThirdBusinessStep;
+
+
+    const payload = {
+        email: form.querySelector('.email').value,
+        loginId: form.querySelector('.id').value,
+        password: form.querySelector('.password').value,
+        phone: phone,
+        userType: selectedMemberType,
+        name: selectedMemberType === 'personal' ? form.querySelector('.name').value : null,
+        nickname: selectedMemberType === 'personal' ? form.querySelector('.nickname').value : null,
+        companyName: selectedMemberType === 'business' ? form.querySelector('.companyName').value : null,
+        representativeName: selectedMemberType === 'business' ? form.querySelector('.representativeName').value : null,
+        businessNumber: selectedMemberType === 'business' ? form.querySelector('.businessNumber').value : null,
+        address: {
+            receiverName: null,
+            phone: phone,
+            postalCode: form.querySelector('.postalNumber').value,
+            addressPrimary: form.querySelector('.primaryAddress').value,
+            addressSecondary: form.querySelector('.detailAddress').value
+        },
+        store: store,
+        termsIds: Array.from(document.querySelectorAll('.agreement-check > .checkbox'))
+            .filter(cb => cb.checked)
+            .map(cb => parseInt(cb.dataset.termsId)),
+        pets: selectedMemberType === 'personal' ? petsDtoArray : null
+    };
+
+    try {
+        const res = await fetch('/user/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.result === 'SUCCESS') {
+            location.href = '/user/login';
+        } else {
+            console.error('회원가입 실패', data);
+        }
+    } catch (err) {
+        console.error('서버 통신 실패', err);
+    }
+});
+
+const loading = document.getElementById('loading');
+
+
+$registerThirdSteps.forEach(step => {
+    // region 이메일 검증
+    const sendButton = step.querySelector(':scope > .emailSendLabel > .button');
+        const emailInput = step.querySelector(':scope > .emailSendLabel > .email');
+
+    sendButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (emailInput.value === '') {
+            showMessage('이메일을 입력해주세요.');
+            emailInput.focus();
+            return;
+        }
+        loading.classList.add('visible');
+
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('email', emailInput.value);
+        formData.append('type', 'REGISTER');
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            loading.classList.remove('visible');
+            if(xhr.status < 200 || xhr.status >= 400){
+                
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('전송 실패! 다시 확인해주세요.');
+                    break;
+                case 'FAILURE_DUPLICATE':
+                    showMessage('이미 사용중인 이메일입니다. 다시 입력해주세요.');
+                    emailInput.focus();
+                    emailInput.select();
+                    break;
+                case 'FAILURE_EXPIRED':
+                    showMessage('인증번호 유효기간이 지났습니다. 다시 시도해 주세요.');
+                    break;
+                case 'SUCCESS':
+                    showMessage('작성하신 이메일로 인증번호를 발송하였습니다. \n 인증번호는 5분간만 유효하니 유의해주세요.');
+                    emailInput.setAttribute('disabled', '');
+                    sendButton.setAttribute('disabled', '');
+                    emailCodeInput.removeAttribute('disabled');
+                    verifyButton.removeAttribute('disabled');
+                    break;
+                default:
+                    showMessage('알 수 없는 이유로 실패하였습니다. 다시 시도해주세요.');
+
+            }
+            
+        };
+        xhr.open('POST', '/user/email');
+        xhr.send(formData);
+    });
+
+
+    const verifyButton = step.querySelector(':scope > .emailVerifyLabel > .button');
+    const emailCodeInput = step.querySelector(':scope > .emailVerifyLabel > .emailVerifyNumber');
+
+    verifyButton.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (emailCodeInput.value === '') {
+            showMessage('인증번호를 입력해주세요.');
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('email', emailInput.value);
+        formData.append('code', emailCodeInput.value);
+        formData.append('type', 'REGISTER');
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('인증번호가 일치하지 않습니다.');
+                    break;
+                case 'FAILURE_EXPIRED':
+                    showMessage('인증번호가 만료되었습니다. 다시 시도해 주세요.');
+                    emailInput.removeAttribute('disabled');
+                    sendButton.removeAttribute('disabled');
+                    emailCodeInput.setAttribute('disabled', '');
+                    verifyButton.setAttribute('disabled', '');
+                    break;
+                case 'SUCCESS':
+                    emailCodeInput.setAttribute('disabled', '');
+                    verifyButton.setAttribute('disabled', '');
+                    isEmailVerified = true;
+                    showMessage('인증을 완료하였습니다.');
+                    break;
+                default:
+
+            }
+
+        };
+        xhr.open('PATCH', '/user/email/verify');
+        xhr.send(formData);
+    });
+    // endregion
+
+    // region 아이디 검증
+    const loginIdInput = step.querySelector(':scope > .IdLabel > .id-wrapper > .id');
+
+    let loginIdTimeout;
+    const message = step.querySelector(':scope > .IdLabel > .id-wrapper > .text');
+    loginIdInput.addEventListener('input', () => {
+        clearTimeout(loginIdTimeout);
+        if (loginIdInput.value === '') {
+            message.classList.remove('visible');
+            return;
+        }
+        loginIdTimeout = setTimeout(() => {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState !== XMLHttpRequest.DONE){
+                    return;
+                }
+                if(xhr.status < 200 || xhr.status >= 400){
+
+                    return;
+                }
+                const response = JSON.parse(xhr.responseText);
+                switch (response.result) {
+                    case 'FAILURE':
+                        message.classList.add('visible');
+                        break;
+                    case 'SUCCESS':
+                        message.classList.remove('visible');
+                        break;
+                    default:
+                }
+            };
+            const url = new URL(origin);
+            url.pathname = '/user/loginId';
+            url.searchParams.set('loginId', loginIdInput.value);
+            xhr.open('GET', url);
+            xhr.send();
+        }, 500);
+    });
+    // endregion
+
+    // region 전화번호 검증
+    const firstNumber = step.querySelector('.firstNumber');
+    const middleNumber = step.querySelector('.contactNumber.first');
+    const lastNumber = step.querySelector('.contactNumber.second');
+    const phoneMessage = step.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .text');
+
+    let phoneTimeout;
+    const checkPhone = () => {
+        clearTimeout(phoneTimeout);
+        if (middleNumber.value.length !== 4 || lastNumber.value.length !== 4) {
+            phoneMessage.classList.remove('visible');
+            return;
+        }
+
+        const phone = `${firstNumber.value}-${middleNumber.value}-${lastNumber.value}`;
+
+        phoneTimeout = setTimeout(() => {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if(xhr.readyState !== XMLHttpRequest.DONE){
+                    return;
+                }
+                if(xhr.status < 200 || xhr.status >= 400){
+
+                    return;
+                }
+                const response = JSON.parse(xhr.responseText);
+                switch (response.result) {
+                    case 'FAILURE':
+                        phoneMessage.classList.add('visible');
+                        break;
+                    case 'SUCCESS':
+                        phoneMessage.classList.remove('visible');
+                        break;
+                    default:
+                }
+            };
+            const url = new URL(origin);
+            url.pathname = '/user/phone';
+            url.searchParams.set('phone', phone);
+            xhr.open('GET', url);
+            xhr.send();
+        }, 500);
+    }
+    middleNumber.addEventListener('input', checkPhone);
+    lastNumber.addEventListener('input', checkPhone);
+
+    // endregion
+});
+
+
+
+
+// region 닉네임 검증
+const nicknameInput = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname-wrapper > .nickname');
+const nicknameMessage = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname-wrapper > .text');
+
+let nicknameTimeout;
+nicknameInput.addEventListener('input', () => {
+    clearTimeout(nicknameTimeout);
+    if (nicknameInput.value === '') {
+        nicknameMessage.classList.remove('visible');
+        return;
+    }
+    nicknameTimeout = setTimeout(() => {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    nicknameMessage.classList.add('visible');
+                    break;
+                case 'SUCCESS':
+                    nicknameMessage.classList.remove('visible');
+                    break;
+                default:
+            }
+        };
+        const url = new URL(origin);
+        url.pathname = '/user/nickname';
+        url.searchParams.set('nickname', nicknameInput.value);
+        xhr.open('GET', url);
+        xhr.send();
+    }, 500);
+});
+// endregion
+
+
+const businessIdInput = $registerThirdBusinessStep.querySelector(':scope > .businessId > .businessId-wrapper > .businessId');
+const businessIdMessage = $registerThirdBusinessStep.querySelector(':scope > .businessId > .businessId-wrapper > .text');
+
+let businessIdTimeout;
+businessIdInput.addEventListener('input', () => {
+    clearTimeout(businessIdTimeout);
+    if (businessIdInput.value === '') {
+        businessIdMessage.classList.remove('visible');
+        return;
+    }
+    businessIdTimeout = setTimeout(() => {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    businessIdMessage.classList.add('visible');
+                    break;
+                case 'SUCCESS':
+                    businessIdMessage.classList.remove('visible');
+                    break;
+                default:
+            }
+        };
+        const url = new URL(origin);
+        url.pathname = '/user/businessId';
+        url.searchParams.set('businessId', businessIdInput.value);
+        xhr.open('GET', url);
+        xhr.send();
+    }, 500);
+})
+
+
+
+
+
+
 
 
 

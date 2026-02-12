@@ -7,9 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
-public class PersonalUser {
+public class BusinessUserEntity {
     private int userId;
-    private String name;
-    private String nickname;
-    private String phone;
+    private String companyName;
+    private String representativeName;
+    private String businessNumber;
 }
