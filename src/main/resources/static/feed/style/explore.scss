@@ -6,7 +6,7 @@
     @include flex(column, center, center, 1rem);
     width: min(75rem, 92%);
     height: 100%;
-    margin: 0 auto;
+    margin: 5rem auto 0 auto;
 }
 
 .options {
@@ -14,7 +14,6 @@
     width: 100%;
     padding: 0.5rem 0 0 0;
     margin-top: 0.65rem;
-    //border-bottom: 0.175rem solid darken($global-border-green-color, 20%);
     background-color: inherit;
     flex-wrap: wrap;
 }
@@ -59,10 +58,19 @@
 
     > img {
         border-radius: 999rem;
-        background-color: #FDC756;
+        background-color: #DBF0DF;
         width: 2rem;
         height: 2rem;
         color: inherit;
+    }
+
+    &:hover {
+        img {
+            background-color: #CFE9D6
+        }
+        > span {
+            text-decoration: underline;
+        }
     }
 }
 

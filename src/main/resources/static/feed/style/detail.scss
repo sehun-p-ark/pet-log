@@ -1,15 +1,19 @@
 @import "../../assets/styles/def";
+@import "../../assets/styles/def";
 
 // 전체 페이지
 .page {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    margin: 0 7.5% 0 6%;
+    grid-template-columns: 1fr 35%;
+    gap: 2rem;
+    padding: 5rem 5rem 0 5rem;
+    align-items: start;
 }
 
 // 좌측 핀 그리드 영역
 .grid-area {
-    grid-column: 1 / 7;
+    width: 100%;
+    min-width: 0;
     padding: 1.5rem 2.5rem 1.5rem 1.5rem;
 }
 
@@ -42,20 +46,21 @@
 // 우측 상세 게시물 영역
 .detail-area {
     position: sticky;
-    top: 0;
-    height: calc(100vh);
-    overflow: hidden;
-    align-self: start;
-    grid-column: 7 / 11;
+    top: 6rem; // 헤더 높이
+    height: calc(100vh - 5rem - 2rem); // 헤더 + 아래 패딩
+    overflow: hidden; // 내부만 스크롤
+    border-radius: 1rem;
     border: 0.0625rem solid $global-border-green-color;
     background-color: $global-gray-background-color;
 }
 
 .detail-shell {
     height: 100%;
-    padding: 1rem 2.5rem;
     overflow-y: auto;
-    -ms-overflow-style: none;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
 
     &::-webkit-scrollbar {
         display: none;
@@ -64,6 +69,7 @@
 
 // 유저 정보 (헤더)
 .detail-header {
+    width: 100%;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
     border-bottom: 0.0625rem solid $global-border-color;
@@ -101,7 +107,6 @@
 }
 
 .detail-image {
-    @include flex(column, center, center);
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
@@ -119,13 +124,16 @@
             height: 100%;
             transition: transform 0.35s ease;
 
-
             > img,
             > video {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
                 flex-shrink: 0;
+            }
+
+            > .no-image-placeholder {
+                background-color: $global-gray-background-color;
             }
         }
     }
@@ -194,41 +202,11 @@
     }
 }
 
-
-
-// 좋아요 / 댓글
-.detail-stats {
-    @include flex(row, center, flex-start, 0.8rem);
-
-    .detail-heart-btn,
-    .detail-comment-btn{
-        @include flex(row, center, center, 0.3rem);
-        padding: 0.35rem 0.6rem;
-        border-radius: 999rem;
-        border: 1px solid $global-border-color;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-
-        > .heart {
-            width: 1.75rem;
-            height: 1.75rem;
-        }
-
-        > .comment {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-
-        &:hover {
-            background-color: #fff;
-
-            > .heart {
-                color: red;
-            }
-        }
-    }
+// 좋아요 댓글
+.feed-action {
+    padding: 0;
 }
+
 
 // 절취선
 .divider {
@@ -304,34 +282,23 @@
     }
 }
 
-
-@media (max-width: 890px) {
-
+@media (max-width: 920px) {
     .page {
-        grid-template-columns: 1fr;   // 한 줄 레이아웃
+        grid-template-columns: 1fr;
+        padding: 5rem 1.2rem 0 1.2rem;
     }
 
     .detail-area {
-        grid-column: 1 / -1;  // 전체 폭 사용
-        position: relative;   // sticky 해제
+        position: static;
         height: auto;
-        order: -1;            // detail-area가 위로 오도록 설정
-
-        > .detail-shell {
-            overflow: visible;
-            height: auto;
-
-            > .detail-content > .detail-image > img {
-                width: 100%;
-                aspect-ratio: 1 / 1.25;
-            }
-        }
+        order: -1;
+        margin: 0 12rem;
     }
 
-    .grid-area {
-        grid-column: 1 / -1;  // 전체 폭
+    .detail-shell {
+        height: auto;
+        overflow: visible;
     }
-
 }
 
 @media (max-width: 534px) {

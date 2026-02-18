@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.feed.FeedMapper">
+    <insert id="insertFeed" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `petlog`.`feed`
+        (user_id, title, content, like_count, comment_count, created_at, updated_at)
+        VALUES (#{userId}, #{title}, #{content}, #{likeCount}, #{commentCount}, #{createdAt}, null)
+    </insert>
+    <update id="increaseLikeCount">
+        UPDATE `petlog`.`feed`
+        SET like_count = like_count + 1
+        WHERE id = #{feedId}
+    </update>
+    <update id="decreaseLikeCount">
+        UPDATE `petlog`.`feed`
+        SET like_count = IF(like_count > 0, like_count - 1, 0)
+        WHERE id = #{feedId}
+    </update>
+    <select id="selectLikeCount" resultType="int">
+        SELECT like_count
+        FROM `petlog`.`feed`
+        WHERE id = #{feedId}
+    </select>
+    <select id="selectFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedDto">
+        SELECT `t1`.`id` AS `feedId`,
+        `t1`.`user_id` AS `userId`,
+        `t1`.`title` AS `title`,
+        `t1`.`content` AS `content`,
+        `t1`.`like_count` AS `likeCount`,
+        `t1`.`comment_count` AS `commentCount`,
+        `t1`.`created_at` AS `createdAt`,
+        `t1`.`updated_at` AS `updatedAt`,
+        `t2`.nickname AS `nickname`,
+        `t3`.image_url AS `profileImageUrl`,
+        `t4`.address_primary AS address
+        FROM `petlog`.`feed` AS `t1`
+        LEFT JOIN `petlog`.`personal_user` AS `t2`
+        ON `t1`.`user_id` = `t2`.`user_id`
+        LEFT JOIN `petlog`.`pets` AS `t3`
+        ON `t1`.user_id = `t3`.user_id
+        AND `t3`.is_primary = 1
+        LEFT JOIN `petlog`.`address` AS `t4`
+        ON `t1`.`user_id` = `t4`.`user_id`
+        <where>
+            <!-- 최신순 커서 -->
+            <if test="sort == 'latest' and lastCreatedAt != null and lastFeedId != null">
+                (
+                `t1`.`created_at` <![CDATA[ < ]]> #{lastCreatedAt}
+                OR (`t1`.`created_at` = #{lastCreatedAt} AND `t1`.`id` <![CDATA[ < ]]> #{lastFeedId})
+                )
+            </if>
+
+            <!-- 인기순 커서 -->
+            <if test="sort == 'like' and lastLikeCount != null and lastFeedId != null">
+                (
+                `t1`.`like_count` <![CDATA[ < ]]> #{lastLikeCount}
+                OR (`t1`.`like_count` = #{lastLikeCount} AND `t1`.`id` <![CDATA[ < ]]> #{lastFeedId})
+                )
+            </if>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="sort == 'latest'">
+                `t1`.`created_at` DESC, `t1`.`id` DESC
+            </when>
+            <when test="sort == 'like'">
+                `t1`.`like_count` DESC, `t1`.`id` DESC
+            </when>
+            <otherwise>
+                `t1`.`created_at` DESC, `t1`.`id` DESC
+            </otherwise>
+        </choose>
+        LIMIT #{size}
+    </select>
+    <select id="selectFeedById" resultType="dev.dhkim.petlog.dto.feed.FeedDto">
+        SELECT `t1`.`id`            AS `feedId`,
+               `t1`.`user_id`       AS `userId`,
+               `t1`.`title`         AS `title`,
+               `t1`.`content`       AS `content`,
+               `t1`.`like_count`    AS `likeCount`,
+               `t1`.`comment_count` AS `commentCount`,
+               `t1`.`created_at`    AS `createdAt`,
+               `t1`.`updated_at`    AS `updatedAt`,
+               `t2`.nickname        AS `nickname`,
+               `t3`.image_url       AS `profileImageUrl`,
+               `t4`.address_primary AS address
+        FROM `petlog`.`feed` AS `t1`
+                 JOIN `petlog`.`personal_user` AS `t2`
+                      ON `t1`.`user_id` = `t2`.`user_id`
+                 LEFT JOIN `petlog`.`pets` AS `t3`
+                           ON `t1`.user_id = `t3`.user_id
+                               AND `t3`.is_primary = 1
+                 LEFT JOIN `petlog`.`address` AS `t4`
+                           ON `t1`.`user_id` = `t4`.`user_id`
+        WHERE `t1`.`id` = #{id}
+    </select>
+    <select id="selectFeedByAddress" resultType="dev.dhkim.petlog.dto.feed.FeedDto">
+        SELECT `t1`.`id`            AS `feedId`,
+               `t1`.`user_id`       AS `userId`,
+               `t1`.`title`         AS `title`,
+               `t1`.`content`       AS `content`,
+               `t1`.`like_count`    AS `likeCount`,
+               `t1`.`comment_count` AS `commentCount`,
+               `t1`.`created_at`    AS `createdAt`,
+               `t1`.`updated_at`    AS `updatedAt`,
+               `t2`.nickname        AS `nickname`,
+               `t3`.image_url       AS `profileImageUrl`,
+               `t4`.address_primary AS address
+        FROM `petlog`.`feed` AS `t1`
+                 JOIN `petlog`.`personal_user` AS `t2`
+                      ON `t1`.`user_id` = `t2`.`user_id`
+                 LEFT JOIN `petlog`.`pets` AS `t3`
+                           ON `t1`.user_id = `t3`.user_id
+                               AND `t3`.is_primary = 1
+                 LEFT JOIN `petlog`.`address` AS `t4`
+                           ON `t1`.`user_id` = `t4`.`user_id`
+        WHERE `t4`.`address_primary` = #{address}
+          AND t1.id != #{id}
+        ORDER BY t1.created_at DESC
+        LIMIT 20;
+    </select>
+    <select id="selectMyFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedThumbnailDto">
+        SELECT `t1`.`id`       AS feedId,
+               `t2`.thumbnail_url  AS thumbnailUrl,
+               `t2`.media_type AS mediaType
+        FROM `petlog`.`feed` AS `t1`
+                 LEFT JOIN `petlog`.`feed_media` AS `t2`
+                           ON `t1`.`id` = `t2`.`feed_id`
+                               AND `t2`.`id` = (SELECT `fm`.`id`
+                                                FROM `petlog`.`feed_media` AS `fm`
+                                                WHERE `t1`.id = `fm`.feed_id
+                                                ORDER BY `fm`.`sort_order`
+                                                LIMIT 1)
+                 LEFT JOIN `petlog`.`personal_user` AS `t3`
+                           ON `t1`.user_id = `t3`.user_id
+        WHERE `t3`.`nickname` = #{nickname}
+        ORDER BY `t1`.`created_at` DESC
+    </select>
+    <select id="selectLikedFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedThumbnailDto">
+        SELECT `t3`.`id` AS `feedId`,
+               `t4`.`thumbnail_url` AS `thumbnailUrl`,
+               `t4`.`media_type` AS `mediaType`
+        FROM `petlog`.`personal_user` `t1`
+                 JOIN `petlog`.`feed_likes` `t2` ON `t2`.`user_id` = `t1`.`user_id`
+                 JOIN `petlog`.`feed` `t3` ON `t2`.`feed_id` = `t3`.`id`
+                 LEFT JOIN `petlog`.`feed_media` `t4`
+                           ON `t4`.`feed_id` = `t3`.`id`
+                               AND `t4`.`sort_order` = 0
+        WHERE `t1`.`nickname` = #{nickname}
+        ORDER BY `t2`.`created_at` DESC
+    </select>
+    <select id="selectRecommendedFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedThumbnailDto">
+        SELECT *
+        FROM petlog.follows `t1`
+            JOIN petlog.feed `t2`
+                ON t1.followed_user_id = t2.user_id
+            JOIN petlog.personal_user `t3`
+                ON t1.followed_user_id = t3.user_id
+        WHERE `t3`.nickname = #{nickname}
+        ORDER BY `t2`.created_at DESC
+    </select>
+</mapper>

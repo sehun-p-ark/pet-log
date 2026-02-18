@@ -1,7 +1,7 @@
 package dev.dhkim.petlog.services.feed;
 
 import dev.dhkim.petlog.enums.feed.Source;
-import dev.dhkim.petlog.vos.feed.AnimalApiResponseVo;
+import dev.dhkim.petlog.dto.feed.AnimalApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -42,17 +42,17 @@ public class AnimalImageService {
 
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<AnimalApiResponseVo[]> response = restTemplate.exchange(
+        ResponseEntity<AnimalApiResponseDto[]> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 entity,
-                AnimalApiResponseVo[].class
+                AnimalApiResponseDto[].class
         );
 
         List<String> result = new ArrayList<>();
 
         if (response.getBody() != null) {
-            for (AnimalApiResponseVo img : response.getBody()) {
+            for (AnimalApiResponseDto img : response.getBody()) {
                 if (img.getUrl() != null) {
                     result.add(img.getUrl());
                 }

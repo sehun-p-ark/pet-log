@@ -4,10 +4,9 @@ import dev.dhkim.petlog.entities.feed.FeedEntity;
 import dev.dhkim.petlog.entities.feed.FeedMediaEntity;
 import dev.dhkim.petlog.enums.feed.MediaType;
 import dev.dhkim.petlog.enums.feed.Source;
-import dev.dhkim.petlog.mappers.FeedMapper;
-import dev.dhkim.petlog.mappers.FeedMediaMapper;
-import dev.dhkim.petlog.utils.DummyTextUtil;
-import dev.dhkim.petlog.vos.feed.FeedResponseVo;
+import dev.dhkim.petlog.mappers.feed.FeedMapper;
+import dev.dhkim.petlog.mappers.feed.FeedMediaMapper;
+import dev.dhkim.petlog.utils.feed.DummyTextUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +20,10 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class FeedDummyService {
 
-    private final FeedMapper feedMapper;
-    private final FeedMediaMapper feedMediaMapper;
     private final AnimalImageService animalImageService;
     private final DummyTextUtil dummyTextUtil;
+    private final FeedMapper feedMapper;
+    private final FeedMediaMapper feedMediaMapper;
 
     private final Random random = new Random();
 
@@ -58,6 +57,7 @@ public class FeedDummyService {
                 FeedMediaEntity media = new FeedMediaEntity();
                 media.setFeedId(feed.getId());
                 media.setMediaUrl(url);
+                media.setThumbnailUrl(url);
                 media.setMediaType(MediaType.IMAGE);
                 media.setSortOrder(order++);
                 media.setSource(source);

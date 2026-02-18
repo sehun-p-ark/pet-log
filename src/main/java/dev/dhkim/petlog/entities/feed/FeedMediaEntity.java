@@ -13,6 +13,7 @@ public class FeedMediaEntity {
     private int id;
     private int feedId;
     private String mediaUrl;
+    private String thumbnailUrl;
     private MediaType mediaType;
     private int sortOrder;
     private Source source;

@@ -20,7 +20,9 @@ $preview.addEventListener('click', (e) => {
     const cancelBtn = e.target.closest(".cancel-btn");
     if (cancelBtn) { // 삭제 버튼을 눌렀을 떄
         const $content = cancelBtn.closest(".content"); // 삭제할 미디어
+        if (!$content) return;
         const removeURL = $content.dataset.src; // 삭제할 미디어의 URL
+        if (!removeURL) return;
 
         const index = selectedMedia.findIndex(media => media.src === removeURL);
         if (index !== -1) { // 삭제할 media를 찾은 경우
@@ -45,7 +47,7 @@ $preview.addEventListener('click', (e) => {
             $video.style.display = 'none';
         }
 
-        if (isCurrentImage || isCurrentVideo) { // 이미지가 남아있고, 메인 이미지 = 삭제 버튼 누른 이미지
+        if ((isCurrentImage || isCurrentVideo) && $remainContent.length > 0) { // 이미지가 남아있고, 메인 이미지 = 삭제 버튼 누른 이미지
             const nextLi = $remainContent[0]
             const nextSrc = nextLi.dataset.src;
             const nextType = nextLi.dataset.type;
@@ -63,7 +65,7 @@ $preview.addEventListener('click', (e) => {
     }
     else if (!cancelBtn) { // preview 사진 클릭 시
         const $content = e.target.closest(".content");
-        if(!$content) return;
+        if (!$content) return;
 
         const src = $content.dataset.src;
         const type = $content.dataset.type;
@@ -86,7 +88,7 @@ $submitButton.addEventListener('click', (e) => {
     e.preventDefault();
 
     const $title = document.querySelector('input[name="title"]').value.trim();
-    const $description = document.querySelector('input[name="description"]').value.trim();
+    const $description = document.querySelector('textarea[name="description"]').value.trim();
 
     if (selectedMedia.length === 0) {
         alert("이미지 또는 동영상을 최소 1개 업로드해주세요.");
@@ -95,9 +97,12 @@ $submitButton.addEventListener('click', (e) => {
 
     if (!$title) {
         alert("제목을 입력해주세요");
+        return;
     }
+
     if (!$description) {
         alert("내용을 입력해주세요.")
+        return;
     }
 
     const xhr = new XMLHttpRequest();
@@ -114,16 +119,18 @@ $submitButton.addEventListener('click', (e) => {
             return;
         }
         if (xhr.status < 200 || xhr.status >= 400) {
-            // dialog.showSimpleOk('오류', `요청을 처리하는 도중 오류가 발생하였습니다. 잠시 후 다시 시도해 주세요. (${xhr.status})`);
+            showMessage('박살남');
             return;
         }
         const response = JSON.parse(xhr.responseText);
         switch (response.result) {
-            case "success":
-
+            case "FAILURE": showMessage('박살남');
+            break;
+            case "SUCCESS": showMessage('성공함');
+            break;
         }
     };
-    xhr.open('POST', 'https://');
+    xhr.open('POST', '/api/feed');
     xhr.send(formData);
 });
 
@@ -145,7 +152,7 @@ function addFile(e) {
     selectedMedia.push({ // 선택한 파일, 타입, 순서를 저장함
         file,
         type,
-        url: blobURL // 어떤 파일인지 식별하기 위함
+        src: blobURL // 어떤 파일인지 식별하기 위함
     });
 
     if (type === 'img') {

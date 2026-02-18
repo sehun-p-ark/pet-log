@@ -1,4 +1,3 @@
-@use "sass:color";
 #topNavigator > .nav-wrapper > .user > .friend-wrapper {
   position: relative;
 }

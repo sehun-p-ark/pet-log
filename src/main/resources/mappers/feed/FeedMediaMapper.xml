@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.feed.FeedMediaMapper">
+    <insert id="insertFeedMediaList">
+        INSERT INTO petlog.feed_media
+        (feed_id, media_url, thumbnail_url, media_type, sort_order, source)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.feedId},
+            #{item.mediaUrl},
+            #{item.thumbnailUrl},
+            #{item.mediaType},
+            #{item.sortOrder},
+            #{item.source}
+            )
+        </foreach>
+    </insert>
+    <select id="selectByFeedIds" resultType="dev.dhkim.petlog.entities.feed.FeedMediaEntity">
+        SELECT
+        id            AS id,
+        feed_id       AS feedId,
+        media_url     AS mediaUrl,
+        thumbnail_url AS thumbnailUrl,
+        media_type    AS mediaType,
+        sort_order    AS sortOrder,
+        source        AS source
+        FROM petlog.feed_media
+        WHERE feed_id IN
+        <foreach collection="feedIds" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        ORDER BY feed_id, sort_order
+    </select>
+    <select id="selectMediaByFeedId" resultType="dev.dhkim.petlog.entities.feed.FeedMediaEntity">
+        SELECT
+            id            AS id,
+            feed_id       AS feedId,
+            media_url     AS mediaUrl,
+            media_type    AS mediaType,
+            sort_order    AS sortOrder,
+            source        AS source
+        FROM petlog.feed_media
+        WHERE feed_id = #{id}
+        ORDER BY sort_order
+    </select>
+</mapper>

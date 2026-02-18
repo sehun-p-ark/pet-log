@@ -2,9 +2,10 @@
 @import "../../assets/styles/def";
 
 #main {
-    @include flex(column, center, center);
+    @include flex(column, center, flex-start);
     padding-top: 2rem;
-    min-height: calc(100vh - 6rem);
+    min-height: calc(100vh - 5rem);
+    margin-top: 5rem;
     background: linear-gradient(to bottom, $global-background-color 30%, #F1F6ED 70%);
 }
 
@@ -54,13 +55,65 @@
 }
 
 .profile-btns {
-    @include flex(row, center, center, 3rem);
+    @include flex(row, center, center, 1rem);
+    width: 100%;
 
-    > .btn-edit,
-    > .btn-share{
-        font-size: 1rem;
+    > button {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.95rem;
         font-weight: 600;
+        cursor: pointer;
+        transition: all 180ms ease;
+    }
+
+    /* ===== 팔로우 (미팔로우 상태) ===== */
+    .btn-follow-toggle.is-follow {
+        background-color: $global-color-concept;
+        border: none;
         color: $global-black-text-color;
+
+        &:hover {
+            background-color: $global-color-hover;
+            transform: translateY(-2px);
+        }
+    }
+
+    /* ===== 팔로우 중 ===== */
+    .btn-follow-toggle.is-following {
+        background-color: #ffffff;
+        border: 1px solid $global-border-green-color;
+        color: $global-green-text-color;
+
+        &:hover {
+            background-color: lighten($global-green-background-color, 25%);
+            transform: translateY(-2px);
+        }
+    }
+
+    /* ===== 공유 / 수정 ===== */
+    .btn-share,
+    .btn-edit {
+        background-color: $global-color-concept;
+        border: none;
+        color: $global-black-text-color;
+
+        &:hover {
+            background-color: $global-color-hover;
+        }
+    }
+
+    /* ===== 메세지 ===== */
+    .btn-message {
+        background-color: $global-gray-background-color;
+        border: 1px solid $global-border-color;
+        color: $global-gray-text-color;
+
+        &:hover {
+            background-color: lighten($global-gray-background-color, 4%);
+            transform: translateY(-2px);
+        }
     }
 }
 
@@ -154,5 +207,11 @@
 
     &:hover img {
         transform: scale(1.08);
+    }
+}
+
+@media (max-width: 510px) {
+    .profile-feed {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

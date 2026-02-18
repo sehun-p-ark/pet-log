@@ -14,7 +14,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/common :: topNavigator"></div>
+<div th:replace="~{fragments/common :: topNavigator}"></div>
 
 <main id="main">
     <button class="create-feed" id="createFeedBtn">
@@ -25,26 +25,58 @@
 
     <section class="profile-header">
         <div class="profile-avatar">
-            <img src="/feed/images/profile/user.png" alt="프로필">
+            <img th:src="${profile.profileImageUrl != null ? profile.profileImageUrl : '/feed/images/explore/user.png'}"
+                 src="/feed/images/profile/user.png" alt="프로필">
         </div>
         <div class="profile-info">
-            <h2 class="nickname">sehun_pet</h2>
+            <h2 class="nickname" th:text="${profile.nickname}">sehun_pet</h2>
             <ul class="stats">
-                <li class="item">게시물<strong>58</strong></li>
-                <li class="item">팔로워<strong>10.3K</strong></li>
-                <li class="item">팔로잉<strong>350</strong></li>
+                <li class="item">게시물<strong th:text="${profile.feedCount}">58</strong></li>
+                <li class="item">팔로워<strong th:text="${profile.followedCount}">10.3K</strong></li>
+                <li class="item">팔로잉<strong th:text="${profile.followingCount}">350</strong></li>
             </ul>
         </div>
-        <div class="profile-btns">
-            <button class="btn-share" data-object="button" data-color="concept">프로필 공유</button>
-            <button class="btn-edit" data-object="button" data-color="concept">프로필 수정</button>
+        <div class="profile-btns"
+             th:classappend="${!profile.mine and !profile.following} ? ' single' : ''"
+             th:data-mine="${profile.mine}"
+             th:data-following="${profile.following}"
+             th:data-target-user-id="${profile.userId}"
+             th:data-nickname="${profile.nickname}">
+
+            <!-- 1) 내 프로필 -->
+            <th:block th:if="${profile.mine}">
+                <button class="btn-share" type="button">프로필 공유</button>
+                <button class="btn-edit" type="button">프로필 수정</button>
+            </th:block>
+
+            <!-- 2) 남의 프로필 -->
+            <th:block th:if="${!profile.mine}">
+                <!-- 팔로우 중 -->
+                <th:block th:if="${profile.following}">
+                    <button class="btn-follow-toggle is-following" type="button" data-action="unfollow">팔로우 해제</button>
+                    <button class="btn-message" type="button">메세지</button>
+                </th:block>
+
+                <!-- 미팔로우 -->
+                <th:block th:if="${!profile.following}">
+                    <button class="btn-follow-toggle is-follow" type="button" data-action="follow">팔로우</button>
+                </th:block>
+            </th:block>
         </div>
     </section>
 
     <div class="profile-tab-nav">
-        <button name="write" type="button" class="tab active"><img class="pen" src="/feed/images/profile/pen.png" alt="작성"></button>
-        <button name="heart" type="button" class="tab"><img class="heart" src="/feed/images/profile/heart.png" alt="좋아요"></button>
-        <button name="etc" type="button" class="tab"><img class="bone" src="/feed/images/profile/bone.png" alt="기타"></button>
+        <button name="write" type="button" class="tab active">
+            <img class="pen" src="/feed/images/profile/pen.png" alt="작성">
+        </button>
+        <th:block th:if="${profile.mine}">
+            <button name="heart" type="button" class="tab">
+                <img class="heart" src="/feed/images/profile/heart.png" alt="좋아요">
+            </button>
+            <button name="etc" type="button" class="tab">
+                <img class="bone" src="/feed/images/profile/bone.png" alt="기타">
+            </button>
+        </th:block>
     </div>
 
     <section class="profile-feed">

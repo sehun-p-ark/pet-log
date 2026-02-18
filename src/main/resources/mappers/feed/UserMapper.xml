@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.feed.UserMapper">
+    <select id="selectProfileById" resultType="dev.dhkim.petlog.dto.feed.ProfileDto">
+        SELECT `t1`.user_id   AS `userId`,
+               `t1`.nickname  AS `nickname`,
+               `t2`.image_url AS `profileImageUrl`
+        FROM `petlog`.`personal_user` AS `t1`
+                 LEFT JOIN `petlog`.`pets` AS `t2`
+                           ON `t1`.`user_id` = `t2`.`user_id`
+                               AND `t2`.is_primary = 1
+        WHERE `t1`.`user_id` = #{userId}
+    </select>
+    <select id="selectProfileByNickname" resultType="dev.dhkim.petlog.dto.feed.ProfileDto">
+        SELECT `t1`.`user_id`                   AS `userId`,
+               `t1`.`nickname`                  AS `nickname`,
+               `t2`.following_count             AS `followingCount`,
+               `t2`.followers_count             AS `followedCount`,
+               `t3`.`image_url`                 AS `profileImageUrl`,
+               (SELECT COUNT(*)
+                FROM `petlog`.`feed` `f`
+                WHERE `f`.`user_id` = `t1`.`user_id`) AS `feedCount`
+        FROM `petlog`.`personal_user` `t1`
+                 JOIN `petlog`.`users` `t2`
+                      ON `t1`.`user_id` = `t2`.`id`
+                 LEFT JOIN `petlog`.`pets` AS `t3`
+                           ON `t1`.`user_id` = `t3`.`user_id`
+                               AND `t3`.`is_primary` = 1
+        WHERE `t1`.`nickname` = #{nickname}
+    </select>
+    <select id="selectIsFollowing" resultType="java.lang.Boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM `petlog`.`follows`
+            WHERE `following_user_id` = #{userId}
+              AND `followed_user_id` = #{targetId}
+        )
+    </select>
+    <select id="selectFollowerCount" resultType="java.lang.Integer">
+        SELECT followers_count
+        FROM `petlog`.`users`
+        WHERE id = #{userId}
+    </select>
+    <select id="selectFollowingCount" resultType="java.lang.Integer">
+        SELECT following_count
+        FROM `petlog`.`users`
+        WHERE id = #{userId}
+    </select>
+    <insert id="insertFollow">
+        INSERT INTO `petlog`.`follows` (following_user_id, followed_user_id, created_at)
+        VALUES (#{userId}, #{targetId}, NOW())
+    </insert>
+    <delete id="deleteFollow">
+        DELETE
+        FROM `petlog`.`follows`
+        WHERE `following_user_id` = #{userId}
+          AND `followed_user_id` = #{targetId}
+    </delete>
+    <update id="increaseFollowing">
+        UPDATE `petlog`.`users`
+        SET `following_count` = `following_count` + 1
+        WHERE `id` = #{userId}
+    </update>
+    <update id="decreaseFollowing">
+        UPDATE `petlog`.`users`
+        SET `following_count` = `following_count` - 1
+        WHERE `id` = #{userId}
+    </update>
+    <update id="increaseFollowers">
+        UPDATE `petlog`.`users`
+        SET `followers_count` = `followers_count` + 1
+        WHERE `id` = #{targetId}
+    </update>
+    <update id="decreaseFollowers">
+        UPDATE `petlog`.`users`
+        SET `followers_count` = `followers_count` - 1
+        WHERE `id` = #{targetId}
+    </update>
+</mapper>

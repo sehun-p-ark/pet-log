@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>상세 피드</title>
     <link rel="stylesheet" href="/assets/styles/common.css">
+    <link rel="stylesheet" href="/assets/styles/header.css">
     <link rel="stylesheet" href="/feed/style/common.css">
     <link rel="stylesheet" href="/feed/style/detail.css">
-    <link rel="stylesheet" href="/assets/styles/header.css">
     <script defer src="/feed/script/common.js"></script>
     <script defer src="/feed/script/detail.js"></script>
-    <script src="/assets/scripts/header.js"></script>
+    <script defer src="/assets/scripts/header.js"></script>
 </head>
 <body>
 
@@ -24,330 +24,72 @@
 
     <main class="grid-area">
         <section class="grid-header">
-            <a class="back-link" href="/feed/explore">← 돌아가기</a>
+            <a class="back-link" href="/feed/explore">← 피드보기</a>
             <div class="grid-title">추천 피드</div>
         </section>
 
         <section id="feed-container">
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog2.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog3.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog4.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog2.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog3.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog4.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog2.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog3.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
-            <div class="feed-card">
-                <header class="feed-user">
-                    <img class="profile" src="/feed/images/explore/user.png" alt="프로필">
-                    <div class="meta">
-                        <span class="nickname">sehun_pet</span>
-                        <span class="place">서울</span>
-                    </div>
-                </header>
-                <div class="feed-image">
-                    <img src="/feed/images/explore/dog4.jpg" alt="게시물 이미지">
-                </div>
-                <div class="feed-content">
-                    <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>
-                </div>
-                <footer class="feed-action">
-                    <button class="action like" data-like="false">
-                        <svg class="icon heart">
-                            <use href="#icon-heart"></use>
-                        </svg>
-                    </button>
-                    <span class="like count">24</span>
-
-                    <button class="action comment">
-                        <svg class="icon comment">
-                            <use href="#icon-comment"></use>
-                        </svg>
-                    </button>
-                    <span class="comment count">6</span>
-                </footer>
-            </div>
+<!--            피드들 자리-->
         </section>
     </main>
     <!-- 우측: 상세 패널 -->
     <aside class="detail-area">
         <div class="detail-shell">
             <header class="detail-header">
-                <div class="detail-user">
-                    <img class="avatar" src="/feed/images/explore/user.png" alt="프로필">
+                <a th:href="@{/feed/profile/{nickname}(nickname=${feed.nickname})}" class="detail-user">
+                    <img class="avatar"
+                         th:src="${feed.profileImageUrl != null ? feed.profileImageUrl : '/feed/images/explore/user.png'}"
+                         alt="프로필">
                     <div class="user-meta">
-                        <div class="nickname">sehun_pet</div>
-                        <div class="place">서울</div>
+                        <div class="nickname" th:text="${feed.nickname}">sehun_pet</div>
+                        <div class="place" th:text="${feed.address}">서울</div>
                     </div>
-                </div>
+                </a>
             </header>
 
             <section class="detail-content">
-                <div class="detail-image">
+                <div class="detail-image" th:if="${#lists.size(feed.feedMediaDtos) > 0}">
                     <button class="slide-btn prev hidden">‹</button>
 
                     <div class="slide-viewport">
                         <div class="slide-track">
-                            <img src="/feed/images/explore/dog1.jpg" alt="">
-                            <img src="/feed/images/explore/dog2.jpg" alt="">
-                            <img src="/feed/images/explore/dog3.jpg" alt="">
+                            <th:block th:each="media : ${feed.feedMediaDtos}">
+                                <img th:if="${media.mediaType.name() == 'IMAGE'}"
+                                     th:src="${media.mediaUrl}" alt="">
+                                <video th:if="${media.mediaType.name() == 'VIDEO'}"
+                                       th:src="${media.mediaUrl}" controls></video>
+                            </th:block>
+
+
+                            <div class="no-image-placeholder"
+                                 th:if="${#lists.isEmpty(feed.feedMediaDtos)}">
+                                이미지가 없습니다 🐶
+                            </div>
                         </div>
                     </div>
 
                     <button class="slide-btn next">›</button>
-
                     <div class="slide-indicators"></div>
                 </div>
 
                 <div class="detail-info">
-                    <h1 class="detail-title">강아지랑 산책 🐾</h1>
-                    <p class="detail-caption">한강 산책 다녀왔어요. 날씨가 좋아서 기분 최고!</p>
+                    <h1 class="detail-title" th:text="${feed.title}">강아지랑 산책 🐾</h1>
+                    <p class="detail-caption" th:text="${feed.content}">한강 산책 다녀왔어요. 날씨가 좋아서 기분 최고!</p>
 
-                    <div class="detail-stats">
-                        <button class="detail-heart-btn" type="button">
+                    <div class="feed-action">
+                        <button class="action like" th:data-like="${feed.liked}">
                             <svg class="icon heart">
-                                <use href="#icon-heart"></use>
+                                <use th:href="${feed.liked ? '#icon-heart-fill' : '#icon-heart'}"></use>
                             </svg>
-                            <span class="count">24</span>
                         </button>
-                        <button class="detail-comment-btn" type="button">
+                        <span class="count like" th:text="${feed.likeCount}"></span>
+
+                        <button class="action comment">
                             <svg class="icon comment">
                                 <use href="#icon-comment"></use>
                             </svg>
-                            <span class="count">6</span>
                         </button>
+                        <span class="count comment" th:text="${feed.commentCount}"></span>
                     </div>
 
                     <hr class="divider"> <!--절취선-->
@@ -355,25 +97,36 @@
                     <section class="comments">
                         <h2 class="comments-title">댓글</h2>
 
-                        <article class="comment">
-                            <img class="avatar sm" src="/feed/images/explore/user.png" alt="">
+                        <article class="comment" th:each="comment : ${feed.comments}">
+                            <img class="avatar sm"
+                                 th:src="${comment.profileImageUrl}"
+                                 src="/feed/images/explore/user.png" alt="">
                             <div class="comment-body -flex-stretch">
                                 <div class="comment-top">
-                                    <span class="comment-user">nana</span>
-                                    <span class="comment-time">2시간 전</span>
+                                    <span class="comment-user" th:text="${comment.nickname}">nana</span>
+                                    <span class="comment-time"
+                                          th:text="${#temporals.format(comment.createdAt, 'yyyy.MM.dd HH:mm')}">
+                                    </span>
                                 </div>
-                                <p class="comment-text">너무 귀여워요 ㅠㅠ</p>
-                            </div>
-                        </article>
-
-                        <article class="comment">
-                            <img class="avatar sm" src="/feed/images/explore/user.png" alt="">
-                            <div class="comment-body">
-                                <div class="comment-top">
-                                    <span class="comment-user">mike</span>
-                                    <span class="comment-time">1일 전</span>
+                                <p class="comment-text" th:text="${comment.content}">너무 귀여워요 ㅠㅠ</p>
+                                <!--대댓글-->
+                                <div class="reply-list"
+                                     th:if="${comment.replies != null and #lists.size(comment.replies) > 0}">
+                                <article class="comment reply" th:each="reply : ${comment.replies}">
+                                        <img class="avatar sm"
+                                             th:src="${reply.profileImageUrl}"
+                                             src="/feed/images/explore/user.png"
+                                             alt="">
+                                        <div class="comment-body">
+                                            <div class="comment-top">
+                                                <span class="comment-user" th:text="${reply.nickname}">닉네임</span>
+                                                <span class="comment-time"
+                                                      th:text="${#temporals.format(reply.createdAt, 'yyyy.MM.dd HH:mm')}"></span>
+                                            </div>
+                                            <p class="comment-text" th:text="${reply.content}">대댓글 내용</p>
+                                        </div>
+                                    </article>
                                 </div>
-                                <p class="comment-text">어디 산책로예요?</p>
                             </div>
                         </article>
                      </section>
@@ -382,7 +135,6 @@
                         <input class="comment-input" type="text" placeholder="댓글을 입력하세요">
                         <button class="btn" type="button">등록</button>
                     </form>
-
                 </div>
             </section>
         </div>

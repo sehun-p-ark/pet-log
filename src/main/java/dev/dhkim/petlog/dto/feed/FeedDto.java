@@ -1,4 +1,4 @@
-package dev.dhkim.petlog.vos.feed;
+package dev.dhkim.petlog.dto.feed;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,15 +12,18 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedResponseVo {
-    private int id;
+public class FeedDto {
+    private int feedId;
     private int userId;
+    private String nickname;
+    private String address;
+    private String profileImageUrl;
     private String title;
     private String content;
+    private boolean liked;
     private int likeCount;
     private int commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String nickname;
-    private List<FeedMediaVo> feedMediaVos;
+    private List<FeedMediaDto> feedMediaDtos;
 }

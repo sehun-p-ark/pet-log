@@ -1,6 +1,7 @@
 package dev.dhkim.petlog.controllers;
 
 import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -22,5 +23,19 @@ public class UserController {
     public ModelAndView getRegister(ModelAndView modelAndView, Model model){
         modelAndView.setViewName("user/register");
         return modelAndView;
+    }
+
+    // 임시 테스트 로그인
+    @RequestMapping(value="/test/login", method = RequestMethod.GET)
+    public String testLogin(HttpSession session) {
+        session.setAttribute("userId", 2);
+        return "redirect:/shop/main";
+    }
+
+    // 로그아웃
+    @RequestMapping(value="/logout", method = RequestMethod.GET)
+    public String logout(HttpSession session) {
+        session.invalidate(); // 세션 전체 삭제
+        return "redirect:/shop/main";
     }
 }

@@ -15,42 +15,45 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   margin-bottom: 0.5rem;
 }
-
-.feed-user {
+.feed-card > .feed-user .user-link {
   align-items: center;
   display: flex;
   flex-direction: row;
   gap: 0.6rem;
   justify-content: flex-start;
 }
-.feed-user > * {
+.feed-card > .feed-user .user-link > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
-.feed-user > .-flex-stretch {
+.feed-card > .feed-user .user-link > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
-.feed-user {
+.feed-card > .feed-user .user-link {
   padding: 0.3rem 0.9rem;
   background-color: #fff;
 }
-.feed-user .profile {
+.feed-card > .feed-user .user-link:hover > .meta > .nickname,
+.feed-card > .feed-user .user-link:hover > .meta > .place {
+  text-decoration: underline;
+}
+.feed-card > .feed-user .user-link > .profile {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
   object-fit: cover;
 }
-.feed-user .meta {
+.feed-card > .feed-user .user-link > .meta {
   display: flex;
   flex-direction: column;
   font-size: 0.8rem;
 }
-.feed-user .meta .nickname {
+.feed-card > .feed-user .user-link > .meta > .nickname {
   font-weight: 600;
   color: #000000;
 }
-.feed-user .meta .place {
+.feed-card > .feed-user .user-link > .meta > .place {
   font-size: 0.7rem;
   color: #565656;
 }
@@ -92,6 +95,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform 180ms ease;
+  cursor: pointer;
 }
 .feed-image img:hover {
   transform: scale(1.1);
@@ -104,6 +108,7 @@
   width: 100%;
   padding: 0.9rem 1rem 1.1rem;
   z-index: 2;
+  cursor: pointer;
 }
 .feed-content .caption {
   font-size: 0.9rem;

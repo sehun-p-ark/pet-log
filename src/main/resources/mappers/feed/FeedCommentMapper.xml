@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.feed.FeedCommentMapper">
+    <select id="selectCommentById" resultType="dev.dhkim.petlog.dto.feed.FeedCommentDto">
+        SELECT `t1`.`id`                AS commentId,
+               `t1`.`feed_id`           AS feedId,
+               `t1`.`user_id`           AS userId,
+               `t1`.`parent_comment_id` AS parentCommentId,
+               `t1`.`content`           AS content,
+               `t1`.`created_at`        AS createdAt,
+               `t1`.`updated_at`        AS updatedAt,
+               `t2`.`nickname`          AS nickname,
+               `t3`.image_url           AS profileImageUrl
+        FROM `petlog`.`feed_comment` AS `t1`
+                 JOIN petlog.personal_user AS `t2`
+                      ON `t1`.user_id = `t2`.`user_id`
+                 LEFT JOIN `petlog`.`pets` AS `t3`
+                           ON `t1`.user_id = `t3`.`user_id`
+                               AND `t3`.`is_primary` = 1
+        WHERE `t1`.feed_id = #{feedId}
+        ORDER BY COALESCE(`t1`.parent_comment_id, `t1`.id),
+                 `t1`.parent_comment_id IS NOT NULL,
+                 `t1`.created_at
+    </select>
+<!--    COALESCE : 앞에 값이 null이면 뒤에 값이 들어감, 그 값을 기준으로 정렬
+        IS NOT NULL : NULL이면 false(0) 아니면 true(1) 그 상태로 정렬-->
+</mapper>

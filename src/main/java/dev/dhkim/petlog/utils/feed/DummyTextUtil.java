@@ -1,4 +1,4 @@
-package dev.dhkim.petlog.utils;
+package dev.dhkim.petlog.utils.feed;
 
 import org.springframework.stereotype.Component;
 

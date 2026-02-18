@@ -6,8 +6,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>메인피드</title>
-    <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/feed/style/common.css">
+    <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/feed/style/explore.css">
     <link rel="stylesheet" href="/assets/styles/header.css">
     <script defer src="/assets/scripts/header.js"></script>
@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<div th:replace="fragments/common :: topNavigator"></div>
+<div th:replace="~{fragments/common :: topNavigator}"></div>
 
 <main id="main">
     <button class="create-feed" id="createFeedBtn">
@@ -39,10 +39,14 @@
 
         <div class="-flex-stretch"></div>
 
-        <a href="/feed/profile" class="my-profile">
-            <img src="/feed/images/explore/user.png" alt="개인 프로필">
-            <span>sehun_pet</span>
+        <a th:href="@{/feed/profile/{id}(id=${profile.userId})}" class="my-profile">
+            <img th:src="${profile.profileImageUrl != null
+                  ? profile.profileImageUrl
+                  : '/feed/images/explore/user.png'}"
+                 alt="개인 프로필">
+            <span th:text="${profile.nickname}">sehun_pet</span>
         </a>
+
 
         <div class="sort-dropdown" data-open="false">
             <button type="button" data-object="button" data-color="concept">
@@ -50,45 +54,16 @@
                 <img src="/feed/images/explore/down.png" alt="열기">
             </button>
             <ul class="sort-options">
-                <li data-value="new" class="select">최신순</li>
-                <li data-value="popular">인기순</li>
+                <li data-sort="latest" class="select">최신순</li>
+                <li data-sort="like">인기순</li>
             </ul>
         </div>
     </div>
 
     <section id="feed-container">
-<!--        <article class="feed-card">-->
-<!--            <header class="feed-user">-->
-<!--                <img class="profile" src="/feed/images/explore/user.png" alt="프로필">-->
-<!--                <div class="meta">-->
-<!--                    <span class="nickname">sehun_pet</span>-->
-<!--                    <span class="place">서울</span>-->
-<!--                </div>-->
-<!--            </header>-->
-<!--            <div class="feed-image">-->
-<!--                <img src="/feed/images/explore/dog1.jpg" alt="게시물 이미지">-->
-<!--            </div>-->
-<!--            <div class="feed-content">-->
-<!--                <span class="caption">햇살 좋은 날, 강아지랑 산책 🌿🐕</span>-->
-<!--            </div>-->
-<!--            <footer class="feed-action">-->
-<!--                <button class="action like" data-like="false">-->
-<!--                    <svg class="icon heart">-->
-<!--                        <use href="#icon-heart"></use>-->
-<!--                    </svg>-->
-<!--                </button>-->
-<!--                <span class="like count">24</span>-->
-
-<!--                <button class="action comment">-->
-<!--                    <svg class="icon comment">-->
-<!--                        <use href="#icon-comment"></use>-->
-<!--                    </svg>-->
-<!--                </button>-->
-<!--                <span class="comment count">6</span>-->
-<!--            </footer>-->
-<!--        </article>-->
-        <div id="scroll-sentinel"></div>
+        <!-- 피드들 들어갈 자리 -->
     </section>
+    <div id="scroll-sentinel"></div>
     <div class="reload-wrapper hidden">
         <button class="reload-btn" type="button" data-object="button" data-color="concept">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="reload-icon">

@@ -1,32 +1,59 @@
 package dev.dhkim.petlog.controllers.feed;
 
-import ch.qos.logback.core.model.Model;
+import dev.dhkim.petlog.dto.feed.FeedDetailDto;
+import dev.dhkim.petlog.dto.feed.ProfileDto;
+import dev.dhkim.petlog.services.feed.FeedProfileService;
+import dev.dhkim.petlog.services.feed.FeedQueryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequestMapping(value="/feed")
+@RequiredArgsConstructor
 public class FeedPageController {
+
+    private final FeedQueryService feedQueryService;
+    private final FeedProfileService feedProfileService;
 
     // 전체 피드
     @RequestMapping(value="/explore", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getExplore() {
+    public String getExplore(@SessionAttribute(value="userId", required = false) Integer userId, Model model) {
+        if (userId != null) {
+            ProfileDto profile = feedProfileService.getProfile(userId);
+            model.addAttribute("profile", profile);
+        }
+
         return "/feed/explore";
     }
 
     // 상세 피드
-    @RequestMapping(value="/detail", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getDetail() {
+    @RequestMapping(value="/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getDetail(@PathVariable(value="id") int feedId,
+                            @SessionAttribute(value="userId", required = false) Integer userId, Model model) {
+        FeedDetailDto feed = feedQueryService.getFeedDetail(feedId, userId);
+        if(feed == null) {
+            return "redirect:/feed/explore";
+        }
+        model.addAttribute("feed", feed);
         return "/feed/detail";
-        //todo model 로 id 받아와서 각 페이지 할당 해줘야함
     }
 
     // 개인 프로필 피드
-    @RequestMapping(value="/profile", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getProfile() {
+    @RequestMapping(value="/profile/{nickname}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getProfile(@PathVariable String nickname,
+                             @SessionAttribute(value="userId", required = false) Integer userId,
+                             Model model) {
+        ProfileDto profile = feedProfileService.getProfileView(nickname, userId);
+        if (profile == null) {
+            return "redirect:/feed/explore";
+        }
+        model.addAttribute("profile", profile);
         return "/feed/profile";
     }
 

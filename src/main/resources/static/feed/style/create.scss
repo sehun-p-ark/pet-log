@@ -1,18 +1,25 @@
 @import "../../assets/styles/def";
 @import "../../assets/styles/objects/def";
 
+#main {
+    margin-top: 5rem;
+}
+
 #form {
     display: grid;
     grid-template-columns: 1fr 1.5fr;
     min-height: calc(100vh - 9rem);
     background-color: $global-background-color;
     border-radius: 0.5rem;
-    margin: 2rem 8rem;
+    margin: 2rem auto;
+    padding: 0 5rem;
 }
 // 좌측 페이지
 .contents-container {
     @include flex(column, center, center);
     padding: 2rem 1rem 3rem 2rem;
+    width: 100%;
+    min-width: 25rem;
 }
 
 .thumbnail {
@@ -224,5 +231,25 @@
             overflow-y: auto;
             background-color: #ffffff;
         }
+    }
+}
+
+@media (max-width: 1200px) {
+    .information {
+        padding: 1rem 1.5rem;
+    }
+}
+
+@media (max-width: 990px) {
+    #form {
+        grid-template-columns: 1fr;
+    }
+
+    .thumbnail {
+        padding: 1rem;
+    }
+
+    .info-container {
+        padding: 1rem;
     }
 }

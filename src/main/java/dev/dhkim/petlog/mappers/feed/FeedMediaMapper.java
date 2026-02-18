@@ -1,4 +1,4 @@
-package dev.dhkim.petlog.mappers;
+package dev.dhkim.petlog.mappers.feed;
 
 import dev.dhkim.petlog.entities.feed.FeedMediaEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,4 +12,6 @@ public interface FeedMediaMapper {
     int insertFeedMediaList(List<FeedMediaEntity> list);
 
     List<FeedMediaEntity> selectByFeedIds(@Param("feedIds") List<Integer> feedIds);
+
+    List<FeedMediaEntity> selectMediaByFeedId(int id);
 }

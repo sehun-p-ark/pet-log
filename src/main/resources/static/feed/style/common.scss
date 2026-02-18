@@ -15,35 +15,43 @@
     position: relative;
     transition: transform .15s ease, box-shadow .15s ease;
     margin-bottom: 0.5rem;
-}
 
+    // 유저 정보
+    > .feed-user {
+        .user-link {
+            @include flex(row, center, flex-start, 0.6rem);
+            padding: 0.3rem 0.9rem;
+            background-color: #fff;
 
-// 유저 정보
-.feed-user {
-    @include flex(row, center, flex-start, 0.6rem);
-    padding: 0.3rem 0.9rem;
-    background-color: #fff;
+            &:hover {
+                > .meta > .nickname,
+                > .meta > .place {
+                        text-decoration: underline;
+                }
+            }
 
-    .profile {
-        width: 2rem;
-        height: 2rem;
-        border-radius: 50%;
-        object-fit: cover;
-    }
+            > .profile {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                object-fit: cover;
+            }
 
-    .meta {
-        display: flex;
-        flex-direction: column;
-        font-size: 0.8rem;
+            > .meta {
+                display: flex;
+                flex-direction: column;
+                font-size: 0.8rem;
 
-        .nickname {
-            font-weight: 600;
-            color: $global-black-text-color;
-        }
+                > .nickname {
+                    font-weight: 600;
+                    color: $global-black-text-color;
+                }
 
-        .place {
-            font-size: 0.7rem;
-            color: $global-gray-text-color;
+                > .place {
+                    font-size: 0.7rem;
+                    color: $global-gray-text-color;
+                }
+            }
         }
     }
 }
@@ -77,6 +85,7 @@
         height: 100%;
         object-fit: cover;
         transition: transform 180ms ease;
+        cursor: pointer;
 
         &:hover {
             transform: scale(1.1);
@@ -92,6 +101,7 @@
     width: 100%;
     padding: 0.9rem 1rem 1.1rem;
     z-index: 2;
+    cursor: pointer;
 
     .caption {
         font-size: 0.9rem;

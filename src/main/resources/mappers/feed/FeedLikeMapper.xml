@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.feed.FeedLikeMapper">
+    <insert id="insert">
+        INSERT INTO `petlog`.`feed_likes` (`user_id`, `feed_id`, `created_at`)
+        VALUES (#{userId}, #{feedId}, NOW())
+    </insert>
+    <delete id="delete">
+        DELETE
+        FROM `petlog`.`feed_likes`
+        WHERE `user_id` = #{userId}
+          AND `feed_id` = #{feedId}
+    </delete>
+    <select id="selectLikedFeedIds" resultType="int">
+        SELECT `feed_id`
+        FROM `petlog`.`feed_likes`
+        WHERE `user_id` = #{userId}
+        AND `feed_id` IN
+        <foreach collection="feedIds" item="feedId" open="(" separator="," close=")">
+            #{feedId}
+        </foreach>
+    </select>
+    <select id="existsFeedLike" resultType="java.lang.Boolean">
+        SELECT EXISTS(SELECT *
+                      FROM `petlog`.`feed_likes`
+                      WHERE `user_id` = #{userId}
+                        AND `feed_id` = #{feedId}
+        )
+    </select>
+</mapper>

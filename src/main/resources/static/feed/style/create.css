@@ -1,10 +1,15 @@
+#main {
+  margin-top: 5rem;
+}
+
 #form {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   min-height: calc(100vh - 9rem);
   background-color: #F0F8F3;
   border-radius: 0.5rem;
-  margin: 2rem 8rem;
+  margin: 2rem auto;
+  padding: 0 5rem;
 }
 
 .contents-container {
@@ -24,6 +29,8 @@
 }
 .contents-container {
   padding: 2rem 1rem 3rem 2rem;
+  width: 100%;
+  min-width: 25rem;
 }
 
 .thumbnail {
@@ -316,6 +323,23 @@
   padding: 0.5rem 0.625rem;
   overflow-y: auto;
   background-color: #ffffff;
+}
+
+@media (max-width: 1200px) {
+  .information {
+    padding: 1rem 1.5rem;
+  }
+}
+@media (max-width: 990px) {
+  #form {
+    grid-template-columns: 1fr;
+  }
+  .thumbnail {
+    padding: 1rem;
+  }
+  .info-container {
+    padding: 1rem;
+  }
 }
 
 /*# sourceMappingURL=create.css.map */

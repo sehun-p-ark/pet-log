@@ -9,10 +9,16 @@
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/feed/style/create.css">
     <script defer src="/feed/script/create.js"></script>
+    <script defer src="/assets/scripts/common.js"></script>
 </head>
 <body>
 
 <div th:replace="fragments/common :: topNavigator"></div>
+
+<div class="cover"></div>
+<div class="message" id="message">
+    <button type="button" class="button">확인</button>
+</div>
 
 <main id="main">
     <form id="form">

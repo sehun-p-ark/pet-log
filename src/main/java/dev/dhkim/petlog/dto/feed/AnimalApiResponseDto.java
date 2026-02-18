@@ -1,9 +1,9 @@
-package dev.dhkim.petlog.vos.feed;
+package dev.dhkim.petlog.dto.feed;
 
 import lombok.Data;
 
 @Data
-public class AnimalApiResponseVo {
+public class AnimalApiResponseDto {
     private String id;
     private String url;
     private Integer width;
