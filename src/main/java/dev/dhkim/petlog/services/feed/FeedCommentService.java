@@ -52,7 +52,6 @@ public class FeedCommentService {
     public FeedCommentDto createComment(int feedId,
                                         int userId,
                                         String content) {
-
         // 1. feed 존재 여부 확인
         if (!feedMapper.existsById(feedId)) {
             throw new RuntimeException("존재하지 않는 피드");

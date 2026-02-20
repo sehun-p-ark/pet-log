@@ -91,6 +91,7 @@ public class FeedApiController {
                                          @RequestParam String title,
                                          @RequestParam String description
     ) {
+        System.out.println("피드 작성 컨트롤러 실행됨");
         if (userId == null) {
             return Map.of("result", "result", "message", "로그인이 필요합니다.");
         }

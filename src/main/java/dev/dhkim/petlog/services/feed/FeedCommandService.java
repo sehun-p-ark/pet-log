@@ -38,6 +38,7 @@ public class FeedCommandService {
                              String title,
                              String description
     ) {
+        System.out.println("피드 작성 서비스 실행됨");
         if (files == null || files.isEmpty()) return CommonResult.FAILURE;
         if (types == null || orders == null) return CommonResult.FAILURE;
         if (files.size() != types.size() || files.size() != orders.size()) return CommonResult.FAILURE;

@@ -124,6 +124,8 @@ $submitButton.addEventListener('click', (e) => {
         }
         const response = JSON.parse(xhr.responseText);
         switch (response.result) {
+            case "result" : showMessage('로그인을 먼저 진행해주세요');
+            break;
             case "FAILURE": showMessage('박살남');
             break;
             case "SUCCESS": showMessage('성공함');
