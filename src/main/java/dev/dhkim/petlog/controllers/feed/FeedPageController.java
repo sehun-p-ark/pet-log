@@ -30,7 +30,6 @@ public class FeedPageController {
             ProfileDto profile = feedProfileService.getProfile(userId);
             model.addAttribute("profile", profile);
         }
-
         return "/feed/explore";
     }
 
@@ -52,7 +51,8 @@ public class FeedPageController {
     @RequestMapping(value="/profile/{nickname}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getProfile(@PathVariable String nickname,
                              @SessionAttribute(value="userId", required = false) Integer userId,
-                             Model model) {
+                             Model model
+    ) {
         ProfileDto profile = feedProfileService.getProfileView(nickname, userId);
         if (profile == null) {
             return "redirect:/feed/explore";

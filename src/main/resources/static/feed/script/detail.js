@@ -117,7 +117,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             const data = await res.json();
-
+            if (data.result === "LOGIN_REQUIRED") {
+                alert("로그인이 필요합니다.");
+                return;
+            }
             if (data.result !== "SUCCESS") {
                 alert("댓글 등록 실패");
                 return;
@@ -185,6 +188,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 const data = await res.json();
+
+                if (data.result === 'LOGIN_REQUIRED') {
+                    alert('로그인이 필요합니다.');
+                    return;
+                }
 
                 if (data.result !== 'SUCCESS') {
                     alert('답글 등록 실패');

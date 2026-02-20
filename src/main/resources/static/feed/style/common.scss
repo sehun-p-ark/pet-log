@@ -191,7 +191,6 @@
     border-radius: 999rem;
     cursor: pointer;
     z-index: 5;
-
     box-shadow: 0 0.3rem 0.8rem rgba(0,0,0,0.15);
     transition: all 0.25s ease;
 
@@ -211,8 +210,8 @@
     }
 
     &.compact {
-        padding: 0.7rem 1.1rem;          // 좌우 패딩 줄이기
-        border-radius: 50%;     // 완전 동그랗게
+        padding: 0.7rem 1.1rem;
+        border-radius: 50%;
 
         > .plus {
             margin-right: 0;

@@ -14,18 +14,16 @@
     <select id="selectProfileByNickname" resultType="dev.dhkim.petlog.dto.feed.ProfileDto">
         SELECT `t1`.`user_id`                   AS `userId`,
                `t1`.`nickname`                  AS `nickname`,
-               `t2`.following_count             AS `followingCount`,
-               `t2`.followers_count             AS `followedCount`,
-               `t3`.`image_url`                 AS `profileImageUrl`,
+               `t1`.following_count             AS `followingCount`,
+               `t1`.followers_count             AS `followedCount`,
+               `t2`.`image_url`                 AS `profileImageUrl`,
                (SELECT COUNT(*)
                 FROM `petlog`.`feed` `f`
                 WHERE `f`.`user_id` = `t1`.`user_id`) AS `feedCount`
         FROM `petlog`.`personal_user` `t1`
-                 JOIN `petlog`.`users` `t2`
-                      ON `t1`.`user_id` = `t2`.`id`
-                 LEFT JOIN `petlog`.`pets` AS `t3`
-                           ON `t1`.`user_id` = `t3`.`user_id`
-                               AND `t3`.`is_primary` = 1
+                 LEFT JOIN `petlog`.`pets` AS `t2`
+                           ON `t1`.`user_id` = `t2`.`user_id`
+                               AND `t2`.`is_primary` = 1
         WHERE `t1`.`nickname` = #{nickname}
     </select>
     <select id="selectIsFollowing" resultType="java.lang.Boolean">
@@ -37,17 +35,17 @@
         )
     </select>
     <select id="selectFollowerCount" resultType="java.lang.Integer">
-        SELECT followers_count
-        FROM `petlog`.`users`
-        WHERE id = #{userId}
+        SELECT `followers_count`
+        FROM `petlog`.`personal_user`
+        WHERE user_id = #{userId}
     </select>
     <select id="selectFollowingCount" resultType="java.lang.Integer">
-        SELECT following_count
-        FROM `petlog`.`users`
-        WHERE id = #{userId}
+        SELECT `following_count`
+        FROM `petlog`.`personal_user`
+        WHERE user_id = #{userId}
     </select>
     <insert id="insertFollow">
-        INSERT INTO `petlog`.`follows` (following_user_id, followed_user_id, created_at)
+        INSERT INTO `petlog`.`follows` (`following_user_id`, `followed_user_id`, `created_at`)
         VALUES (#{userId}, #{targetId}, NOW())
     </insert>
     <delete id="deleteFollow">
@@ -57,23 +55,23 @@
           AND `followed_user_id` = #{targetId}
     </delete>
     <update id="increaseFollowing">
-        UPDATE `petlog`.`users`
+        UPDATE `petlog`.`personal_user`
         SET `following_count` = `following_count` + 1
-        WHERE `id` = #{userId}
+        WHERE `user_id` = #{userId}
     </update>
     <update id="decreaseFollowing">
-        UPDATE `petlog`.`users`
+        UPDATE `petlog`.`personal_user`
         SET `following_count` = `following_count` - 1
-        WHERE `id` = #{userId}
+        WHERE `user_id` = #{userId}
     </update>
     <update id="increaseFollowers">
-        UPDATE `petlog`.`users`
+        UPDATE `petlog`.`personal_user`
         SET `followers_count` = `followers_count` + 1
-        WHERE `id` = #{targetId}
+        WHERE `user_id` = #{targetId}
     </update>
     <update id="decreaseFollowers">
-        UPDATE `petlog`.`users`
+        UPDATE `petlog`.`personal_user`
         SET `followers_count` = `followers_count` - 1
-        WHERE `id` = #{targetId}
+        WHERE `user_id` = #{targetId}
     </update>
 </mapper>
