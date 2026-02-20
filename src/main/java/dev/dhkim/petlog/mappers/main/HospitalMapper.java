@@ -1,4 +1,4 @@
-package dev.dhkim.petlog.mappers;
+package dev.dhkim.petlog.mappers.main;
 
 import dev.dhkim.petlog.entities.main.HospitalEntity;
 import org.apache.ibatis.annotations.Mapper;

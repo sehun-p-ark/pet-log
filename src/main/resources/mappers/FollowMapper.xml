@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.dhkim.petlog.mappers.main.FollowMapper">
+
+    <!-- 팔로우 존재 여부 -->
+    <select id="existsFollow" resultType="int">
+        SELECT COUNT(*)
+        FROM petlog.follows
+        WHERE following_user_id = #{followingUserId}
+          AND followed_user_id = #{followedUserId}
+    </select>
+
+    <!-- 팔로우 추가 -->
+    <insert id="insertFollow">
+        INSERT INTO petlog.follows
+            (following_user_id, followed_user_id, created_at)
+        VALUES
+            (#{followingUserId}, #{followedUserId}, NOW())
+    </insert>
+
+    <!-- 언팔로우 -->
+    <delete id="deleteFollow">
+        DELETE FROM petlog.follows
+        WHERE following_user_id = #{followingUserId}
+          AND followed_user_id = #{followedUserId}
+    </delete>
+
+</mapper>

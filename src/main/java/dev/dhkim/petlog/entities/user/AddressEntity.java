@@ -17,6 +17,8 @@ public class AddressEntity {
     private String postalCode;
     private String addressPrimary;
     private String addressSecondary;
+    private Double lat;
+    private Double lng;
     private boolean isDefault;
     private LocalDateTime createdAt;
 }

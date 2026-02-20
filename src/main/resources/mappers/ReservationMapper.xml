@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.dhkim.petlog.mappers.main.ReservationMapper">
+
+    <insert id="insertReservation" parameterType="dev.dhkim.petlog.dto.main.ReservationDto" useGeneratedKeys="true" keyProperty="reservationId">
+        INSERT INTO `petlog`.`reservation`
+        (user_id, store_id, reservation_date, reservation_time, request_text, payment_method)
+        VALUES
+            (#{userId}, #{storeId}, #{reservationDate}, #{reservationTime}, #{requestText}, #{paymentMethod})
+    </insert>
+
+
+
+
+
+</mapper>

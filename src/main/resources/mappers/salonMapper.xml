@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.dhkim.petlog.mappers.main.SalonMapper">
+    <insert id="insertSalon" parameterType="dev.dhkim.petlog.entities.main.SalonEntity">
+        INSERT INTO `petlog`.salon (
+            manage_no, name, address, phone, status, zip_code, crd_x, crd_y
+        )
+        VALUES (
+                   #{manageNo}, #{name}, #{address}, #{phone}, #{status}, #{zipCode}, #{crdX}, #{crdY}
+               )
+        ON DUPLICATE KEY UPDATE
+                             name = VALUES(name),
+                             address = VALUES(address),
+                             phone = VALUES(phone),
+                             status = VALUES(status),
+                             zip_code = VALUES(zip_code),
+                             crd_x = VALUES(crd_x),
+                             crd_y = VALUES(crd_y);
+
+    </insert>
+
+    <delete id="deleteAllSalons">
+        delete
+        from `petlog`.`salon`
+    </delete>
+
+    <!-- 1. 관리번호 중복 체크 -->
+    <select id="existsByManageNo"
+            parameterType="string"
+            resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM `petlog`.`salon`
+        WHERE manage_no = #{manageNo}
+    </select>
+
+    <!-- 2. 위도/경도 NULL 또는 0 zeroLat / zeroLng = “쿼리 조건용 변수” 위도 경도에 0 이 들어간 경우 찾기 위해-->
+    <select id="findInvalidCoords"
+            resultType="dev.dhkim.petlog.entities.main.SalonEntity">
+        SELECT
+            id,
+            manage_no AS manageNo,
+            name,
+            address,
+            phone,
+            status,
+            zip_code AS zipCode,
+            crd_x AS crdX,
+            crd_y AS crdY,
+            lat,
+            lng
+        FROM `petlog`.`salon`
+        WHERE lat IS NULL
+           OR lng IS NULL
+           OR lat = 0
+           OR lng = 0
+    </select>
+
+    <select id="findAllActive"
+            resultType="dev.dhkim.petlog.entities.main.SalonEntity">
+        SELECT
+            id,
+            manage_no AS manageNo,
+            name,
+            address,
+            phone,
+            status,
+            zip_code AS zipCode,
+            crd_x AS crdX,
+            crd_y AS crdY,
+            lat,
+            lng
+        FROM `petlog`.`salon`
+        WHERE status = '영업/정상'
+          AND lat IS NOT NULL
+          AND lng IS NOT NULL
+    </select>
+
+
+
+
+    <!--위도 경도 업데이트-->
+    <update id="updateLatLng" parameterType="map">
+        update `petlog`.`salon`
+        set lat= #{lat},
+            lng = #{lng}
+        where id = #{id}
+    </update>
+
+</mapper>

@@ -2,16 +2,44 @@ let map;
 let geocoder;
 let currentInfo = null;
 
+//현재 마커 + 인포
+let currentLocationMarker = null;
+let currentLocationInfo = null;
+
+let isMarkerClick = false;
+
+let selectedMarker = null;  // 지도에 남아 있는 단 하나의 선택 마커
+
+// ================== 선택 마커만 지도 표시 ==================
+function selectSingleMarker(marker, info) {
+    // 이전 선택 마커 제거
+    if (selectedMarker && selectedMarker !== marker) {
+        selectedMarker.setMap(null);
+    }
+
+    // 현재 마커 지도에 표시
+    marker.setMap(map);
+    selectedMarker = marker;
+
+    // 인포윈도우 처리
+    if (currentInfo) currentInfo.close();
+    info.open(map, marker);
+    currentInfo = info;
+}
+
 // 단일 클릭 마커
 const markers = [];
 
-// 카테고리 마커
 const categoryMarkers = {
     hospital: [],
     salon: [],
     cafe: [],
+    school: [],
+    park: [],
+    camp: [],
     search: []
 };
+
 
 let activeCategory = null;
 
@@ -27,24 +55,73 @@ let selectedPlace = null;
 let currentPlaces = [];
 
 
+function clearActiveList() {
+    document
+        .querySelectorAll('.store-list .item.active')
+        .forEach(el => el.classList.remove('active'));
+}
+
 
 /* ================= 초기화 ================= */
 
 window.addEventListener('DOMContentLoaded', () => {
+    //... 버튼
+    const moreBtn = document.getElementById('moreCategoryBtn');
+//..누르면 나타나게 하는 카테고리들
+    const moreCategory = document.getElementById('moreCategory');
+
+    if (moreBtn) {
+        moreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            moreCategory.classList.toggle('open');
+        });
+    }
     kakao.maps.load(initMap);
 
     document.querySelectorAll('.category-btn').forEach(btn => {
+        const category = btn.dataset.category;
+        if (!category) return; // ← 이거 추가
+
+
         btn.addEventListener('click', () => {
             handleCategoryClick(btn.dataset.category);
         });
     });
 
     bindDistanceFilter();
+    loadNearbyFriendsByCurrentLocation();
 });
 
 /* ================= 데이터 정규화 ================= */
-
 function normalizePlaceData(place, category) {
+
+    // DB에서 오는 store 처리
+    if (place.storeName && place.addressPrimary && place.lat != null && place.lng != null) {
+        return {
+            name: place.storeName,
+            address: place.addressSecondary
+                ? place.addressPrimary + ' ' + place.addressSecondary
+                : place.addressPrimary,
+            tel: place.phone || '',
+            status: '영업 중',  // 기본값
+            lat: place.lat,
+            lng: place.lng,
+            category
+        };
+    }
+
+    // 기존 처리
+    if (place.name && place.address && place.lat != null && place.lng != null) {
+        return {
+            name: place.name,
+            address: place.address,
+            tel: place.tel || '',
+            status: place.status || '영업 중',
+            lat: place.lat,
+            lng: place.lng,
+            category
+        };
+    }
 
     // 공공데이터
     if (place.bizplc_NM) {
@@ -52,7 +129,7 @@ function normalizePlaceData(place, category) {
             name: place.bizplc_NM,
             address: place.road_NM_ADDR || '주소 정보 없음',
             tel: place.telno || '',
-            status: place.sals_STTS_NM || '상태 정보 없음', // 기본 상태 영업으로 ?
+            status: place.sals_STTS_NM || '상태 정보 없음',
             lat: place.lat,
             lng: place.lng,
             category
@@ -91,6 +168,13 @@ function initMap() {
     /*bindStoreListClick();*/
 
     kakao.maps.event.addListener(map, 'click', e => {
+
+        if (isMarkerClick) {
+            isMarkerClick = false; // 🔥 초기화
+            return;
+        }
+
+
         const lat = e.latLng.getLat();
         const lng = e.latLng.getLng();
 
@@ -107,54 +191,34 @@ function initMap() {
     });
 }
 
-/* ================= 마커 ================= */
-
-function createMarker({position, name, address, tel, status, category}) {
+// ================== 마커 생성 ==================
+// createMarker 함수 수정
+function createMarker({position, name, address, category}) {
     const marker = new kakao.maps.Marker({
-        map,
-        position
+        map,          // 지도에 바로 표시
+        position,
+        category
+        // image: defaultMarkerImage  ← 이 부분은 나중에 이미지 바꿀때 필요
     });
-
-    categoryMarkers[category].push(marker);
 
     const info = new kakao.maps.InfoWindow({
         content: `
         <div style="padding:0.75rem;width:14rem;font-size:0.85rem;">
             <div style="font-weight:700;margin-bottom:0.4rem;">📍 ${name}</div>
             <div style="color:#555;margin-bottom:0.3rem;">${address}</div>
-            ${tel ? `<div style="color:#007aff;">📞 ${tel}</div>` : ''} ${status ? `
-            <div style="color:${status === '폐업' ? '#ff3b30' : '#34c759'};">
-                🕒 ${status}
-            </div>` : ''
-        }
- 
-        </div>
-        `,
+        </div>`,
         removable: true
     });
 
     kakao.maps.event.addListener(marker, 'click', () => {
-        if (currentInfo) currentInfo.close();
+        // 선택 마커 기능은 필요하면 여기에 넣을 수 있음
         info.open(map, marker);
-        currentInfo = info;
-        //
-        switchView('detail', {
-            name,
-            address,
-            tel,
-            status,
-            lat: position.getLat(),
-            lng: position.getLng(),
-            category,
-            marker,
-            info
-        });
-
     });
-
 
     return {marker, info};
 }
+
+
 function bindSearch() {
     const input = document.getElementById('placeInput');
     const btn = document.querySelector('.search-btn');
@@ -167,6 +231,7 @@ function bindSearch() {
 
     //  실제 검색 로직을 함수로 분리
     const doSearch = () => {
+        // 🔥 현재 위치 마커 제거
         const keyword = input.value.trim();
         if (!keyword) return;
 
@@ -204,7 +269,7 @@ function bindSearch() {
                     normalized.lng
                 );
 
-                const { marker, info } = createMarker({
+                const {marker, info} = createMarker({
                     position,
                     ...normalized
                 });
@@ -224,10 +289,10 @@ function bindSearch() {
         });
     };
 
-    // 🔘 버튼 클릭
+    //  버튼 클릭
     btn.addEventListener('click', doSearch);
 
-    // ⌨️ Enter 키
+    // Enter 키
     input.addEventListener('keydown', e => {
         if (e.key === 'Enter') {
             e.preventDefault(); // form submit 방지
@@ -236,49 +301,60 @@ function bindSearch() {
     });
 }
 
-
 function addSingleMarker(lat, lng, title, address) {
-    markers.forEach(m => m.setMap(null));
-    markers.length = 0;
+    const position = new kakao.maps.LatLng(lat, lng);
 
+    // 기존 선택 마커가 있으면 제거
+    if (selectedMarker) {
+        selectedMarker.setMap(null);
+    }
+
+    // 새 마커 생성
     const marker = new kakao.maps.Marker({
-        map,
-        position: new kakao.maps.LatLng(lat, lng)
+        position,
+        map // 바로 지도에 올림
     });
-
-    markers.push(marker);
 
     const info = new kakao.maps.InfoWindow({
-        content: `
-    <div style="
-    padding: 0.3rem;
-    font-size: 0.7rem;
-    width: 100%;
-    max-width: 400px;
-    white-space: normal !important;
-    overflow-wrap: break-word;
-    word-break: break-word;
-    ">
-        <div style="font-weight:700;margin-bottom:0.4rem;">
-            📍 ${title}
-        </div>
-       <div style="color:#555;">
-    ${address}
-</div>
-    </div>
-    `,
-        removable:true
+        content: `<div style="padding:0.75rem;width:14rem;font-size:0.85rem;">
+                    <div style="font-weight:700;margin-bottom:0.4rem;">📍 ${title}</div>
+                    <div style="color:#555;">${address}</div>
+                  </div>`
     });
 
+    // 클릭 시 선택 마커 처리
+    kakao.maps.event.addListener(marker, 'click', () => {
+        selectSingleMarker(marker, info);
+    });
+
+    // 현재 선택 마커 업데이트
+    selectedMarker = marker;
+    if (currentInfo) currentInfo.close();
     info.open(map, marker);
     currentInfo = info;
 }
 
+
 /* ================= 카테고리 ================= */
+
+/*// 장소 탭 강제 활성화
+const friendTab = document.getElementById('friendTab');
+const storeTab = document.getElementById('storeTab');
+const friendList = document.querySelector('.main.friend-list');
+const storePanel = document.querySelector('.store-panel');
+
+storeTab.classList.add('active');
+friendTab.classList.remove('active');
+
+friendList.classList.add('hidden');
+storePanel.classList.remove('hidden');*/
+
 
 async function handleCategoryClick(category) {
 
+
     const btn = document.querySelector(`[data-category="${category}"]`);
+
 
     // 이미 선택된 카테고리면 OFF
     if (activeCategory === category) {
@@ -303,66 +379,74 @@ async function handleCategoryClick(category) {
 
 async function showCategory(category) {
     try {
-        const res = await fetch(`/api/${category}`);
-        const raw = await res.json();
 
-        const list = Array.isArray(raw) ? raw : raw.results || [];
-        const bounds = new kakao.maps.LatLngBounds();
+        let list = [];
 
-        //  리스트 + 마커 연결용
-        const visiblePlaces = [];
-
-        list.forEach(item => {
-            const data = normalizePlaceData(item, category);
-            if (!data || !data.lat || !data.lng) return;
-            //장소 리스트에 현재 위치 기준 거리 계산 넣기위해
-            let distanceKm = null;
-            // 반경 필터 (현재 위치 있을 때만)
-            if (currentLat && currentLng) {
-                distanceKm = getDistanceKm(
-                    currentLat,
-                    currentLng,
-                    data.lat,
-                    data.lng
-                );
-                if (distanceKm > 1.5) return;
-            }
-
-            const position = new kakao.maps.LatLng(data.lat, data.lng);
-
-            //  마커 생성 + 반환 받기
-            const {marker, info} = createMarker({
-                position,
-                ...data
-            });
-
-            bounds.extend(position);
-
-            //  리스트에 쓸 데이터 (마커 연결)
-            visiblePlaces.push({
-                ...data,
-                distanceKm,
-                marker,
-                info
-            });
-        });
-
-        if (!bounds.isEmpty()) {
-            map.setBounds(bounds);
+        // 1️⃣ 병원
+        if (category === 'hospital') {
+            const res = await fetch('/api/hospital');
+            list = await res.json();
         }
 
-        //  리스트 렌더링
-        renderStoreList(visiblePlaces);
+        // 2️⃣ 미용실
+        else if (category === 'salon') {
+            const res = await fetch('/api/salon');
+            list = await res.json();
+        }
+
+        // 3️⃣ 나머지는 store 테이블
+        else {
+            const res = await fetch(`/api/stores?category=${encodeURIComponent(category)}`);
+            list = await res.json();
+        }
+
+        console.log("카테고리", category, "데이터:", list);
+
+        renderPlaces(list, category);
 
     } catch (e) {
         console.error('showCategory 오류:', e);
     }
 }
+
+function renderPlaces(list, category) {
+
+    const bounds = new kakao.maps.LatLngBounds();
+    const visiblePlaces = [];
+
+    list.forEach(item => {
+        const data = normalizePlaceData(item, category);
+        if (!data || !data.lat || !data.lng) return;
+
+        let distanceKm = null;
+        if (currentLat && currentLng) {
+            distanceKm = getDistanceKm(
+                currentLat,
+                currentLng,
+                data.lat,
+                data.lng
+            );
+            if (distanceKm > 3) return;
+        }
+
+        const position = new kakao.maps.LatLng(data.lat, data.lng);
+        const { marker, info } = createMarker({ position, ...data });
+
+        bounds.extend(position);
+        visiblePlaces.push({ ...data, distanceKm, marker, info });
+    });
+
+    if (!bounds.isEmpty()) {
+        map.setBounds(bounds);
+    }
+
+    renderStoreList(visiblePlaces);
+}
+
 function bindDistanceFilter() {
     const filterBtn = document.getElementById('distanceFilterBtn');
     const filterMenu = document.getElementById('distanceFilterMenu');
 
-    // 아직 DOM 없으면 그냥 종료
     if (!filterBtn || !filterMenu) return;
 
     filterBtn.addEventListener('click', (e) => {
@@ -379,14 +463,52 @@ function bindDistanceFilter() {
         if (!li) return;
 
         const sortType = li.dataset.sort;
-        sortPlaces(sortType);
 
-        // 버튼 텍스트 변경
+        // 클릭 시 버튼 텍스트 변경
         filterBtn.textContent = `${li.textContent} ▾`;
 
+        // 거리 계산 후 정렬
+        currentPlaces.forEach(place => {
+            if (place.distanceKm == null && currentLat != null && currentLng != null) {
+                place.distanceKm = getDistanceKm(currentLat, currentLng, place.lat, place.lng);
+            }
+        });
+
+        sortPlaces(sortType);
         filterMenu.classList.add('hidden');
     });
+}
 
+// DOM 준비 후 실행
+window.addEventListener('DOMContentLoaded', () => {
+    bindDistanceFilter();
+});
+
+//선택 전용 함수
+function selectPlace(place) {
+
+    // 🔥 이전 선택 복구
+    if (selectedPlace && selectedPlace.marker) {
+        selectedPlace.marker.setImage(defaultMarkerImage);
+    }
+
+    // 🔥 이전 인포 닫기
+    if (currentInfo) {
+        currentInfo.close();
+        currentInfo = null;
+    }
+
+    // 🔥 현재 선택 저장
+    selectedPlace = place;
+
+    // 🔥 선택 아이콘 적용
+    place.marker.setImage(selectedMarkerImage);
+
+    // 🔥 인포 열기
+    place.info.open(map, place.marker);
+    currentInfo = place.info;
+
+    map.panTo(place.marker.getPosition());
 }
 
 
@@ -402,6 +524,7 @@ function clearAllCategories() {
     Object.keys(categoryMarkers).forEach(clearCategory);
 }
 
+//장소필터 가까운순 먼순 거리 계산 함수
 function getDistanceKm(lat1, lng1, lat2, lng2) {
     const R = 6371;
     const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -418,48 +541,133 @@ function getDistanceKm(lat1, lng1, lat2, lng2) {
 
 /* ================= 현재 위치 ================= */
 
+// 다른곳 선택되면 현재위치 지우는 함수
+function removeCurrentLocation() {
+    if (currentLocationMarker) {
+        currentLocationMarker.setMap(null);
+        currentLocationMarker = null;
+    }
+    if (currentLocationInfo) {
+        currentLocationInfo.close();
+        currentLocationInfo = null;
+    }
+}
+
+// ================== 현재 위치 ==================
 function getCurrentLocation() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+        console.log('geolocation 지원 안함');
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        pos => {
+            currentLat = pos.coords.latitude;
+            currentLng = pos.coords.longitude;
+
+            const latlng = new kakao.maps.LatLng(currentLat, currentLng);
+
+            // 기존 현재위치 마커 제거
+            if (currentLocationMarker) {
+                currentLocationMarker.setMap(null);
+            }
+
+            currentLocationMarker = new kakao.maps.Marker({
+                map,
+                position: latlng
+            });
+
+            // 주소 가져오기
+            geocoder.coord2Address(currentLng, currentLat, (result, status) => {
+                let address = '주소 정보 없음';
+                if (status === kakao.maps.services.Status.OK) {
+                    address =
+                        result[0].road_address?.address_name ||
+                        result[0].address?.address_name ||
+                        address;
+                }
+
+                currentLocationInfo = new kakao.maps.InfoWindow({
+                    content: `<div style="padding:0.3rem;width:12rem;font-size:0.8rem;">
+                                <div style="font-weight:700;margin-bottom:0.4rem;">📍 현재 위치</div>
+                                <div style="color:#555;">${address}</div>
+                              </div>`
+                });
+            });
+
+            kakao.maps.event.addListener(currentLocationMarker, 'click', () => {
+                if (currentInfo) currentInfo.close();
+                currentLocationInfo.open(map, currentLocationMarker);
+                currentInfo = currentLocationInfo;
+            });
+
+            map.setCenter(latlng);
+        },
+        err => {
+            console.log('위치 실패:', err);
+        }
+    );
+}
+
+
+// ====================== 장소 상세 렌더링 ======================
+function renderPlaceDetail(place) {
+    const el = document.querySelector('.place-detail-content');
+    if (!el) return;
+
+    let distanceText = '거리 정보 없음';
+    let timeText = '';
+
+    if (place.distanceKm != null) {
+        distanceText =
+            place.distanceKm < 1
+                ? `${Math.round(place.distanceKm * 1000)}m`
+                : `${place.distanceKm.toFixed(1)}km`;
+
+        const min = getWalkMinutes(place.distanceKm);
+        timeText = ` · 도보 ${min}분`;
+    }
+
+    el.innerHTML = `
+        <h2 class="name">${place.name}</h2>
+        <div class="distance">📍 ${distanceText}${timeText}</div>
+
+        <p><strong>주소</strong><br>${place.address}</p>
+
+        ${place.tel ? `<p><strong>전화</strong><br>${place.tel}</p>` : ''}
+
+        ${place.status ? `<p><strong>영업 상태</strong><br>${place.status}</p>` : ''}
+
+        <p><strong>영업 시간</strong><br>평일 09:00 - 18:00</p>
+
+        ${place.category !== 'search' ? `<button class="reserve-btn">예약하기</button>` : ''}
+    `;
+}
+
+function loadNearbyFriendsByCurrentLocation() {
+
+    if (!navigator.geolocation) {
+        console.log("geolocation 지원 안함");
+        return;
+    }
 
     navigator.geolocation.getCurrentPosition(pos => {
-        currentLat = pos.coords.latitude;
-        currentLng = pos.coords.longitude;
 
-        const latlng = new kakao.maps.LatLng(currentLat, currentLng);
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
 
-        const marker = new kakao.maps.Marker({
-            map,
-            position: latlng
-        });
+        fetch(`/api/friends/nearby?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(data => {
+                renderFriendList(data);
+            })
+            .catch(err => console.error("친구 불러오기 실패:", err));
 
-        const info = new kakao.maps.InfoWindow({
-            content: `
-            <div style="padding:0.3rem;width:12rem;font-size:0.8rem;">
-                <div style="font-weight:700;margin-bottom:0.4rem;">
-                    📍 현재 위치
-                </div>
-                <div style="color:#555;">
-                    지도 기준 현재 위치입니다.
-                </div>
-            </div>
-            `,
-            removable: true
-        });
-
-        // 클릭 이벤트 추가
-        kakao.maps.event.addListener(marker, 'click', () => {
-            if (currentInfo) currentInfo.close();
-            info.open(map, marker);
-            currentInfo = info;
-        });
-
-        // 최초 한 번은 열어두고 싶으면 ↓ 유지
-        info.open(map, marker);
-        currentInfo = info;
-
-        map.setCenter(latlng);
+    }, err => {
+        console.log("위치 권한 거부:", err);
     });
 }
+
 
 function sortPlaces(type) {
     if (!currentPlaces.length) return;
@@ -478,48 +686,41 @@ function sortPlaces(type) {
 }
 
 
-
 function renderStoreList(places) {
-    currentPlaces = [...places]; //정렬용 상태 저장
+
+    currentPlaces = [...places];
+
     const listEl = document.querySelector('.store-list');
     const countEl = document.querySelector('.result-count');
     if (!listEl) return;
 
-    if(countEl){
-        countEl.textContent = `총${places.length}개`
+    if (countEl) {
+        countEl.textContent = `총 ${places.length}개`;
     }
 
     listEl.innerHTML = '';
 
     places.forEach(place => {
+
         const li = document.createElement('li');
         li.className = 'item';
-
+        /*이건 장소 리스트 하나 만드는거  -> 이거클릭하면 디테일 뷰 열림*/
         li.innerHTML = `
             <div class="item-wrapper">
                 <div class="text-wrapper">
                     <div class="nickname">${place.name}</div>
                     <div class="address">주소: ${place.address}</div>
                     ${place.tel ? `<div class="phone">전화: ${place.tel}</div>` : ''}
-                   
                 </div>
             </div>
         `;
-
         li.addEventListener('click', () => {
-            // 1. 이전 상태 정리
-            if (currentInfo) currentInfo.close();
             clearActiveList();
-
-            // 2. 지도 & 마커
-            map.panTo(place.marker.getPosition());
-            place.info.open(map, place.marker);
-            currentInfo = place.info;
-
-            // 3. 리스트 active 표시
             li.classList.add('active');
 
-            currentPlace = place;
+            // 선택 마커 하나만 남기기
+            selectSingleMarker(place.marker, place.info);
+
             switchView('detail', place);
         });
 
@@ -528,9 +729,12 @@ function renderStoreList(places) {
     });
 }
 
+//화면 모드(리스트 하나 누르면 상세로 )전환을 담당하는 상태 관리 함수
 function switchView(mode, place = null) {
     const listView = document.querySelector('.place-list-view');
     const detailView = document.querySelector('.place-detail-view');
+    const backBtn = document.querySelector('.back-btn')
+
 
     viewMode = mode;
 
@@ -567,75 +771,180 @@ function getWalkMinutes(distanceKm) {
     return Math.max(1, Math.round((distanceKm / 4) * 60));
 }
 
-//장소탭 아이템 리스트 렌더링
-function renderPlaceDetail(place) {
-    const el = document.querySelector('.place-detail-content');
-    if (!el) return;
 
-    let distanceText = '거리 정보 없음';
-    let timeText = '';
+// ====================== 예약 시간 생성 ======================
+function generateReserveTime() {
+    const select = document.getElementById('reserveTime');
+    if (!select) return;
 
-    if (place.distanceKm != null) {
-        distanceText =
-            place.distanceKm < 1
-                ? `${Math.round(place.distanceKm * 1000)}m`
-                : `${place.distanceKm.toFixed(1)}km`;
+    select.innerHTML = '';
 
-        const min = getWalkMinutes(place.distanceKm);
-        timeText = ` · 도보 ${min}분`;
+    for (let hour = 9; hour <= 18; hour++) {
+        for (let minute = 0; minute < 60; minute += 30) {
+            if (hour === 18 && minute > 0) break;
+            const option = document.createElement('option');
+            const time =
+                hour.toString().padStart(2, '0') + ':' + minute.toString().padStart(2, '0');
+            option.value = time;
+            option.textContent = time;
+            select.appendChild(option);
+        }
+    }
+}
+
+// ====================== DOMContentLoaded ======================
+window.addEventListener('DOMContentLoaded', () => {
+
+    // ----- 뒤로가기 버튼 -----
+    const backBtn = document.getElementById('placeBackBtn');
+    if (backBtn) {
+        backBtn.addEventListener('click', () => {
+            switchView('list');
+        });
     }
 
-    el.innerHTML = `
-        <h2 class="name">${place.name}</h2>
-        <div class="distance">📍 ${distanceText}${timeText}</div>
+    // ----- 예약 모달 -----
+    const modal = document.getElementById('reserveModal');
+    if (modal) {
+        document.addEventListener('click', async (e) => {
+            // 예약 버튼 (동적 생성 대응)
+            const reserveBtn = e.target.closest('.reserve-btn');
+            if (reserveBtn) {
 
-        <p><strong>주소</strong><br>${place.address}</p>
+                const isLoggedIn = /*[[${sessionUser != null}]]*/ false; // 서버에서 세션 전달
+                if (!isLoggedIn) {
+                    alert('로그인 후 예약할 수 있습니다.');
+                    return; // 로그인 안 되면 모달 안 열기
+                }
 
-        ${place.tel ? `<p><strong>전화</strong><br>${place.tel}</p>` : ''}
+                generateReserveTime();
+                modal.classList.add('open');
+                return;
+            }
 
-        ${place.status ? `
-            <p>
-                <strong>영업 상태</strong><br>
-                ${place.status}
-            </p>
-        ` : ''}
+            // 모달 닫기
+            if (
+                e.target.closest('#reserveModal .close-btn') ||
+                e.target.closest('#reserveModal .cancel') ||
+                e.target === modal
+            ) {
+                modal.classList.remove('open');
+                return;
+            }
+        });
 
-        ${place.category !== 'search' ? `
-            <button class="reserve-btn">예약하기</button>
-        ` : ''}
-    `;
+        // ----- 예약 확정 버튼 -----
+        const confirmBtn = modal.querySelector('.btn.confirm');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', async () => {
+                const dateInput = document.getElementById('reserveDate');
+                const timeSelect = document.getElementById('reserveTime');
+                const requestInput = document.getElementById('reserveRequest');
+
+                if (!dateInput || !timeSelect) return;
+
+                const date = dateInput.value;
+                const time = timeSelect.value;
+                const request = requestInput.value;
+
+                if (!date || !time) {
+                    alert('날짜와 시간을 선택해주세요.');
+                    return;
+                }
+
+                const payload = {
+                    storeId: selectedPlace ? selectedPlace.id : null,
+                    reservationDate: date,       // DTO 필드명
+                    reservationTime: time,       // DTO 필드명
+                    requestText: request,        // DTO 필드명
+                    paymentMethod: 'OFFLINE',    // 필요시
+                };
+
+                try {
+                    const res = await fetch('/reservation/create', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(payload),
+                    });
+
+                    if (res.ok) {
+                        // 성공 시 text()로 받음
+                        const message = await res.text();
+                        alert(message);  // "예약이 완료되었습니다!" 출력
+                        modal.classList.remove('open');
+                    } else {
+                        // 실패 시 JSON일 수 있으니 안전하게 처리
+                        let data;
+                        try {
+                            data = await res.json();
+                        } catch {
+                            data = await res.text();
+                        }
+                        alert('예약 실패: ' + (data || '알 수 없는 오류'));
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('예약일자를 확인해 주세요');
+                }
+
+            });
+        }
+    }
+
+    // ----- 거리순 필터 바인딩 -----
+    bindDistanceFilter(); // 중복 제거
+});
+
+function renderFriendList(friends) {
+
+    const listEl = document.querySelector('.friend-list');
+    if (!listEl) return;
+
+    listEl.innerHTML = '';
+
+    if (!friends || friends.length === 0) {
+        listEl.innerHTML = `<li class="empty">주변에 친구가 없습니다.</li>`;
+        return;
+    }
+
+    friends.forEach(friend => {
+
+        const li = document.createElement('li');
+        li.className = 'item';
+
+        const imageUrl = friend.imageUrl
+            ? friend.imageUrl
+            : '/images/defaultPetImage.png';
+
+        li.innerHTML = `
+    <div class="item-wrapper" 
+         data-pet-id="${friend.petId}"
+         data-birth="${friend.birthDate ?? ''}"
+         data-gender="${friend.gender ?? ''}"
+         data-introduction="${friend.introduction ?? ''}">
+        
+        <div class="image">
+            <img src="${imageUrl}" alt="pet image">
+        </div>
+
+        <div class="text-wrapper">
+            <div class="nickname">${friend.name}</div>
+            <div class="species">${friend.species ?? ''}</div>
+            ${friend.distanceKm != null
+            ? `<div class="distance">📍 ${friend.distanceKm.toFixed(1)}km</div>`
+            : ''
+        }
+        </div>
+
+      <button class="button ${friend.isFollowing ? 'following' : 'follow'}"
+            data-user-id="${friend.userId}">
+        ${friend.isFollowing ? '팔로잉' : '팔로우'}
+    </button>
+
+    </div>
+`;
+
+
+        listEl.appendChild(li);
+    });
 }
-//탭 거리순 필터
-const filterBtn = document.getElementById('distanceFilterBtn');
-const filterMenu = document.getElementById('distanceFilterMenu');
-
-filterBtn.addEventListener('click', (e) => {
-    e.stopPropagation(); // 이벤트 버블링 방지
-    filterMenu.classList.toggle('hidden');
-});
-document.addEventListener('click', () => {
-    filterMenu.classList.add('hidden');
-});
-filterMenu.addEventListener('click', (e) => {
-    const li = e.target.closest('li');
-    if (!li) return;
-
-    const sortType = li.dataset.sort;
-    sortPlaces(sortType);
-
-    filterMenu.classList.add('hidden');
-});
-
-
-
-//클릭되면 이벤트 주는 함수
-function clearActiveList() {
-    document
-        .querySelectorAll('.store-list .item.active')
-        .forEach(el => el.classList.remove('active'));
-}
-
-
-
-
-

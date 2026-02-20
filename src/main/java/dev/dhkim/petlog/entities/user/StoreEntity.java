@@ -20,4 +20,8 @@ public class StoreEntity {
     private String category;
     private String phone;
     private LocalDateTime createdAt;
+    private Double lat;
+    private Double lng;
+
+
 }

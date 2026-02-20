@@ -21,7 +21,7 @@ public class SalonController {
 
 
 
-    @GetMapping("/test/salon/reset")
+    @GetMapping("/delete")
     public String resetSalonData() {
         salonService.deleteAllSalons();
         return "테스트용 미용실 데이터 전체 삭제 완료";
@@ -37,14 +37,14 @@ public class SalonController {
 
     @GetMapping("/update-salons-coords")
     public String updateCoords() throws Exception {
-        salonService.updateAllSalonsLatLng();
-        return "미용싷 위도/경도 업데이트 완료!";
+        salonService.updateAllSalonsLatLng(); // 전체 샵 위경도 업데이트
+        return "미용실 위도/경도 업데이트 완료!";
     }
 
-    //병원 목록 내보내기
+    //미용실 목록 내보내기
     @GetMapping("/salon")
     public List<SalonDto> getSalon() {
 
-        return salonService.getAllHospitalsForMap(); // DB에서 DTO 리스트 반환
+        return salonService.getAllSalonsForMap(); // DB에서 DTO 리스트 반환
     }
 }

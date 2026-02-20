@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dhkim.petlog.dto.main.HospitalDto;
 import dev.dhkim.petlog.entities.main.HospitalEntity;
-import dev.dhkim.petlog.mappers.HospitalMapper;
+import dev.dhkim.petlog.mappers.main.HospitalMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -78,6 +78,12 @@ public class HospitalService {
 
             // 여기 핵심
             for (HospitalEntity hospital : batch) {
+
+                // 🚫 폐업 / 영업정지 제외
+                if (!"영업/정상".equals(hospital.getStatus())) {
+                    continue;
+                }
+
 
                 // 중복 체크
                 if (hospitalMapper.existsByManageNo(hospital.getManageNo())) {

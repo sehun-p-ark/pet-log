@@ -1,243 +1,145 @@
 document.addEventListener('DOMContentLoaded', () => {
-    clickOpenDescription()
-    initTabs();
-    closeDescription();
 
-    initPlaceBackButton();
-    bindPlaceItemClick();
-});
+    const friendTab = document.getElementById('friendTab');
+    const storeTab = document.getElementById('storeTab');
+    const friendContent = document.querySelector('.friend-tab-content'); // wrapper
+    const storePanel = document.querySelector('.store-panel');
+    const container = document.getElementById('descriptionContainer');
 
-const $description = document.getElementById('description');
-const $list = document.getElementById('list');
+    // 서버에서 로그인 여부를 JS로 전달
+    const sessionUser = /*[[${sessionUser != null}]]*/ false;
 
+    // ==================== 탭 전환 ====================
+    if (friendTab && storeTab) {
 
-const friendTab = document.getElementById('friendTab');
-const storeTab = document.getElementById('storeTab');
+        friendTab.addEventListener('click', () => {
+            friendTab.classList.add('active');
+            storeTab.classList.remove('active');
 
-const friendList = document.querySelector('.main.friend-list');
-const storeList = document.querySelector('.store-list');
+            friendContent?.classList.remove('hidden');  // 친구 탭 영역 표시
+            storePanel?.classList.add('hidden');       // 장소 숨김
 
-// 장소 탭 상세 페이지
-const storePanel = document.querySelector('.store-panel');
-const placeListView = document.querySelector('.place-list-view');
-const placeDetailView = document.querySelector('.place-detail-view');
-const placeDetailContent = document.querySelector('.place-detail-content');
-const backBtn = document.querySelector('.place-detail-view .back-btn');
+            container.style.display = "none";
+        });
 
+        storeTab.addEventListener('click', () => {
+            storeTab.classList.add('active');
+            friendTab.classList.remove('active');
 
-function clickOpenDescription() {
-    if (!$list || !$description) return;
+            friendContent?.classList.add('hidden');    // 친구 탭 영역 숨김
+            storePanel?.classList.remove('hidden');    // 장소 표시
 
-    const $itemWrappers = $list.querySelectorAll('.item-wrapper');
+            container.style.display = "none";
+        });
+    }
 
-    $itemWrappers.forEach($item => {
-        $item.addEventListener('click', (e) => {
+    // ==================== 팔로우 버튼 ====================
+    document.body.addEventListener('click', async e => {
+        const btn = e.target.closest('.button.follow, .button.following');
+        if (!btn) return;
 
-            // 버튼 클릭이면 무시
+        e.stopPropagation();
+
+        const targetUserId = btn.dataset.userId;
+        if (!targetUserId) return;
+
+        const currentlyFollowing = btn.classList.contains('following');
+
+        try {
+            const res = await fetch(`/api/follow/toggle?targetUserId=${targetUserId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const result = await res.json();
+
+            if (result === true) {
+                btn.classList.add('following');
+                btn.classList.remove('follow');
+                btn.textContent = '팔로잉';
+            } else if (result === false) {
+                btn.classList.remove('following');
+                btn.classList.add('follow');
+                btn.textContent = '팔로우';
+            }
+
+        } catch (err) {
+            console.error('팔로우 토글 실패', err);
+            alert('팔로우 상태 변경에 실패했습니다.');
+            if (currentlyFollowing) {
+                btn.classList.add('following');
+                btn.classList.remove('follow');
+                btn.textContent = '팔로잉';
+            } else {
+                btn.classList.remove('following');
+                btn.classList.add('follow');
+                btn.textContent = '팔로우';
+            }
+        }
+    });
+
+    // ==================== 친구 클릭 ====================
+    if (sessionUser && friendContent && container) {
+        const friendList = friendContent.querySelector('.friend-list');
+
+        friendList.addEventListener('click', (e) => {
+            const item = e.target.closest('.item-wrapper');
+            if (!item) return;
             if (e.target.closest('.button')) return;
 
-            // 친구 탭 아닐 때도 무시
-            if (!friendTab.classList.contains('active')) return;
+            const petId = item.dataset.petId;
 
-            toggleDescription();
-        });
-    });
-}
+            if (container.style.display === "block" && container.dataset.openId === petId) {
+                container.style.display = "none";
+                container.innerHTML = '';
+                container.dataset.openId = '';
+                return;
+            }
 
-function closeDescription() {
-    if (!$description) return;
+            const name = item.querySelector('.nickname')?.textContent || '이름 없음';
+            const species = item.querySelector('.caption')?.textContent || '종 없음';
+            const image = item.querySelector('img')?.src || '';
+            const birthDate = item.dataset.birth || '';
+            const gender = item.dataset.gender || '';
+            const introduction = item.dataset.introduction || '';
 
-    const $closeBtn = $description.querySelector(':scope > .close-btn > .close');
-    if (!$closeBtn) return;
+            function calculateAge(birth) {
+                if (!birth) return '';
+                const b = new Date(birth);
+                const today = new Date();
+                let age = today.getFullYear() - b.getFullYear();
+                const m = today.getMonth() - b.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < b.getDate())) age--;
+                return age;
+            }
 
-    $closeBtn.addEventListener('click', () => {
-        $description.removeAttribute('data-visible');
-    });
-}
-
-function toggleDescription() {
-    if (!friendTab.classList.contains('active')) return;
-
-    if ($description.hasAttribute('data-visible')) {
-        $description.removeAttribute('data-visible');
-    } else {
-        $description.setAttribute('data-visible', 'true');
-    }
-}
-
-function initTabs() {
-    if (
-        !friendTab ||
-        !storeTab ||
-        !friendList ||
-        !storePanel ||
-        !placeListView ||
-        !placeDetailView
-    ) return;
-
-    /* ========= 초기 상태 ========= */
-    friendTab.classList.add('active');
-    storeTab.classList.remove('active');
-
-    friendList.classList.remove('hidden');
-    storePanel.classList.add('hidden');   //
-
-    placeListView.classList.add('hidden');
-    placeDetailView.classList.add('hidden');
-
-    /* ========= 친구 탭 ========= */
-    friendTab.addEventListener('click', () => {
-        friendTab.classList.add('active');
-        storeTab.classList.remove('active');
-
-        friendList.classList.remove('hidden');
-        storePanel.classList.add('hidden'); //
-
-        placeListView.classList.add('hidden');
-        placeDetailView.classList.add('hidden');
-    });
-
-    /* ========= 장소 탭 ========= */
-    storeTab.addEventListener('click', () => {
-        console.log('장소탭 클릭됨');
-
-        if ($description) {
-            $description.removeAttribute('data-visible');
-        }
-
-        storeTab.classList.add('active');
-        friendTab.classList.remove('active');
-
-        friendList.classList.add('hidden');
-        storePanel.classList.remove('hidden'); //
-
-        placeListView.classList.remove('hidden');
-        placeDetailView.classList.add('hidden');
-    });
-}
-
-
-//팔로우 -> 한번 클릭 팔로잉
-//팔로잉 -> 한번 클릭 팔로우 ( 언팔로우 )
-
-document.addEventListener('click', e => {
-    const btn = e.target.closest('.button.follow, .button.following');
-    if (!btn) return;
-    e.stopPropagation(); // 부모(.item-wrapper) 클릭 이벤트 막기
-
-    const isFollowing = btn.classList.toggle('following');
-    btn.classList.toggle('follow', !isFollowing);
-
-    btn.textContent = isFollowing ? '팔로잉' : '팔로우';
-});
-
-
-function openPlaceDetail(placeData) {
-    // 리스트 숨기고
-    placeListView.classList.add('hidden');
-
-    // 상세 보이게
-    placeDetailView.classList.remove('hidden');
-
-    // 내용 채우기 (예시)
-    placeDetailContent.innerHTML = `
-        <h2>${placeData.name}</h2>
-        <p>${placeData.address}</p>
-        <p>${placeData.phone ?? ''}</p>
+            container.innerHTML = `
+        <div class="friend description">
+            <button type="button" class="close-btn">X</button>
+            <div class="text-wrapper">
+                <div class="image">
+                    <img src="${image}">
+                </div>
+                <div class="caption-wrapper">
+                    <div><strong>이름:</strong> ${name}</div>
+                    <div><strong>타입:</strong> ${species}</div>
+                    <div><strong>생년월일:</strong> ${birthDate} (${calculateAge(birthDate)}살)</div>
+                    <div><strong>성별:</strong> ${gender}</div>
+                    <div><strong>한줄 소개:</strong> ${introduction}</div>
+                </div>
+            </div>
+        </div>
     `;
-}
 
-function initPlaceBackButton() {
-    if (!backBtn) return;
+            container.style.display = "block";
+            container.dataset.openId = petId;
 
-    backBtn.addEventListener('click', () => {
-        placeDetailView.classList.add('hidden');
-        placeListView.classList.remove('hidden');
-    });
-}
-
-function bindPlaceItemClick() {
-    const items = document.querySelectorAll('.store-list .item');
-
-    items.forEach(item => {
-        item.addEventListener('click', () => {
-            const placeData = {
-                name: item.dataset.name,
-                address: item.dataset.address,
-                phone: item.dataset.phone
-            };
-
-            openPlaceDetail(placeData);
+            container.querySelector('.close-btn')
+                .addEventListener('click', () => {
+                    container.style.display = "none";
+                    container.innerHTML = '';
+                    container.dataset.openId = '';
+                });
         });
-    });
-}
-
-
-
-//모달
-const reserveModal = document.getElementById('reserveModal');
-const closeReserveBtn = reserveModal.querySelector('.close-btn');
-const cancelBtn = reserveModal.querySelector('.cancel');
-
-//모달 열 때 이전 값 초기화
-function openReserveModal() {
-    reserveModal.classList.add('open');
-    document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
-}
-
-function closeReserveModal() {
-    reserveModal.classList.remove('open');
-    document.body.style.overflow = '';
-}
-// 예약하기 버튼
-document.addEventListener('click', e => {
-    const btn = e.target.closest('.reserve-btn');
-    if (!btn) return;
-
-    openReserveModal();
-});
-
-
-// 닫기 (X)
-closeReserveBtn.addEventListener('click', closeReserveModal);
-
-// 취소 버튼
-cancelBtn.addEventListener('click', closeReserveModal);
-
-// 오버레이 클릭 시 닫기
-reserveModal.addEventListener('click', e => {
-    if (e.target === reserveModal) {
-        closeReserveModal();
-    }
-});
-
-// ESC 키
-document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && reserveModal.classList.contains('open')) {
-        closeReserveModal();
-    }
-});
-
-
-
-//예약 버튼에서 데이터 수집 (백엔드 )
-const confirmBtn = reserveModal.querySelector('.confirm');
-
-confirmBtn.addEventListener('click', () => {
-    const date = reserveModal.querySelector('input[type="date"]').value;
-    const time = reserveModal.querySelector('input[type="time"]').value;
-
-    if (!date || !time) {
-        alert('날짜와 시간을 선택해주세요.');
-        return;
     }
 
-    const data = {
-        date,
-        time,
-        paymentMethod: 'OFFLINE'
-    };
-
-    console.log('예약 데이터:', data);
-    closeReserveModal();
 });

@@ -188,20 +188,160 @@
 
 .inquiry-list {
   position: fixed;
-  top: 6.25rem;
-  right: -100%;
-  width: 30rem;
-  height: 50rem;
+  top: 0;
+  right: 0;
+  width: 32rem;
+  height: 100vh;
   background: #ffffff;
-  box-shadow: -0.3125rem 0 1.25rem #0000001a;
-  border-radius: 0.3125rem 0 0 0.3125rem;
-  transition: right 0.3s ease;
+  box-shadow: -0.5rem 0 1.5rem rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
   z-index: 2000;
+  transition: transform 0.3s ease;
+  transform: translateX(100%);   // 🔥 기본 숨김
+}
+.inquiry-list.active {
+  transform: translateX(0);      // 🔥 열림
 }
 
-.inquiry-list.active {
-  right: 0;
-}
+  .list-header {
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #222;
+    }
+  }
+
+  .no-inquiry {
+    text-align: center;
+    padding: 2rem 0;
+    color: #999;
+    font-size: 0.95rem;
+  }
+
+  .list-container {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .inquiry-item {
+    border: 0.0625rem solid #e5e5e5;
+    border-radius: 0.6rem;
+    background: #fafafa;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      border-color: #7acb8c;
+      background: #f3fff6;
+    }
+
+
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 1rem;
+      font-size: 0.9rem;
+
+      .title {
+        font-weight: 600;
+        color: #333;
+        flex: 1;
+      }
+
+      .date {
+        font-size: 0.8rem;
+        color: #999;
+        margin-right: 0.8rem;
+      }
+
+      .status {
+        padding: 0.2rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      /* 상태별 색상 */
+      .status.waiting {
+        background: #fff4e5;
+        color: #ff8c00;
+      }
+
+      .status.answered {
+        background: #e6f9ed;
+        color: #28a745;
+      }
+    }
+
+    .content {
+      padding: 0 1rem 1rem;
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.4;
+      border-top: 1px solid #eee;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    &.active {
+      .content {
+        max-height: 10rem;
+      }
+    }
+    .btn-delete {
+      position: absolute;
+      top: 2.9rem;
+      right: 0.5rem;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      border: none;
+      color: #555;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+
+  }
+
+  #closeInquiryList {
+    margin-top: 1rem;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #7acb8c;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+
+    &:hover {
+      background: #63b476;
+    }
+  }
+
+
+
 
 /* ============================= */
 /*            반응형             */

@@ -26,7 +26,8 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class
+UserService {
     private final UserMapper userMapper;
     private final EmailVerificationMapper emailVerificationMapper;
     private final JavaMailSender mailSender;

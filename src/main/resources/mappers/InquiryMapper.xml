@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.dhkim.petlog.mappers.cs.InquiryMapper">
+    <insert id="insertInquiry">
+        INSERT INTO `petlog`.`inquiry`
+            (user_id, title, content, status, created_at)
+        VALUES
+            (#{userId}, #{title}, #{content}, #{status}, #{createdAt})
+    </insert>
+
+    <!-- 유저별 문의 조회 -->
+    <select id="selectByUserId" parameterType="int" resultType="dev.dhkim.petlog.entities.cs.InquiryEntity">
+        SELECT id, user_id, title, content, status, created_at
+        FROM `petlog`.inquiry
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 단일 문의 조회 -->
+    <select id="selectById" parameterType="int" resultType="dev.dhkim.petlog.entities.cs.InquiryEntity">
+        SELECT *
+        FROM `petlog`.`inquiry`
+        WHERE id = #{inquiryId}
+    </select>
+
+    <!-- 문의 삭제 -->
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM `petlog`.`inquiry`
+        WHERE id = #{inquiryId}
+    </delete>
+</mapper>

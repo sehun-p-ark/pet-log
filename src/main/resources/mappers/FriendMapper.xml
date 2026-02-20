@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.dhkim.petlog.mappers.main.FriendMapper">
+    <update id="updateAddressLatLng">
+        UPDATE `petlog`.address
+        SET latitude = #{lat}, longitude = #{lng}
+        WHERE address_id = #{addressId}
+    </update>
+
+    <update id="updateAddress" parameterType="dev.dhkim.petlog.entities.user.AddressEntity">
+        UPDATE `petlog`.address
+        SET
+            address_primary = #{addressPrimary},
+            address_secondary = #{addressSecondary},
+            is_default = #{isDefault},
+            latitude = #{lat},
+            longitude = #{lng},
+            receiver_name = #{receiverName},
+            phone = #{phone},
+            postal_code = #{postalCode}
+        WHERE address_id = #{addressId}
+    </update>
+
+    <insert id="insertAddress" parameterType="dev.dhkim.petlog.entities.user.AddressEntity">
+        INSERT INTO `petlog`.`address`(
+            user_id, receiver_name, phone, postal_code, address_primary, address_secondary, latitude, longitude, is_default, created_at
+        )
+        VALUES(
+                  #{userId}, #{receiverName}, #{phone}, #{postalCode}, #{addressPrimary}, #{addressSecondary}, #{lat}, #{lng}, #{isDefault}, NOW()
+              )
+    </insert>
+    <select id="selectFriendsByUserId" parameterType="int" resultType="dev.dhkim.petlog.dto.user.PetDto">
+        SELECT name,
+               species,
+               birth_date AS birthDate,
+               gender,
+               weight,
+               body_type AS bodyType,
+               image_url AS imageUrl,
+               created_at AS createdAt
+        FROM `petlog`.pets
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="findDefaultByUserId" resultType="dev.dhkim.petlog.entities.user.AddressEntity" parameterType="int">
+        SELECT
+            address_id AS addressId,
+            user_id AS userId,
+            receiver_name AS receiverName,
+            phone,
+            postal_code AS postalCode,
+            address_primary AS addressPrimary,
+            address_secondary AS addressSecondary,
+            latitude AS lat,
+            longitude AS lng,
+            is_default AS isDefault
+        FROM `petlog`.`address`
+        WHERE user_id = #{userId} AND is_default = 1
+        LIMIT 1
+    </select>
+
+    <select id="selectNearbyFriends"
+            resultType="dev.dhkim.petlog.dto.user.PetDto"
+            parameterType="map">
+
+        SELECT
+        p.pet_id AS petId,
+        p.user_id AS userId,
+        p.name AS name,
+        p.species AS species,
+        p.birth_date AS birthDate,
+        p.gender AS gender,
+        p.image_url AS imageUrl,
+        p.introduction AS introduction,
+        a.latitude AS lat,
+        a.longitude AS lng,
+
+        --  여기 추가
+        CASE
+        WHEN f.id IS NOT NULL THEN true
+        ELSE false
+        END AS isFollowing,
+
+        (6371 * acos(
+        cos(radians(#{lat})) * cos(radians(a.latitude)) *
+        cos(radians(a.longitude) - radians(#{lng})) +
+        sin(radians(#{lat})) * sin(radians(a.latitude))
+        )) AS distance
+
+        FROM `petlog`.`pets` p
+
+        JOIN `petlog`.`address` a
+        ON p.user_id = a.user_id
+
+        --  여기 추가
+        LEFT JOIN `petlog`.`follows` f
+        ON f.following_user_id = #{userId}
+        AND f.followed_user_id = p.user_id
+
+        WHERE p.user_id != #{userId}
+
+        HAVING distance &lt;= 1.5
+
+        ORDER BY distance ASC
+
+    </select>
+
+    <select id="selectAllOtherUsersAddresses" resultType="dev.dhkim.petlog.entities.user.AddressEntity" parameterType="int">
+        SELECT
+            address_id AS addressId,
+            user_id AS userId,
+            receiver_name AS receiverName,
+            phone,
+            postal_code AS postalCode,
+            address_primary AS addressPrimary,
+            address_secondary AS addressSecondary,
+            latitude AS lat,
+            longitude AS lng,
+            is_default AS isDefault
+        FROM `petlog`.`address`
+        WHERE user_id != #{excludeUserId} AND is_default = 1
+    </select>
+
+
+
+
+
+</mapper>

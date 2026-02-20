@@ -25,4 +25,7 @@ public class PetDto {
     private String bodyType;
     private String imageUrl;
     private LocalDateTime createdAt;
+    private String introduction;
+    /*목표 유저, 즉 버튼 클릭 시 “팔로우 대상”의 ID를 저장하는 필드*/
+    private Integer userId;
 }
