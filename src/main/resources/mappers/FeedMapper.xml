@@ -7,7 +7,7 @@
         VALUES
             (#{userId}, #{title}, #{content}, #{likeCount}, #{commentCount}, #{createdAt}, null)
     </insert>
-    <select id="selectFeedsForScroll" resultType="dev.dhkim.petlog.entities.feed.FeedEntity">
+    <select id="selectFeedsForScroll" resultType="map">
         SELECT `id` AS `id`,
                `user_id` AS `userId`,
                `title` AS `title`,

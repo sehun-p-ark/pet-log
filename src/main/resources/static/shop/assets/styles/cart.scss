@@ -49,6 +49,10 @@
         color: #999;
         width: 100%;
 
+        &.show{
+          display: block;
+        }
+
         > p {
           font-size: 1.1rem;
           margin: 0;
@@ -182,11 +186,72 @@
       padding: 1rem;
       font-size: 1.1rem;
       font-weight: 600;
-      background-color: lighten($global-gray-right-text-color, 40%);
+      background-color: #E0E0E0;
       color: lighten($global-gray-text-color, 10%);
       border-radius: 0.35rem;
       border: 0.0625rem solid #00000040;
       cursor: pointer;
+
+      &.disabled{
+        background-color: #e0e0e0;
+        color: #999;
+        cursor: not-allowed;
+      }
+
+      &.active{
+        background-color: #38A34C;
+        color: #ffffff;
+        cursor: pointer;
+
+        &:hover{
+          background-color: darken(#38a34c, 5%);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 800px) {
+    @include flex(column, flex-start, flex-start, 0);
+    height: auto;
+    min-height: auto;
+    padding: 1rem 0 5rem 0;
+    margin: 1rem 0 0 0;
+
+    > .summary-wrapper{
+      position: static;
+      width: 100%;
+
+      > .summary{
+        > .price.all,
+        > .price.ship-price,
+        > .price.discount-price{
+          display: none;
+        }
+
+        > .price.payment-price {
+          @include flex(row, center, space-between);
+          position: fixed;
+          background-color: #ffffff;
+          left: 0;
+          right: 0;
+          bottom: 3.1rem;
+          width: 100%;
+          padding: 1rem;
+          border-top: 0.0625rem solid #E0E0E0;
+          border-radius: 0;
+          z-index: 99;
+        }
+      }
+
+      > .payment{
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        border-radius: 0;
+        z-index: 99;
+      }
     }
   }
 }

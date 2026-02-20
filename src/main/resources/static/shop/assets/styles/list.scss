@@ -73,13 +73,21 @@
           background-color: $global-green-background-color;
         }
 
+        > .brand{
+          padding: 0.4rem 0 0.3rem 0;
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: $global-gray-text-color;
+        }
+
         > .name {
-          padding: 0.4rem 0;
-          font-size: 0.9rem;
+          padding: 0 0 0.3rem 0;
+          font-size: 1rem;
           color: $global-gray-text-color;
         }
 
         > .discount{
+          @include flex(row, center, center, 0.3rem);
           font-size: 0.8rem;
           padding-bottom: 0.2rem;
           text-decoration: line-through;

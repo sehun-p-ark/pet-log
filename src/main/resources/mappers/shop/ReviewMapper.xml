@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.shop.ReviewMapper">
+    <select id="selectReviewsByProductId" resultType="map">
+        SELECT r.id,
+               r.rating,
+               r.content,
+               r.created_at AS createdAt,
+               p.name       AS petName,
+               p.image_url  AS profileImageUrl,
+               opt.option_name AS optionName
+        FROM `petlog`.review r
+                 JOIN `petlog`.users u ON r.user_id = u.id
+                 LEFT JOIN `petlog`.pets p ON u.id = p.user_id AND p.is_primary = true
+                 LEFT JOIN (
+            SELECT oi.option_id, o.user_id, oi.product_id
+            FROM `petlog`.order_item oi
+                     JOIN `petlog`.`order` o ON oi.order_id = o.id
+            WHERE (o.user_id, oi.product_id, o.created_at) IN (
+                SELECT o2.user_id, oi2.product_id, MAX(o2.created_at)
+                FROM `petlog`.order_item oi2
+                         JOIN `petlog`.`order` o2 ON oi2.order_id = o2.id
+                GROUP BY o2.user_id, oi2.product_id
+            )
+        ) latest_oi ON latest_oi.user_id = r.user_id AND latest_oi.product_id = r.product_id
+                 LEFT JOIN `petlog`.`option` opt ON latest_oi.option_id = opt.id
+        WHERE r.product_id = #{productId}
+        ORDER BY r.created_at DESC
+    </select>
+
+    <select id="selectReviewImages" resultType="string">
+        SELECT image_url
+        FROM `petlog`.review_image
+        WHERE review_id = #{reviewId}
+        ORDER BY sort_order
+    </select>
+
+    <select id="checkPurchased" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM `petlog`.order_item oi
+                 JOIN `petlog`.`order` o ON oi.order_id = o.id
+        WHERE o.user_id = #{userId}
+          AND oi.product_id = #{productId}
+    </select>
+
+    <select id="getPurchasedOptions" resultType="string">
+        SELECT opt.option_name
+        FROM `petlog`.order_item oi
+                 JOIN `petlog`.`order` o ON oi.order_id = o.id
+                 LEFT JOIN `petlog`.`option` opt ON oi.option_id = opt.id
+        WHERE o.user_id = #{userId}
+          AND oi.product_id = #{productId}
+    </select>
+
+    <select id="checkAlreadyReviewed" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM `petlog`.review
+        WHERE user_id = #{userId}
+          AND product_id = #{productId}
+    </select>
+
+    <select id="selectAverageRating" resultType="Double">
+        SELECT ROUND(AVG(rating), 1)
+        FROM petlog.review
+        WHERE product_id = #{productId}
+    </select>
+
+    <select id="selectRatingDistribution" resultType="map">
+        SELECT rating, COUNT(*) as count
+        FROM petlog.review
+        WHERE product_id = #{productId}
+        GROUP BY rating
+        ORDER BY rating DESC
+    </select>
+</mapper>

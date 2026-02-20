@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.shop.PointMapper">
+    <select id="getAvailablePoint" resultType="int">
+        SELECT COALESCE(SUM(`change`), 0)
+        FROM `petlog`.`point`
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

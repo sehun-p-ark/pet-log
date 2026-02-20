@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -18,22 +18,23 @@
         <th:block th:replace="~{/fragments/shop.html :: category}"></th:block>
         <div class="overview">
             <div class="preview">
-                <div class="img-container">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
-                </div>
-                <div class="img-container">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
+                <div class="img-container"
+                     th:each="image, stat : ${product.productImages}"
+                     th:if="${stat.index < 2}"
+                     th:data-index="${stat.index}">
+                    <img class="image" th:src="${image.imageUrl}" alt="">
                 </div>
             </div>
             <div class="image-wrapper">
-                <img class="image" src="/shop/assets/images/product.png" alt="">
+                <img class="image main-image" th:src="${product.productImages[0]?.imageUrl}" alt="">
             </div>
+
             <form class="content">
                 <div class="info">
                     <div class="description-wrapper">
                         <div class="text-description">
-                            <div class="company">레보</div>
-                            <div class="product-name">강아지 장난감 노즈워크 움직이는 스낵볼</div>
+                            <div class="company" th:text="${product.brand}">레보</div>
+                            <div class="product-name" th:text="${product.name}">강아지 장난감</div>
                         </div>
                         <div class="image-wrapper">
                             <img class="image bookmark" src="/shop/assets/images/heart-default.png" alt="">
@@ -42,45 +43,41 @@
                     </div>
                     <div class="review-wrapper">
                         <div class="star-wrapper">
-                            <svg class="star filled" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <svg class="star filled" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <svg class="star filled" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <svg class="star filled" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <svg class="star filled" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
+                            <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                <span class="star" th:classappend="${i <= averageRating} ? 'filled' : (${i - 0.5 <= averageRating} ? 'half' : '')">★</span>
+                            </th:block>
                         </div>
-                        <div class="count">73개 리뷰</div>
+                        <div class="count" th:text="${reviewCount + '개 리뷰'}"></div>
                     </div>
                     <div class="price-wrapper">
-                        <div class="discount">
-                            <div class="percent">44%</div>
-                            <div class="previous">15,900원</div>
+                        <div class="discount" th:if="${product.discountRate > 0}">
+                            <div class="percent" th:text="${product.discountRate + '%'}">44%</div>
+                            <div class="previous" th:text="${#numbers.formatInteger(product.price, 0, 'COMMA') + '원'}">15,900원</div>
                         </div>
-                        <div class="price">8,900원</div>
+                        <div class="price" th:text="${#numbers.formatInteger(product.price * (100 - product.discountRate) / 100, 0, 'COMMA') + '원'}"></div>
                     </div>
                     <div class="ship">
                         <div class="title">배송</div>
-                        <div class="charge">무료배송</div>
+                        <div class="charge" th:text="${product.deliveryFee == 0 ? '무료배송' : #numbers.formatInteger(product.deliveryFee, 0, 'COMMA') + '원'}"></div>
                     </div>
                 </div>
-                <label class="option">
-                    <select class="list">
-                        <option class="" disabled selected hidden>상품명</option>
-                        <option class="option">노란색</option>
-                        <option class="option">파란색</option>
+                <!-- 옵션이 1개 이상이면 렌더링 -->
+                <!-- 데스크톱 옵션 -->
+                <label class="option" th:if="${options != null && !options.isEmpty()}" th:style="${options.size() == 1 ? 'display: none;' : ''}">
+                    <select class="list" id="option-select">
+                        <option value="" disabled selected hidden>옵션을 선택하세요</option>
+                        <option th:each="option : ${options}"
+                                th:value="${option.id}"
+                                th:data-id="${option.id}"
+                                th:data-name="${option.optionName}"
+                                th:data-price="${option.additionalPrice}"
+                                th:data-stock="${option.stock}"
+                                th:text="${option.optionName + (option.additionalPrice > 0 ? ' (+' + #numbers.formatInteger(option.additionalPrice, 0, 'COMMA') + '원)' : '')}">
+                        </option>
                     </select>
                 </label>
-                <div class="option-detail">
-                    <div class="text">노란색</div>
+                <div class="option-detail" style="display: none;">
+                    <div class="text">템플릿</div>
                     <div class="delete-btn">
                         <svg class="delete" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -92,9 +89,10 @@
                             <input class="quantity-input" type="text" value="1">
                             <button class="quantity-btn plus" type="button">+</button>
                         </label>
-                        <div class="price">8,900원</div>
+                        <div class="price">0원</div>
                     </div>
                 </div>
+
                 <div class="final">
                     <div class="title">주문금액</div>
                     <div class="final-price">0원</div>
@@ -108,8 +106,8 @@
         <div class="bottom-bar">
             <div class="description-wrapper">
                 <div class="text-description">
-                    <div class="company">레보</div>
-                    <div class="product-name">강아지 장난감 노즈워크 움직이는 스낵볼</div>
+                    <div class="company" th:text="${product.brand}">레보</div>
+                    <div class="product-name" th:text="${product.name}">강아지 장난감</div>
                 </div>
                 <div class="image-wrapper">
                     <img class="image bookmark" src="/shop/assets/images/heart-default.png" alt="">
@@ -118,55 +116,157 @@
             </div>
             <div class="review-wrapper">
                 <div class="star-wrapper">
-                    <svg class="star filled" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    <svg class="star filled" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    <svg class="star filled" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    <svg class="star filled" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                    <svg class="star filled" viewBox="0 0 24 24">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
+                    <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                        <span class="star" th:classappend="${i <= averageRating} ? 'filled' : (${i - 0.5 <= averageRating} ? 'half' : '')">★</span>
+                    </th:block>
                 </div>
-                <div class="count">73개 리뷰</div>
+                <div class="count" th:text="${reviewCount + '개 리뷰'}"></div>
             </div>
             <div class="price-wrapper">
-                <div class="discount">
-                    <div class="percent">44%</div>
-                    <div class="previous">15,900원</div>
+                <div class="discount" th:if="${product.discountRate > 0}">
+                    <div class="percent" th:text="${product.discountRate + '%'}">44%</div>
+                    <div class="previous" th:text="${#numbers.formatInteger(product.price, 0, 'COMMA') + '원'}">15,900원</div>
                 </div>
-                <div class="price">8,900원</div>
+                <div class="price" th:text="${#numbers.formatInteger(product.price * (100 - product.discountRate) / 100, 0, 'COMMA') + '원'}">8,900원</div>
             </div>
             <div class="ship">
                 <div class="title">배송</div>
-                <div class="charge">무료배송</div>
+                <div class="charge" th:text="${product.deliveryFee == 0 ? '무료배송' : #numbers.formatInteger(product.deliveryFee, 0, 'COMMA') + '원'}">무료배송</div>
             </div>
         </div>
     </div>
     <div class="detail-wrapper">
         <ul class="line">
             <li class="item info-tab">상품정보</li>
-            <li class="item review-tab">리뷰(73)</li>
+            <li class="item review-tab" th:text="'리뷰(' + ${reviewCount} + ')'"></li>
         </ul>
         <div class="container">
             <div class="detail">
-                <img class="image" src="/shop/assets/images/detail.png" alt="">
+                <img class="image"
+                     th:each="detailImage : ${detailImages}"
+                     th:src="${detailImage.imageUrl}"
+                     alt="">
                 <div class="background"></div>
                 <div class="more">상품설명 더보기</div>
             </div>
             <div class="review-container">
-                리뷰창
+                <div class="inner">
+                    <div class="top">
+                        <div class="total-count">
+                            <span class="count-text">리뷰</span>
+                            <span class="total-value" th:text="${#numbers.formatInteger(reviewCount, 0, 'COMMA') + '개'}"></span>
+                        </div>
+                        <label class="review-btn" th:if="${isPurchased && !isAlreadyReviewed}">
+                            <button class="button" type="button">리뷰 남기기</button>
+                        </label>
+                    </div>
+                    <div class="overview">
+                        <div class="rating-summary">
+                            <div class="stars">
+                                <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                    <span th:classappend="${i <= averageRating} ? 'filled' : (${i - 0.5 <= averageRating} ? 'half' : '')">★</span>
+                                </th:block>
+                            </div>
+                            <span class="summary-score" th:text="${averageRating}">0.0</span>
+                        </div>
+                        <div class="detail">
+                            <th:block th:each="i : ${#numbers.sequence(5, 1, -1)}"
+                                      th:with="count=${ratingMap.get('' + i) != null ? ratingMap.get('' + i) : 0},
+                                      width=${reviewCount > 0 ? (count * 100 / reviewCount) : 0}">
+                                <div th:class="'rating-item rating-' + ${i}">
+                                    <span class="num" th:text="${i + '점'}"></span>
+                                    <span class="bar">
+                                        <span class="fill" th:style="'width: ' + ${width} + '%'"
+                                              th:classappend="${count == maxRatingCount && count > 0} ? 'best' : ''"></span>
+                                    </span>
+                                    <span class="count" th:text="${count}"></span>
+                                </div>
+                            </th:block>
+                        </div>
+                   </div>
+                    <div class="filter">
+                        <div class="text-filter">
+                            <div class="best-filter">베스트순</div>
+                            <div class="new-filter">최신순</div>
+                        </div>
+                        <div class="select-filter">
+                            <div class="star-filter">
+                                <button type="button" class="filter-btn">별점</button>
+                                <div class="dropdown">
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="stars">★★★★★</span>
+                                        <span class="count">(44,154개)</span>
+                                    </label>
+
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="stars">★★★★☆</span>
+                                        <span class="count">(6,395개)</span>
+                                    </label>
+
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="stars">★★★☆☆</span>
+                                        <span class="count">(1,022개)</span>
+                                    </label>
+
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="stars">★★☆☆☆</span>
+                                        <span class="count">(160개)</span>
+                                    </label>
+
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="stars">★☆☆☆☆</span>
+                                        <span class="count">(104개)</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="option-filter">
+                                <button type="button" class="filter-btn">옵션</button>
+                                <div class="dropdown">
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="option-name">하늘색</span>
+                                    </label>
+                                    <label class="option">
+                                        <input type="checkbox">
+                                        <span class="option-name">노란색</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-item" th:each="review : ${reviews}">
+                        <div class="profile">
+                            <img class="img" th:src="${review['profileImageUrl']}" alt="프로필">
+                            <div class="info">
+                                <div class="nickname" th:text="${review['petName']}"></div>
+                                <div class="rating">
+                                    <div class="score">
+                                        <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <span th:text="${i <= review['rating']} ? '★' : '☆'"></span>
+                                        </th:block>
+                                    </div>
+                                    <div class="date" th:text="${review['createdAt']}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="option" th:text="${review['optionName'] != null ? review['optionName'] : ''}"></div>
+                        <div class="review-images">
+                            <img th:each="imgUrl : ${review['reviewImages']}"
+                                 th:src="${imgUrl}" class="review-img" alt="리뷰이미지">
+                        </div>
+                        <div class="review-text" th:text="${review['content']}"></div>
+                    </div>
+                    <div class="empty" th:if="${#lists.isEmpty(reviews)}">등록된 리뷰가 없습니다.</div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
 <form class="bottom-option">
     <div class="bottom-bar">
         <div class="image-wrapper">
@@ -175,15 +275,22 @@
     </div>
 
     <div class="option-area">
-        <label class="option">
+        <label class="option" th:if="${options != null && !options.isEmpty()}" th:style="${options.size() == 1 ? 'display: none;' : ''}">
             <select class="list">
-                <option class="" disabled selected hidden>상품명</option>
-                <option class="option">노란색</option>
-                <option class="option">파란색</option>
+                <option value="" disabled selected hidden>옵션을 선택하세요</option>
+                <option th:each="option : ${options}"
+                        th:value="${option.id}"
+                        th:data-id="${option.id}"
+                        th:data-name="${option.optionName}"
+                        th:data-price="${option.additionalPrice}"
+                        th:data-stock="${option.stock}"
+                        th:text="${option.optionName + (option.additionalPrice > 0 ? ' (+' + #numbers.formatInteger(option.additionalPrice, 0, 'COMMA') + '원)' : '')}">
+                </option>
             </select>
         </label>
-        <div class="option-detail">
-            <div class="text">노란색</div>
+
+        <div class="option-detail" style="display: none;">
+            <div class="text"></div>
             <div class="delete-btn">
                 <svg class="delete" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -192,12 +299,13 @@
             <div class="check">
                 <label class="quantity-control">
                     <button class="quantity-btn minus" type="button">-</button>
-                    <input class="quantity-input" id="quantity-1" type="text" value="1">
+                    <input class="quantity-input" type="text" value="1">
                     <button class="quantity-btn plus" type="button">+</button>
                 </label>
-                <div class="price">8,900원</div>
+                <div class="price">0원</div>
             </div>
         </div>
+
         <div class="final">
             <div class="title">주문금액</div>
             <div class="final-price">0원</div>

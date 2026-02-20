@@ -7,7 +7,8 @@
   width: 100%;
   height: 100%;
   padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
-  margin: 0 0 2rem 0; }
+  margin: 0 0 2rem 0;
+  overflow: auto; }
   #main > * {
     flex-grow: 0;
     flex-shrink: 0; }
@@ -35,10 +36,10 @@
       transform: translateY(-50%);
       z-index: 20;
       background-color: rgba(252, 252, 252, 0.6);
-      padding: 1rem 0.3rem;
+      padding: clamp(0.5rem, 1vw, 1rem) clamp(0.2rem, 0.3vw, 0.3rem);
       cursor: pointer; }
       #main > .banner-wrapper > .button > .image {
-        width: 2rem; }
+        width: clamp(1.2rem, 2vw, 2rem); }
     #main > .banner-wrapper > .previous {
       left: 0;
       border-bottom-right-radius: 1rem;
@@ -78,12 +79,16 @@
         #main > .banner-wrapper > .img-wrapper > .item > .-flex-stretch {
           flex-grow: 1;
           flex-shrink: 1; }
+        #main > .banner-wrapper > .img-wrapper > .item > .image,
         #main > .banner-wrapper > .img-wrapper > .item > .picture {
           width: 100%;
           display: flex; }
+          #main > .banner-wrapper > .img-wrapper > .item > .image > .picture > .image,
+          #main > .banner-wrapper > .img-wrapper > .item > .image > .image,
+          #main > .banner-wrapper > .img-wrapper > .item > .picture > .picture > .image,
           #main > .banner-wrapper > .img-wrapper > .item > .picture > .image {
             width: 100%;
-            height: 20rem; }
+            object-fit: cover; }
     #main > .banner-wrapper > .page {
       align-items: center;
       display: flex;
@@ -91,11 +96,11 @@
       gap: 0.3rem;
       justify-content: center;
       position: absolute;
-      min-width: 4rem;
+      min-width: clamp(3rem, 4vw, 4rem);
       background-color: rgba(173, 173, 173, 0.5);
-      padding: 0.5rem 1rem;
+      padding: clamp(0.3rem, 0.5vw, 0.5rem) clamp(0.6rem, 1vw, 1rem);
       border-radius: 999rem;
-      font-size: 0.9rem;
+      font-size: clamp(0.7rem, 0.9vw, 0.9rem);
       right: 1%;
       bottom: 4%;
       color: #FFFFFF;
@@ -219,16 +224,33 @@
         #main > .best-product > .product > .item > .-flex-stretch {
           flex-grow: 1;
           flex-shrink: 1; }
-        #main > .new-product > .product > .item > .image,
-        #main > .best-product > .product > .item > .image {
+        #main > .new-product > .product > .item > .image-wrapper,
+        #main > .best-product > .product > .item > .image-wrapper {
           width: 100%;
-          aspect-ratio: 1;
-          object-fit: cover;
+          overflow: hidden;
           border-radius: 0.2rem;
-          background-color: #89CC96; }
+          border: 0.0625rem solid #ededed; }
+          #main > .new-product > .product > .item > .image-wrapper > .image,
+          #main > .best-product > .product > .item > .image-wrapper > .image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background-color: #89CC96;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: block; }
+            #main > .new-product > .product > .item > .image-wrapper > .image:hover,
+            #main > .best-product > .product > .item > .image-wrapper > .image:hover {
+              transform: scale(1.05); }
+        #main > .new-product > .product > .item > .brand,
+        #main > .best-product > .product > .item > .brand {
+          padding: 0.4rem 0 0.3rem 0;
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #565656; }
         #main > .new-product > .product > .item > .name,
         #main > .best-product > .product > .item > .name {
-          padding: 0.4rem 0 0.3rem 0;
+          padding: 0 0 0.3rem 0;
           font-size: 1rem;
           color: #565656; }
         #main > .new-product > .product > .item > .discount,

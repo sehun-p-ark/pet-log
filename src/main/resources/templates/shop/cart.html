@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -26,60 +26,54 @@
             </div>
         </div>
         <div class="cart-list">
-            <div class="cart-item">
-                <label class="checkbox-label">
-                    <input class="item-checkbox" type="checkbox">
-                </label>
-                <img class="image" src="/shop/assets/images/product.png" alt="">
-                <div class="item-info">
-                    <div class="product">
-                        <span class="brand">[레토]</span>
-                        <span class="product-name">강아지 장난감 노즈워크 음직이는 스낵볼</span>
-                    </div>
-                    <div class="ship">무료배송</div>
-                    <div class="option-wrapper">
-                        <span class="title">옵션:</span>
-                        <span class="option">노란색</span>
-                    </div>
-                    <div class="change-wrapper">
-                        <button class="option-change" type="button">옵션변경</button>
-                        <label class="quantity-control">
-                            <button class="quantity-btn minus" type="button">-</button>
-                            <input class="quantity-input" type="text" value="1">
-                            <button class="quantity-btn plus" type="button">+</button>
-                        </label>
-                        <div class="single-price">8,900원</div>
-                    </div>
-                </div>
-            </div>
-            <div class="cart-item">
-                <label class="checkbox-label">
-                    <input class="item-checkbox" type="checkbox">
-                </label>
-                <img class="image" src="/shop/assets/images/product.png" alt="">
-                <div class="item-info">
-                    <div class="product">
-                        <span class="brand">[레토]</span>
-                        <span class="product-name">강아지 장난감 노즈워크 음직이는 스낵볼</span>
-                    </div>
-                    <div class="ship">무료배송</div>
-                    <div class="option-wrapper">
-                        <span class="title">옵션:</span>
-                        <span class="option">파란색</span>
-                    </div>
-                    <div class="change-wrapper">
-                        <button class="option-change" type="button">옵션변경</button>
-                        <label class="quantity-control">
-                            <button class="quantity-btn minus" type="button">-</button>
-                            <input class="quantity-input" type="text" value="1">
-                            <button class="quantity-btn plus" type="button">+</button>
-                        </label>
-                        <div class="single-price">8,900원</div>
-                    </div>
-                </div>
-            </div>
-            <div class="empty-cart" style="display: none;">
+            <!-- 장바구니가 비어있을 때 -->
+            <div class="empty-cart" th:classappend="${cartItems == null || cartItems.isEmpty()} ? 'show' : ''">
                 <p>장바구니가 비어있습니다.</p>
+            </div>
+
+            <!-- 장바구니 아이템들 -->
+            <div class="cart-item"
+                 th:each="item : ${cartItems}"
+                 th:data-cart-id="${item.get('cartId')}"
+                 th:data-product-id="${item.get('productId')}"
+                 th:data-option-id="${item.get('optionId') != null ? item.get('optionId') : ''}"
+                 th:data-price="${item.get('price')}"
+                 th:data-additional-price="${item.get('additionalPrice') != null ? item.get('additionalPrice') : 0}"
+                 th:data-discount-rate="${item.get('discountRate')}"
+                 th:data-delivery-fee="${item.get('deliveryFee')}">
+
+                <label class="checkbox-label">
+                    <input class="item-checkbox" type="checkbox">
+                </label>
+
+                <img class="image"
+                     th:src="${item.get('imageUrl') != null ? item.get('imageUrl') : '/shop/assets/images/product.png'}"
+                     alt="">
+
+                <div class="item-info">
+                    <div class="product">
+                        <span class="brand" th:text="'[' + ${item.get('brand')} + ']'">[레토]</span>
+                        <span class="product-name" th:text="${item.get('productName')}">강아지 장난감</span>
+                    </div>
+
+                    <div class="ship" th:text="${item.get('deliveryFee') == 0 ? '무료배송' : item.get('deliveryFee') + '원'}">무료배송</div>
+
+                    <div class="option-wrapper" th:if="${item.get('optionName') != null}">
+                        <span class="title">옵션:</span>
+                        <span class="option" th:text="${item.get('optionName')}">노란색</span>
+                    </div>
+
+                    <div class="change-wrapper">
+                        <label class="quantity-control">
+                            <button class="quantity-btn minus" type="button">-</button>
+                            <input class="quantity-input" type="text" th:value="${item.get('quantity')}">
+                            <button class="quantity-btn plus" type="button">+</button>
+                        </label>
+                        <button class="option-change" type="button"
+                                th:if="${item.get('optionName') != null}">옵션변경</button>
+                        <div class="single-price" th:text="${#numbers.formatInteger((item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100, 0, 'COMMA') + '원'}"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

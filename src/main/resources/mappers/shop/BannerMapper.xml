@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.shop.BannerMapper">
+    <select id="selectBannersByDeviceType" resultType="dev.dhkim.petlog.entities.shop.BannerEntity">
+        SELECT
+            id,
+            image_url AS imageUrl,
+            target_id AS targetId,
+            target_type AS targetType,
+            brand_name AS brandName,
+            sort_order AS sortOrder,
+            device_type AS deviceType
+        FROM `petlog`.banner
+        WHERE device_type = #{deviceType}
+        ORDER BY sort_order ASC
+    </select>
+</mapper>

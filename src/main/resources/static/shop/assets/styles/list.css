@@ -110,16 +110,32 @@
           object-fit: cover;
           border-radius: 0.2rem;
           background-color: #89CC96; }
+        #list > .product > .product > .item > .brand {
+          padding: 0.4rem 0 0.3rem 0;
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #565656; }
         #list > .product > .product > .item > .name {
-          padding: 0.4rem 0;
-          font-size: 0.9rem;
+          padding: 0 0 0.3rem 0;
+          font-size: 1rem;
           color: #565656; }
         #list > .product > .product > .item > .discount {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          gap: 0.3rem;
+          justify-content: center;
           font-size: 0.8rem;
           padding-bottom: 0.2rem;
           text-decoration: line-through;
           font-weight: 600;
           color: #949494; }
+          #list > .product > .product > .item > .discount > * {
+            flex-grow: 0;
+            flex-shrink: 0; }
+          #list > .product > .product > .item > .discount > .-flex-stretch {
+            flex-grow: 1;
+            flex-shrink: 1; }
         #list > .product > .product > .item > .price {
           font-size: 1.1rem;
           font-weight: 700;

@@ -646,19 +646,21 @@ ol, ul {
           width: 0;
           height: 0.15rem;
           background-color: #38A34C;
-          transition: width 0.2s ease; }
+          transition: none; }
         #category > .menu > .main > .list > .item > input[type="radio"] {
           display: none; }
         #category > .menu > .main > .list > .item:hover {
           font-weight: 700;
           color: #565656; }
           #category > .menu > .main > .list > .item:hover::after {
-            width: 100%; }
+            width: 100%;
+            transition: width 0.2s ease; }
         #category > .menu > .main > .list > .item:has(input[type="radio"]:checked) {
           font-weight: 700;
           color: #565656; }
           #category > .menu > .main > .list > .item:has(input[type="radio"]:checked)::after {
-            width: 100%; }
+            width: 100%;
+            transition: none; }
       #category > .menu > .main > .list > .menu-item-wrapper {
         position: relative; }
         #category > .menu > .main > .list > .menu-item-wrapper > .item {
@@ -676,19 +678,21 @@ ol, ul {
             width: 0;
             height: 0.15rem;
             background-color: #38A34C;
-            transition: width 0.2s ease; }
+            transition: none; }
           #category > .menu > .main > .list > .menu-item-wrapper > .item > input[type="radio"] {
             display: none; }
           #category > .menu > .main > .list > .menu-item-wrapper > .item:hover {
             font-weight: 700;
             color: #565656; }
             #category > .menu > .main > .list > .menu-item-wrapper > .item:hover::after {
-              width: 100%; }
+              width: 100%;
+              transition: width 0.2s ease; }
           #category > .menu > .main > .list > .menu-item-wrapper > .item:has(input[type="radio"]:checked) {
             font-weight: 700;
             color: #565656; }
             #category > .menu > .main > .list > .menu-item-wrapper > .item:has(input[type="radio"]:checked)::after {
-              width: 100%; }
+              width: 100%;
+              transition: none; }
         #category > .menu > .main > .list > .menu-item-wrapper > .submenu {
           align-items: center;
           display: flex;
@@ -697,10 +701,8 @@ ol, ul {
           justify-content: center;
           display: none;
           position: absolute;
+          width: max-content;
           z-index: 999;
-          width: 24rem;
-          height: 3rem;
-          background-color: #FFFFFF;
           top: calc(100% + 0.6rem);
           left: 0; }
           #category > .menu > .main > .list > .menu-item-wrapper > .submenu > * {
@@ -714,9 +716,11 @@ ol, ul {
             display: flex;
             flex-direction: row;
             gap: 1rem;
-            justify-content: center;
-            padding: 1rem 3rem;
-            width: 100%; }
+            justify-content: flex-start;
+            padding: 1rem 0.5rem;
+            width: 100%;
+            background-color: #FFFFFF;
+            white-space: nowrap; }
             #category > .menu > .main > .list > .menu-item-wrapper > .submenu > .list > * {
               flex-grow: 0;
               flex-shrink: 0; }

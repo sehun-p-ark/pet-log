@@ -4,7 +4,7 @@
   > .container {
     @include flex(column, center, center, 1rem);
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
 
     > .overview {
@@ -31,10 +31,12 @@
         > .img-container {
           overflow: hidden;
           border-radius: 0.5rem;
+          border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
           width: clamp(3rem, 5vw, 5rem);
           aspect-ratio: 1;
 
-          &:hover {
+          &:hover,
+          &.active{
             border: 0.1rem solid $global-green-text-color;
           }
 
@@ -57,6 +59,8 @@
         min-width: 0;
         aspect-ratio: 1;
         overflow: hidden;
+        border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+        border-radius: 0.25rem;
 
         @media (max-width: 1000px) {
           order: 1;
@@ -67,7 +71,6 @@
           width: 100%;
           height: 100%;
           object-fit: cover;
-          border-radius: 0.5rem;
           display: block;
         }
       }
@@ -150,12 +153,18 @@
               flex-shrink: 0;
 
               > .star {
-                width: 1.3rem;
+                font-size: 1.3rem;
                 flex-shrink: 0;
-                fill: #ddd;
+                color: darken($global-gray-background-color, 10%);
 
                 &.filled {
-                  fill: #ffd700;
+                  color: $global-green-background-color;
+                }
+
+                &.half {
+                  background: linear-gradient(to right, $global-green-background-color 50%, darken($global-gray-background-color, 10%) 50%);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
                 }
               }
             }
@@ -420,12 +429,18 @@
           flex-shrink: 0;
 
           > .star {
-            width: 1.3rem;
+            font-size: 1.3rem;
             flex-shrink: 0;
-            fill: #ddd;
+            color: darken($global-gray-background-color, 10%);
 
             &.filled {
-              fill: #ffd700;
+              color: $global-green-background-color;
+            }
+
+            &.half {
+              background: linear-gradient(to right, $global-green-background-color 50%, darken($global-gray-background-color, 10%) 50%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
             }
           }
         }
@@ -581,14 +596,361 @@
         position: relative;
         margin-bottom: 3rem;
         width: 100%;
-        padding: 1rem max(1rem, calc((100vw - 1100px) / 2));
+        padding: 1rem max(1rem, calc((100vw - 900px) / 2));
         display: none;
+
+        > .inner{
+          @include flex(column, center, center, 1rem);
+          width: 100%;
+          background-color: #ffffff;
+          padding: 1rem 2rem;
+
+          > .top{
+            @include flex(row, center, space-between);
+            width: 100%;
+
+            > .total-count{
+              @include flex(row, center, center, 0.5rem);
+
+              > .count-text{
+                font-weight: 600;
+              }
+
+              > .total-value{
+                font-weight: 600;
+                color: $global-green-text-color;
+              }
+            }
+
+            > .review-btn{
+              > .button{
+                font-weight: 600;
+                color: $global-green-text-color;
+                cursor: pointer;
+              }
+            }
+          }
+
+          > .overview{
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            background-color: $global-gray-background-color;
+            width: 100%;
+            padding: 1rem;
+
+            > .rating-summary {
+              @include flex(row, center, center, 0.5rem);
+
+              > .stars {
+                @include flex(row, center, center);
+                font-size: 1.5rem;
+
+                > span {
+                  color: darken($global-gray-background-color, 10%);
+
+                  &.filled {
+                    color: $global-green-background-color;
+                  }
+
+                  &.half {
+                    background: linear-gradient(90deg, $global-green-background-color 50%, darken($global-gray-background-color, 10%) 50%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                  }
+                }
+              }
+
+              > .summary-score {
+                font-weight: 700;
+                font-size: 1.5rem;
+              }
+            }
+
+            > .detail{
+              @include flex(column, center, center, 0.4rem);
+              flex: 1;
+              padding: 0 3rem;
+
+              > .rating-item{
+                @include flex(row, center, flex-start);
+                width: 100%;
+
+                > .num{
+                  font-size: 0.7rem;
+                  color: $global-gray-right-text-color;
+                  width: 2rem;
+                  flex-shrink: 0;
+                  text-align: right;
+                  margin-right: 0.5rem;
+                }
+
+                > .bar {
+                  flex: 1;
+                  height: 0.3rem;
+                  background-color: darken($global-gray-background-color, 8%);
+                  border-radius: 1rem;
+                  overflow: hidden;
+
+                  > .fill {
+                    display: block;
+                    height: 100%;
+                    background-color: lighten($global-gray-right-text-color, 30%);
+                    border-radius: 1rem;
+
+                    &.best {
+                      background-color: $global-green-background-color;
+                    }
+                  }
+                }
+
+                > .count {
+                  font-size: 0.7rem;
+                  width: 3.5rem;
+                  flex-shrink: 0;
+                  margin-left: 0.5rem;
+                }
+
+                &:has(.fill.best) > .num,
+                &:has(.fill.best) > .count{
+                  color: $global-green-text-color;
+                  font-weight: 700;
+                }
+              }
+            }
+          }
+
+          > .filter {
+            @include flex(row, center, space-between);
+            width: 100%;
+            border-top: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+            border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+            padding: 0.7rem 0;
+
+            > .text-filter {
+              @include flex(row, center, center, 0.5rem);
+
+              > .best-filter,
+              > .new-filter{
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: $global-gray-right-text-color;
+                cursor: pointer;
+
+                &:hover{
+                  color: $global-green-text-color;
+                }
+
+                &.active {
+                  color: $global-green-text-color;
+                }
+              }
+            }
+
+            > .select-filter {
+              @include flex(row, center, center, 0.5rem);
+              position: relative;
+
+              > .star-filter{
+                > .filter-btn {
+                  padding: 0.3rem 0.6rem;
+                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+                  border-radius: 0.25rem;
+                  font-size: 0.85rem;
+                  cursor: pointer;
+                }
+
+                > .dropdown {
+                  position: absolute;
+                  top: calc(100% + 0.5rem);
+                  right: 0;
+                  width: 13rem;
+                  padding: 0.5rem;
+                  background: #ffffff;
+                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+                  border-radius: 0.25rem;
+                  display: none;
+                  flex-direction: column;
+                  gap: 0.2rem;
+                  z-index: 10;
+
+                  &.active {
+                    display: flex;
+                  }
+
+                  > .option {
+                    @include flex(row, center, flex-start, 0.6rem);
+                    padding: 0.3rem 0.4rem;
+                    border-radius: 0.4rem;
+                    cursor: pointer;
+
+                    &:hover {
+                      background-color: $global-gray-background-color;
+                    }
+
+                    > input {
+                      width: 0.9rem;
+                      height: 0.9rem;
+                    }
+
+                    > .stars {
+                      color: $global-green-background-color;
+                      letter-spacing: 0.1rem;
+                      font-size: 0.9rem;
+                    }
+
+                    > .count {
+                      font-size: 0.7rem;
+                      color: $global-gray-right-text-color;
+                    }
+                  }
+                }
+              }
+
+              > .option-filter{
+                > .filter-btn {
+                  padding: 0.3rem 0.6rem;
+                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+                  border-radius: 0.25rem;
+                  font-size: 0.85rem;
+                  cursor: pointer;
+                  background-color: #fff;
+                }
+
+                > .dropdown {
+                  position: absolute;
+                  top: calc(100% + 0.5rem);
+                  right: 0;
+                  width: 13rem;
+                  padding: 0.5rem;
+                  background: #ffffff;
+                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+                  border-radius: 0.25rem;
+                  display: none;
+                  flex-direction: column;
+                  gap: 0.2rem;
+                  z-index: 10;
+
+                  &.active {
+                    display: flex;
+                  }
+
+                  > .option {
+                    @include flex(row, center, flex-start, 0.6rem);
+                    padding: 0.3rem 0.4rem;
+                    border-radius: 0.4rem;
+                    cursor: pointer;
+
+                    &:hover {
+                      background-color: $global-gray-background-color;
+                    }
+
+                    > input {
+                      width: 0.9rem;
+                      height: 0.9rem;
+                    }
+
+                    > .stars {
+                      color: $global-green-background-color;
+                      letter-spacing: 0.1rem;
+                      font-size: 0.9rem;
+                    }
+
+                    > .count {
+                      font-size: 0.7rem;
+                      color: $global-gray-right-text-color;
+                    }
+
+                    > .option-name {
+                      font-size: 0.85rem;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          > .review-item {
+            @include flex(column, flex-start, center, 0.5rem);
+            width: 100%;
+            border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+            padding-bottom: 1rem;
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            > .profile{
+              @include flex(row, center, center, 0.5rem);
+
+              > .img{
+                background-color: $global-gray-background-color;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 99rem;
+                border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+              }
+
+              > .info{
+                @include flex(column, flex-start, center, 0.2rem);
+
+                > .nickname{
+                  font-size: 0.8rem;
+                }
+
+                > .rating{
+                  @include flex(row, flex-start, center, 0.2rem);
+                  font-size: 0.8rem;
+
+                  > .score{
+                    color: $global-green-background-color;
+                  }
+
+                  > .date{
+                    color: lighten($global-gray-right-text-color, 20%);
+                  }
+                }
+              }
+            }
+
+            > .option{
+              font-size: 0.8rem;
+              border-left: 0.15rem solid lighten($global-gray-text-color, 55%);
+              padding-left: 0.3rem;
+              color: lighten($global-gray-text-color, 10%);
+            }
+
+            > .review-images {
+              @include flex(row, center, flex-start, 0.5rem);
+              flex-wrap: wrap;
+
+              > .review-img {
+                width: 5rem;
+                height: 5rem;
+                border-radius: 0.25rem;
+                object-fit: cover;
+              }
+            }
+
+            > .review-text{
+              font-size: 0.9rem;
+              font-weight: 400;
+              color: lighten($global-gray-text-color, 10%);
+            }
+          }
+
+          > .empty{
+            padding: 3rem 0;
+            color: lighten($global-gray-text-color, 10%);
+          }
+        }
       }
     }
   }
 }
 
 .toast {
+  @include flex(column, center, center);
   position: fixed;
   bottom: 2rem;
   left: 50%;
@@ -605,6 +967,20 @@
   &.show {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
+  }
+
+  .toast-link {
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+
+    &:hover {
+      color: lighten(#4ade80, 10%);
+    }
   }
 }
 

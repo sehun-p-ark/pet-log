@@ -108,60 +108,6 @@
         }
       }
 
-      > .email-wrapper{
-        @include flex(row, flex-start, flex-start);
-        width: 100%;
-        padding-top: 0.7rem;
-
-        > .title{
-          font-size: 1rem;
-          color: $global-gray-text-color;
-          padding-top: 0.8rem;
-        }
-
-        > .field{
-          @include flex(row, flex-start, center, 0.5rem);
-
-          > .front-email{
-            background-color: #ffffff;
-            border: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
-            padding: 0.5rem 0.9rem;
-            border-radius: 0.35rem;
-            width: 15rem;
-            height: 2.5rem;
-          }
-
-          > .at{
-            display: flex;
-            align-items: center;
-            height: 2.4rem;
-          }
-
-          > .back-wrapper{
-            @include flex(column, center, flex-start, 0.5rem);
-
-            > .direct{
-              background-color: #ffffff;
-              border: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
-              padding: 0.5rem 0.9rem;
-              border-radius: 0.35rem;
-              width: 15rem;
-              height: 2.5rem;
-              display: none;
-            }
-
-            > .back-email{
-              background-color: #ffffff;
-              border: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
-              padding: 0.5rem 0.9rem;
-              border-radius: 0.35rem;
-              width: 15rem;
-              height: 2.5rem;
-            }
-          }
-        }
-      }
-
       > .phone-wrapper{
         @include flex(row, center, flex-start);
         width: 100%;
@@ -384,21 +330,25 @@
         width: 100%;
       }
 
-      > .product-wrapper{
-        @include flex(row, flex-start, center, 0.5rem);
+      > .product-wrapper {
+        @include flex(row, flex-start, flex-start, 0.5rem);
         padding-top: 1rem;
+        width: 100%;
 
-        > .image{
+        > .image {
           width: 5rem;
+          flex-shrink: 0;
           border-radius: 0.2rem;
         }
 
-        > .product-info{
-          @include flex(column, flex-start, center, 0.3rem);
+        > .product-info {
+          @include flex(column, flex-start, flex-start, 0.3rem);
+          min-width: 0;
+          width: 100%;
 
-          > .product-name{
-            @include flex(row, center, center, 0.3rem);
+          > .product-name {
             font-size: 1rem;
+            word-break: break-all;
           }
 
           > .option{
@@ -550,6 +500,16 @@
             font-size: 1rem;
             font-weight: 500;
           }
+
+          &:hover{
+            background-color: lighten($global-green-text-color, 55%);
+            border: 0.0625rem solid $global-green-text-color;
+          }
+
+          &.selected{
+            background-color: lighten($global-green-text-color, 50%);
+            border: 0.0625rem solid $global-green-text-color;
+          }
         }
       }
     }
@@ -562,10 +522,6 @@
     top: 1rem;
     height: fit-content;
     align-self: flex-start;
-    
-    @media (max-width: 900px) {
-      display: none;
-    }
 
     > .summary{
       @include flex(column, center, center, 1rem);
@@ -609,6 +565,55 @@
       cursor: pointer;
     }
   }
+
+  @media (max-width: 930px) {
+    @include flex(column, flex-start, flex-start, 0);
+    height: auto;
+    min-height: auto;
+    padding: 1rem 1rem 5rem 1rem;
+    width: 100%;
+
+
+    > .summary-wrapper{
+      position: static;
+      width: 100%;
+
+      > .summary{
+        background-color: transparent;
+
+        > .price.all,
+        > .price.ship-price,
+        > .price.discount-coupon,
+        > .price.discount-point{
+          display: none;
+        }
+
+        > .price.payment-price {
+          @include flex(row, center, space-between);
+          position: fixed;
+          background-color: #ffffff;
+          left: 0;
+          right: 0;
+          bottom: 3.1rem;
+          width: 100%;
+          padding: 1rem;
+          border-top: 0.0625rem solid #E0E0E0;
+          border-radius: 0;
+          z-index: 99;
+        }
+      }
+
+      > .payment{
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        border-radius: 0;
+        z-index: 99;
+      }
+    }
+  }
 }
 
 //주소 변경 모달
@@ -632,7 +637,7 @@
     background-color: #ffffff;
     border-radius: 0.35rem;
     width: 100%;
-    max-width: 600px;
+    max-width: 450px;
     max-height: 80vh;
     @include flex(column, flex-start, stretch);
 
@@ -811,6 +816,41 @@
           background-color: darken($global-green-background-color, 5%);
         }
       }
+    }
+  }
+}
+
+.toast {
+  @include flex(column, center, center);
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+
+  &.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .toast-link {
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+
+    &:hover {
+      color: lighten(#4ade80, 10%);
     }
   }
 }
