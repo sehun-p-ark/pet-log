@@ -78,6 +78,37 @@ document.addEventListener("DOMContentLoaded", () => {
 // 이벤트 중복 방지
     listSection?.removeEventListener("click", handleDeleteClick);
     listSection?.addEventListener("click", handleDeleteClick);
+    /* =========================
+   5. 문의 작성 검증
+========================= */
+
+    const form = document.getElementById("inquiryForm");
+    const titleInput = document.getElementById("inquiryTitle");
+    const contentInput = document.getElementById("inquiryContent");
+
+    form?.addEventListener("submit", (e) => {
+
+        const title = titleInput?.value.trim() || "";
+        const content = contentInput?.value.trim() || "";
+
+        // 제목 검사
+        if (title.length < 5 || title.length > 100) {
+            alert("제목은 5자 이상 100자 이하로 입력해주세요.");
+            e.preventDefault();
+            titleInput?.focus();
+            return;
+        }
+
+        // 내용 검사
+        if (content.length < 10 || content.length > 2000) {
+            alert("내용은 10자 이상 2000자 이하로 입력해주세요.");
+            e.preventDefault();
+            contentInput?.focus();
+            return;
+        }
+    });
 
 
 });
+
+

@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ==================== 친구 클릭 ====================
-    if (sessionUser && friendContent && container) {
+    if (friendContent && container) {
         const friendList = friendContent.querySelector('.friend-list');
 
         friendList.addEventListener('click', (e) => {
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const name = item.querySelector('.nickname')?.textContent || '이름 없음';
-            const species = item.querySelector('.caption')?.textContent || '종 없음';
+            const species = item.querySelector('.species')?.textContent || '종 없음';
             const image = item.querySelector('img')?.src || '';
             const birthDate = item.dataset.birth || '';
             const gender = item.dataset.gender || '';

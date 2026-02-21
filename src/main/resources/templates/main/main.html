@@ -9,10 +9,8 @@
 
     <script defer src="/main/assets/scripts/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.9.0/proj4.js"></script>
-<!--    <script th:inline="javascript">-->
-<!--        window.IS_LOGGED_IN = [[${sessionUser != null}]];-->
-<!--    </script>-->
-    <script src="/main/assets/scripts/map.js"></script>
+
+    <script defer src="/main/assets/scripts/map.js"></script>
 
     <script src="/assets/scripts/fragment.js"></script>
     <link rel="stylesheet" href="/assets/styles/common.css">
@@ -72,7 +70,7 @@
                 <!-- 친구 리스트 + 안내 메시지를 하나의 wrapper로 묶음 -->
                 <div class="friend-tab-content">
                     <!-- 친구 리스트 영역 -->
-                    <ul class="main friend-list" th:if="${sessionUser != null}">
+                    <ul id="friendList" class="main friend-list" th:if="${sessionUser != null}">
                         <li class="item" th:each="pet : ${nearbyFriendsPets}">
                             <div class="item-wrapper"
                                  th:attr=" data-user-id=${pet.userId},data-pet-id=${pet.petId},data-birth=${pet.birthDate}, data-gender=${pet.gender}">

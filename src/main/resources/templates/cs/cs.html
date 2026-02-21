@@ -113,15 +113,15 @@
             <h3>1:1 문의 작성</h3>
             <button class="modal-close" id="modalCloseBtn">&times;</button>
         </div>
-        <form class="modal-body" method="post" action="/cs/inquiry/write">
+        <form  id="inquiryForm" class="modal-body" method="post" action="/cs/inquiry/write">
             <div class="form-group">
                 <label for="inquiryTitle">제목</label>
-                <input type="text" id="inquiryTitle" name="title" required />
+                <input type="text" id="inquiryTitle" name="title" minlength="5" maxlength="100" required />
             </div>
 
             <div class="form-group">
                 <label for="inquiryContent">내용</label>
-                <textarea id="inquiryContent" name="content" rows="6" required></textarea>
+                <textarea id="inquiryContent" name="content" minlength="5" maxlength="2000" rows="6" required></textarea>
             </div>
 
             <div class="modal-footer">

@@ -13,7 +13,7 @@ import java.util.Map;
 public class ReviewService {
     private final ReviewMapper reviewMapper;
 
-    public Map<String, Object> getReviewsByProductId(Integer productId, Integer userId) {
+    public Map<String, Object> getReviewsByProductId(Integer productId) {
         List<Map<String, Object>> reviews = reviewMapper.selectReviewsByProductId(productId);
         reviews.forEach(review -> {
             List<String> images = reviewMapper.selectReviewImages(((Number) review.get("id")).intValue());
@@ -22,10 +22,7 @@ public class ReviewService {
 
         boolean isPurchased = false;
         boolean isAlreadyReviewed = false;
-        if (userId != null) {
-            isPurchased = reviewMapper.checkPurchased(userId, productId);
-            isAlreadyReviewed = reviewMapper.checkAlreadyReviewed(userId, productId);
-        }
+
 
         Double averageRating = reviewMapper.selectAverageRating(productId);
 

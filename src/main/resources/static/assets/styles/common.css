@@ -557,7 +557,6 @@ textarea[data-object=input][data-resize=both] {
 #topNavigator > .nav-wrapper > .user > .friend-wrapper > .view > .buttons {
   width: 100%;
   padding: 1.2rem 1.2rem;
-  pointer-events: auto;
 }
 #topNavigator > .nav-wrapper > .user > .friend-wrapper > .view > .buttons > button {
   flex: 1;
@@ -584,6 +583,16 @@ body {
   flex-direction: column;
   gap: 0;
   justify-content: flex-start;
+}
+body > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+body > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+body {
   min-height: 100%;
   background-color: #F0F8F3;
   color: #000000;
@@ -825,7 +834,7 @@ ol, ul {
   width: 0;
   height: 0.15rem;
   background-color: #38A34C;
-  transition: width 0.2s ease;
+  transition: none;
 }
 #category > .menu > .main > .list > .item > input[type=radio] {
   display: none;
@@ -836,6 +845,7 @@ ol, ul {
 }
 #category > .menu > .main > .list > .item:hover::after {
   width: 100%;
+  transition: width 0.2s ease;
 }
 #category > .menu > .main > .list > .item:has(input[type=radio]:checked) {
   font-weight: 700;
@@ -843,6 +853,7 @@ ol, ul {
 }
 #category > .menu > .main > .list > .item:has(input[type=radio]:checked)::after {
   width: 100%;
+  transition: none;
 }
 #category > .menu > .main > .list > .menu-item-wrapper {
   position: relative;
@@ -863,7 +874,7 @@ ol, ul {
   width: 0;
   height: 0.15rem;
   background-color: #38A34C;
-  transition: width 0.2s ease;
+  transition: none;
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .item > input[type=radio] {
   display: none;
@@ -874,6 +885,7 @@ ol, ul {
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .item:hover::after {
   width: 100%;
+  transition: width 0.2s ease;
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .item:has(input[type=radio]:checked) {
   font-weight: 700;
@@ -881,6 +893,7 @@ ol, ul {
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .item:has(input[type=radio]:checked)::after {
   width: 100%;
+  transition: none;
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .submenu {
   align-items: center;
@@ -900,10 +913,8 @@ ol, ul {
 #category > .menu > .main > .list > .menu-item-wrapper > .submenu {
   display: none;
   position: absolute;
+  width: max-content;
   z-index: 999;
-  width: 24rem;
-  height: 3rem;
-  background-color: #FFFFFF;
   top: calc(100% + 0.6rem);
   left: 0;
 }
@@ -912,7 +923,7 @@ ol, ul {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .submenu > .list > * {
   flex-grow: 0;
@@ -923,8 +934,10 @@ ol, ul {
   flex-shrink: 1;
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .submenu > .list {
-  padding: 1rem 3rem;
+  padding: 1rem 0.5rem;
   width: 100%;
+  background-color: #FFFFFF;
+  white-space: nowrap;
 }
 #category > .menu > .main > .list > .menu-item-wrapper > .submenu > .list > .item {
   font-size: 1rem;

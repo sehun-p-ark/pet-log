@@ -20,17 +20,27 @@ public class FriendService {
         if (userId == null) return List.of();
         return friendMapper.selectFriendsByUserId(userId);
     }
-
     /** 내 위치 기준 1.5km 반경 친구 조회 */
-    public List<PetDto> getNearbyFriends(Integer userId, double myLat, double myLng) {
+    public List<PetDto> getNearbyFriends(
+            Integer userId,
+            double myLat,
+            double myLng
+    ) {
         if (userId == null) return List.of();
 
-        // 다른 회원들의 lat/lng 없으면 채움
+        if (myLat == 0.0 || myLng == 0.0) return List.of();
+
+        double radiusKm = 1.5;  // 👈 여기서 고정
+
         ensureAllOtherUsersHaveLatLng(userId);
 
-        return friendMapper.selectNearbyFriends(userId, myLat, myLng);
+        return friendMapper.selectNearbyFriends(
+                userId,
+                myLat,
+                myLng,
+                radiusKm
+        );
     }
-
     /** 내 기본 주소 조회 후 위도/경도 없으면 API로 채움 */
     public AddressEntity getOrCreateAddressWithLatLng(Integer userId) {
         if (userId == null) return null;

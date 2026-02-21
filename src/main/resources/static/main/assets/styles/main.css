@@ -349,6 +349,9 @@
   background-color: #f0f6ff;
   border-left: 0.8rem solid #3b82f6;
 }
+#main > .content-wrapper .tab-list-container > .list .friend-list {
+  display: block;
+}
 #main > .content-wrapper .tab-list-container > .list .friend-list .empty {
   padding: 3rem 1rem;
   text-align: center;

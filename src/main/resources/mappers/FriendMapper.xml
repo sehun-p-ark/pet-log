@@ -63,8 +63,7 @@
     </select>
 
     <select id="selectNearbyFriends"
-            resultType="dev.dhkim.petlog.dto.user.PetDto"
-            parameterType="map">
+            resultType="dev.dhkim.petlog.dto.user.PetDto">
 
         SELECT
         p.pet_id AS petId,
@@ -78,36 +77,45 @@
         a.lat AS lat,
         a.lng AS lng,
 
-        --  여기 추가
         CASE
         WHEN f.id IS NOT NULL THEN true
         ELSE false
         END AS isFollowing,
 
-        (6371 * acos(
+        (
+        6371 * acos(
+        LEAST(1.0,
         cos(radians(#{lat})) * cos(radians(a.lat)) *
         cos(radians(a.lng) - radians(#{lng})) +
         sin(radians(#{lat})) * sin(radians(a.lat))
-        )) AS distance
+        )
+        )
+        ) AS distanceKm
 
-        FROM `petlog`.`pets` p
-
-        JOIN `petlog`.`address` a
+        FROM petlog.pets p
+        JOIN petlog.address a
         ON p.user_id = a.user_id
 
-        --  여기 추가
-        LEFT JOIN `petlog`.`follows` f
+        LEFT JOIN petlog.follows f
         ON f.following_user_id = #{userId}
         AND f.followed_user_id = p.user_id
 
         WHERE p.user_id != #{userId}
+        AND a.lat IS NOT NULL
+        AND a.lng IS NOT NULL
+        AND (
+        6371 * acos(
+        LEAST(1.0,
+        cos(radians(#{lat})) * cos(radians(a.lat)) *
+        cos(radians(a.lng) - radians(#{lng})) +
+        sin(radians(#{lat})) * sin(radians(a.lat))
+        )
+        )
+        ) &lt;=#{radiusKm}
 
-        HAVING distance &lt;= 1.5
-
-        ORDER BY distance ASC
+        ORDER BY distanceKm ASC
 
     </select>
-
     <select id="selectAllOtherUsersAddresses" resultType="dev.dhkim.petlog.entities.user.AddressEntity" parameterType="int">
         SELECT
             address_id AS addressId,

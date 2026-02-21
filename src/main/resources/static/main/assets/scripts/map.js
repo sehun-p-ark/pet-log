@@ -811,11 +811,11 @@ window.addEventListener('DOMContentLoaded', () => {
             const reserveBtn = e.target.closest('.reserve-btn');
             if (reserveBtn) {
 
-                const isLoggedIn = /*[[${sessionUser != null}]]*/ false; // 서버에서 세션 전달
+/*                const isLoggedIn = /!*[[${sessionUser != null}]]*!/ false; // 서버에서 세션 전달
                 if (!isLoggedIn) {
                     alert('로그인 후 예약할 수 있습니다.');
                     return; // 로그인 안 되면 모달 안 열기
-                }
+                }*/
 
                 generateReserveTime();
                 modal.classList.add('open');
@@ -880,7 +880,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         } catch {
                             data = await res.text();
                         }
-                        alert('예약 실패: ' + (data || '알 수 없는 오류'));
+                        alert('예약 실패: 로그인을 해주세요');
                     }
                 } catch (err) {
                     console.error(err);
@@ -897,17 +897,43 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function renderFriendList(friends) {
 
-    const listEl = document.querySelector('.friend-list');
-    if (!listEl) return;
+    console.log("=== renderFriendList 시작 ===");
+    console.log("friends 전체:", friends);
+    console.log("Array인가?", Array.isArray(friends));
+    console.log("길이:", friends?.length);
 
-    listEl.innerHTML = '';
+    const listEl = document.getElementById('friendList');
+    console.log("listEl:", listEl);
 
-    if (!friends || friends.length === 0) {
-        listEl.innerHTML = `<li class="empty">주변에 친구가 없습니다.</li>`;
+    if (!listEl) {
+        console.error("❌ .friend-list 요소 없음");
         return;
     }
 
-    friends.forEach(friend => {
+    listEl.innerHTML = '';
+
+    // ✅ 데이터가 없을 때
+    if (!friends || !Array.isArray(friends) || friends.length === 0) {
+
+        const emptyLi = document.createElement('li');
+        emptyLi.className = 'empty';
+        emptyLi.textContent = '📍 주변에 친구가 없습니다.';
+
+        listEl.appendChild(emptyLi);
+        return;
+    }
+
+    if (!friends || !Array.isArray(friends)) {
+        console.error("❌ friends가 배열이 아님:", friends);
+        return;
+    }
+
+    friends.forEach((friend, index) => {
+
+        console.log(`--- ${index}번째 friend ---`);
+        console.log("friend 객체:", friend);
+        console.log("distanceKm:", friend.distanceKm);
+        console.log("distanceKm 타입:", typeof friend.distanceKm);
 
         const li = document.createElement('li');
         li.className = 'item';
@@ -916,35 +942,42 @@ function renderFriendList(friends) {
             ? friend.imageUrl
             : '/images/defaultPetImage.png';
 
+        const distanceHtml = friend.distanceKm != null
+            ? `<div class="distance">📍 ${Number(friend.distanceKm).toFixed(1)}km</div>`
+            : `<div class="distance">❌ distance 없음</div>`;
+        const isFollowing = friend.isFollowing === true;
+
+        const buttonClass = isFollowing ? 'button following' : 'button follow';
+        const buttonText = isFollowing ? '팔로잉' : '팔로우';
+
+
         li.innerHTML = `
-    <div class="item-wrapper" 
-         data-pet-id="${friend.petId}"
+            <div class="item-wrapper"
+             data-user-id="${friend.userId ?? ''}"
+         data-pet-id="${friend.petId ?? ''}"
          data-birth="${friend.birthDate ?? ''}"
          data-gender="${friend.gender ?? ''}"
          data-introduction="${friend.introduction ?? ''}">
-        
-        <div class="image">
-            <img src="${imageUrl}" alt="pet image">
-        </div>
+                <div class="image">
+                    <img src="${imageUrl}" alt="pet image">
+                </div>
 
-        <div class="text-wrapper">
-            <div class="nickname">${friend.name}</div>
-            <div class="species">${friend.species ?? ''}</div>
-            ${friend.distanceKm != null
-            ? `<div class="distance">📍 ${friend.distanceKm.toFixed(1)}km</div>`
-            : ''
-        }
-        </div>
+                <div class="text-wrapper">
+                    <div class="nickname">${friend.name}</div>
+                    <div class="species">${friend.species ?? ''}</div>
+                    ${distanceHtml}
+                </div>
+                   <button class="${buttonClass}"
+                    data-user-id="${friend.userId}">
+                ${buttonText}
+            </button>
+            </div>
+        `;
 
-      <button class="button ${friend.isFollowing ? 'following' : 'follow'}"
-            data-user-id="${friend.userId}">
-        ${friend.isFollowing ? '팔로잉' : '팔로우'}
-    </button>
-
-    </div>
-`;
-
+        console.log("생성된 HTML:", li.innerHTML);
 
         listEl.appendChild(li);
     });
+
+    console.log("=== renderFriendList 종료 ===");
 }

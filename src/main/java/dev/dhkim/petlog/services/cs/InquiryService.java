@@ -19,6 +19,22 @@ public class InquiryService {
 
     public void writeInquiry(int userId, InquiryDto dto) {
 
+        if (dto == null) {
+            throw new IllegalArgumentException("문의 데이터가 없습니다.");
+        }
+
+        String title = dto.getTitle();
+        String content = dto.getContent();
+
+        if (title == null || title.trim().length() < 5 || title.length() > 100) {
+            throw new IllegalArgumentException("제목은 5자 이상 100자 이하로 입력해주세요.");
+        }
+
+        if (content == null || content.trim().length() < 10 || content.length() > 2000) {
+            throw new IllegalArgumentException("내용은 10자 이상 2000자 이하로 입력해주세요.");
+        }
+
+
         InquiryEntity inquiry = new InquiryEntity();
 
         inquiry.setUserId(userId);

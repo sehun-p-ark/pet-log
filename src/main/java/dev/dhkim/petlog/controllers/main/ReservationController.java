@@ -20,6 +20,11 @@ public class ReservationController {
             @RequestBody ReservationDto reservation,
             @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
+        System.out.println(sessionUser);
+        System.out.println(sessionUser.getUserId());
+        System.out.println(reservation);
+        System.out.println(reservation.getUserId());
+
         if (sessionUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }

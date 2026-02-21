@@ -47,8 +47,8 @@ public class MainController {
                 double myLat = myAddress.getLat();
                 double myLng = myAddress.getLng();
 
-               /* List<PetDto> nearbyFriends = friendService.getNearbyFriends(sessionUser.getUserId(), myLat, myLng);
-                modelAndView.addObject("nearbyFriendsPets", nearbyFriends); // 여기 이름을 템플릿과 맞춤*/
+//               List<PetDto> nearbyFriends = friendService.getNearbyFriends(sessionUser.getUserId(), myLat, myLng);
+//                modelAndView.addObject("nearbyFriendsPets", nearbyFriends); // 여기 이름을 템플릿과 맞춤*/
 
 
                 System.out.println("[DEBUG] 내 펫 리스트: " + pets.size());
@@ -60,18 +60,18 @@ public class MainController {
         return modelAndView;
     }
 
-    @GetMapping("/api/friends/nearby")
+ /*   @GetMapping("/api/friends/nearby")
     @ResponseBody
     public List<PetDto> getNearbyFriends(
-            @SessionAttribute("sessionUser") SessionUser sessionUser,
+            @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser,
             @RequestParam double lat,
-            @RequestParam double lng
+            @RequestParam double lng,
+            @RequestParam(required = false) Integer testUserId // 테스트용
     ) {
-        return friendService.getNearbyFriends(
-                sessionUser.getUserId(),
-                lat,
-                lng
-        );
-    }
+        Integer userId = (sessionUser != null) ? sessionUser.getUserId() : testUserId;
+        if (userId == null) return List.of(); // userId 없으면 빈 리스트
+
+        return friendService.getNearbyFriends(userId, lat, lng);
+    }*/
 
 }
