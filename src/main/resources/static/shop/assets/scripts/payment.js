@@ -289,8 +289,8 @@ if (pointAllButton) {
     pointAllButton.addEventListener('click', () => {
         if (pointInput) {
             pointInput.value = availablePoint.toLocaleString();
-            // pointDiscount = availablePoint;
-            showPointToast(availablePoint);  // 토스트
+            pointDiscount = availablePoint;
+            showPointToast(availablePoint);
             updatePaymentSummary();
         }
     });
@@ -428,6 +428,51 @@ if (paymentBtn) {
 
         // 주문 ID 생성
         const orderId = 'ORDER_' + new Date().getTime();
+
+        // 주문 정보 세션에 저장
+        const addressPrimary = document.querySelector('.about-address').textContent;
+        const addressSecondary = document.querySelector('.detail-address .detail').value;
+        const deliveryRequest = document.querySelector('.delivery-message .direct')?.value ||
+            document.querySelector('.message-label')?.options[document.querySelector('.message-label')?.selectedIndex]?.textContent || '';
+        const ordererPhoneSelect = document.querySelector('.phone-wrapper .num-select').value;
+        const receiverPhoneSelect = document.querySelector('.phone-num .num-select').value;
+        const userCouponId = couponSelect?.value || null;
+
+        // 주문 상품 목록 수집
+        const items = Array.from(document.querySelectorAll('.product-wrapper')).map(wrapper => ({
+            productId: parseInt(wrapper.dataset.productId),
+            optionId: wrapper.dataset.optionId ? parseInt(wrapper.dataset.optionId) : null,
+            quantity: parseInt(wrapper.dataset.quantity),
+            price: parseInt(wrapper.dataset.price)
+        }));
+
+        const saveRes = await fetch('/shop/payment/prepare', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                ordererName,
+                ordererEmail: '',
+                ordererPhone: ordererPhoneSelect + ordererPhone,
+                receiverName,
+                receiverPhone: receiverPhoneSelect + receiverPhone,
+                postalCode,
+                addressPrimary,
+                addressSecondary,
+                deliveryRequest,
+                paymentMethod: selectedPaymentMethod,
+                couponDiscount,
+                usedPoint: pointDiscount,
+                userCouponId: userCouponId || null,
+                deliveryFee,
+                items
+            })
+        });
+
+        if (!saveRes.ok) {
+            alert('주문 정보 저장에 실패했습니다. 다시 시도해주세요.');
+            return;
+        }
+
         const orderName = '펫로그 상품 주문';
 
         try {

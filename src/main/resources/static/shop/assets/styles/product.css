@@ -6,7 +6,8 @@
   justify-content: center;
   width: 100%;
   min-height: 100%;
-  padding: 1rem max(1rem, calc((100vw - 1200px) / 2)); }
+  padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
+  margin: 5rem 0 2rem 0; }
   #product > .container > * {
     flex-grow: 0;
     flex-shrink: 0; }
@@ -1107,44 +1108,6 @@
       padding: 3rem 0;
       color: #707070; }
 
-.toast {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  justify-content: center;
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
-  opacity: 0;
-  transition: all 0.3s ease;
-  z-index: 1000; }
-  .toast > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .toast > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1; }
-  .toast .toast-link {
-    color: #4ade80;
-    font-weight: 600;
-    font-size: 0.9rem;
-    text-decoration: underline;
-    cursor: pointer;
-    white-space: nowrap;
-    margin-top: 0.5rem; }
-    .toast .toast-link:hover {
-      color: #75e69e; }
-
 @media (min-width: 1001px) {
   .bottom-option {
     display: none; } }
@@ -1341,5 +1304,185 @@
         border-radius: 0.35rem;
         font-size: 1.1rem;
         cursor: pointer; } }
+
+.review-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center; }
+  .review-modal-overlay > * {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  .review-modal-overlay > .-flex-stretch {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .review-modal-overlay > .review-modal {
+    background: #fff;
+    border-radius: 0.75rem;
+    width: min(500px, 90vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    justify-content: flex-start; }
+    .review-modal-overlay > .review-modal > * {
+      flex-grow: 0;
+      flex-shrink: 0; }
+    .review-modal-overlay > .review-modal > .-flex-stretch {
+      flex-grow: 1;
+      flex-shrink: 1; }
+    .review-modal-overlay > .review-modal > .modal-header {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      gap: 0;
+      justify-content: space-between;
+      width: 100%;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 0.0625rem solid #ededed; }
+      .review-modal-overlay > .review-modal > .modal-header > * {
+        flex-grow: 0;
+        flex-shrink: 0; }
+      .review-modal-overlay > .review-modal > .modal-header > .-flex-stretch {
+        flex-grow: 1;
+        flex-shrink: 1; }
+      .review-modal-overlay > .review-modal > .modal-header > .modal-title {
+        font-weight: 700;
+        font-size: 1.1rem; }
+      .review-modal-overlay > .review-modal > .modal-header > .modal-close {
+        font-size: 1.2rem;
+        color: #7A7A7A;
+        cursor: pointer; }
+        .review-modal-overlay > .review-modal > .modal-header > .modal-close:hover {
+          color: #565656; }
+    .review-modal-overlay > .review-modal > .modal-body {
+      align-items: flex-start;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      justify-content: flex-start;
+      width: 100%;
+      padding: 1.5rem; }
+      .review-modal-overlay > .review-modal > .modal-body > * {
+        flex-grow: 0;
+        flex-shrink: 0; }
+      .review-modal-overlay > .review-modal > .modal-body > .-flex-stretch {
+        flex-grow: 1;
+        flex-shrink: 1; }
+      .review-modal-overlay > .review-modal > .modal-body > .rating-select {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        gap: 0.3rem;
+        justify-content: flex-start;
+        width: 100%;
+        font-size: 2.3rem;
+        color: lightgray;
+        cursor: pointer;
+        padding-bottom: 0.5rem; }
+        .review-modal-overlay > .review-modal > .modal-body > .rating-select > * {
+          flex-grow: 0;
+          flex-shrink: 0; }
+        .review-modal-overlay > .review-modal > .modal-body > .rating-select > .-flex-stretch {
+          flex-grow: 1;
+          flex-shrink: 1; }
+        .review-modal-overlay > .review-modal > .modal-body > .rating-select > .star-input {
+          transition: color 0.1s; }
+          .review-modal-overlay > .review-modal > .modal-body > .rating-select > .star-input.active {
+            color: #89CC96; }
+          .review-modal-overlay > .review-modal > .modal-body > .rating-select > .star-input:hover {
+            color: #89CC96; }
+      .review-modal-overlay > .review-modal > .modal-body > .review-content {
+        width: 100%;
+        height: 8rem;
+        border: 0.0625rem solid lightgray;
+        border-radius: 0.25rem;
+        padding: 0.8rem;
+        resize: none;
+        font-size: 0.95rem; }
+        .review-modal-overlay > .review-modal > .modal-body > .review-content:focus {
+          outline: none;
+          border-color: #89CC96; }
+      .review-modal-overlay > .review-modal > .modal-body > .rating-text,
+      .review-modal-overlay > .review-modal > .modal-body > .image-text,
+      .review-modal-overlay > .review-modal > .modal-body > .content-text {
+        font-size: 0.9rem;
+        font-weight: 500; }
+      .review-modal-overlay > .review-modal > .modal-body > .image-upload-label > .upload-btn {
+        padding: 0.5rem 1rem;
+        border: 0.0625rem solid lightgray;
+        border-radius: 0.25rem;
+        font-size: 0.9rem;
+        cursor: pointer;
+        color: #565656; }
+        .review-modal-overlay > .review-modal > .modal-body > .image-upload-label > .upload-btn:hover {
+          background-color: #F9F9F9; }
+      .review-modal-overlay > .review-modal > .modal-body > .preview-images {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding-bottom: 0.5rem; }
+        .review-modal-overlay > .review-modal > .modal-body > .preview-images > * {
+          flex-grow: 0;
+          flex-shrink: 0; }
+        .review-modal-overlay > .review-modal > .modal-body > .preview-images > .-flex-stretch {
+          flex-grow: 1;
+          flex-shrink: 1; }
+        .review-modal-overlay > .review-modal > .modal-body > .preview-images > .preview-img-wrapper {
+          position: relative; }
+          .review-modal-overlay > .review-modal > .modal-body > .preview-images > .preview-img-wrapper > img {
+            width: 5rem;
+            height: 5rem;
+            object-fit: cover;
+            border-radius: 0.4rem;
+            border: 0.0625rem solid #e0e0e0;
+            border-radius: 0.25rem; }
+          .review-modal-overlay > .review-modal > .modal-body > .preview-images > .preview-img-wrapper > .remove-img {
+            position: absolute;
+            top: -0.3rem;
+            right: -0.3rem;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 99rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            font-size: 0.7rem;
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            gap: 0;
+            justify-content: center;
+            cursor: pointer; }
+            .review-modal-overlay > .review-modal > .modal-body > .preview-images > .preview-img-wrapper > .remove-img > * {
+              flex-grow: 0;
+              flex-shrink: 0; }
+            .review-modal-overlay > .review-modal > .modal-body > .preview-images > .preview-img-wrapper > .remove-img > .-flex-stretch {
+              flex-grow: 1;
+              flex-shrink: 1; }
+    .review-modal-overlay > .review-modal > .modal-footer {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-top: 0.0625rem solid #ededed; }
+      .review-modal-overlay > .review-modal > .modal-footer > .submit-review {
+        width: 100%;
+        padding: 0.9rem;
+        background-color: #89CC96;
+        color: white;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer; }
+        .review-modal-overlay > .review-modal > .modal-footer > .submit-review:hover {
+          background-color: #65bd76; }
 
 /*# sourceMappingURL=product.css.map */

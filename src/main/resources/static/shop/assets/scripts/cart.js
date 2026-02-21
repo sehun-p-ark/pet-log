@@ -31,6 +31,50 @@ document.addEventListener('click', async (e) => {
     }
 });
 
+// 장바구니 수량 직접 입력
+document.addEventListener('input', (e) => {
+    if (e.target.classList.contains('quantity-input')) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        const value = parseInt(e.target.value) || 0;
+        if (value > 999) {
+            showToast('개수는 1~999까지 입력 가능합니다.');
+            e.target.value = '999';
+        }
+    }
+});
+
+document.addEventListener('blur', async (e) => {
+    if (e.target.classList.contains('quantity-input')) {
+        const input = e.target;
+        const cartItem = input.closest('.cart-item');
+        const cartId = parseInt(cartItem.dataset.cartId);
+        let value = parseInt(input.value) || 0;
+
+        if (value < 1) {
+            showToast('개수는 1~999까지 입력 가능합니다.');
+            value = 1;
+        }
+
+        input.value = value;
+        await updateQuantityInDB(cartId, value);
+        updateItemPrice(cartItem, value);
+        updateCartSummary();
+    }
+}, true);
+
+document.addEventListener('keydown', (e) => {
+    if (!e.target.classList.contains('quantity-input')) return;
+
+    if (e.key === 'Enter') {
+        e.target.blur();
+        return;
+    }
+
+    if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) {
+        e.preventDefault();
+    }
+});
+
 // DB에 수량 업데이트
 async function updateQuantityInDB(cartId, quantity) {
     try {

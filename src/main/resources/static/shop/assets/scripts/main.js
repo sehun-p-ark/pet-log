@@ -7,16 +7,16 @@ if ($banner) {
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '/shop/banners', true);
 
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                const banners = JSON.parse(xhr.responseText);
-                renderBanners(banners);
-                initBannerSlider();
-            } else {
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            if (xhr.status < 200 || xhr.status >= 400) {
                 console.error('배너 로딩 실패:', xhr.status);
+                return;
             }
+            const banners = JSON.parse(xhr.responseText);
+            renderBanners(banners);
+            initBannerSlider();
         };
-
         xhr.send();
     }
 
@@ -391,20 +391,18 @@ function checkHeartStatus(productId) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', '/shop/heart/' + productId + '/status', true);
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const result = JSON.parse(xhr.responseText);
-            const allBookmarks = document.querySelectorAll('.bookmark');
-
-            allBookmarks.forEach(bookmark => {
-                if (result.isHearted) {
-                    bookmark.src = '/shop/assets/images/heart-filled.png';
-                    bookmark.classList.add('active');
-                }
-            });
-        }
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState !== XMLHttpRequest.DONE) return;
+        if (xhr.status < 200 || xhr.status >= 400) return;
+        const result = JSON.parse(xhr.responseText);
+        const allBookmarks = document.querySelectorAll('.bookmark');
+        allBookmarks.forEach(bookmark => {
+            if (result.isHearted) {
+                bookmark.src = '/shop/assets/images/heart-active.png';
+                bookmark.classList.add('active');
+            }
+        });
     };
-
     xhr.send();
 }
 
@@ -431,38 +429,81 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function toggleHeart(productId, heartElement) {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '/shop/heart/' + productId, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const result = JSON.parse(xhr.responseText);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
-            if (result.success) {
-                console.log('찜 상태:', result.isHearted);
+        if (xhr.status === 400) {
+            showToast('로그인이 필요합니다.', '로그인하기', '/user/login');
+            return;
+        }
 
-                const allBookmarks = document.querySelectorAll('.bookmark');
-                allBookmarks.forEach(bookmark => {
-                    if (result.isHearted) {
-                        bookmark.src = '/shop/assets/images/heart-filled.png';
-                        bookmark.classList.add('active');
-                    } else {
-                        bookmark.src = '/shop/assets/images/heart-default.png';
-                        bookmark.classList.remove('active');
-                    }
-                });
+        if (xhr.status < 200 || xhr.status >= 400) return;
 
-                // 토스트 메시지 추가
+        const result = JSON.parse(xhr.responseText);
+
+        if (result.success) {
+            const allBookmarks = document.querySelectorAll('.bookmark');
+            allBookmarks.forEach(bookmark => {
                 if (result.isHearted) {
-                    showToast('즐겨찾기가 완료 되었습니다.');
+                    bookmark.src = '/shop/assets/images/heart-active.png';
+                    bookmark.classList.add('active');
                 } else {
-                    showToast('즐겨찾기가 취소되었습니다.');
+                    bookmark.src = '/shop/assets/images/heart-default.png';
+                    bookmark.classList.remove('active');
                 }
+            });
+
+            if (result.isHearted) {
+                showToast('즐겨찾기가 완료 되었습니다.');
             } else {
-                alert(result.message);
+                showToast('즐겨찾기가 취소되었습니다.');
             }
+        } else {
+            alert(result.message);
         }
     };
 
+    xhr.open('POST', '/shop/heart/' + productId, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
+}
+
+// 토스트 메세지
+let currentToast = null;
+
+function showToast(message, linkText = null, linkHref = null) {
+    if (currentToast) {
+        currentToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+
+    const msgSpan = document.createElement('span');
+    msgSpan.textContent = message;
+    toast.appendChild(msgSpan);
+
+    if (linkText && linkHref) {
+        const link = document.createElement('a');
+        link.href = linkHref;
+        link.textContent = linkText;
+        link.className = 'toast-link';
+        toast.appendChild(link);
+    }
+
+    document.body.appendChild(toast);
+    currentToast = toast;
+
+    setTimeout(() => toast.classList.add('show'), 10);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+            if (currentToast === toast) {
+                currentToast = null;
+            }
+        }, 300);
+    }, 3000);
 }

@@ -1,0 +1,37 @@
+@import "../../../assets/styles/def";
+body {
+  align-items: center;
+  justify-content: center;
+}
+
+.order-success-info-wrapper,
+.order-fail-info-wrapper {
+  @include flex(column, center, center, 2rem);
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 3rem 4rem;
+  margin-top: 5rem;
+  width: 40rem;
+  height: 40rem;
+
+  > h2 {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+
+  > .a-wrapper{
+    @include flex(row, center, center, 2rem);
+
+    > a {
+      font-size: 1.1rem;
+      color: $global-green-text-color;
+      text-decoration: underline;
+    }
+  }
+
+  @media (max-width: 700px) {
+    width: 100%;
+    height: 100vh;
+    border-radius: 0;
+  }
+}

@@ -71,7 +71,9 @@ public class CartController {
             return Map.of("success", false, "message", "로그인이 필요합니다");
         }
 
-        List<Integer> cartIds = (List<Integer>) request.get("cartIds");
+        List<Integer> cartIds = ((List<?>) request.get("cartIds")).stream()
+                .map(id -> ((Number) id).intValue())
+                .collect(java.util.stream.Collectors.toList());
 
         try {
             cartService.deleteCartItems(cartIds);
@@ -100,8 +102,8 @@ public class CartController {
     @ResponseBody
     public Map<String, Object> updateCartOption(@RequestBody Map<String, Object> request) {
         try {
-            Integer cartId = (Integer) request.get("cartId");
-            Integer optionId = (Integer) request.get("optionId");
+            Integer cartId = ((Number) request.get("cartId")).intValue();
+            Integer optionId = ((Number) request.get("optionId")).intValue();
 
             cartService.updateCartOption(cartId, optionId);
             return Map.of("success", true);
@@ -116,8 +118,8 @@ public class CartController {
     @ResponseBody
     public Map<String, Object> updateCartQuantity(@RequestBody Map<String, Object> request) {
         try {
-            Integer cartId = (Integer) request.get("cartId");
-            Integer quantity = (Integer) request.get("quantity");
+            Integer cartId = ((Number) request.get("cartId")).intValue();
+            Integer quantity = ((Number) request.get("quantity")).intValue();
 
             cartService.updateCartQuantity(cartId, quantity);
             return Map.of("success", true);

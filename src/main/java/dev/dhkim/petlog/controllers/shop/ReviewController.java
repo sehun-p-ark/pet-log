@@ -17,10 +17,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/{id}/reviews")
-    public Map<String, Object> getReviews(
-            @PathVariable Integer id,
-            HttpSession session) {
-        Integer userId = (Integer) session.getAttribute("userId");
-        return reviewService.getReviewsByProductId(id, userId);
+    public Map<String, Object> getReviews(@PathVariable Integer id) {
+        return reviewService.getReviewsByProductId(id, null);
     }
 }

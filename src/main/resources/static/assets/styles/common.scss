@@ -448,3 +448,38 @@ body:has(> .message.visible) > .cover {
   opacity: 0;
   pointer-events: none;
 }
+
+.toast {
+  @include flex(column, center, center);
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+
+  &.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  .toast-link {
+    color: #4ade80;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+
+    &:hover {
+      color: lighten(#4ade80, 10%);
+    }
+  }
+}

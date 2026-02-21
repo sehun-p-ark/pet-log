@@ -62,17 +62,17 @@ public class ShopController {
     // 상품 상세 페이지
     @RequestMapping(value = "product/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     @SuppressWarnings("unchecked")
-    public ModelAndView getProduct(@PathVariable Integer id,
-                                   @SessionAttribute(value ="sessionUser") SessionUser sessionUser, ModelAndView modelAndView) {
-        Integer userId = sessionUser.getUserId();
+    public ModelAndView getProduct(@PathVariable Integer id, ModelAndView modelAndView, HttpSession session) {
 
         ProductEntity product = productService.getProductDetail(id);
         int reviewCount = productMapper.countReviewByProductId(id);
         List<ProductDetailImageEntity> detailImages = productMapper.findDetailImagesByProductId(id);
         List<OptionEntity> options = productMapper.getProductOptions(id);
 
-        Map<String, Object> reviewData = reviewService.getReviewsByProductId(id, userId);
-        List<Map<String, Object>> reviews = (List<Map<String, Object>>) reviewData.get("reviews");
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
+
+        Map<String, Object> reviewData = reviewService.getReviewsByProductId(id, userId);        List<Map<String, Object>> reviews = (List<Map<String, Object>>) reviewData.get("reviews");
         boolean isPurchased = (boolean) reviewData.get("isPurchased");
         boolean isAlreadyReviewed = (boolean) reviewData.get("isAlreadyReviewed");
         Double averageRating = (Double) reviewData.get("averageRating");

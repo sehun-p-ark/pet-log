@@ -2,6 +2,7 @@ package dev.dhkim.petlog.controllers.feed;
 
 import dev.dhkim.petlog.dto.feed.FeedDetailDto;
 import dev.dhkim.petlog.dto.feed.ProfileDto;
+import dev.dhkim.petlog.dto.user.SessionUser;
 import dev.dhkim.petlog.services.feed.FeedProfileService;
 import dev.dhkim.petlog.services.feed.FeedQueryService;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,10 @@ public class FeedPageController {
     // 상세 피드
     @RequestMapping(value="/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getDetail(@PathVariable(value="id") int feedId,
-                            @SessionAttribute(value="userId", required = false) Integer userId,
+                            @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
                             Model model
     ) {
-        FeedDetailDto feed = feedQueryService.getFeedDetail(feedId, userId);
+        FeedDetailDto feed = feedQueryService.getFeedDetail(feedId, sessionUser.getUserId());
         if(feed == null) {
             return "redirect:/feed/explore";
         }

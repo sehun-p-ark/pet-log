@@ -22,7 +22,8 @@ public class ReviewService {
 
         boolean isPurchased = false;
         boolean isAlreadyReviewed = false;
-        if (userId != null) {
+
+        if (userId != null){
             isPurchased = reviewMapper.checkPurchased(userId, productId);
             isAlreadyReviewed = reviewMapper.checkAlreadyReviewed(userId, productId);
         }

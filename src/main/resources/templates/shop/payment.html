@@ -162,7 +162,12 @@
         </div>
         <div class="order-product">
             <div class="title">주문상품</div>
-            <div class="product-wrapper" th:each="item : ${selectedItems}">
+            <div class="product-wrapper"
+                 th:each="item : ${selectedItems}"
+                 th:data-product-id="${item.get('productId')}"
+                 th:data-option-id="${item.get('optionId')}"
+                 th:data-quantity="${item.get('quantity')}"
+                 th:data-price="${(item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100}">
                 <img class="image"
                      th:src="${item.get('imageUrl') != null ? item.get('imageUrl') : '/shop/assets/images/product.png'}"
                      alt="">

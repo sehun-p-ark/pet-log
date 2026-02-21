@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.shop.OrderMapper">
+
+    <insert id="insertOrder" parameterType="map" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `petlog`.`order` (user_id, orderer_name, orderer_email, orderer_phone,
+                             receiver_name, receiver_phone, address_postal, address_primary,
+                             address_secondary, delivery_request, delivery_fee, final_amount,
+                             used_coupon_id, coupon_discount, used_point, payment_method, status)
+        VALUES (#{userId}, #{ordererName}, #{ordererEmail}, #{ordererPhone},
+                #{receiverName}, #{receiverPhone}, #{addressPostal}, #{addressPrimary},
+                #{addressSecondary}, #{deliveryRequest}, #{deliveryFee}, #{finalAmount},
+                #{usedCouponId}, #{couponDiscount}, #{usedPoint}, #{paymentMethod}, #{status})
+    </insert>
+
+    <insert id="insertOrderItem" parameterType="map">
+        INSERT INTO `petlog`.order_item (order_id, product_id, option_id, quantity, price)
+        VALUES (#{orderId}, #{productId}, #{optionId}, #{quantity}, #{price})
+    </insert>
+
+    <insert id="deductPoint">
+        INSERT INTO `petlog`.point (user_id, type, `change`, order_id, description)
+        VALUES (#{userId}, 'USE', -#{amount}, #{orderId}, '포인트 사용')
+    </insert>
+
+    <update id="useCoupon">
+        UPDATE `petlog`.user_coupon SET status = 'USED', used_at = NOW(), order_id = #{orderId}
+        WHERE id = #{userCouponId}
+    </update>
+
+    <insert id="earnPoint">
+        INSERT INTO `petlog`.point (user_id, type, `change`, order_id, description)
+        VALUES (#{userId}, 'EARN', #{amount}, #{orderId}, '구매 적립')
+    </insert>
+
+</mapper>

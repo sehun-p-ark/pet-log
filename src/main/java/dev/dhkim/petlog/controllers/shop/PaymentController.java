@@ -1,17 +1,11 @@
 package dev.dhkim.petlog.controllers.shop;
 
 import dev.dhkim.petlog.dto.user.SessionUser;
-import dev.dhkim.petlog.services.shop.CartService;
-import dev.dhkim.petlog.services.shop.CouponService;
-import dev.dhkim.petlog.services.shop.PointService;
-import dev.dhkim.petlog.services.shop.ProductService;
+import dev.dhkim.petlog.services.shop.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
@@ -29,6 +23,7 @@ public class PaymentController {
     private final CouponService couponService;
     private final ProductService productService;
     private final PointService pointService;
+    private final OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getPayment(
@@ -141,5 +136,44 @@ public class PaymentController {
         modelAndView.setViewName("shop/payment");
 
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/success", method = RequestMethod.GET)
+    public ModelAndView paymentSuccess(
+            @RequestParam String paymentKey,
+            @RequestParam String orderId,
+            @RequestParam Integer amount,
+            @SessionAttribute("sessionUser") SessionUser sessionUser,
+            HttpSession session,
+            ModelAndView mav) {
+
+        Map<String, Object> pendingOrder = (Map<String, Object>) session.getAttribute("pendingOrder");
+        orderService.saveOrder(sessionUser.getUserId(), amount, pendingOrder);
+        session.removeAttribute("pendingOrder");
+
+        mav.setViewName("redirect:/shop/payment/complete");
+        return mav;
+    }
+
+    @RequestMapping(value = "/fail", method = RequestMethod.GET)
+    public ModelAndView paymentFail(ModelAndView mav) {
+        mav.setViewName("shop/order-fail");
+        return mav;
+    }
+
+    @RequestMapping(value = "/complete", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView paymentComplete(ModelAndView mav) {
+        mav.setViewName("shop/order-success");
+        return mav;
+    }
+
+    @RequestMapping(value = "/prepare", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> preparePayment(
+            @RequestBody Map<String, Object> orderInfo,
+            HttpSession session) {
+
+        session.setAttribute("pendingOrder", orderInfo);
+        return Map.of("success", true);
     }
 }
