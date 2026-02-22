@@ -49,10 +49,11 @@ public class OrderService {
         // 주문 아이템 저장
         List<Map<String, Object>> items = (List<Map<String, Object>>) orderInfo.get("items");
         for (Map<String, Object> item : items) {
+            System.out.println("item: " + item);
+            System.out.println("optionId: " + item.get("optionId") + ", type: " + (item.get("optionId") != null ? item.get("optionId").getClass() : "null"));
             item.put("orderId", orderId);
             orderMapper.insertOrderItem(item);
         }
-
         // 포인트 차감
         int usedPoint = toInt(orderInfo.get("usedPoint"));
         if (usedPoint > 0) {

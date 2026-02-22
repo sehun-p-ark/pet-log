@@ -443,7 +443,7 @@ if (paymentBtn) {
             productId: parseInt(wrapper.dataset.productId),
             optionId: wrapper.dataset.optionId ? parseInt(wrapper.dataset.optionId) : null,
             quantity: parseInt(wrapper.dataset.quantity),
-            price: parseInt(wrapper.dataset.price)
+            price: Math.floor(parseFloat(wrapper.dataset.price)) * parseInt(wrapper.dataset.quantity)
         }));
 
         const saveRes = await fetch('/shop/payment/prepare', {

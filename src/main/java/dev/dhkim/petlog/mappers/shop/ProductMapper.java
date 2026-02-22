@@ -23,7 +23,8 @@ public interface ProductMapper {
     List<ProductEntity> selectBestProducts(
             @Param("petType") String petType,
             @Param("categoryId") Integer categoryId,
-            @Param("limit") int limit
+            @Param("limit") int limit,
+            @Param("brand") String brand
     );
 
     // 상품 상세 조회
@@ -42,7 +43,8 @@ public interface ProductMapper {
             @Param("categoryId") Integer categoryId,
             @Param("sort") String sort,
             @Param("offset") int offset,
-            @Param("size") int size
+            @Param("size") int size,
+            @Param("brand") String brand
     );
 
     // 리뷰 개수 조회
@@ -58,4 +60,5 @@ public interface ProductMapper {
     List<Map<String, Object>> getBuyNowItem(@Param("productId") Integer productId,
                                             @Param("optionId") Integer optionId,
                                             @Param("quantity") Integer quantity);
+
 }

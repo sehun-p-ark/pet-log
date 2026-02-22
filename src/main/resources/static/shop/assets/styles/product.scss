@@ -103,6 +103,7 @@
                 font-size: 1.1rem;
                 color: $global-gray-text-color;
                 font-weight: 500;
+                cursor: pointer;
               }
 
               > .product-name {
@@ -379,6 +380,7 @@
             font-size: 1.1rem;
             color: $global-gray-text-color;
             font-weight: 500;
+            cursor: pointer;
           }
 
           > .product-name {
@@ -732,13 +734,13 @@
               @include flex(row, center, center, 0.5rem);
 
               > .best-filter,
-              > .new-filter{
+              > .new-filter {
                 font-size: 0.9rem;
                 font-weight: 500;
                 color: $global-gray-right-text-color;
                 cursor: pointer;
 
-                &:hover{
+                &:hover {
                   color: $global-green-text-color;
                 }
 

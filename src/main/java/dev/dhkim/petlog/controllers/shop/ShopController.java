@@ -32,6 +32,12 @@ public class ShopController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "brand", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getBrand(ModelAndView modelAndView){
+        modelAndView.setViewName("shop/brand");
+        return modelAndView;
+    }
+
     @RequestMapping(value = "list", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getList(
             @RequestParam(required = false) String petType,
@@ -47,7 +53,7 @@ public class ShopController {
         if (keyword != null && !keyword.isEmpty()) {
             products = productService.searchProducts(keyword, petType, null);
         } else {
-            products = productService.getProducts(petType, null, sort, page, size);
+            products = productService.getProducts(petType, null, sort, page, size, null);
         }
 
         modelAndView.addObject("products", products);
@@ -63,7 +69,6 @@ public class ShopController {
     @RequestMapping(value = "product/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     @SuppressWarnings("unchecked")
     public ModelAndView getProduct(@PathVariable Integer id, ModelAndView modelAndView, HttpSession session) {
-
         ProductEntity product = productService.getProductDetail(id);
         int reviewCount = productMapper.countReviewByProductId(id);
         List<ProductDetailImageEntity> detailImages = productMapper.findDetailImagesByProductId(id);
@@ -72,23 +77,24 @@ public class ShopController {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
 
-        Map<String, Object> reviewData = reviewService.getReviewsByProductId(id, userId);        List<Map<String, Object>> reviews = (List<Map<String, Object>>) reviewData.get("reviews");
-        boolean isPurchased = (boolean) reviewData.get("isPurchased");
-        boolean isAlreadyReviewed = (boolean) reviewData.get("isAlreadyReviewed");
+        Map<String, Object> reviewData = reviewService.getReviewsByProductId(id, userId, "best");
+        List<Map<String, Object>> reviews = (List<Map<String, Object>>) reviewData.get("reviews");
+        boolean canWriteReview = (boolean) reviewData.get("canWriteReview");
         Double averageRating = (Double) reviewData.get("averageRating");
-        Map<String, Long> ratingMap = (Map<String, Long>) reviewData.get("ratingMap");
+        Map<Integer, Long> ratingMap = (Map<Integer, Long>) reviewData.get("ratingMap");
         long maxRatingCount = (long) reviewData.get("maxRatingCount");
+        int bestRating = (int) reviewData.get("bestRating");
 
         modelAndView.addObject("product", product);
         modelAndView.addObject("reviewCount", reviewCount);
         modelAndView.addObject("detailImages", detailImages);
         modelAndView.addObject("options", options);
         modelAndView.addObject("reviews", reviews);
-        modelAndView.addObject("isPurchased", isPurchased);
-        modelAndView.addObject("isAlreadyReviewed", isAlreadyReviewed);
+        modelAndView.addObject("canWriteReview", canWriteReview);
         modelAndView.addObject("averageRating", averageRating);
         modelAndView.addObject("ratingMap", ratingMap);
         modelAndView.addObject("maxRatingCount", maxRatingCount);
+        modelAndView.addObject("bestRating", bestRating);
         modelAndView.setViewName("shop/product");
 
         return modelAndView;

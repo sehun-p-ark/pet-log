@@ -33,7 +33,7 @@
                 <div class="info">
                     <div class="description-wrapper">
                         <div class="text-description">
-                            <div class="company" th:text="${product.brand}">레보</div>
+                            <a class="company" th:href="@{/shop/brand(brand=${product.brand})}" th:text="${product.brand}"></a>
                             <div class="product-name" th:text="${product.name}">강아지 장난감</div>
                         </div>
                         <div class="image-wrapper">
@@ -76,7 +76,7 @@
                         </option>
                     </select>
                 </label>
-                <div class="option-detail" style="display: none;">
+                <div class="option-detail template" style="display: none;">
                     <div class="text">템플릿</div>
                     <div class="delete-btn">
                         <svg class="delete" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -98,15 +98,15 @@
                     <div class="final-price">0원</div>
                 </div>
                 <div class="action">
-                    <button class="cart" type="button">장바구니</button>
-                    <button class="buy" type="button">바로구매</button>
+                    <button class="cart" type="button" th:data-login="${session.sessionUser != null ? 'true' : 'false'}">장바구니</button>
+                    <button class="buy" type="button" th:data-login="${session.sessionUser != null ? 'true' : 'false'}">바로구매</button>
                 </div>
             </form>
         </div>
         <div class="bottom-bar">
             <div class="description-wrapper">
                 <div class="text-description">
-                    <div class="company" th:text="${product.brand}">레보</div>
+                    <a class="company" th:href="@{/shop/brand(brand=${product.brand})}" th:text="${product.brand}"></a>
                     <div class="product-name" th:text="${product.name}">강아지 장난감</div>
                 </div>
                 <div class="image-wrapper">
@@ -157,7 +157,7 @@
                             <span class="count-text">리뷰</span>
                             <span class="total-value" th:text="${#numbers.formatInteger(reviewCount, 0, 'COMMA') + '개'}">1,000개</span>
                         </div>
-                        <label class="review-btn" th:if="${isPurchased && !isAlreadyReviewed}">
+                        <label class="review-btn" th:if="${canWriteReview}">
                             <button class="button" type="button">리뷰 남기기</button>
                         </label>
                     </div>
@@ -290,7 +290,7 @@
             </select>
         </label>
 
-        <div class="option-detail" style="display: none;">
+        <div class="option-detail template" style="display: none;">
             <div class="text">템플릿</div>
             <div class="delete-btn">
                 <svg class="delete" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -35,10 +35,11 @@ public class ProductController {
     public List<ProductEntity> getBestProducts(
             @RequestParam(required = false) String petType,
             @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "10") int limit
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(required = false) String brand
     ) {
         Integer subCategoryId = getSubCategoryId(category);
-        return productService.getBestProducts(petType, subCategoryId, limit);
+        return productService.getBestProducts(petType, subCategoryId, limit, brand);
     }
 
     private Integer getSubCategoryId(String categoryName) {
@@ -88,8 +89,9 @@ public class ProductController {
             @RequestParam(required = false) Integer categoryId,
             @RequestParam(defaultValue = "latest") String sort,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String brand
     ) {
-        return productService.getProducts(petType, categoryId, sort, page, size);
+        return productService.getProducts(petType, categoryId, sort, page, size, brand);
     }
 }

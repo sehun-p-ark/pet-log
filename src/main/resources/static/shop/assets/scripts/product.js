@@ -299,15 +299,17 @@ document.addEventListener('DOMContentLoaded', function() {
 function syncOptions() {
     const desktopContainer = document.querySelector('.content');
     const mobileContainer = document.querySelector('.bottom-option');
+    const totalOptionCount = document.querySelectorAll('#option-select option:not([disabled])').length;
 
-    desktopContainer?.querySelectorAll('.option-detail[style*="flex"]').forEach(el => el.remove());
-    mobileContainer?.querySelectorAll('.option-detail[style*="flex"]').forEach(el => el.remove());
+    desktopContainer?.querySelectorAll('.option-detail:not(.template)').forEach(el => el.remove());
+    mobileContainer?.querySelectorAll('.option-detail:not(.template)').forEach(el => el.remove());
 
     selectedOptions.forEach(option => {
         if (desktopContainer) {
-            const templateDetail = desktopContainer.querySelector('.option-detail');
+            const templateDetail = desktopContainer.querySelector('.option-detail.template');
             if (templateDetail) {
                 const newOptionDetail = templateDetail.cloneNode(true);
+                newOptionDetail.classList.remove('template');
                 newOptionDetail.querySelector('.text').textContent = option.name;
                 newOptionDetail.querySelector('.quantity-input').value = option.quantity;
 
@@ -315,7 +317,7 @@ function syncOptions() {
                 newOptionDetail.querySelector('.check > .price').textContent = optionTotal.toLocaleString() + '원';
                 newOptionDetail.style.display = 'flex';
 
-                if (selectedOptions.length === 1) {
+                if (totalOptionCount <= 1) {
                     newOptionDetail.querySelector('.delete-btn').style.display = 'none';
                 }
 
@@ -329,9 +331,10 @@ function syncOptions() {
         }
 
         if (mobileContainer) {
-            const templateDetail = mobileContainer.querySelector('.option-area > .option-detail');
+            const templateDetail = mobileContainer.querySelector('.option-area > .option-detail.template');
             if (templateDetail) {
                 const newOptionDetail = templateDetail.cloneNode(true);
+                newOptionDetail.classList.remove('template');
                 newOptionDetail.querySelector('.text').textContent = option.name;
                 newOptionDetail.querySelector('.quantity-input').value = option.quantity;
 
@@ -339,7 +342,7 @@ function syncOptions() {
                 newOptionDetail.querySelector('.check > .price').textContent = optionTotal.toLocaleString() + '원';
                 newOptionDetail.style.display = 'flex';
 
-                if (selectedOptions.length === 1) {
+                if (totalOptionCount <= 1) {
                     newOptionDetail.querySelector('.delete-btn').style.display = 'none';
                 }
 
@@ -379,7 +382,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function addToCart() {
     const btn = document.querySelector('.content .cart');
-    if (btn.dataset.login === 'false') {
+    if (!btn || btn.dataset.login === 'false') {  // null 체크 추가
         showToast('로그인이 필요합니다.', '로그인하기', '/user/login');
         return;
     }
@@ -442,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function buyNow() {
     const btn = document.querySelector('.content .buy');
-    if (btn.dataset.login === 'false') {
+    if (!btn || btn.dataset.login === 'false') {  // null 체크 추가
         showToast('로그인이 필요합니다.', '로그인하기', '/user/login');
         return;
     }
@@ -460,7 +463,76 @@ function buyNow() {
     window.location.href = `/shop/payment/buynow?productId=${productId}&optionId=${optionId}&quantity=${quantity}`;
 }
 
-// 리뷰 필터
+// 리뷰 필터 (최신순, 베스트순)
+const productId = window.location.pathname.split('/').pop();
+const bestFilter = document.querySelector('.best-filter');
+const newFilter = document.querySelector('.new-filter');
+
+if (bestFilter && newFilter) {
+    bestFilter.classList.add('active');
+
+    bestFilter.addEventListener('click', () => {
+        bestFilter.classList.add('active');
+        newFilter.classList.remove('active');
+
+        fetch(`/shop/products/${productId}/reviews?sort=best`)
+            .then(res => res.json())
+            .then(data => renderReviews(data.reviews));
+    });
+
+    newFilter.addEventListener('click', () => {
+        newFilter.classList.add('active');
+        bestFilter.classList.remove('active');
+
+        fetch(`/shop/products/${productId}/reviews?sort=new`)
+            .then(res => res.json())
+            .then(data => renderReviews(data.reviews));
+    });
+}
+
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}.${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;
+}
+
+function renderReviews(reviews) {
+    const container = document.querySelector('.inner');
+    container.querySelectorAll('.review-item').forEach(el => el.remove());
+    container.querySelector('.empty')?.remove();
+
+    if (!reviews || reviews.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = '등록된 리뷰가 없습니다.';
+        container.appendChild(empty);
+        return;
+    }
+
+    reviews.forEach(review => {
+        const item = document.createElement('div');
+        item.className = 'review-item';
+        item.innerHTML = `
+            <div class="profile">
+                <img class="img" src="${review.profileImageUrl || ''}" alt="프로필">
+                <div class="info">
+                    <div class="nickname">${review.petName || ''}</div>
+                    <div class="rating">
+                        <div class="score">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                        <div class="date" th:text="${review['createdAt'] != null ? review['createdAt'].toString().substring(0, 10).replace('-', '.') : ''}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="option">${review.optionName || ''}</div>
+            <div class="review-images">
+                ${(review.reviewImages || []).map(img => `<img src="${img}" class="review-img" alt="리뷰이미지">`).join('')}
+            </div>
+            <div class="review-text">${review.content || ''}</div>
+        `;
+        container.appendChild(item);
+    });
+}
+
+// 리뷰 필터 (별점, 옵션)
 const filterBoxes = document.querySelectorAll('.star-filter, .option-filter');
 
 filterBoxes.forEach(box => {
@@ -585,14 +657,17 @@ document.querySelector('.submit-review')?.addEventListener('click', () => {
     formData.append('content', content);
     selectedFiles.forEach(file => formData.append('images', file));
 
-    fetch('/shop/reviews', {
+    fetch(`/shop/products/${productId}/reviews`, {
         method: 'POST',
         body: formData
     }).then(res => {
         if (res.ok) {
             showToast('리뷰가 등록되었습니다.');
             closeModal();
-            location.reload();
+            document.querySelector('.review-tab').click();
+            fetch(`/shop/products/${productId}/reviews?sort=best`)
+                .then(res => res.json())
+                .then(data => renderReviews(data.reviews));
         } else {
             showToast('리뷰 등록에 실패했습니다.');
         }

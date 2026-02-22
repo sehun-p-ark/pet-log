@@ -144,7 +144,8 @@
             #product > .container > .overview > .content > .info > .description-wrapper > .text-description > .company {
               font-size: 1.1rem;
               color: #565656;
-              font-weight: 500; }
+              font-weight: 500;
+              cursor: pointer; }
             #product > .container > .overview > .content > .info > .description-wrapper > .text-description > .product-name {
               font-size: 1.7em;
               font-weight: 300;
@@ -469,7 +470,8 @@
         #product > .container > .bottom-bar > .description-wrapper > .text-description > .company {
           font-size: 1.1rem;
           color: #565656;
-          font-weight: 500; }
+          font-weight: 500;
+          cursor: pointer; }
         #product > .container > .bottom-bar > .description-wrapper > .text-description > .product-name {
           font-size: 1.7em;
           font-weight: 300;

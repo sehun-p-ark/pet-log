@@ -6,4 +6,218 @@
   height: 100%;
   padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
   margin: 5rem 0 2rem 0;
+  overflow: auto;
+
+  > .brand-product {
+    @include flex(column, flex-start, flex-start, 2rem);
+    width: 100%;
+
+    > .brand-info {
+      > .name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $global-gray-text-color;
+      }
+    }
+
+    > .best-product {
+      @include flex(column, flex-start, flex-start, 1rem);
+      width: 100%;
+
+      > .caption {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: $global-gray-text-color;
+      }
+
+      > .product {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+        width: 100%;
+
+        @media (max-width: 768px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        > .item {
+          @include flex(column, flex-start, flex-start);
+          cursor: pointer;
+          padding-bottom: 0.5rem;
+
+          > .image-wrapper {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.2rem;
+            border: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+
+            > .image {
+              width: 100%;
+              aspect-ratio: 1;
+              object-fit: cover;
+              background-color: $global-green-background-color;
+              transition: transform 0.3s ease;
+              transform-origin: center center;
+              display: block;
+
+              &:hover {
+                transform: scale(1.05);
+              }
+            }
+          }
+
+          > .brand {
+            padding: 0.4rem 0 0.3rem 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: $global-gray-text-color;
+          }
+
+          > .name {
+            padding: 0 0 0.3rem 0;
+            font-size: 1rem;
+            color: $global-gray-text-color;
+          }
+
+          > .discount {
+            @include flex(row, center, center, 0.3rem);
+
+            > .percent {
+              font-size: 0.9rem;
+              padding-bottom: 0.2rem;
+              font-weight: 600;
+              color: $global-green-text-color;
+            }
+
+            > .number {
+              font-size: 0.8rem;
+              padding-bottom: 0.2rem;
+              text-decoration: line-through;
+              font-weight: 600;
+              color: lighten($global-gray-right-text-color, 10%);
+            }
+          }
+
+          > .price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $global-black-text-color;
+          }
+        }
+      }
+    }
+
+    > .all-product {
+      @include flex(column, flex-start, flex-start, 1rem);
+      width: 100%;
+
+      > .navi {
+        @include flex(row, center, space-between);
+        width: 100%;
+
+        > .title {
+          @include flex(row, center, center, 0.5rem);
+
+          > .text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: $global-gray-text-color;
+          }
+
+          > .count {
+            font-size: 0.9rem;
+            color: lighten($global-gray-right-text-color, 10%);
+          }
+        }
+
+        > .filter {
+          > .product-filter {
+            padding: 0.3rem 0.6rem;
+            border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+            color: $global-gray-text-color;
+            cursor: pointer;
+            outline: none;
+          }
+        }
+      }
+
+      > .product {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+        width: 100%;
+
+        @media (max-width: 768px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        > .item {
+          @include flex(column, flex-start, flex-start);
+          cursor: pointer;
+          padding-bottom: 0.5rem;
+
+          > .image-wrapper {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 0.2rem;
+            border: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+
+            > .image {
+              width: 100%;
+              aspect-ratio: 1;
+              object-fit: cover;
+              background-color: $global-green-background-color;
+              transition: transform 0.3s ease;
+              transform-origin: center center;
+              display: block;
+
+              &:hover {
+                transform: scale(1.05);
+              }
+            }
+          }
+
+          > .brand {
+            padding: 0.4rem 0 0.3rem 0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: $global-gray-text-color;
+          }
+
+          > .name {
+            padding: 0 0 0.3rem 0;
+            font-size: 1rem;
+            color: $global-gray-text-color;
+          }
+
+          > .discount {
+            @include flex(row, center, center, 0.3rem);
+
+            > .percent {
+              font-size: 0.9rem;
+              padding-bottom: 0.2rem;
+              font-weight: 600;
+              color: $global-green-text-color;
+            }
+
+            > .number {
+              font-size: 0.8rem;
+              padding-bottom: 0.2rem;
+              text-decoration: line-through;
+              font-weight: 600;
+              color: lighten($global-gray-right-text-color, 10%);
+            }
+          }
+
+          > .price {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $global-black-text-color;
+          }
+        }
+      }
+    }
+  }
 }

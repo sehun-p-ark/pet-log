@@ -15,7 +15,7 @@
 
     <insert id="insertOrderItem" parameterType="map">
         INSERT INTO `petlog`.order_item (order_id, product_id, option_id, quantity, price)
-        VALUES (#{orderId}, #{productId}, #{optionId}, #{quantity}, #{price})
+        VALUES (#{orderId}, #{productId}, #{optionId, jdbcType=INTEGER}, #{quantity}, #{price})
     </insert>
 
     <insert id="deductPoint">

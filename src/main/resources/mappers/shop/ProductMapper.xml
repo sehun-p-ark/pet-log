@@ -86,29 +86,35 @@
         pi.is_thumbnail,
         pi.sort_order
         FROM (
-        SELECT *
-        FROM product
+        SELECT p.*,
+        COUNT(oi.id) as order_count
+        FROM product p
+        LEFT JOIN order_item oi ON oi.product_id = p.id
         <where>
             <if test="petType != null">
                 AND (
-                pet_type = #{petType}
-                OR pet_type = 'all'
+                p.pet_type = #{petType}
+                OR p.pet_type = 'all'
                 <if test="petType == 'dog' or petType == 'cat'">
-                    OR pet_type = 'both'
+                    OR p.pet_type = 'both'
                 </if>
                 )
             </if>
             <if test="categoryId != null">
-                AND sub_category_id IN (
+                AND p.sub_category_id IN (
                 SELECT id FROM sub_category WHERE category_id = #{categoryId}
                 )
             </if>
+            <if test="brand != null">
+                AND p.brand = #{brand}
+            </if>
         </where>
-        ORDER BY price DESC
+        GROUP BY p.id
+        ORDER BY order_count DESC, p.created_at DESC
         LIMIT #{limit}
         ) p
         LEFT JOIN product_image pi ON p.id = pi.product_id
-        ORDER BY p.price DESC, pi.sort_order ASC
+        ORDER BY p.order_count DESC, p.created_at DESC, pi.sort_order ASC
     </select>
 
     <!-- 상품 상세 조회 -->
@@ -200,6 +206,9 @@
             <if test="categoryId != null">
                 AND p.sub_category_id = #{categoryId}
             </if>
+            <if test="brand != null">
+                AND p.brand = #{brand}
+            </if>
         </where>
         <choose>
             <when test="sort == 'price_low'">
@@ -266,6 +275,7 @@
              WHERE pi.product_id = p.id
                AND pi.is_thumbnail = true
              LIMIT 1)      AS imageUrl,
+            o.id            AS optionId,
             o.option_name   AS optionName,
             o.additional_price AS additionalPrice,
             #{quantity}     AS quantity

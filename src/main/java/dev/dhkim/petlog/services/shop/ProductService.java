@@ -22,8 +22,8 @@ public class ProductService {
     }
 
     // 베스트 상품 목록 조회
-    public List<ProductEntity> getBestProducts(String petType, Integer categoryId, int limit) {
-        return productMapper.selectBestProducts(petType, categoryId, limit);
+    public List<ProductEntity> getBestProducts(String petType, Integer categoryId, int limit, String brand) {
+        return productMapper.selectBestProducts(petType, categoryId, limit, brand);
     }
 
     // 상품 상세 정보 조회
@@ -37,10 +37,11 @@ public class ProductService {
     }
 
     // 카테고리별 상품 목록 조회
-    public List<ProductEntity> getProducts(String petType, Integer categoryId, String sort, int page, int size) {
+    public List<ProductEntity> getProducts(String petType, Integer categoryId, String sort, int page, int size, String brand) {
         int offset = page * size;
-        return productMapper.selectProducts(petType, categoryId, sort, offset, size);
+        return productMapper.selectProducts(petType, categoryId, sort, offset, size, brand);
     }
+
 
     // 바로 구매
     public List<Map<String, Object>> getBuyNowItem(Integer productId, Integer optionId, Integer quantity) {
