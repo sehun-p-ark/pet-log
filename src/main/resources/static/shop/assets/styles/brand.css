@@ -169,8 +169,9 @@
             color: #949494; }
         #brand > .brand-product > .all-product > .navi > .filter > .product-filter {
           padding: 0.3rem 0.6rem;
+          background-color: #ffffff;
           border: 0.0625rem solid #e0e0e0;
-          border-radius: 0.3rem;
+          border-radius: 0.25rem;
           font-size: 0.9rem;
           color: #565656;
           cursor: pointer;

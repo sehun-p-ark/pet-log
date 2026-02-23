@@ -99,6 +99,10 @@
         font-size: 1.3rem;
         font-weight: 700;
         color: $global-gray-text-color;
+
+        @media (max-width: 700px){
+          font-size: 1.1rem;
+        }
       }
 
       > .category{
@@ -113,6 +117,11 @@
           border-radius: 999rem;
           cursor: pointer;
 
+          @media (max-width: 700px) {
+            padding: 0.3rem 0.6rem;
+            font-size: 0.8rem;
+          }
+
           > input[type="radio"]{
             display: none;
           }
@@ -126,6 +135,10 @@
             background-color: darken($global-color-concept, 15%);
             color: $global-white-text-color;
           }
+        }
+
+        @media (max-width: 700px) {
+          gap: 0.4rem;
         }
       }
     }

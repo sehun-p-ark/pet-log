@@ -881,7 +881,7 @@
         align-items: center;
         display: flex;
         flex-direction: row;
-        gap: 0.5rem;
+        gap: 0.8rem;
         justify-content: center; }
         #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > * {
           flex-grow: 0;
@@ -890,129 +890,20 @@
           flex-grow: 1;
           flex-shrink: 1; }
         #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .best-filter,
+        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .row-filter,
         #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .new-filter {
           font-size: 0.9rem;
           font-weight: 500;
           color: #7A7A7A;
           cursor: pointer; }
           #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .best-filter:hover,
+          #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .row-filter:hover,
           #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .new-filter:hover {
             color: #38A34C; }
           #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .best-filter.active,
+          #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .row-filter.active,
           #product > .detail-wrapper > .container > .review-container > .inner > .filter > .text-filter > .new-filter.active {
             color: #38A34C; }
-      #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        gap: 0.5rem;
-        justify-content: center;
-        position: relative; }
-        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .filter-btn {
-          padding: 0.3rem 0.6rem;
-          border: 0.0625rem solid #e0e0e0;
-          border-radius: 0.25rem;
-          font-size: 0.85rem;
-          cursor: pointer; }
-        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown {
-          position: absolute;
-          top: calc(100% + 0.5rem);
-          right: 0;
-          width: 13rem;
-          padding: 0.5rem;
-          background: #ffffff;
-          border: 0.0625rem solid #e0e0e0;
-          border-radius: 0.25rem;
-          display: none;
-          flex-direction: column;
-          gap: 0.2rem;
-          z-index: 10; }
-          #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown.active {
-            display: flex; }
-          #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            gap: 0.6rem;
-            justify-content: flex-start;
-            padding: 0.3rem 0.4rem;
-            border-radius: 0.4rem;
-            cursor: pointer; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option > * {
-              flex-grow: 0;
-              flex-shrink: 0; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option > .-flex-stretch {
-              flex-grow: 1;
-              flex-shrink: 1; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option:hover {
-              background-color: #F9F9F9; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option > input {
-              width: 0.9rem;
-              height: 0.9rem; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option > .stars {
-              color: #89CC96;
-              letter-spacing: 0.1rem;
-              font-size: 0.9rem; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .star-filter > .dropdown > .option > .count {
-              font-size: 0.7rem;
-              color: #7A7A7A; }
-        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .filter-btn {
-          padding: 0.3rem 0.6rem;
-          border: 0.0625rem solid #e0e0e0;
-          border-radius: 0.25rem;
-          font-size: 0.85rem;
-          cursor: pointer;
-          background-color: #fff; }
-        #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown {
-          position: absolute;
-          top: calc(100% + 0.5rem);
-          right: 0;
-          width: 13rem;
-          padding: 0.5rem;
-          background: #ffffff;
-          border: 0.0625rem solid #e0e0e0;
-          border-radius: 0.25rem;
-          display: none;
-          flex-direction: column;
-          gap: 0.2rem;
-          z-index: 10; }
-          #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown.active {
-            display: flex; }
-          #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            gap: 0.6rem;
-            justify-content: flex-start;
-            padding: 0.3rem 0.4rem;
-            border-radius: 0.4rem;
-            cursor: pointer; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option > * {
-              flex-grow: 0;
-              flex-shrink: 0; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option > .-flex-stretch {
-              flex-grow: 1;
-              flex-shrink: 1; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option:hover {
-              background-color: #F9F9F9; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option > input {
-              width: 0.9rem;
-              height: 0.9rem; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option > .stars {
-              color: #89CC96;
-              letter-spacing: 0.1rem;
-              font-size: 0.9rem; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option > .count {
-              font-size: 0.7rem;
-              color: #7A7A7A; }
-            #product > .detail-wrapper > .container > .review-container > .inner > .filter > .select-filter > .option-filter > .dropdown > .option > .option-name {
-              font-size: 0.85rem; }
     #product > .detail-wrapper > .container > .review-container > .inner > .review-item {
       align-items: flex-start;
       display: flex;
@@ -1021,7 +912,8 @@
       justify-content: center;
       width: 100%;
       border-bottom: 0.0625rem solid #ededed;
-      padding-bottom: 1rem; }
+      padding-bottom: 1rem;
+      position: relative; }
       #product > .detail-wrapper > .container > .review-container > .inner > .review-item > * {
         flex-grow: 0;
         flex-shrink: 0; }
@@ -1106,6 +998,14 @@
         font-size: 0.9rem;
         font-weight: 400;
         color: #707070; }
+      #product > .detail-wrapper > .container > .review-container > .inner > .review-item > .update {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #38A34C;
+        position: absolute;
+        right: 0;
+        top: 0;
+        cursor: pointer; }
     #product > .detail-wrapper > .container > .review-container > .inner > .empty {
       padding: 3rem 0;
       color: #707070; }
@@ -1129,17 +1029,31 @@
       gap: 0;
       justify-content: center;
       padding: 0.5rem;
-      border-bottom: 0.0625rem solid #e0e0e0; }
+      width: 100%;
+      border-bottom: 0.0625rem solid #e0e0e0;
+      cursor: pointer; }
       .bottom-option > .bottom-bar > * {
         flex-grow: 0;
         flex-shrink: 0; }
       .bottom-option > .bottom-bar > .-flex-stretch {
         flex-grow: 1;
         flex-shrink: 1; }
-      .bottom-option > .bottom-bar > .image-wrapper > .image {
-        width: 2.5rem;
-        height: 1rem;
-        cursor: pointer; }
+      .bottom-option > .bottom-bar > .image-wrapper {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        gap: 0;
+        justify-content: center;
+        width: 100%; }
+        .bottom-option > .bottom-bar > .image-wrapper > * {
+          flex-grow: 0;
+          flex-shrink: 0; }
+        .bottom-option > .bottom-bar > .image-wrapper > .-flex-stretch {
+          flex-grow: 1;
+          flex-shrink: 1; }
+        .bottom-option > .bottom-bar > .image-wrapper > .image {
+          width: 2.5rem;
+          height: 1rem; }
       .bottom-option > .bottom-bar.active > .image-wrapper > .image {
         transform: rotate(180deg); }
     .bottom-option > .option-area {

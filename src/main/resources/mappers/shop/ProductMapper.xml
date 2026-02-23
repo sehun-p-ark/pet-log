@@ -218,10 +218,17 @@
                 ORDER BY p.price DESC, pi.sort_order ASC
             </when>
             <when test="sort == 'popular'">
-                ORDER BY p.id DESC, pi.sort_order ASC
+                ORDER BY (
+                SELECT COUNT(*) FROM order_item oi WHERE oi.product_id = p.id
+                ) DESC, pi.sort_order ASC
             </when>
             <when test="sort == 'latest'">
                 ORDER BY p.created_at DESC, pi.sort_order ASC
+            </when>
+            <when test="sort == 'review'">
+                ORDER BY (
+                SELECT COUNT(*) FROM review r WHERE r.product_id = p.id
+                ) DESC, pi.sort_order ASC
             </when>
             <otherwise>
                 <!-- 기본: 판매량 높은 순 (BEST) -->

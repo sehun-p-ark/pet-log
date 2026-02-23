@@ -14,7 +14,7 @@
 </head>
 <body>
 <th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
-<div class="cover"></div>
+<div class="address-cover"></div>
 <div class="address-container" id="address-wrapper">
     <button type="button" class="button">
         <img class="image" src="/shop/assets/images/cancelButton.png" alt="">
@@ -23,6 +23,7 @@
 </div>
 
 <!--배송지 변경 모달-->
+<div class="cover"></div>
 <div class="delivery-change-modal" id="delivery-change-modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -66,7 +67,7 @@
                             <span class="addr">대구광역시 중구 어딘가</span>
                         </div>
                         <div class="detail-addr">10층</div>
-                        <div class="phone">010-1234-5678</div>
+                        <div class="phone">010-1234-0000</div>
                         <div class="item-actions">
                             <div class="left-actions">
                                 <button type="button" class="delete-btn">삭제</button>
@@ -91,30 +92,31 @@
             <div class="title">주문자</div>
             <label class="name-wrapper">
                 <span class="title">이름</span>
-                <input class="input" type="text">
+                <input class="input" type="text"
+                       th:value="${ordererInfo != null ? ordererInfo.get('name') : ''}">
             </label>
             <label class="phone-wrapper">
                 <span class="title">전화번호</span>
                 <select class="num-select">
-                    <option class="item">010</option>
-                    <option class="item">011</option>
-                    <option class="item">016</option>
-                    <option class="item">017</option>
-                    <option class="item">018</option>
-                    <option class="item">019</option>
+                    <option th:selected="${ordererInfo != null and ordererInfo.get('phone') != null and ordererInfo.get('phone').toString().startsWith('010')}">010</option>
+                    <option th:selected="${ordererInfo != null and ordererInfo.get('phone') != null and ordererInfo.get('phone').toString().startsWith('011')}">011</option>
+                    <option>016</option>
+                    <option>017</option>
+                    <option>018</option>
+                    <option>019</option>
                 </select>
-                <input class="input" type="text">
+                <input class="input" type="text"
+                       th:value="${ordererInfo != null and ordererInfo.get('phone') != null ? ordererInfo.get('phone').toString().substring(3) : ''}">
             </label>
         </div>
         <div class="delivery-info">
             <div class="delivery-header">
                 <span class="title">배송지</span>
-                <span class="change">변경</span>
+                <span class="action">
+                    <span class="paste">위와 동일하게 채우기</span>
+                    <span class="change">변경</span>
+                </span>
             </div>
-            <label class="delivery-name">
-                <span class="title">배송지명</span>
-                <input class="input" type="text">
-            </label>
             <label class="orderer-name">
                 <span class="title">받는 사람</span>
                 <input class="input" type="text">
@@ -167,7 +169,7 @@
                  th:data-product-id="${item.get('productId')}"
                  th:data-option-id="${item.get('optionId')}"
                  th:data-quantity="${item.get('quantity')}"
-                 th:data-price="${(item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100}">
+                 th:data-price="${(item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100 * item.get('quantity')}">
                 <img class="image"
                      th:src="${item.get('imageUrl') != null ? item.get('imageUrl') : '/shop/assets/images/product.png'}"
                      alt="">
@@ -179,7 +181,8 @@
                     <div class="option" th:if="${item.get('optionName') != null}" th:text="${item.get('optionName')}">노란색</div>
                     <div class="price-info">
                         <span class="price"
-                              th:text="${#numbers.formatInteger((item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100, 0, 'COMMA') + '원'}">1,800원</span>
+                              th:text="${#numbers.formatInteger((item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100 * item.get('quantity'), 0, 'COMMA') + '원'}">
+                        </span>
                         <span class="quantity" th:text="${item.get('quantity')} + '개'">1개</span>
                     </div>
                 </div>

@@ -168,7 +168,7 @@ const optionArea = document.querySelector('.bottom-option .option-area');
 const bottomBar = document.querySelector('.bottom-option .bottom-bar');
 
 if (imageWrapper && optionArea && bottomBar) {
-    imageWrapper.addEventListener('click', () => {
+    bottomBar.addEventListener('click', () => {
         optionArea.classList.toggle('show');
         bottomBar.classList.toggle('active');
     });
@@ -466,27 +466,46 @@ function buyNow() {
 // 리뷰 필터 (최신순, 베스트순)
 const productId = window.location.pathname.split('/').pop();
 const bestFilter = document.querySelector('.best-filter');
+const rowFilter = document.querySelector('.row-filter');
 const newFilter = document.querySelector('.new-filter');
 
-if (bestFilter && newFilter) {
+if (bestFilter) {
     bestFilter.classList.add('active');
 
     bestFilter.addEventListener('click', () => {
         bestFilter.classList.add('active');
+        rowFilter.classList.remove('active');
         newFilter.classList.remove('active');
-
         fetch(`/shop/products/${productId}/reviews?sort=best`)
             .then(res => res.json())
-            .then(data => renderReviews(data.reviews));
+            .then(data => {
+                renderReviews(data.reviews);
+                renderRatingSummary(data);
+            });
+    });
+
+    rowFilter.addEventListener('click', () => {
+        rowFilter.classList.add('active');
+        bestFilter.classList.remove('active');
+        newFilter.classList.remove('active');
+        fetch(`/shop/products/${productId}/reviews?sort=low`)
+            .then(res => res.json())
+            .then(data => {
+                renderReviews(data.reviews);
+                renderRatingSummary(data);
+            });
     });
 
     newFilter.addEventListener('click', () => {
         newFilter.classList.add('active');
         bestFilter.classList.remove('active');
-
+        rowFilter.classList.remove('active');
         fetch(`/shop/products/${productId}/reviews?sort=new`)
             .then(res => res.json())
-            .then(data => renderReviews(data.reviews));
+            .then(data => {
+                renderReviews(data.reviews);
+                renderRatingSummary(data);
+            });
     });
 }
 
@@ -512,48 +531,31 @@ function renderReviews(reviews) {
         const item = document.createElement('div');
         item.className = 'review-item';
         item.innerHTML = `
-            <div class="profile">
-                <img class="img" src="${review.profileImageUrl || ''}" alt="프로필">
-                <div class="info">
-                    <div class="nickname">${review.petName || ''}</div>
-                    <div class="rating">
-                        <div class="score">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
-                        <div class="date" th:text="${review['createdAt'] != null ? review['createdAt'].toString().substring(0, 10).replace('-', '.') : ''}"></div>
-                    </div>
+        <div class="profile">
+            <img class="img" src="${review.profileImageUrl || ''}" alt="프로필">
+            <div class="info">
+                <div class="nickname">${review.petName || ''}</div>
+                <div class="rating">
+                    <div class="score">${[1,2,3,4,5].map(i => `<span>${i <= review.rating ? '★' : '☆'}</span>`).join('')}</div>
+                    <div class="date">${review.createdAt ? formatDate(review.createdAt) : ''}</div>
                 </div>
             </div>
-            <div class="option">${review.optionName || ''}</div>
-            <div class="review-images">
-                ${(review.reviewImages || []).map(img => `<img src="${img}" class="review-img" alt="리뷰이미지">`).join('')}
-            </div>
-            <div class="review-text">${review.content || ''}</div>
+        </div>
+        <div class="option">${review.optionName || ''}</div>
+        <div class="review-images">
+            ${(review.reviewImages || []).map(img => `<img src="${img}" class="review-img" alt="리뷰이미지">`).join('')}
+        </div>
+        <div class="review-text">${review.content || ''}</div>
+        <div class="update">수정</div>
         `;
+
+        item.querySelector('.update')?.addEventListener('click', () => {
+            openEditModal(review.id, review.rating, review.content);
+        });
+
         container.appendChild(item);
     });
 }
-
-// 리뷰 필터 (별점, 옵션)
-const filterBoxes = document.querySelectorAll('.star-filter, .option-filter');
-
-filterBoxes.forEach(box => {
-    const btn = box.querySelector('.filter-btn');
-    const dropdown = box.querySelector('.dropdown');
-
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-
-        document.querySelectorAll('.dropdown')
-            .forEach(d => {
-                if (d !== dropdown) d.classList.remove('active');
-            });
-
-        dropdown.classList.toggle('active');
-    });
-
-    dropdown.addEventListener('click', (e) => {
-        e.stopPropagation();
-    });
-});
 
 document.addEventListener('click', () => {
     document.querySelectorAll('.dropdown')
@@ -583,15 +585,25 @@ const previewImages = document.querySelector('.preview-images');
 let selectedRating = 0;
 let selectedFiles = [];
 
-if (reviewBtn && overlay) {
-    reviewBtn.addEventListener('click', () => {
-        overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    });
-
+if (modalClose) {
     modalClose.addEventListener('click', closeModal);
+}
+if (overlay) {
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) closeModal();
+    });
+}
+
+if (reviewBtn) {
+    reviewBtn.addEventListener('click', () => {
+        editingReviewId = null; // 새 작성이니까 초기화
+        selectedRating = 0;
+        stars.forEach(s => s.classList.remove('active'));
+        document.querySelector('.review-content').value = '';
+        selectedFiles = [];
+        previewImages.innerHTML = '';
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     });
 }
 
@@ -599,6 +611,59 @@ function closeModal() {
     overlay.style.display = 'none';
     document.body.style.overflow = '';
 }
+
+// 수정 모달 열기
+let editingReviewId = null;
+
+function openEditModal(reviewId, rating, content) {
+    editingReviewId = reviewId;
+    selectedRating = rating;
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= selectedRating));
+    document.querySelector('.review-content').value = content;
+    selectedFiles = [];
+    previewImages.innerHTML = '';
+
+    fetch(`/shop/products/0/reviews/${reviewId}/images`)
+        .then(res => res.json())
+        .then(images => {
+            images.forEach(imageUrl => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'preview-img-wrapper';
+
+                const img = document.createElement('img');
+                img.src = imageUrl;
+
+                const removeBtn = document.createElement('div');
+                removeBtn.className = 'remove-img';
+                removeBtn.textContent = '✕';
+                removeBtn.addEventListener('click', () => {
+                    fetch(`/shop/products/0/reviews/${reviewId}/images?imageUrl=${encodeURIComponent(imageUrl)}`, {
+                        method: 'DELETE'
+                    }).then(res => {
+                        if (res.ok) wrapper.remove();
+                    });
+                });
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(removeBtn);
+                previewImages.appendChild(wrapper);
+            });
+        });
+
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// 정적 리뷰 수정 버튼
+document.querySelectorAll('.review-item .update').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const item = btn.closest('.review-item');
+        const reviewId = item.dataset.reviewId;
+        const filledStars = [...item.querySelectorAll('.score span')].filter(s => s.textContent === '★').length;
+        const content = item.querySelector('.review-text').textContent;
+        openEditModal(reviewId, filledStars, content);
+    });
+});
 
 stars.forEach(star => {
     star.addEventListener('mouseover', () => {
@@ -618,7 +683,7 @@ stars.forEach(star => {
 
 imageInput?.addEventListener('change', () => {
     Array.from(imageInput.files).forEach(file => {
-        if (selectedFiles.length >= 5) return;
+        if (selectedFiles.length >= 3) return;
         selectedFiles.push(file);
 
         const wrapper = document.createElement('div');
@@ -657,19 +722,55 @@ document.querySelector('.submit-review')?.addEventListener('click', () => {
     formData.append('content', content);
     selectedFiles.forEach(file => formData.append('images', file));
 
-    fetch(`/shop/products/${productId}/reviews`, {
-        method: 'POST',
-        body: formData
-    }).then(res => {
-        if (res.ok) {
-            showToast('리뷰가 등록되었습니다.');
-            closeModal();
-            document.querySelector('.review-tab').click();
-            fetch(`/shop/products/${productId}/reviews?sort=best`)
-                .then(res => res.json())
-                .then(data => renderReviews(data.reviews));
+    const isEdit = editingReviewId !== null;
+    const url = isEdit
+        ? `/shop/products/${productId}/reviews/${editingReviewId}`
+        : `/shop/products/${productId}/reviews`;
+    const method = isEdit ? 'PUT' : 'POST';
+    fetch(url, { method, body: formData })
+        .then(res => {
+            if (res.ok) {
+                showToast(isEdit ? '리뷰가 수정되었습니다.' : '리뷰가 등록되었습니다.');
+                editingReviewId = null;
+                closeModal();
+                document.querySelector('.review-tab').click();
+                fetch(`/shop/products/${productId}/reviews?sort=best`)
+                    .then(res => res.json())
+                    .then(data => {
+                        renderReviews(data.reviews);
+                        renderRatingSummary(data);
+                    });
+            } else {
+                showToast(isEdit ? '리뷰 수정에 실패했습니다.' : '리뷰 등록에 실패했습니다.');
+            }
+        });
+});
+
+function renderRatingSummary(data) {
+    const scoreEl = document.querySelector('.summary-score');
+    if (scoreEl) scoreEl.textContent = data.averageRating;
+
+    document.querySelectorAll('.rating-summary .stars span').forEach((span, idx) => {
+        const i = idx + 1;
+        span.className = '';
+        if (i <= data.averageRating) span.classList.add('filled');
+        else if (i - 0.5 <= data.averageRating) span.classList.add('half');
+    });
+
+    const totalCount = data.reviews.length;
+    const maxCount = Math.max(...[5,4,3,2,1].map(i => data.ratingMap[i] || 0));
+    [5,4,3,2,1].forEach(i => {
+        const count = data.ratingMap[i] || 0;
+        const width = totalCount > 0 ? (count / totalCount * 100) : 0;
+        const item = document.querySelector(`.rating-item.rating-${i}`);
+        if (!item) return;
+        item.querySelector('.count').textContent = count;
+        item.querySelector('.fill').style.width = width + '%';
+        const fill = item.querySelector('.fill');
+        if (count > 0 && count === maxCount) {
+            fill.classList.add('best');
         } else {
-            showToast('리뷰 등록에 실패했습니다.');
+            fill.classList.remove('best');
         }
     });
-});
+}

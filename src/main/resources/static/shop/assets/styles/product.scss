@@ -731,9 +731,10 @@
             padding: 0.7rem 0;
 
             > .text-filter {
-              @include flex(row, center, center, 0.5rem);
+              @include flex(row, center, center, 0.8rem);
 
               > .best-filter,
+              > .row-filter,
               > .new-filter {
                 font-size: 0.9rem;
                 font-weight: 500;
@@ -749,128 +750,6 @@
                 }
               }
             }
-
-            > .select-filter {
-              @include flex(row, center, center, 0.5rem);
-              position: relative;
-
-              > .star-filter{
-                > .filter-btn {
-                  padding: 0.3rem 0.6rem;
-                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
-                  border-radius: 0.25rem;
-                  font-size: 0.85rem;
-                  cursor: pointer;
-                }
-
-                > .dropdown {
-                  position: absolute;
-                  top: calc(100% + 0.5rem);
-                  right: 0;
-                  width: 13rem;
-                  padding: 0.5rem;
-                  background: #ffffff;
-                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
-                  border-radius: 0.25rem;
-                  display: none;
-                  flex-direction: column;
-                  gap: 0.2rem;
-                  z-index: 10;
-
-                  &.active {
-                    display: flex;
-                  }
-
-                  > .option {
-                    @include flex(row, center, flex-start, 0.6rem);
-                    padding: 0.3rem 0.4rem;
-                    border-radius: 0.4rem;
-                    cursor: pointer;
-
-                    &:hover {
-                      background-color: $global-gray-background-color;
-                    }
-
-                    > input {
-                      width: 0.9rem;
-                      height: 0.9rem;
-                    }
-
-                    > .stars {
-                      color: $global-green-background-color;
-                      letter-spacing: 0.1rem;
-                      font-size: 0.9rem;
-                    }
-
-                    > .count {
-                      font-size: 0.7rem;
-                      color: $global-gray-right-text-color;
-                    }
-                  }
-                }
-              }
-
-              > .option-filter{
-                > .filter-btn {
-                  padding: 0.3rem 0.6rem;
-                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
-                  border-radius: 0.25rem;
-                  font-size: 0.85rem;
-                  cursor: pointer;
-                  background-color: #fff;
-                }
-
-                > .dropdown {
-                  position: absolute;
-                  top: calc(100% + 0.5rem);
-                  right: 0;
-                  width: 13rem;
-                  padding: 0.5rem;
-                  background: #ffffff;
-                  border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
-                  border-radius: 0.25rem;
-                  display: none;
-                  flex-direction: column;
-                  gap: 0.2rem;
-                  z-index: 10;
-
-                  &.active {
-                    display: flex;
-                  }
-
-                  > .option {
-                    @include flex(row, center, flex-start, 0.6rem);
-                    padding: 0.3rem 0.4rem;
-                    border-radius: 0.4rem;
-                    cursor: pointer;
-
-                    &:hover {
-                      background-color: $global-gray-background-color;
-                    }
-
-                    > input {
-                      width: 0.9rem;
-                      height: 0.9rem;
-                    }
-
-                    > .stars {
-                      color: $global-green-background-color;
-                      letter-spacing: 0.1rem;
-                      font-size: 0.9rem;
-                    }
-
-                    > .count {
-                      font-size: 0.7rem;
-                      color: $global-gray-right-text-color;
-                    }
-
-                    > .option-name {
-                      font-size: 0.85rem;
-                    }
-                  }
-                }
-              }
-            }
           }
 
           > .review-item {
@@ -878,6 +757,7 @@
             width: 100%;
             border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
             padding-bottom: 1rem;
+            position: relative;
 
             &:last-child {
               border-bottom: none;
@@ -940,6 +820,16 @@
               font-weight: 400;
               color: lighten($global-gray-text-color, 10%);
             }
+
+            > .update{
+              font-size: 0.9rem;
+              font-weight: 500;
+              color: $global-green-text-color;
+              position: absolute;
+              right: 0;
+              top: 0;
+              cursor: pointer;
+            }
           }
 
           > .empty{
@@ -969,13 +859,17 @@
     > .bottom-bar {
       @include flex(row, center, center);
       padding: 0.5rem;
+      width: 100%;
       border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+      cursor: pointer;
 
       > .image-wrapper {
+        @include flex(row, center, center);
+        width: 100%;
+
         > .image {
           width: 2.5rem;
           height: 1rem;
-          cursor: pointer;
         }
       }
 

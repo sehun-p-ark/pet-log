@@ -33,4 +33,11 @@
         VALUES (#{userId}, 'EARN', #{amount}, #{orderId}, '구매 적립')
     </insert>
 
+    <!--주문자 정보 채우기-->
+    <select id="selectOrdererInfo" parameterType="int" resultType="map">
+        SELECT u.phone, pu.name
+        FROM `petlog`.users u
+                 JOIN `petlog`.personal_user pu ON u.id = pu.user_id
+        WHERE u.id = #{userId}
+    </select>
 </mapper>

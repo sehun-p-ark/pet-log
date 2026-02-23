@@ -15,12 +15,8 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
 
     public Map<String, Object> getReviewsByProductId(Integer productId, Integer userId, String sort) {
-        List<Map<String, Object>> reviews;
-        if ("new".equals(sort)) {
-            reviews = reviewMapper.selectReviewsByProductIdSortedByDate(productId);
-        } else {
-            reviews = reviewMapper.selectReviewsByProductId(productId);
-        }
+        List<Map<String, Object>> reviews = reviewMapper.selectReviews((long) productId, sort);
+
         reviews.forEach(review -> {
             List<String> images = reviewMapper.selectReviewImages(((Number) review.get("id")).intValue());
             review.put("reviewImages", images);
@@ -70,5 +66,24 @@ public class ReviewService {
         for (int i = 0; i < imageUrls.size(); i++) {
             reviewMapper.insertReviewImage(reviewId, imageUrls.get(i), i);
         }
+    }
+
+    // 리뷰 수정
+    @Transactional
+    public void updateReview(Integer userId, Integer reviewId, Integer rating, String content) {
+        reviewMapper.updateReview(reviewId, userId, rating, content);
+    }
+
+    // 리뷰 이미지 삭제
+    public List<String> getReviewImages(Integer reviewId) {
+        return reviewMapper.selectReviewImages(reviewId);
+    }
+
+    public void deleteReviewImage(Integer reviewId, String imageUrl) {
+        reviewMapper.deleteReviewImage(reviewId, imageUrl);
+    }
+
+    public void addReviewImage(Integer reviewId, String imageUrl) {
+        reviewMapper.insertReviewImage(reviewId, imageUrl, 0);
     }
 }

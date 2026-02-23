@@ -12,4 +12,5 @@ public interface OrderMapper {
     void deductPoint(@Param("userId") int userId, @Param("amount") int amount, @Param("orderId") int orderId);
     void useCoupon(@Param("userCouponId") int userCouponId, @Param("orderId") int orderId);
     void earnPoint(@Param("userId") int userId, @Param("amount") int amount, @Param("orderId") int orderId);
+    Map<String, Object> selectOrdererInfo(@Param("userId") int userId);
 }

@@ -187,70 +187,18 @@
                     </div>
                     <div class="filter">
                         <div class="text-filter">
-                            <div class="best-filter">베스트순</div>
+                            <div class="best-filter">높은평점</div>
+                            <div class="row-filter">낮은평점</div>
                             <div class="new-filter">최신순</div>
                         </div>
-                        <div class="select-filter">
-                            <div class="star-filter">
-                                <button type="button" class="filter-btn">별점</button>
-                                <div class="dropdown">
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="stars">★★★★★</span>
-                                        <span class="count">(44,154개)</span>
-                                    </label>
-
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="stars">★★★★☆</span>
-                                        <span class="count">(6,395개)</span>
-                                    </label>
-
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="stars">★★★☆☆</span>
-                                        <span class="count">(1,022개)</span>
-                                    </label>
-
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="stars">★★☆☆☆</span>
-                                        <span class="count">(160개)</span>
-                                    </label>
-
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="stars">★☆☆☆☆</span>
-                                        <span class="count">(104개)</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="option-filter">
-                                <button type="button" class="filter-btn">옵션</button>
-                                <div class="dropdown">
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="option-name">하늘색</span>
-                                    </label>
-                                    <label class="option">
-                                        <input type="checkbox">
-                                        <span class="option-name">노란색</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="review-item" th:each="review : ${reviews}">
+                    <div class="review-item" th:each="review : ${reviews}" th:data-review-id="${review['id']}">
                         <div class="profile">
                             <img class="img" th:src="${review['profileImageUrl']}" alt="프로필">
                             <div class="info">
                                 <div class="nickname" th:text="${review['petName']}"></div>
                                 <div class="rating">
-                                    <div class="score">
-                                        <th:block th:each="i : ${#numbers.sequence(1, 5)}">
-                                            <span th:text="${i <= review['rating']} ? '★' : '☆'"></span>
-                                        </th:block>
-                                    </div>
+                                    <div class="score"><th:block th:each="i : ${#numbers.sequence(1, 5)}"><span th:text="${i <= review['rating']} ? '★' : '☆'"></span></th:block></div>
                                     <div class="date" th:text="${review['createdAt'] != null ? review['createdAt'].toString().substring(0, 10).replace('-', '.') : ''}"></div>
                                 </div>
                             </div>
@@ -261,6 +209,7 @@
                                  th:src="${imgUrl}" class="review-img" alt="리뷰이미지">
                         </div>
                         <div class="review-text" th:text="${review['content']}"></div>
+                        <div class="update">수정</div>
                     </div>
                     <div class="empty" th:if="${#lists.isEmpty(reviews)}">등록된 리뷰가 없습니다.</div>
                 </div>

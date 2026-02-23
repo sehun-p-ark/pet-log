@@ -133,8 +133,9 @@
         > .filter {
           > .product-filter {
             padding: 0.3rem 0.6rem;
+            background-color: #ffffff;
             border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
-            border-radius: 0.3rem;
+            border-radius: 0.25rem;
             font-size: 0.9rem;
             color: $global-gray-text-color;
             cursor: pointer;

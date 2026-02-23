@@ -33,9 +33,10 @@ if (messageSelect) {
 }
 
 // 주소 검색
+const cover = document.querySelector('.cover');
+const addressCover = document.querySelector('.address-cover');
 const button = document.querySelector('.search-btn');
 if (button) {
-    const cover = document.querySelector('.cover');
     const addressWrapper = document.getElementById('address-wrapper');
     const addressContainer = document.getElementById('address-container');
     const postalCode = document.querySelector('.postal-code');
@@ -43,7 +44,7 @@ if (button) {
     const detailAddress = document.querySelector('.detail');
 
     button.addEventListener('click', () => {
-        cover.style.display = 'block';
+        addressCover.style.display = 'block';
         addressWrapper.classList.add('visible');
         new daum.Postcode({
             width: '400px',
@@ -52,7 +53,7 @@ if (button) {
                 postalCode.textContent = data.zonecode;
                 aboutAddress.textContent = data.roadAddress || data.jibunAddress;
 
-                cover.style.display = 'none';
+                addressCover.style.display = 'none';
                 addressWrapper.classList.remove('visible');
 
                 detailAddress.focus();
@@ -63,7 +64,7 @@ if (button) {
     const closeBtn = document.querySelector('#address-wrapper .button');
     if (closeBtn) {
         closeBtn.addEventListener('click', () => {
-            cover.style.display = 'none';
+            addressCover.style.display = 'none';
             addressWrapper.classList.remove('visible');
         });
     }
@@ -83,7 +84,7 @@ let pointDiscount = 0;
 
 // 페이지 로드 시 실행 (통합)
 document.addEventListener('DOMContentLoaded', () => {
-    // 기본배송지 자동 입력
+    // 기본배송지 자동 입력 (마이페이지 주소 가져오기)
     const defaultDeliveryItem = document.querySelector('.delivery-item .default-badge')?.closest('.delivery-item');
 
     if (defaultDeliveryItem) {
@@ -94,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const detailAddr = defaultDeliveryItem.querySelector('.detail-addr').textContent;
         const phone = defaultDeliveryItem.querySelector('.phone').textContent;
 
-        document.querySelector('.delivery-name .input').value = deliveryName;
         document.querySelector('.orderer-name .input').value = recipient;
         document.querySelector('.postal-code').textContent = postal.replace(/\[|\]/g, '');
         document.querySelector('.about-address').textContent = addr;
@@ -120,17 +120,34 @@ document.addEventListener('DOMContentLoaded', () => {
         deliveryFee = parseInt(deliveryFeeEl.textContent.replace(/[^0-9]/g, ''));
     }
 
+    const pasteBtn = document.querySelector('.delivery-header .paste');
+    if (pasteBtn) {
+        pasteBtn.addEventListener('click', () => {
+            const ordererName = document.querySelector('.name-wrapper .input').value;
+            const ordererPhonePrefix = document.querySelector('.phone-wrapper .num-select').value;
+            const ordererPhoneNum = document.querySelector('.phone-wrapper .input').value;
+
+            document.querySelector('.orderer-name .input').value = ordererName;
+            document.querySelector('.phone-num .num-select').value = ordererPhonePrefix;
+            document.querySelector('.phone-num .input').value = ordererPhoneNum;
+        });
+    }
+
     updatePaymentSummary();
 });
 
 if (changeBtn && deliveryModal) {
     changeBtn.addEventListener('click', () => {
         deliveryModal.classList.add('visible');
+        cover.style.opacity = '1';
+        cover.style.pointerEvents = 'auto';
         document.body.style.overflow = 'hidden';
     });
 
     const closeModal = () => {
         deliveryModal.classList.remove('visible');
+        cover.style.opacity = '0';
+        cover.style.pointerEvents = 'none';
         document.body.style.overflow = '';
     };
 
@@ -150,25 +167,23 @@ if (changeBtn && deliveryModal) {
             e.stopPropagation();
             const item = e.target.closest('.delivery-item');
 
-            const deliveryName = item.querySelector('.delivery-name').textContent;
-            const recipient = item.querySelector('.recipient').textContent;
             const postal = item.querySelector('.postal').textContent;
             const addr = item.querySelector('.addr').textContent;
             const detailAddr = item.querySelector('.detail-addr').textContent;
-            const phone = item.querySelector('.phone').textContent;
 
-            document.querySelector('.delivery-name .input').value = deliveryName;
-            document.querySelector('.orderer-name .input').value = recipient;
             document.querySelector('.postal-code').textContent = postal.replace(/\[|\]/g, '');
             document.querySelector('.about-address').textContent = addr;
             document.querySelector('.detail-address .detail').value = detailAddr;
 
+            const recipient = item.querySelector('.recipient').textContent;
+            const phone = item.querySelector('.phone').textContent;
+
+            document.querySelector('.orderer-name .input').value = recipient;
+
             const phoneParts = phone.split('-');
             if (phoneParts.length === 3) {
-                const phoneSelect = document.querySelector('.phone-num .num-select');
-                const phoneInput = document.querySelector('.phone-num .input');
-                phoneSelect.value = phoneParts[0];
-                phoneInput.value = phoneParts[1] + phoneParts[2];
+                document.querySelector('.phone-num .num-select').value = phoneParts[0];
+                document.querySelector('.phone-num .input').value = phoneParts[1] + phoneParts[2];
             }
 
             closeModal();
@@ -186,7 +201,6 @@ if (changeBtn && deliveryModal) {
                 item.remove();
 
                 if (isDefault) {
-                    document.querySelector('.delivery-name .input').value = '';
                     document.querySelector('.orderer-name .input').value = '';
                     document.querySelector('.postal-code').textContent = '';
                     document.querySelector('.about-address').textContent = '';
@@ -443,7 +457,7 @@ if (paymentBtn) {
             productId: parseInt(wrapper.dataset.productId),
             optionId: wrapper.dataset.optionId ? parseInt(wrapper.dataset.optionId) : null,
             quantity: parseInt(wrapper.dataset.quantity),
-            price: Math.floor(parseFloat(wrapper.dataset.price)) * parseInt(wrapper.dataset.quantity)
+            price: Math.floor(parseFloat(wrapper.dataset.price))
         }));
 
         const saveRes = await fetch('/shop/payment/prepare', {

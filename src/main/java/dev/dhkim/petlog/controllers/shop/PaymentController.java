@@ -70,6 +70,9 @@ public class PaymentController {
         int availablePoint = pointService.getAvailablePoint(userId);
         modelAndView.addObject("availablePoint", availablePoint);
 
+        Map<String, Object> ordererInfo = orderService.getOrdererInfo(userId);
+
+        modelAndView.addObject("ordererInfo", ordererInfo);
         modelAndView.addObject("selectedItems", selectedItems);
         modelAndView.addObject("totalPrice", totalPrice);
         modelAndView.addObject("totalDeliveryFee", totalDeliveryFee);
@@ -127,6 +130,9 @@ public class PaymentController {
         int availablePoint = pointService.getAvailablePoint(userId);
         modelAndView.addObject("availablePoint", availablePoint);
 
+        Map<String, Object> ordererInfo = orderService.getOrdererInfo(userId);
+
+        modelAndView.addObject("ordererInfo", ordererInfo);
         modelAndView.addObject("selectedItems", selectedItems);
         modelAndView.addObject("totalPrice", totalPrice);
         modelAndView.addObject("totalDeliveryFee", totalDeliveryFee);

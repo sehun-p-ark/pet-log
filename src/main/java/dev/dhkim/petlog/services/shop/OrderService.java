@@ -75,4 +75,8 @@ public class OrderService {
             orderMapper.earnPoint(userId, earnPoint, orderId);
         }
     }
+
+    public Map<String, Object> getOrdererInfo(int userId) {
+        return orderMapper.selectOrdererInfo(userId);
+    }
 }

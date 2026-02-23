@@ -1,3 +1,13 @@
+.address-cover {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #00000070;
+  width: 100%;
+  height: 100%;
+  z-index: 30; }
+
 .cover {
   display: none;
   position: fixed;
@@ -6,7 +16,7 @@
   background-color: #00000070;
   width: 100%;
   height: 100%;
-  z-index: 29; }
+  z-index: 30; }
 
 .address-container {
   align-items: flex-end;
@@ -17,13 +27,13 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  position: absolute;
+  position: fixed;
   background-color: #ffffff;
   border: 0.0625rem solid #e7e5e4;
   border-radius: 0.35rem;
   opacity: 0;
   pointer-events: none;
-  z-index: 30; }
+  z-index: 31; }
   .address-container > * {
     flex-grow: 0;
     flex-shrink: 0; }
@@ -191,36 +201,25 @@
           font-size: 1.3rem;
           font-weight: 500;
           padding-bottom: 0.5rem; }
-        #payment > .info-wrapper > .delivery-info > .delivery-header > .change {
-          font-size: 1rem;
-          font-weight: 600;
-          padding-bottom: 0.5rem;
-          color: #38A34C;
-          cursor: pointer; }
-      #payment > .info-wrapper > .delivery-info > .delivery-name {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        gap: 0;
-        justify-content: flex-start;
-        width: 100%;
-        padding-top: 0.7rem; }
-        #payment > .info-wrapper > .delivery-info > .delivery-name > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        #payment > .info-wrapper > .delivery-info > .delivery-name > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        #payment > .info-wrapper > .delivery-info > .delivery-name > .title {
-          font-size: 1rem;
-          color: #565656; }
-        #payment > .info-wrapper > .delivery-info > .delivery-name > .input {
-          background-color: #ffffff;
-          border: 0.0625rem solid #c7c7c7;
-          padding: 0.5rem 0.9rem;
-          border-radius: 0.35rem;
-          width: 15rem;
-          height: 2.5rem; }
+        #payment > .info-wrapper > .delivery-info > .delivery-header > .action {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          gap: 1.3rem;
+          justify-content: center; }
+          #payment > .info-wrapper > .delivery-info > .delivery-header > .action > * {
+            flex-grow: 0;
+            flex-shrink: 0; }
+          #payment > .info-wrapper > .delivery-info > .delivery-header > .action > .-flex-stretch {
+            flex-grow: 1;
+            flex-shrink: 1; }
+          #payment > .info-wrapper > .delivery-info > .delivery-header > .action > .paste,
+          #payment > .info-wrapper > .delivery-info > .delivery-header > .action > .change {
+            font-size: 1rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            color: #38A34C;
+            cursor: pointer; }
       #payment > .info-wrapper > .delivery-info > .orderer-name {
         align-items: center;
         display: flex;
@@ -794,7 +793,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 31;
+  z-index: 32;
   justify-content: center;
   align-items: center; }
   .delivery-change-modal.visible {

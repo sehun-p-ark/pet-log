@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="dev.dhkim.petlog.mappers.shop.ReviewMapper">
-    <select id="selectReviewsByProductId" resultType="map">
-        SELECT r.id,
-               r.rating,
-               r.content,
-               r.created_at AS createdAt,
-               p.name       AS petName,
-               p.image_url  AS profileImageUrl,
-               opt.option_name AS optionName
+    <select id="selectReviews" resultType="map">
+        SELECT r.id, r.rating, r.content,
+        r.created_at AS createdAt,
+        p.name AS petName,
+        p.image_url AS profileImageUrl,
+        opt.option_name AS optionName
         FROM `petlog`.review r
-                 JOIN `petlog`.users u ON r.user_id = u.id
-                 LEFT JOIN `petlog`.pets p ON u.id = p.user_id AND p.is_primary = true
-                 LEFT JOIN (
-            SELECT oi.option_id, o.user_id, oi.product_id
-            FROM `petlog`.order_item oi
-                     JOIN `petlog`.`order` o ON oi.order_id = o.id
-            WHERE (o.user_id, oi.product_id, o.created_at) IN (
-                SELECT o2.user_id, oi2.product_id, MAX(o2.created_at)
-                FROM `petlog`.order_item oi2
-                         JOIN `petlog`.`order` o2 ON oi2.order_id = o2.id
-                GROUP BY o2.user_id, oi2.product_id
-            )
+        JOIN `petlog`.users u ON r.user_id = u.id
+        LEFT JOIN `petlog`.pets p ON u.id = p.user_id AND p.is_primary = true
+        LEFT JOIN (
+        SELECT oi.option_id, o.user_id, oi.product_id
+        FROM `petlog`.order_item oi
+        JOIN `petlog`.`order` o ON oi.order_id = o.id
+        WHERE (o.user_id, oi.product_id, o.created_at) IN (
+        SELECT o2.user_id, oi2.product_id, MAX(o2.created_at)
+        FROM `petlog`.order_item oi2
+        JOIN `petlog`.`order` o2 ON oi2.order_id = o2.id
+        GROUP BY o2.user_id, oi2.product_id
+        )
         ) latest_oi ON latest_oi.user_id = r.user_id AND latest_oi.product_id = r.product_id
-                 LEFT JOIN `petlog`.`option` opt ON latest_oi.option_id = opt.id
+        LEFT JOIN `petlog`.`option` opt ON latest_oi.option_id = opt.id
         WHERE r.product_id = #{productId}
-        ORDER BY r.rating DESC, r.created_at DESC
+        <choose>
+            <when test="sort == 'new'">ORDER BY r.created_at DESC</when>
+            <when test="sort == 'low'">ORDER BY r.rating ASC, r.created_at DESC</when>
+            <otherwise>ORDER BY r.rating DESC, r.created_at DESC</otherwise>
+        </choose>
     </select>
 
     <select id="selectReviewImages" resultType="string">
@@ -58,33 +60,6 @@
         ORDER BY rating DESC
     </select>
 
-    <select id="selectReviewsByProductIdSortedByDate" resultType="map">
-        SELECT r.id,
-               r.rating,
-               r.content,
-               r.created_at AS createdAt,
-               p.name       AS petName,
-               p.image_url  AS profileImageUrl,
-               opt.option_name AS optionName
-        FROM `petlog`.review r
-                 JOIN `petlog`.users u ON r.user_id = u.id
-                 LEFT JOIN `petlog`.pets p ON u.id = p.user_id AND p.is_primary = true
-                 LEFT JOIN (
-            SELECT oi.option_id, o.user_id, oi.product_id
-            FROM `petlog`.order_item oi
-                     JOIN `petlog`.`order` o ON oi.order_id = o.id
-            WHERE (o.user_id, oi.product_id, o.created_at) IN (
-                SELECT o2.user_id, oi2.product_id, MAX(o2.created_at)
-                FROM `petlog`.order_item oi2
-                         JOIN `petlog`.`order` o2 ON oi2.order_id = o2.id
-                GROUP BY o2.user_id, oi2.product_id
-            )
-        ) latest_oi ON latest_oi.user_id = r.user_id AND latest_oi.product_id = r.product_id
-                 LEFT JOIN `petlog`.`option` opt ON latest_oi.option_id = opt.id
-        WHERE r.product_id = #{productId}
-        ORDER BY r.created_at DESC
-    </select>
-
     <!--리뷰 등록-->
     <insert id="insertReview">
         INSERT INTO petlog.review (user_id, product_id, rating, content)
@@ -113,4 +88,17 @@
                      AND product_id = #{productId}
                )
     </select>
+
+    <!--리뷰 수정-->
+    <update id="updateReview">
+        UPDATE petlog.review
+        SET rating = #{rating}, content = #{content}
+        WHERE id = #{reviewId} AND user_id = #{userId}
+    </update>
+
+    <!--리뷰 이미지 삭제-->
+    <delete id="deleteReviewImage">
+        DELETE FROM petlog.review_image
+        WHERE review_id = #{reviewId} AND image_url = #{imageUrl}
+    </delete>
 </mapper>

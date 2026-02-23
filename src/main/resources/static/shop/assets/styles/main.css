@@ -150,6 +150,10 @@
         font-size: 1.3rem;
         font-weight: 700;
         color: #565656; }
+        @media (max-width: 700px) {
+          #main > .new-product > .category-wrapper > .caption,
+          #main > .best-product > .category-wrapper > .caption {
+            font-size: 1.1rem; } }
       #main > .new-product > .category-wrapper > .category,
       #main > .best-product > .category-wrapper > .category {
         align-items: center;
@@ -186,6 +190,11 @@
           #main > .best-product > .category-wrapper > .category > .item > .-flex-stretch {
             flex-grow: 1;
             flex-shrink: 1; }
+          @media (max-width: 700px) {
+            #main > .new-product > .category-wrapper > .category > .item,
+            #main > .best-product > .category-wrapper > .category > .item {
+              padding: 0.3rem 0.6rem;
+              font-size: 0.8rem; } }
           #main > .new-product > .category-wrapper > .category > .item > input[type="radio"],
           #main > .best-product > .category-wrapper > .category > .item > input[type="radio"] {
             display: none; }
@@ -197,6 +206,10 @@
           #main > .best-product > .category-wrapper > .category > .item:has(input[type="radio"]:checked) {
             background-color: #fcb727;
             color: #FFFFFF; }
+        @media (max-width: 700px) {
+          #main > .new-product > .category-wrapper > .category,
+          #main > .best-product > .category-wrapper > .category {
+            gap: 0.4rem; } }
     #main > .new-product > .product,
     #main > .best-product > .product {
       display: grid;
