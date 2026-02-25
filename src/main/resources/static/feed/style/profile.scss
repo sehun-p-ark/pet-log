@@ -210,6 +210,114 @@
     }
 }
 
+/* 채팅 모달 */
+.chat-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    &.hidden {
+        display: none;
+    }
+
+    > .chat-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    > .chat-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 25rem;
+        height: 38rem;
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+
+        @include flex(column, stretch, stretch);
+
+        > .chat-header {
+            @include flex(row, center, space-between);
+            padding: 0.8rem 1rem;
+            background-color: $global-green-background-color;
+            color: $global-white-text-color;
+            font-weight: 600;
+
+            > .chat-title {
+                font-size: 1rem;
+            }
+
+            > .chat-close {
+                font-size: 1.2rem;
+                cursor: pointer;
+                background: none;
+                border: none;
+                color: inherit;
+            }
+        }
+
+        > .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: $global-gray-background-color;
+
+            @include flex(column, flex-start, flex-start, 0.5rem);
+
+            > .message {
+                max-width: 70%;
+                padding: 0.6rem 0.8rem;
+                border-radius: 1rem;
+                font-size: 0.9rem;
+                line-height: 1.3rem;
+            }
+
+            > .message.me {
+                align-self: flex-end;
+                background-color: $global-green-background-color;
+                color: white;
+            }
+
+            > .message.other {
+                align-self: flex-start;
+                background-color: white;
+                border: 0.0625rem solid #ddd;
+            }
+        }
+
+        > .chat-input {
+            @include flex(row, center, stretch, 0.5rem);
+            padding: 0.8rem;
+            border-top: 0.0625rem solid #ddd;
+            background-color: white;
+
+            > input {
+                flex: 1;
+                padding: 0.6rem 0.8rem;
+                border-radius: 0.8rem;
+                border: 0.0625rem solid #ccc;
+                font-size: 0.9rem;
+            }
+
+            > button {
+                padding: 0.6rem 1rem;
+                border-radius: 0.8rem;
+                border: none;
+                background-color: $global-green-background-color;
+                color: white;
+                cursor: pointer;
+
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: 510px) {
     .profile-feed {
         grid-template-columns: repeat(2, 1fr);

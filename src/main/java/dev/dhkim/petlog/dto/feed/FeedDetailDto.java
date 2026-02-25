@@ -24,4 +24,5 @@ public class FeedDetailDto {
     private int commentCount;
     private List<FeedMediaDto> feedMediaDtos;
     private List<FeedCommentDto> comments;
+    private boolean isWriter;
 }

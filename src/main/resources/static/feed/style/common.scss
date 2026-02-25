@@ -178,12 +178,13 @@
 글 쓰기 버튼 관련 css
 
 ****************************************************/
-.create-feed {
+.create-feed{
     @include flex(row, center, center);
     position: fixed;
     right: 1.25rem;
-    bottom: 2.5rem;
-    padding: 0.7rem 1.4rem;
+    bottom: 6.5rem;
+    width: 5rem;
+    height: 3.5rem;
     background-color: darkorange;
     color: $global-white-text-color;
     font-weight: 600;
@@ -192,7 +193,7 @@
     cursor: pointer;
     z-index: 5;
     box-shadow: 0 0.3rem 0.8rem rgba(0,0,0,0.15);
-    transition: all 0.25s ease;
+    transition: width, height 0.25s ease;
 
     /* + 아이콘 */
     > .plus {
@@ -210,7 +211,8 @@
     }
 
     &.compact {
-        padding: 0.7rem 1.1rem;
+        width: 3.5rem;
+        height: 3.5rem;
         border-radius: 50%;
 
         > .plus {
@@ -223,5 +225,9 @@
             width: 0;
             overflow: hidden;
         }
+    }
+
+    &:hover {
+        background-color: lighten(darkorange, 5%);
     }
 }

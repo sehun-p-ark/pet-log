@@ -2,19 +2,14 @@ package dev.dhkim.petlog.services.feed;
 
 import dev.dhkim.petlog.dto.feed.*;
 import dev.dhkim.petlog.entities.feed.FeedMediaEntity;
-import dev.dhkim.petlog.mappers.feed.FeedCommentMapper;
-import dev.dhkim.petlog.mappers.feed.FeedLikeMapper;
-import dev.dhkim.petlog.mappers.feed.FeedMapper;
-import dev.dhkim.petlog.mappers.feed.FeedMediaMapper;
+import dev.dhkim.petlog.mappers.feed.*;
 import dev.dhkim.petlog.utils.feed.AddressUtil;
 import dev.dhkim.petlog.utils.feed.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,65 +23,48 @@ public class FeedQueryService {
     private final FeedCommentService feedCommentService;
     private final AddressUtil addressUtil;
 
-    // 피드 페이지 FEED 조회
-    // 로딩 찾아오기 (lastFeedId보다 작은 값, size갯수만큼, sort에 따라)
+    /* ===== 무한스크롤 조회 ===== */
+
     public FeedScrollDto getFeeds(String sort,
                                   Integer lastFeedId,
                                   Integer lastLikeCount,
                                   String lastCreatedAt,
                                   int size,
-                                  Integer userId
-    ) {
-        List<FeedDto> feedList = feedMapper.selectFeeds(sort, lastFeedId, lastLikeCount, lastCreatedAt, size + 1);
+                                  Integer userId) {
 
-        boolean hasNext = feedList.size() > size; // size만큼 조회 후 다음 게시물 유무
+        List<FeedDto> feedList =
+                feedMapper.selectFeeds(sort, lastFeedId, lastLikeCount, lastCreatedAt, size + 1);
 
-        if (hasNext) { // hasNext가 있으면 -> 마지막 +1 조회했던거 지우기
+        boolean hasNext = feedList.size() > size;
+
+        if (hasNext) {
             feedList.remove(size);
         }
 
-        if (feedList.isEmpty()) { // 조회 결과가 비었으면?
+        if (feedList.isEmpty()) {
             return FeedScrollDto.builder()
-                    .feedDtos(Collections.emptyList()) // 빈 리스트
-                    .lastFeedId(null) // 마지막 게시물 없음
+                    .feedDtos(Collections.emptyList())
+                    .lastFeedId(null)
                     .lastLikeCount(null)
                     .lastCreatedAt(null)
-                    .hasNext(false) // 다음 게시물 없음
+                    .hasNext(false)
                     .build();
         }
 
-        // 피드 ID에 해당하는 미디어 넣어주기
         feedMediaService.addMediaToFeed(feedList);
-        // 피드 ID에 맞게 주소 넣기
-        feedList.forEach(feed ->
-                feed.setAddress(addressUtil.extractCity(feed.getAddress()))
-        );
-
-        // 좋아요 누른 게시물 전부 가져오기
-        if (userId != null) {
-            List<Integer> feedIds = feedList.stream()
-                    .map(FeedDto::getFeedId)
-                    .toList();
-
-            List<Integer> likedFeedIds =
-                    feedLikeMapper.selectLikedFeedIds(userId, feedIds); // 좋아요한 피드 아이디들만 가져옴
-
-            Set<Integer> likedSet = new HashSet<>(likedFeedIds); // 아래에서 set.contains를 사용하기 위함 // List로 조회하면 성능 최악
-
-            feedList.forEach(feed ->
-                    feed.setLiked(likedSet.contains(feed.getFeedId()))  //getFeedId가 likedSet안에 포함되어 있으면 liked = true
-            );
-        }
+        applyCityAddress(feedList);
+        applyLikedStatus(feedList, userId);
 
         FeedDto lastFeed = feedList.get(feedList.size() - 1);
-        Integer nextLastFeedId = hasNext ? lastFeed.getFeedId() : null; // 마지막 게시물 아이디 가져오기
-        Integer nextLastLikeCount = null; // 마지막 게시물의 좋아요 수
-        String nextLastCreatedAt = null; // 마지막 게시물의 생성일
+
+        Integer nextLastFeedId = hasNext ? lastFeed.getFeedId() : null;
+        Integer nextLastLikeCount = null;
+        String nextLastCreatedAt = null;
 
         if (hasNext) {
             switch (sort) {
-                case "like" -> nextLastLikeCount = lastFeed.getLikeCount(); // 인기순 -> 마지막 게시물의 좋아요 수
-                case "latest" -> nextLastCreatedAt = lastFeed.getCreatedAt().toString(); // 최신순 -> 마지막 게시물의 생성일
+                case "like" -> nextLastLikeCount = lastFeed.getLikeCount();
+                case "latest" -> nextLastCreatedAt = lastFeed.getCreatedAt().toString();
             }
         }
 
@@ -99,85 +77,64 @@ public class FeedQueryService {
                 .build();
     }
 
-    // 디테일 페이지 FEED 조회
-    // 디테일 페이지 - 동일 지역 피드 조회 (좌측 영역)
+    /* ===== 디테일 좌측영역 - 같은 지역 피드 ===== */
+
     public List<FeedDto> getRelatedFeeds(int feedId, Integer userId) {
 
         FeedDto dbFeed = feedMapper.selectFeedById(feedId);
-        if (dbFeed == null || dbFeed.getAddress() == null) return List.of();
+        if (dbFeed == null || dbFeed.getAddress() == null)
+            return List.of();
 
-        // 같은 지역 피드 조회 (현재 피드는 제외)
-        List<FeedDto> relatedFeeds = feedMapper.selectFeedByAddress(dbFeed.getAddress(), feedId);
-        if (relatedFeeds.isEmpty()) return relatedFeeds;
+        String city = addressUtil.extractCity(dbFeed.getAddress());
+        if (city.isBlank())
+            return List.of();
 
-        // 피드 ID에 해당하는 미디어 넣어주기
+        List<FeedDto> relatedFeeds =
+                feedMapper.selectFeedByAddress(city, feedId);
+
+        if (relatedFeeds.isEmpty())
+            return relatedFeeds;
+
         feedMediaService.addMediaToFeed(relatedFeeds);
-        // 피드 ID에 맞게 주소 넣어주기
-        relatedFeeds.forEach(f ->
-                f.setAddress(addressUtil.extractCity(f.getAddress()))
-        );
+        applyCityAddress(relatedFeeds);
+        applyLikedStatus(relatedFeeds, userId);
 
-        // 좋아요 누른 게시물 전부 가져오기
-        if (userId != null) {
-            List<Integer> feedIds = relatedFeeds.stream()
-                    .map(FeedDto::getFeedId)
-                    .toList();
-
-            List<Integer> likedFeedIds =
-                    feedLikeMapper.selectLikedFeedIds(userId, feedIds); // 좋아요한 피드 아이디들만 가져옴
-
-            Set<Integer> likedSet = new HashSet<>(likedFeedIds); // 아래에서 set.contains를 사용하기 위함 // List로 조회하면 성능 최악
-
-            relatedFeeds.forEach(feed ->
-                    feed.setLiked(likedSet.contains(feed.getFeedId()))  //getFeedId가 likedSet안에 포함되어 있으면 liked = true
-            );
-        }
         return relatedFeeds;
     }
 
-    // 디테일 페이지
-    // 디테일 페이지 - 선택한 피드 조회 (우측 영역)
-    public FeedDetailDto getFeedDetail(int feedId, Integer userId) {
-        // 1. 피드id를 통해서 피드의 작성자, 제목, 내용 찾음
-        FeedDto feed = feedMapper.selectFeedById(feedId);
-        if (feed == null) {
-            return null;
-        }
-        // 2. 피드id를 통해서 피드의 미디어들을 찾음
-        List<FeedMediaEntity> mediaList = feedMediaMapper.selectMediaByFeedId(feedId);
-        // Entity -> DTO로 변환시키기
-        List<FeedMediaDto> mediaDtos = mediaList.stream()
-                .map(m -> FeedMediaDto.builder()
-                        .mediaUrl(m.getMediaUrl())
-                        .mediaType(m.getMediaType())
-                        .sortOrder(m.getSortOrder())
-                        .build())
-                .toList();
+    /* ===== 디테일페이지 우측영역 ===== */
 
-        // 3. 게시물 좋아요 상태 확인
+    public FeedDetailDto getFeedDetail(int feedId, Integer userId) {
+
+        FeedDto feed = feedMapper.selectFeedById(feedId);
+        if (feed == null) return null;
+
+        List<FeedMediaEntity> mediaList =
+                feedMediaMapper.selectMediaByFeedId(feedId);
+
+        List<FeedMediaDto> mediaDtos = toMediaDtos(mediaList);
+
         boolean liked = false;
+        boolean write = false;
+
         if (userId != null) {
             liked = feedLikeMapper.existsFeedLike(feedId, userId);
+            write = feed.getUserId() == userId;
         }
 
+        List<FeedCommentDto> commentList =
+                feedCommentMapper.selectCommentById(feedId);
 
-        // 4. 피드id를 통해서 피드의 댓글들을 찾음
-        // 4-1. 댓글에서 유저의 닉네임, 대표 펫의 사진을 가져옴
-        List<FeedCommentDto> commentList = feedCommentMapper.selectCommentById(feedId);
-        // 트리구조 구성
-        List<FeedCommentDto> commentTree = feedCommentService.buildCommentTree(commentList);
-        // 시간 ~전으로 설정
+        List<FeedCommentDto> commentTree =
+                feedCommentService.buildCommentTree(commentList);
+
         for (FeedCommentDto parent : commentTree) {
             parent.setTimeAgo(TimeUtil.getTimeAgo(parent.getCreatedAt()));
-
             for (FeedCommentDto reply : parent.getReplies()) {
                 reply.setTimeAgo(TimeUtil.getTimeAgo(reply.getCreatedAt()));
             }
         }
 
-
-
-        // 4. 이 모든걸 FeedDetailDto로 묶어서 controller로 보내주기
         return FeedDetailDto.builder()
                 .feedId(feed.getFeedId())
                 .userId(feed.getUserId())
@@ -191,27 +148,85 @@ public class FeedQueryService {
                 .commentCount(feed.getCommentCount())
                 .feedMediaDtos(mediaDtos)
                 .comments(commentTree)
+                .isWriter(write)
                 .build();
     }
 
-    // 프로필 페이지
-    // 내가 쓴 FEED 조회 (기본 선택)
+    /* ===== 수정 페이지 ===== */
+
+    @Transactional(readOnly = true)
+    public FeedDto getFeedForEdit(int feedId, int userId) {
+
+        FeedDto feed = feedMapper.selectFeedById(feedId);
+
+        if (feed == null)
+            throw new IllegalArgumentException("존재하지 않는 게시글");
+
+        if (feed.getUserId() != userId)
+            throw new SecurityException("수정 권한 없음");
+
+        List<FeedMediaEntity> mediaList =
+                feedMediaMapper.selectMediaByFeedId(feedId);
+
+        feed.setFeedMediaDtos(toMediaDtos(mediaList));
+
+        return feed;
+    }
+
+    /* ===== 프로필 페이지 ==== */
+
+    // 내가 작성한 피드
     public List<FeedThumbnailDto> getMyFeeds(String nickname) {
-        List<FeedThumbnailDto> myFeeds = feedMapper.selectMyFeeds(nickname);
-        return myFeeds == null ? List.of() : myFeeds;
+        List<FeedThumbnailDto> result = feedMapper.selectMyFeeds(nickname);
+        return result == null ? List.of() : result;
     }
-
-    // 프로필 페이지
-    // 내가 좋아요 누른 FEED 조회
+    // 좋아요 누른 피드
     public List<FeedThumbnailDto> getLikedFeeds(String nickname) {
-        List<FeedThumbnailDto> likeFeeds = feedMapper.selectLikedFeeds(nickname);
-        return likeFeeds == null ? List.of() : likeFeeds;
+        List<FeedThumbnailDto> result = feedMapper.selectLikedFeeds(nickname);
+        return result == null ? List.of() : result;
+    }
+    // 팔로우한 사람들 피드
+    public List<FeedThumbnailDto> getRecommendedFeeds(String nickname) {
+        List<FeedThumbnailDto> result = feedMapper.selectRecommendedFeeds(nickname);
+        return result == null ? List.of() : result;
     }
 
-    // 프로필 페이지
-    // 내가 팔로우 한 사람들의 FEED 조회
-    public List<FeedThumbnailDto> getRecommendedFeeds(String nickname) {
-        List<FeedThumbnailDto> recommendFeeds = feedMapper.selectRecommendedFeeds(nickname);
-        return recommendFeeds == null ? List.of() : recommendFeeds;
+
+    /* ===== 공통 유틸 메서드 ===== */
+
+    private void applyCityAddress(List<FeedDto> feeds) {
+        feeds.forEach(feed ->
+                feed.setAddress(addressUtil.extractCity(feed.getAddress()))
+        );
+    }
+
+    private void applyLikedStatus(List<FeedDto> feeds, Integer userId) {
+        if (userId == null || feeds.isEmpty()) return;
+
+        List<Integer> feedIds = feeds.stream()
+                .map(FeedDto::getFeedId)
+                .toList();
+
+        List<Integer> likedFeedIds =
+                feedLikeMapper.selectLikedFeedIds(userId, feedIds);
+
+        Set<Integer> likedSet = new HashSet<>(likedFeedIds);
+
+        feeds.forEach(feed ->
+                feed.setLiked(likedSet.contains(feed.getFeedId()))
+        );
+    }
+
+    private List<FeedMediaDto> toMediaDtos(List<FeedMediaEntity> mediaList) {
+        return mediaList.stream()
+                .map(m -> FeedMediaDto.builder()
+                        .id(m.getId())
+                        .feedId(m.getFeedId())
+                        .mediaUrl(m.getMediaUrl())
+                        .thumbnailUrl(m.getThumbnailUrl())
+                        .mediaType(m.getMediaType())
+                        .sortOrder(m.getSortOrder())
+                        .build())
+                .toList();
     }
 }

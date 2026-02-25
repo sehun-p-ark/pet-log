@@ -13,6 +13,14 @@ public interface FeedMapper {
     // db에 dummyFeed 넣기
     int insertFeed(FeedEntity feed);
 
+    // 피드 제목, 내용 업데이트
+    int updateFeed(@Param("feedId") int feedId,
+                   @Param("title") String title,
+                   @Param("content") String content);
+
+    // 피드 삭제
+    int deleteFeed(int feedId);
+
     // 무한 스크롤 피드 조회 (최신순)
     List<FeedDto> selectFeeds(@Param("sort") String sort,
                               @Param("lastFeedId") Integer lastFeedId,

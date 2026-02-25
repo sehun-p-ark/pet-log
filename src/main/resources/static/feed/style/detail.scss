@@ -69,6 +69,7 @@
 
 // 유저 정보 (헤더)
 .detail-header {
+    @include flex(row, flex-start, center);
     width: 100%;
     margin-bottom: 0.75rem;
     padding-bottom: 0.75rem;
@@ -77,6 +78,7 @@
 
 .detail-user {
     @include flex(row, center, flex-start, 0.8rem);
+    flex: 1;
 
     .avatar {
         width: 2.6rem;
@@ -97,6 +99,79 @@
         .place {
             font-size: 0.75rem;
             color: $global-gray-text-color;
+        }
+    }
+}
+
+// 헤더 더보기 버튼
+.more-wrap {
+    position: relative;
+
+    .more-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 999rem;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+
+        svg {
+            width: 28px;
+            height: 28px;
+            color: #555555;
+            transition: color 0.15s ease;
+            border-radius: 999rem;
+
+            &:hover {
+                color: #000000;
+            }
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    .more-menu {
+        @include flex(column, center, flex-start, 0.3rem);
+        position: absolute;
+        top: 35px;
+        right: 5px;
+        min-width: 90px;
+        padding: 8px 0;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        z-index: 25;
+
+        &.hidden {
+            display: none;
+        }
+
+        button {
+            padding: 10px 16px;
+            text-align: center;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border-radius: 8px;
+
+            transition: background 0.15s ease;
+
+            &:hover {
+                background: #f3f3f3;
+            }
+        }
+
+        .more-edit {
+            color: #333;
+        }
+
+        .more-delete {
+            color: #e53935;
+
+            &:hover {
+                background: rgba(229, 57, 53, 0.08);
+            }
         }
     }
 }

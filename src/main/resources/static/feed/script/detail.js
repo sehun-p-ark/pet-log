@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
     /* ===== 왼쪽 추천 피드 생성 ===== */
-    const feedId = parseInt(window.location.pathname.split("/").pop());
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const feedId = parseInt(pathParts[pathParts.length - 1], 10);
+    const userNickname = document.querySelector('.detail-header .nickname').dataset.nickname;
     const res = await fetch(`/api/feed/${feedId}/related`);
     const feeds = await res.json();
     renderFeedDetail(feeds);
+
+    /* ===== 헤더 영역 ===== */
+    const $moreWrap = document.querySelector('.more-wrap');
+    if (!$moreWrap) return;
+    const $moreBtn = document.querySelector('.more-btn');
+    const $moreMenu = document.querySelector('.more-menu');
+    const $moreEditBtn = $moreMenu.querySelector('.more-edit');
+    const $moreDeleteBtn = $moreMenu.querySelector('.more-delete');
 
     /* ===== 슬라이드 영역 ===== */
     const track = document.querySelector('.slide-track');
@@ -24,6 +34,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     const commentInput = commentForm.querySelector('.comment-input');
     const writeCommentBtn = commentForm.querySelector('.btn');
     const commentSection = detailArea.querySelector('.comments');
+
+    // 피드 더보기 버튼
+    $moreBtn.addEventListener('click', () => {
+        $moreMenu.classList.toggle('hidden');
+    });
+
+    // 수정하기 버튼
+    $moreEditBtn.addEventListener('click', () => {
+        window.location.href = `/feed/${feedId}/edit`;
+        $moreMenu.classList.add("hidden");
+    });
+
+    // 삭제하기 버튼
+    $moreDeleteBtn.addEventListener('click', async () => {
+        const confirmed = confirm("게시글을 삭제하시겠습니까?");
+        if (!confirmed) {
+            alert("지켜드렸습니다 ㅋ");
+            return;
+        }
+        alert("맞아요옹~ 난 냐옹이다!");
+        try{
+            const res = await fetch(`/api/feed/${feedId}`, {
+                method: 'DELETE'
+            });
+            const data = await res.json();
+            if (data.result === "LOGIN_REQUIRED") {
+                showMessage("로그인 후 이용가능합니다.");
+                return;
+            }
+            if (data.result !== "SUCCESS") {
+                showMessage("삭제에 실패하였습니다. 다시 시도햊쉐요.");
+                return;
+            }
+            showMessage("삭제되었습니다.");
+            window.location.href = `/feed/profile/${userNickname}`;
+        } catch (e) {
+            console.log("에러발생 삐용 삐용" + e);
+            showMessage("알 수 없는 오류가 발생하였습니다.")
+        }
+        $moreMenu.classList.add("hidden");
+    });
 
     if (slides.length > 0) {
         slides.forEach((_, i) => { // 점 생성
@@ -62,12 +113,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             const data = await res.json();
 
             if (data.result === 'LOGIN_REQUIRED') {
-                alert('로그인이 필요합니다.');
+                showMessage("로그인 후 이용 가능합니다.");
                 return;
             }
 
             if (data.result !== 'SUCCESS') {
-                alert('좋아요 처리 실패');
+                showMessage("좋아요 처리 실패");
                 return;
             }
 
@@ -82,7 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (error) {
         console.log(`좋아요 요청 중 오류 발생`, error);
-        alert('서버 오류가 발생함');
+        showMessage('서버 오류가 발생하였습니다. 다시 시도해주세요.');
         }
     });
 
@@ -101,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const content = commentInput.value.trim();
 
         if (!content || content === '') {
-            alert(`댓글을 입력해주세요.`);
+            showMessage("댓글을 입력해주세요");
             return;
         }
 
@@ -118,11 +169,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const data = await res.json();
             if (data.result === "LOGIN_REQUIRED") {
-                alert("로그인이 필요합니다.");
+                showMessage("로그인 후 이용 가능합니다");
                 return;
             }
             if (data.result !== "SUCCESS") {
-                alert("댓글 등록 실패");
+                showMessage("댓글 등록 실패");
                 return;
             }
             // 댓글 등록하기
@@ -131,7 +182,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             commentInput.value = '';
         } catch (error) {
         console.error('댓글 등록 오류:', error);
-        alert('서버 오류가 발생했습니다.');
+        showMessage('서버 오류가 발생했습니다. 다시 시도해주세요');
         }
     });
 
@@ -176,7 +227,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const content = input.value.trim();
 
             if (!content) {
-                alert('답글을 입력하세요.');
+                showMessage('답글을 입력하세요');
                 return;
             }
 
@@ -190,12 +241,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const data = await res.json();
 
                 if (data.result === 'LOGIN_REQUIRED') {
-                    alert('로그인이 필요합니다.');
+                    showMessage('로그인 후 이용 가능합니다');
                     return;
                 }
 
                 if (data.result !== 'SUCCESS') {
-                    alert('답글 등록 실패');
+                    showMessage('답글 등록 실패');
                     return;
                 }
 
@@ -225,12 +276,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const data = await res.json();
 
                 if (data.result === "LOGIN_REQUIRED") {
-                    alert('로그인이 필요합니다.');
+                    showMessage('로그인 후 이용 가능합니다');
                     return;
                 }
 
                 if (data.result !== 'SUCCESS') {
-                    alert('삭제 실패');
+                    showMessage('댓글 삭제 실패');
                     return;
                 }
 
@@ -241,7 +292,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             } catch (err) {
                 console.error(err);
-                alert('서버 오류');
+                showMessage('서버 오류가 발생했습니다. 다시 시도해주세요');
             }
 
             return;

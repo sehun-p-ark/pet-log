@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="dev.dhkim.petlog.mappers.feed.FeedMediaMapper">
     <insert id="insertFeedMediaList">
-        INSERT INTO petlog.feed_media
-        (feed_id, media_url, thumbnail_url, media_type, sort_order, source)
+        INSERT INTO `petlog`.`feed_media`
+        (`feed_id`, `media_url`, `thumbnail_url`, `media_type`, `sort_order`, `source`)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (
@@ -16,6 +16,28 @@
             )
         </foreach>
     </insert>
+    <update id="updateSortOrders">
+        <foreach collection="list" item="m" separator=";">
+            UPDATE `petlog`.`feed_media`
+            SET `sort_order` = #{m.sortOrder}
+            WHERE `id` = #{m.id}
+        </foreach>
+    </update>
+    <delete id="deleteNotIn">
+        DELETE
+        FROM `petlog`.`feed_media`
+        WHERE `feed_id` = #{feedId}
+        <if test="keepMediaIds != null and keepMediaIds.size > 0">
+            AND `id` NOT IN
+            <foreach collection="keepMediaIds"
+                     item="id"
+                     open="("
+                     separator=","
+                     close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
     <select id="selectByFeedIds" resultType="dev.dhkim.petlog.entities.feed.FeedMediaEntity">
         SELECT
         id            AS id,

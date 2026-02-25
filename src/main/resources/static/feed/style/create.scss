@@ -24,8 +24,8 @@
 
 .thumbnail {
     position: relative;
-    height: 100%;
     width: 100%;
+    aspect-ratio: 4/5;
     background-color: $global-gray-background-color;
     border: 0.125rem solid $global-border-color;
     border-radius: 1rem;

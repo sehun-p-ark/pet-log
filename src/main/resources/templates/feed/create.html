@@ -8,12 +8,16 @@
     <title>피드 작성 페이지</title>
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/feed/style/create.css">
+    <script th:inline="javascript">
+        const existingMedia = [[${mediaList}]];
+    </script>
     <script defer src="/feed/script/create.js"></script>
     <script defer src="/assets/scripts/common.js"></script>
 </head>
-<body>
+<body th:data-mode="${mode}"
+      th:data-feed-id="${feed != null ? feed.feedId : ''}">
 
-<div th:replace="fragments/common :: topNavigator"></div>
+<div th:replace="~{fragments/common :: topNavigator}"></div>
 
 <div class="cover"></div>
 <div class="message" id="message">
@@ -61,11 +65,13 @@
         <div class="information">
             <label class="title">
                 <span>제목</span>
-                <input name="title" type="text" placeholder="제목을 작성하세요" data-object="input">
+                <input name="title" type="text" placeholder="제목을 작성하세요" data-object="input"
+                th:value="${feed != null ? feed.title : ''}">
             </label>
             <label class="description">
                 <span>설명</span>
-                <textarea name="description" placeholder="자세한 설명을 추가하세요" data-object="input"></textarea>
+                <textarea name="description" placeholder="자세한 설명을 추가하세요" data-object="input"
+                th:text="${feed != null ? feed.content : ''}"></textarea>
             </label>
             <div class="form-actions">
                 <button type="submit" class="submit-btn" data-object="button" data-color="green">게시하기</button>
@@ -74,5 +80,6 @@
     </section>
     </form>
 </main>
+<div th:replace="~{fragments/chat :: chatModal}"></div>
 </body>
 </html>

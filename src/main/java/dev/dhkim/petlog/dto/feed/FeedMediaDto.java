@@ -15,6 +15,7 @@ public class FeedMediaDto {
     private int id;
     private int feedId;
     private String mediaUrl;   // 이미지 or 영상 주소
+    private String thumbnailUrl;
     private MediaType mediaType; // IMAGE / VIDEO
     private int sortOrder;     // 정렬 순서
     private Source source; // DOG_API, CAT_API, USER_UPLOAD

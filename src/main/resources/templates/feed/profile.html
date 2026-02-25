@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/feed/style/common.css">
     <link rel="stylesheet" href="/feed/style/profile.css">
+    <script defer src="/assets/scripts/common.js"></script>
     <script defer src="/feed/script/common.js"></script>
     <script defer src="/feed/script/profile.js"></script>
 </head>
@@ -16,12 +17,16 @@
 
 <div th:replace="~{fragments/common :: topNavigator}"></div>
 
+<div class="cover"></div>
+<div class="message" id="message">
+    <button type="button" class="button">확인</button>
+</div>
+
 <main id="main">
     <button class="create-feed" id="createFeedBtn">
         <span class="plus">+</span>
         <span class="label">글쓰기</span>
     </button>
-
 
     <section class="profile-header">
         <div class="profile-avatar">
@@ -102,7 +107,6 @@
 
     </section>
 </main>
-
-
+<div th:replace="~{fragments/chat :: chatModal}"></div>
 </body>
 </html>

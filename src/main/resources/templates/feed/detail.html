@@ -5,16 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>상세 피드</title>
     <link rel="stylesheet" href="/assets/styles/common.css">
-    <link rel="stylesheet" href="/assets/styles/header.css">
     <link rel="stylesheet" href="/feed/style/common.css">
     <link rel="stylesheet" href="/feed/style/detail.css">
+    <script defer src="/assets/scripts/common.js"></script>
     <script defer src="/feed/script/common.js"></script>
     <script defer src="/feed/script/detail.js"></script>
-    <script defer src="/assets/scripts/header.js"></script>
 </head>
 <body>
 
 <div th:replace="~{fragments/common :: topNavigator}"></div>
+
+<div class="cover"></div>
+<div class="message" id="message">
+    <button type="button" class="button">확인</button>
+</div>
 
 <div class="page">
     <button class="create-feed" id="createFeedBtn">
@@ -29,22 +33,41 @@
         </section>
 
         <section id="feed-container">
-            <!--            피드들 자리-->
+            <!--피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리
+            피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리
+            피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리
+            피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리 피드들 자리 -->
         </section>
     </main>
     <!-- 우측: 상세 패널 -->
     <aside class="detail-area">
         <div class="detail-shell">
             <header class="detail-header">
-                <a th:href="@{/feed/profile/{nickname}(nickname=${feed.nickname})}" class="detail-user">
+                <a th:href="@{/feed/profile/{nickname}(nickname=${feed.nickname})}"
+                   th:data-id="${feed.userId}"
+                   class="detail-user">
                     <img class="avatar"
                          th:src="${feed.profileImageUrl != null ? feed.profileImageUrl : '/feed/images/explore/user.png'}"
                          alt="프로필">
+
                     <div class="user-meta">
-                        <div class="nickname" th:text="${feed.nickname}">sehun_pet</div>
+                        <div th:text="${feed.nickname}"
+                             th:data-nickname="${feed.nickname}"
+                             class="nickname">sehun_pet</div>
                         <div class="place" th:text="${feed.address}">서울</div>
                     </div>
                 </a>
+                <div th:if="${feed.isWriter}" class="more-wrap">
+                    <button type="button" class="more-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                            <path d="M308.27-451.64Q320-463.28 320-479.91t-11.64-28.36Q296.72-520 280.09-520t-28.36 11.64Q240-496.72 240-480.09t11.64 28.36Q263.28-440 279.91-440t28.36-11.64Zm200 0Q520-463.28 520-479.91t-11.64-28.36Q496.72-520 480.09-520t-28.36 11.64Q440-496.72 440-480.09t11.64 28.36Q463.28-440 479.91-440t28.36-11.64Zm200 0Q720-463.28 720-479.91t-11.64-28.36Q696.72-520 680.09-520t-28.36 11.64Q640-496.72 640-480.09t11.64 28.36Q663.28-440 679.91-440t28.36-11.64ZM480.13-120q-74.67 0-140.41-28.34-65.73-28.34-114.36-76.92-48.63-48.58-76.99-114.26Q120-405.19 120-479.87q0-74.67 28.34-140.41 28.34-65.73 76.92-114.36 48.58-48.63 114.26-76.99Q405.19-840 479.87-840q74.67 0 140.41 28.34 65.73 28.34 114.36 76.92 48.63 48.58 76.99 114.26Q840-554.81 840-480.13q0 74.67-28.34 140.41-28.34 65.73-76.92 114.36-48.58 48.63-114.26 76.99Q554.81-120 480.13-120Zm-.13-40q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
+                        </svg>
+                    </button>
+                    <div class="more-menu hidden">
+                        <button type="button" class="more-edit">수정하기</button>
+                        <button type="button" class="more-delete">삭제하기</button>
+                    </div>
+                </div>
             </header>
 
             <section class="detail-content">
@@ -158,6 +181,7 @@
     </aside>
 </div>
 
+<div th:replace="~{fragments/chat :: chatModal}"></div>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
     <symbol id="icon-down" viewBox="0 0 320 200">

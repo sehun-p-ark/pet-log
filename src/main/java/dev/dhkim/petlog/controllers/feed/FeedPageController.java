@@ -1,17 +1,18 @@
 package dev.dhkim.petlog.controllers.feed;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dhkim.petlog.dto.feed.FeedDetailDto;
+import dev.dhkim.petlog.dto.feed.FeedDto;
 import dev.dhkim.petlog.dto.feed.ProfileDto;
+import dev.dhkim.petlog.dto.user.SessionUser;
 import dev.dhkim.petlog.services.feed.FeedProfileService;
 import dev.dhkim.petlog.services.feed.FeedQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value="/feed")
@@ -23,22 +24,24 @@ public class FeedPageController {
 
     // 전체 피드
     @RequestMapping(value="/explore", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getExplore(@SessionAttribute(value="userId", required = false) Integer userId,
+    public String getExplore(@SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
                              Model model
     ) {
-        if (userId != null) {
+        if (sessionUser != null) {
+            Integer userId = sessionUser.getUserId();
             ProfileDto profile = feedProfileService.getProfile(userId);
             model.addAttribute("profile", profile);
         }
         return "/feed/explore";
     }
 
-    // 상세 피드
+    // 상세 피드 (우측 페이지)
     @RequestMapping(value="/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getDetail(@PathVariable(value="id") int feedId,
-                            @SessionAttribute(value="userId", required = false) Integer userId,
+                            @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
                             Model model
     ) {
+        Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
         FeedDetailDto feed = feedQueryService.getFeedDetail(feedId, userId);
         if(feed == null) {
             return "redirect:/feed/explore";
@@ -50,9 +53,10 @@ public class FeedPageController {
     // 개인 프로필 피드
     @RequestMapping(value="/profile/{nickname}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getProfile(@PathVariable String nickname,
-                             @SessionAttribute(value="userId", required = false) Integer userId,
+                             @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
                              Model model
     ) {
+        Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
         ProfileDto profile = feedProfileService.getProfileView(nickname, userId);
         if (profile == null) {
             return "redirect:/feed/explore";
@@ -61,9 +65,33 @@ public class FeedPageController {
         return "/feed/profile";
     }
 
-    // 피드 작성하기
+    // 피드 작성하기 페이지
     @RequestMapping(value="/create", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getCreate() {
+    public String getCreate(@SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
+                            Model model) {
+        if (sessionUser == null) {
+            return "redirect:/user/login";
+        }
+        model.addAttribute("mode", "create");
         return "/feed/create";
+    }
+
+    // 피드 수정하기 페이지
+    @RequestMapping(value="/{feedId}/edit", method = RequestMethod.GET)
+    public String getEdit(@PathVariable int feedId,
+                          @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
+                          Model model) {
+        if (sessionUser == null) {
+            return "redirect:/user/login";
+        }
+        Integer userId = sessionUser.getUserId();
+
+        FeedDto feed = feedQueryService.getFeedForEdit(feedId, userId);
+
+        model.addAttribute("mode", "edit");
+        model.addAttribute("feed", feed);
+        model.addAttribute("mediaList", feed.getFeedMediaDtos());
+
+        return "/feed/create"; //create 페이지 재사용
     }
 }

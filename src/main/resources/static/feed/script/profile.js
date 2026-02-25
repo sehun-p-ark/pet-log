@@ -1,8 +1,11 @@
 const pathParts = window.location.pathname.split('/');
 const $nickname = decodeURIComponent(pathParts[pathParts.length - 1]);
+// 피드
 const $feedContainer = document.querySelector('.profile-feed');
 const $profileTabNav = document.querySelector('.profile-tab-nav');
 const $tabs = $profileTabNav.querySelectorAll(':scope > .tab');
+/// 채팅
+const modal = document.getElementById("chatModal");
 
 // 탭 전환
 $tabs.forEach($tab => {
@@ -75,27 +78,38 @@ function formatCount(count) {
     return (count / 1_000_000_000).toFixed(1).replace('.0','') + 'B';
 }
 
+// 채팅방 모달 띄우기
+function openChatModal(roomId) {
+    modal.classList.remove("hidden");
+    modal.dataset.roomId = roomId;
+}
+// 채팅방 모달 닫기
+function closeChatModal() {
+    if(!modal) return;
+    modal.classList.add("hidden");
+}
 
 // 팔로우 상태에 따른 화면 토글
 document.addEventListener('DOMContentLoaded', () => {
     const $btnArea = document.querySelector('.profile-btns');
     if (!$btnArea) return;
-    const isMine = $btnArea.dataset.mine === 'true';
-    const isFollowing = $btnArea.dataset.following === 'true';
-    const targetUserId = parseInt($btnArea.dataset.targetUserId);
+    const isMine = $btnArea.dataset.mine === 'true'; // 본인 프로필 확인
+    const isFollowing = $btnArea.dataset.following === 'true'; // 팔로우 상태 확인
+    const targetUserId = parseInt($btnArea.dataset.targetUserId); // 현재페이지 userId 확인
+    const $followerCount = document.querySelector('.stats .item:nth-child(2) strong');
+    const $followingCount = document.querySelector('.stats .item:nth-child(3) strong');
+    const $chatClose = document.querySelector(".chat-close");
+    const $chatOverlay = document.querySelector(".chat-overlay");
 
-    const $followerStrong = document.querySelector('.stats .item:nth-child(2) strong');
-    const $followingStrong = document.querySelector('.stats .item:nth-child(3) strong');
-
-    if ($followerStrong) {
-        $followerStrong.textContent = formatCount($followerStrong.textContent);
+    if ($followerCount) {
+        $followerCount.textContent = formatCount($followerCount.textContent);
     }
 
-    if ($followingStrong) {
-        $followingStrong.textContent = formatCount($followingStrong.textContent);
+    if ($followingCount) {
+        $followingCount.textContent = formatCount($followingCount.textContent);
     }
 
-    // 1) 공유 버튼
+    // 공유 버튼
     const $share = $btnArea.querySelector('.btn-share');
     if ($share) {
         $share.addEventListener('click', async () => {
@@ -109,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2) 수정 버튼 (내 프로필일 때만 존재)
+    // 수정 버튼 (내 프로필일 때만 존재)
     const $edit = $btnArea.querySelector('.btn-edit');
     if ($edit) {
         $edit.addEventListener('click', () => {
@@ -118,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3) 팔로우 토글 버튼 (남의 프로필일 때만 존재)
+    // 팔로우 토글 버튼 (남의 프로필일 때만 존재)
     const $followToggle = $btnArea.querySelector('.btn-follow-toggle');
     if ($followToggle) {
         $followToggle.addEventListener('click', async () => {
@@ -128,61 +142,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await res.json();
 
-            if (data.result === "LOGIN_REQUIRED") {
-                alert("로그인이 필요합니당");
-                return;
+            switch (data.result) {
+                case "LOGIN_REQUIRED" :
+                    showMessage("로그인 후 이용 가능합니다.");
+                    break;
+                case "SUCCESS" :
+                    if (data.following) {
+                        // 버튼 스타일 변경
+                        $followToggle.textContent = '팔로우 해제';
+                        $followToggle.classList.remove('is-follow');
+                        $followToggle.classList.add('is-following');
+                        if ($followerCount) { // 팔로워 +1
+                            $followerCount.textContent = formatCount(data.followerCount);
+                        }
+                        // 이미 메세지 버튼이 없다면 생성
+                        if (!$btnArea.querySelector('.btn-message')) {
+                            const msgBtn = document.createElement('button');
+                            msgBtn.className = 'btn-message';
+                            msgBtn.type = 'button';
+                            msgBtn.textContent = '메세지';
+
+                            msgBtn.addEventListener('click', () => {
+                                alert('메세지 기능 연결 필요');
+                            });
+
+                            $btnArea.appendChild(msgBtn);
+                        }
+                    } else {
+                        // 팔로우 취소 상태
+                        $followToggle.textContent = '팔로우';
+                        $followToggle.classList.remove('is-following');
+                        $followToggle.classList.add('is-follow');
+                        if ($followerCount) { // 팔로워 -1
+                            $followerCount.textContent = formatCount(data.followerCount);
+                        }
+                        // 메세지 버튼 제거
+                        const $messageBtn = $btnArea.querySelector('.btn-message');
+                        if ($messageBtn) {
+                            $messageBtn.remove();
+                        }
+                    }
+                    break;
+                default :
+                    showMessage("알 수 없는 이유로 오류가 발생하였습니다.");
+                    break;
             }
 
-            if (data.result !== "SUCCESS") {
-                alert("저장 실패");
-                return;
-            }
 
-            if (data.following) {
-                // 버튼 스타일 변경
-                $followToggle.textContent = '팔로우 해제';
-                $followToggle.classList.remove('is-follow');
-                $followToggle.classList.add('is-following');
-                if ($followerStrong) { // 팔로워 +1
-                    $followerStrong.textContent = formatCount(data.followerCount);
-                }
-                // 이미 메세지 버튼이 없다면 생성
-                if (!$btnArea.querySelector('.btn-message')) {
-                    const msgBtn = document.createElement('button');
-                    msgBtn.className = 'btn-message';
-                    msgBtn.type = 'button';
-                    msgBtn.textContent = '메세지';
-
-                    msgBtn.addEventListener('click', () => {
-                        alert('메세지 기능 연결 필요');
-                    });
-
-                    $btnArea.appendChild(msgBtn);
-                }
-            } else {
-                // 팔로우 취소 상태
-                $followToggle.textContent = '팔로우';
-                $followToggle.classList.remove('is-following');
-                $followToggle.classList.add('is-follow');
-                if ($followerStrong) { // 팔로워 -1
-                    $followerStrong.textContent = formatCount(data.followerCount);
-                }
-                // 메세지 버튼 제거
-                const $msg = $btnArea.querySelector('.btn-message');
-                if ($msg) {
-                    $msg.remove();
-                }
-            }
         });
     }
 
-    // 4) 메세지 버튼
-    const $msg = $btnArea.querySelector('.btn-message');
-    if ($msg) {
-        $msg.addEventListener('click', () => {
-            alert('메세지 기능은 다음 단계에서 연결해야함');
+    // 메세지 버튼
+    const $messageBtn = $btnArea.querySelector('.btn-message');
+    if ($messageBtn) {
+        $messageBtn.addEventListener('click', async () => {
+            try {
+                const response = await fetch("/api/chat/room", {
+                   method: `POST`,
+                    headers: {
+                       'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({targetUserId: targetUserId})
+                });
+
+                const data = await response.json();
+
+                switch (data.result) {
+                    case "LOGIN_REQUIRED" : showMessage("로그인 후 이용 가능합니다.");
+                        break;
+                    case "SUCCESS" :
+                        openChatModal(data.roomId);
+                        break;
+                    default : showMessage("채팅방 생성 실패");
+                }
+            } catch (e) {
+                console.log("채팅방 생성 오류 : " + e);
+            }
         });
     }
+    // 채팅방 닫기
+    $chatClose.addEventListener('click', () => closeChatModal());
+    $chatOverlay.addEventListener('click', () => closeChatModal());
 });
 
 

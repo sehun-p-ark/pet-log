@@ -4,9 +4,9 @@ import dev.dhkim.petlog.dto.feed.FeedCommentDto;
 import dev.dhkim.petlog.dto.feed.FeedDto;
 import dev.dhkim.petlog.dto.feed.FeedScrollDto;
 import dev.dhkim.petlog.dto.feed.FeedThumbnailDto;
+import dev.dhkim.petlog.dto.user.SessionUser;
 import dev.dhkim.petlog.results.Result;
 import dev.dhkim.petlog.services.feed.*;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,31 +34,42 @@ public class FeedApiController {
                                   @RequestParam(required = false) Integer lastLikeCount,
                                   @RequestParam(required = false) String lastCreatedAt,
                                   @RequestParam(defaultValue = "20") int size,
-                                  @SessionAttribute(value = "userId", required = false) Integer userId
+                                  @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
+        Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
         return feedQueryService.getFeeds(sort, lastFeedId, lastLikeCount, lastCreatedAt, size, userId);
     }
 
-    // 상세페이지(/feed/detail) 로딩
+    // 상세페이지(/feed/detail) 좌측페이지 로딩
     @RequestMapping(value = "/{id}/related", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FeedDto> getRelatedFeeds(@PathVariable(value = "id") int feedId,
-                                         @SessionAttribute(value = "userId", required = false) Integer userId) {
+                                         @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
         return feedQueryService.getRelatedFeeds(feedId, userId);
     }
 
     // 피드 좋아요 기능
     @RequestMapping(value = "/{id}/like", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> toggleLike(@PathVariable int id,
-                                          @SessionAttribute(value = "userId", required = false) Integer userId) {
-        if (userId == null) {
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED"); // 로그인 안되어 있으면 리턴
         }
-
+        Integer userId = sessionUser.getUserId();
         Map<String, Object> result = feedLikeService.toggleLike(id, userId);
         return Map.of("result", "SUCCESS",
                 "liked", result.get("liked"),
                 "likeCount", result.get("likeCount")
         );
+    }
+
+    // 글쓰기 버튼 클릭 시 로그인 여부 확인
+    @RequestMapping(value="/create-check", method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> checkCreate(@SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
+            return Map.of("result", "LOGIN_REQUIRED");
+        }
+        return Map.of("result", "SUCCESS");
     }
 
     // 프로필 탭(작성) 전환 시 로딩 (/feed/profile)
@@ -84,34 +95,64 @@ public class FeedApiController {
 
     // 피드 생성 (게시하기)
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, Object> postFeeds(@SessionAttribute(value = "userId", required = false) Integer userId,
-                                         @RequestParam("files") List<MultipartFile> files,
-                                         @RequestParam("types") List<String> types,
-                                         @RequestParam("orders") List<Integer> orders,
+    public Map<String, Object> postFeeds(@SessionAttribute(value = "sessionUser", required = false)SessionUser sessionUser,
                                          @RequestParam String title,
-                                         @RequestParam String description
+                                         @RequestParam String description,
+                                         @RequestParam(value="files", required = false) List<MultipartFile> files,
+                                         @RequestParam(value="newOrders", required = false) List<Integer> orders
     ) {
-        System.out.println("피드 작성 컨트롤러 실행됨");
-        if (userId == null) {
-            return Map.of("result", "result", "message", "로그인이 필요합니다.");
+        if (sessionUser == null) {
+            return Map.of("result", "LOGIN_REQUIRED");
         }
-        Result result = feedCommandService.createFeed(userId, files, types, orders, title, description);
-        System.out.println("result :" + result);
+        Integer userId = sessionUser.getUserId();
+        Result result = feedCommandService.createFeed(userId, title, description, files, orders);
+        return Map.of("result", result);
+    }
+
+    // 피드 수정
+    @RequestMapping(value="/{feedId}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> updateFeed(@PathVariable int feedId,
+                                          @RequestParam String title,
+                                          @RequestParam String description,
+                                          @RequestParam(value="files", required = false) List<MultipartFile> files,
+                                          @RequestParam(value="newOrders", required = false) List<Integer> newOrders,
+                                          @RequestParam(value="keepMediaIds", required = false) List<Integer> keepMediaIds,
+                                          @RequestParam(value="keepOrders", required = false) List<Integer> keepOrders,
+                                          @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser
+    ) {
+        if (sessionUser == null) {
+            return Map.of("result", "LOGIN_REQUIRED");
+        }
+        Integer userId = sessionUser.getUserId();
+        Result result = feedCommandService.updateFeed(feedId, userId, title, description, files, newOrders, keepMediaIds, keepOrders);
+
+        return Map.of("result", result);
+    }
+
+    // 피드 삭제
+    @RequestMapping(value=("/{feedId}"), method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> deleteFeed(@PathVariable int feedId,
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
+            return Map.of("result", "LOGIN_REQUIRED");
+        }
+        Integer userId = sessionUser.getUserId();
+        Result result = feedCommandService.deleteFeed(feedId, userId);
         return Map.of("result", result);
     }
 
     // 팔로우 버튼 클릭 시 처리
     @RequestMapping(value = "/follow/{targetUserId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> postFollow(@PathVariable int targetUserId,
-                                          @SessionAttribute(value = "userId", required = false) Integer userId
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
-        if (userId == null) {
+        if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }
+        Integer userId = sessionUser.getUserId();
         // 팔로우 여부
         boolean following = feedFollowService.toggleFollow(userId, targetUserId);
         Map<String, Integer> follow = feedFollowService.getFollowCount(userId, targetUserId);
-
 
         return Map.of("result", "SUCCESS",
                 "following", following,
@@ -124,11 +165,12 @@ public class FeedApiController {
     @RequestMapping(value = "/{feedId}/comments", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> createComment(@PathVariable int feedId,
                                              @RequestBody Map<String, String> request,
-                                             @SessionAttribute Integer userId
+                                             @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
-        if (userId == null) {
+        if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }
+        Integer userId = sessionUser.getUserId();
         String content = request.get("content");
         FeedCommentDto comment = feedCommentService.createComment(feedId, userId, content);
         return Map.of(
@@ -143,11 +185,12 @@ public class FeedApiController {
             @PathVariable int feedId,
             @PathVariable int commentId,
             @RequestBody Map<String, String> request,
-            @SessionAttribute(value="userId", required = false) Integer userId
+            @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser
     ) {
-        if (userId == null) {
+        if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }
+        Integer userId = sessionUser.getUserId();
         String content = request.get("content");
         FeedCommentDto reply = feedCommentService.createReply(feedId, commentId, userId, content);
         return Map.of(
@@ -161,11 +204,12 @@ public class FeedApiController {
     public Map<String, Object> deleteComment(
             @PathVariable int feedId,
             @PathVariable int commentId,
-            @SessionAttribute(value="userId", required = false) Integer userId
+            @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser
     ) {
-        if (userId == null) {
+        if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }
+        Integer userId = sessionUser.getUserId();
         feedCommentService.deleteComment(feedId, commentId, userId);
         return Map.of("result", "SUCCESS");
     }

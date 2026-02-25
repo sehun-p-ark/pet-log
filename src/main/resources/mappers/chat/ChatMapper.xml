@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dev.dhkim.petlog.mappers.chat.ChatMapper">
+    <insert id="insertChatRoom"
+            parameterType="dev.dhkim.petlog.entities.chat.ChatRoomEntity"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO `petlog`.`chat_room` ()
+        VALUES ()
+    </insert>
+    <insert id="insertChatRoomMember">
+        INSERT INTO `petlog`.`chat_room_member` (room_id, user_id)
+        VALUES (#{roomId}, #{userId})
+    </insert>
+    <insert id="insertMessage"
+            parameterType="dev.dhkim.petlog.entities.chat.ChatMessageEntity"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO `petlog`.`chat_message` (`room_id`, `sender_id`, `message`, `created_at`)
+        VALUES (#{roomId}, #{senderId}, #{message}, NOW())
+    </insert>
+    <update id="updateLastMessage">
+        UPDATE `petlog`.`chat_room`
+        SET `last_message`    = #{message},
+            `last_sender_id`  = #{senderId},
+            `last_message_at` = NOW()
+        WHERE `id` = #{roomId}
+    </update>
+    <update id="updateLastReadMessageId">
+        UPDATE `petlog`.`chat_room_member`
+        SET `last_read_message_id` = #{lastMessageId}
+        WHERE `room_id` = #{roomId}
+          AND `user_id` = #{userId}
+    </update>
+    <select id="findExistingRoom" resultType="java.lang.Integer">
+        SELECT `t1`.`room_id`
+        FROM `petlog`.`chat_room_member` `t1`
+                 JOIN `petlog`.`chat_room_member` `t2`
+                      ON `t1`.`room_id` = `t2`.`room_id`
+        WHERE `t1`.`user_id` = #{userId}
+          AND `t2`.`user_id` = #{targetUserId}
+        LIMIT 1
+    </select>
+    <select id="selectFollowedUsers" resultType="dev.dhkim.petlog.dto.chat.ChatFriendDto">
+        SELECT `t2`.`id` AS `userId`,
+        `t3`.`nickname` AS `nickname`,
+        `t4`.`image_url` AS `profileImageUrl`,
+        `t1`.`created_at` AS `followedAt`
+        FROM `petlog`.`follows` AS `t1`
+            JOIN `petlog`.`users` AS `t2`
+                ON `t1`.`followed_user_id` = `t2`.`id`
+            JOIN `petlog`.`personal_user` AS `t3`
+                ON `t3`.`user_id` = `t2`.`id`
+            LEFT JOIN `petlog`.`pets` AS `t4`
+                ON `t4`.`user_id` = `t2`.`id`
+                       AND `t4`.`is_primary` = 1
+        WHERE `t1`.`following_user_id` = #{userId}
+        ORDER BY
+        <choose>
+            <when test="sort == 'time'">
+                t1.created_at DESC
+            </when>
+            <otherwise>
+                t3.nickname ASC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="selectMessagesByRoomId" resultType="dev.dhkim.petlog.dto.chat.ChatMessageDto">
+        SELECT `id`         AS `messageId`,
+               `room_id`    AS `roomId`,
+               `sender_id`  AS `senderId`,
+               `message`    AS `message`,
+               `created_at` AS `createdAt`
+        FROM `petlog`.`chat_message`
+        WHERE `room_id` = #{roomId}
+        ORDER BY `id`
+    </select>
+    <select id="selectMessageById" resultType="dev.dhkim.petlog.dto.chat.ChatWsMessageDto">
+        SELECT `room_id`    AS `roomId`,
+               `sender_id`  AS `senderId`,
+               `message`    AS `message`,
+               `created_at` AS `createdAt`
+        FROM `petlog`.`chat_message`
+        WHERE `id` = #{messageId}
+    </select>
+    <select id="selectChatRooms" resultType="dev.dhkim.petlog.dto.chat.ChatRoomListDto">
+        SELECT `t1`.`id`              AS `roomId`,
+               `t4`.`nickname`        AS `nickname`,
+               `t1`.`last_message`    AS `lastMessage`,
+               `t1`.`last_sender_id`  AS `lastSenderId`,
+               `t1`.`last_message_at` AS `lastMessageAt`,
+               COUNT(`t5`.`id`)         AS `unReadCount`
+        FROM `petlog`.`chat_room` `t1`
+                 JOIN `petlog`.`chat_room_member` `t2`
+                      ON `t2`.`room_id` = `t1`.`id`
+                          AND `t2`.`user_id` = #{userId}
+                 JOIN `petlog`.`chat_room_member` `t3`
+                      ON `t3`.`room_id` = `t1`.`id`
+                          AND `t3`.`user_id` != #{userId}
+                 JOIN `petlog`.`personal_user` `t4`
+                      ON `t4`.`user_id` = `t3`.`user_id`
+                 LEFT JOIN `chat_message` `t5`
+                           ON `t5`.`room_id` = `t1`.`id`
+                               AND `t5`.`id` > IFNULL(`t2`.`last_read_message_id`, 0)
+                               AND `t5`.`sender_id` != #{userId}
+        GROUP BY `t1`.`id`,
+                 `t4`.`nickname`,
+                 `t1`.`last_message`,
+                 `t1`.`last_sender_id`,
+                 `t1`.`last_message_at`
+
+        ORDER BY `t1`.last_message_at DESC
+    </select>
+    <select id="selectLastMessageIdInRoom" resultType="java.lang.Integer">
+        SELECT MAX(`id`)
+        FROM `petlog`.`chat_message`
+        WHERE `room_id` = #{roomId}
+    </select>
+</mapper>

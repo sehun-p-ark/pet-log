@@ -63,15 +63,15 @@ public class ShopController {
     @RequestMapping(value = "product/{id}", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     @SuppressWarnings("unchecked")
     public ModelAndView getProduct(@PathVariable Integer id,
-                                   ModelAndView modelAndView) {
-
+                                   @SessionAttribute(value ="sessionUser") SessionUser sessionUser, ModelAndView modelAndView) {
+        Integer userId = sessionUser.getUserId();
 
         ProductEntity product = productService.getProductDetail(id);
         int reviewCount = productMapper.countReviewByProductId(id);
         List<ProductDetailImageEntity> detailImages = productMapper.findDetailImagesByProductId(id);
         List<OptionEntity> options = productMapper.getProductOptions(id);
 
-        Map<String, Object> reviewData = reviewService.getReviewsByProductId(id);
+        Map<String, Object> reviewData = reviewService.getReviewsByProductId(id,userId);
         List<Map<String, Object>> reviews = (List<Map<String, Object>>) reviewData.get("reviews");
         boolean isPurchased = (boolean) reviewData.get("isPurchased");
         boolean isAlreadyReviewed = (boolean) reviewData.get("isAlreadyReviewed");

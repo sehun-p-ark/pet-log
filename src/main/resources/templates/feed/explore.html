@@ -6,17 +6,21 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>메인피드</title>
-    <link rel="stylesheet" href="/feed/style/common.css">
     <link rel="stylesheet" href="/assets/styles/common.css">
+    <link rel="stylesheet" href="/feed/style/common.css">
     <link rel="stylesheet" href="/feed/style/explore.css">
-    <link rel="stylesheet" href="/assets/styles/header.css">
-    <script defer src="/assets/scripts/header.js"></script>
+    <script defer src="/assets/scripts/common.js"></script>
     <script defer src="/feed/script/common.js"></script>
     <script defer src="/feed/script/explore.js"></script>
 </head>
 <body>
 
 <div th:replace="~{fragments/common :: topNavigator}"></div>
+
+<div class="cover"></div>
+<div class="message" id="message">
+    <button type="button" class="button">확인</button>
+</div>
 
 <main id="main">
     <button class="create-feed" id="createFeedBtn">
@@ -40,7 +44,7 @@
         <div class="-flex-stretch"></div>
 
         <div th:if="${profile != null}">
-            <a th:href="@{/feed/profile/{id}(id=${profile.userId})}"
+            <a th:href="@{/feed/profile/{id}(id=${profile.nickname})}"
                class="my-profile">
                 <img th:src="${profile.profileImageUrl != null
                       ? profile.profileImageUrl
@@ -75,6 +79,8 @@
         </button>
     </div>
 </main>
+
+<div th:replace="~{fragments/chat :: chatModal}"></div>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
     <symbol id="icon-down" viewBox="0 0 320 200">

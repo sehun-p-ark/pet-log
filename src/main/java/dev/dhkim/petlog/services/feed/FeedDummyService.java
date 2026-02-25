@@ -33,7 +33,7 @@ public class FeedDummyService {
         for (int i = 0; i < count; i++) {
             // 피드 기본 정보 생성
             FeedEntity feed = new FeedEntity();
-            feed.setUserId(random.nextInt(5) + 1); // 1 ~ 5 유저 중 한명
+            feed.setUserId(random.nextInt(6 - 2 + 1) + 2); // (최대값 - 최소값 + 1) + 최소값;
             feed.setTitle(dummyTextUtil.randomTitle()); // 설정 값 중 하나
             feed.setContent(dummyTextUtil.randomContent()); // 설정 값 중 하나
             feed.setLikeCount(random.nextInt(200)); // 좋아요 수 0~200 중 하나
