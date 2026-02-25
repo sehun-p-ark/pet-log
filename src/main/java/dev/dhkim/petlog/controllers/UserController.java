@@ -154,13 +154,20 @@ public class UserController {
     public Map<String, Object> postLogin(@RequestParam(value = "loginId") String loginId,
                                          @RequestParam(value = "password") String password,
                                          HttpSession session) {
+        //response 위치 옮김 -> usertype admin 밑에 ★때문에
+        Map<String, Object> response = new HashMap<>();
         Pair<LoginResult, UserEntity> result = this.userService.login(loginId, password);
         if (result.getLeft() == LoginResult.SUCCESS) {
             UserEntity user = result.getRight();
+            // JS가 이 값을 보고 관리자인지 판단하니까 꼭 넣어주세요.★
+            response.put("userType", user.getUserType());
             SessionUser sessionUser = new SessionUser(user.getId(), user.getUserType());
             session.setAttribute("sessionUser", sessionUser);
+
+
         }
-        Map<String, Object> response = new HashMap<>();
+
+
         response.put("result", result.getLeft().name());
         return response;
     }

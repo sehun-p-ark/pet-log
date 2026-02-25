@@ -1,9 +1,5 @@
 @import "../../assets/styles/def";
 
-/* ============================= */
-/*        전체 레이아웃          */
-/* ============================= */
-
 .support {
   width: 100%;
   max-width: 75rem;
@@ -11,9 +7,6 @@
   padding: 0 3rem;
 }
 
-/* ============================= */
-/*            헤더               */
-/* ============================= */
 
 .support-header {
   @include flex(column, stretch, center, 0.625rem);
@@ -30,9 +23,6 @@
   }
 }
 
-/* ============================= */
-/*           카드 공통           */
-/* ============================= */
 
 .faq.card{
   width: 100%;
@@ -42,6 +32,24 @@
   box-shadow: 0 0.625rem 1.875rem #0000000f;
   max-height: 20rem;
   overflow-y: scroll;
+  // --- 스크롤바 스타일 추가 ---
+  &::-webkit-scrollbar {
+    width: 0.4rem; // .list보다 살짝 더 얇게 (0.4rem ≒ 6.4px)
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 1.5rem 0; // 스크롤바 상하단에 여백을 주어 둥근 모서리와 안 겹치게 함
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($global-border-green-color, 0.25); // 평소엔 아주 은은하게
+    border-radius: 1rem;
+
+    &:hover {
+      background-color: rgba($global-border-green-color, 0.6); // 마우스 올리면 선명하게
+    }
+  }
 }
 .card {
   width: 100%;
@@ -49,12 +57,7 @@
   padding: 2.5rem 3rem;
   border-radius: 1.2rem;
   box-shadow: 0 0.625rem 1.875rem #0000000f;
-
 }
-
-/* ============================= */
-/*             FAQ               */
-/* ============================= */
 
 .faq {
   margin-bottom: 3.5rem;
@@ -93,9 +96,6 @@
   }
 }
 
-/* ============================= */
-/*     문의 + 고객센터 정보      */
-/* ============================= */
 
 .support-bottom {
   display: flex;
@@ -109,9 +109,6 @@
   }
 }
 
-/* ============================= */
-/*           문의 CTA            */
-/* ============================= */
 
 .inquiry {
   background-color: $global-green-background-color;
@@ -156,9 +153,7 @@
   }
 }
 
-/* ============================= */
-/*         고객센터 정보         */
-/* ============================= */
+/*고객센터 정보*/
 
 .support-info {
   display: grid;
@@ -182,9 +177,7 @@
   }
 }
 
-/* ============================= */
-/*       문의내역 슬라이드        */
-/* ============================= */
+/*문의내역슬라이드*/
 
 .inquiry-list {
   position: fixed;
@@ -199,181 +192,331 @@
   flex-direction: column;
   z-index: 2000;
   transition: transform 0.3s ease;
-  transform: translateX(100%);   // 🔥 기본 숨김
+  transform: translateX(100%);   // 기본 숨김
 }
 .inquiry-list.active {
-  transform: translateX(0);      // 🔥 열림
+  transform: translateX(0);      // 열림
 }
 
-  .list-header {
-    margin-bottom: 1.5rem;
+.list-header {
+  margin-bottom: 1.5rem;
 
-    h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: #222;
-    }
+  h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #222;
+  }
+}
+
+.no-inquiry {
+  text-align: center;
+  padding: 2rem 0;
+  color: #999;
+  font-size: 0.95rem;
+}
+
+.list-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.inquiry-item {
+  border: 0.0625rem solid #e5e5e5;
+  border-radius: 0.6rem;
+  background: #fafafa;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    border-color: #7acb8c;
+    background: #f3fff6;
   }
 
-  .no-inquiry {
-    text-align: center;
-    padding: 2rem 0;
-    color: #999;
-    font-size: 0.95rem;
-  }
-
-  .list-container {
-    flex: 1;
-    overflow-y: auto;
+  .summary {
     display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-  }
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
 
-  .inquiry-item {
-    border: 0.0625rem solid #e5e5e5;
-    border-radius: 0.6rem;
-    background: #fafafa;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    position: relative;
-
-    &:hover {
-      border-color: #7acb8c;
-      background: #f3fff6;
+    .title {
+      font-weight: 600;
+      color: #333;
+      flex: 1;
     }
 
-
-    .summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.9rem 1rem;
-      font-size: 0.9rem;
-
-      .title {
-        font-weight: 600;
-        color: #333;
-        flex: 1;
-      }
-
-      .date {
-        font-size: 0.8rem;
-        color: #999;
-        margin-right: 0.8rem;
-      }
-
-      .status {
-        padding: 0.2rem 0.6rem;
-        border-radius: 1rem;
-        font-size: 0.75rem;
-        font-weight: 600;
-      }
-
-      /* 상태별 색상 */
-      .status.waiting {
-        background: #fff4e5;
-        color: #ff8c00;
-      }
-
-      .status.answered {
-        background: #e6f9ed;
-        color: #28a745;
-      }
+    .date {
+      font-size: 0.8rem;
+      color: #999;
+      margin-right: 0.8rem;
     }
 
-    .content {
-      padding: 0 1rem 1rem;
-      font-size: 0.85rem;
-      color: #555;
-      line-height: 1.4;
-      border-top: 1px solid #eee;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
-    }
-
-    &.active {
-      .content {
-        max-height: 10rem;
-      }
-    }
-    .btn-delete {
-      position: absolute;
-      top: 2.9rem;
-      right: 0.5rem;
-      padding: 0.25rem 0.6rem;
+    .status {
+      padding: 0.2rem 0.6rem;
+      border-radius: 1rem;
       font-size: 0.75rem;
       font-weight: 600;
-      border-radius: 0.5rem;
-      border: none;
-      color: #555;
-      cursor: pointer;
-      transition: all 0.2s ease;
-
-      &:hover {
-
-        transform: translateY(-1px);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
     }
 
 
+    /* 답변상태 배지 스타일 */
+    .status {
+      &.waiting {
+        background-color: #fff4e5;
+        color: #ff8c00;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+      }
+
+      &.answered {
+        background-color: #e6f9ed;
+        color: #28a745;
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.25rem;
+        font-size: 0.75rem;
+      }
+    }
+
+    /* 유저 리스트 내 답변 박스 스타일 */
+    .admin-reply {
+      margin-top: 0.9375rem;
+      padding: 0.9375rem;
+      background-color: #f8f9fa;
+      border-left: 0.25rem solid #28a745;
+      border-radius: 0.25rem;
+
+      p {
+        margin: 0;
+        color: #333;
+        font-size: 0.9375rem;
+        line-height: 1.5;
+      }
+
+      strong {
+        color: #28a745;
+        margin-right: 0.3125rem;
+        font-size: 0.875rem;
+      }
+    }
   }
 
-  #closeInquiryList {
-    margin-top: 1rem;
-    padding: 0.8rem;
-    border: none;
-    border-radius: 0.5rem;
-    background: #7acb8c;
-    color: white;
+  .content {
+    padding: 0 1rem 1rem;
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.4;
+    border-top: 0.0625rem solid #eee;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  &.active {
+    .content {
+      max-height: 10rem;
+    }
+  }
+
+  .btn-delete {
+    position: absolute;
+    top: 2.8rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
     font-weight: 600;
+    border-radius: 0.5rem;
+    border: none;
+    color: #555;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
 
-    &:hover {
-      background: #63b476;
+    &:hover { transform: translateY(-1px); }
+    &:active { transform: translateY(0); }
+  }
+}
+
+#closeInquiryList {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #7acb8c;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover { background: #63b476; }
+}
+
+/*관리자 전용 페이지*/
+
+.admin-dashboard {
+  width: 100%;
+  max-width: 75rem;
+  margin: 0 auto 5rem auto;
+
+  .admin-list-wrapper {
+    background: #fff;
+    border-radius: 1.2rem;
+    padding: 0;
+    box-shadow: 0 0.625rem 1.875rem #0000000f;
+    margin-top: 2rem;
+    overflow: hidden;
+  }
+
+  .list-header {
+    padding: 2rem 2.5rem 1.5rem;
+    border-bottom: 1px solid #f5f5f5;
+    h2 { font-size: 1.4rem; font-weight: 700; }
+  }
+
+  /* 각 문의 아이템 */
+  .admin-inquiry-item {
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    transition: background 0.2s ease;
+
+    &:last-child { border-bottom: none; }
+
+    // 활성화(클릭) 되었을 때 배경색 변경
+    &.active {
+      background-color: #f3f9f5;
+      .admin-summary-row { font-weight: 700; }
+      .admin-detail-fold { max-height: 1000px; } // 상세 내용 펼침
     }
   }
 
+  /* 요약 줄 (클릭 영역) */
+  .admin-summary-row {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem 2.5rem;
+    gap: 1.5rem;
+    cursor: pointer;
 
+    &:hover { background-color: #f9fdfa; }
 
+    .badge {
+      padding: 0.3rem 0.7rem;
+      border-radius: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+      &.waiting { background: #fff0f0; color: #ff5b5b; }
+      &.complete { background: #f0fff4; color: #28a745; }
+    }
 
-/* ============================= */
-/*            반응형             */
-/* ============================= */
+    .admin-user-info { font-size: 0.85rem; color: #888; white-space: nowrap; }
+
+    .admin-title {
+      font-size: 1rem;
+      color: #333;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap; // 제목이 길면 생략 처리
+    }
+
+    .admin-date { font-size: 0.85rem; color: #bbb; }
+  }
+
+  /* 상세 내용 (기본 숨김) */
+  .admin-detail-fold {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    background-color: #fafafa; // 유저 리스트와 유사한 옅은 회색
+
+    .fold-inner {
+      padding: 2rem 2.5rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .question-box, .answer-box {
+      strong {
+        display: block;
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 0.6rem;
+        font-weight: 700;
+      }
+      p {
+        font-size: 0.95rem;
+        color: #444;
+        line-height: 1.6;
+        white-space: pre-wrap; // 줄바꿈 보존
+      }
+    }
+
+    /* 답변 입력/완료 박스 */
+    .answer-box {
+      padding: 1.5rem;
+      border-radius: 0.8rem;
+
+      &.complete {
+        background: #fff;
+        border: 1px solid #e6f9ed;
+        border-left: 4px solid #28a745;
+      }
+
+      &.form {
+        background: #fff;
+        border: 1px solid #eee;
+
+        textarea {
+          width: 100%;
+          min-height: 120px;
+          border: 1px solid #ddd;
+          border-radius: 0.6rem;
+          padding: 1rem;
+          margin-bottom: 1rem;
+          resize: vertical;
+          &:focus { border-color: #7acb8c; outline: none; }
+        }
+
+        .action-row {
+          display: flex;
+          justify-content: flex-end;
+
+          .btn-admin-reply {
+            background: #7acb8c;
+            color: white;
+            padding: 0.7rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            &:hover { background: #63b476; transform: translateY(-1px); }
+          }
+        }
+      }
+    }
+  }
+}
+
+/*반응형*/
 
 @media (max-width: 64rem) {
-  .support {
-    padding: 0 2rem;
-  }
-
-  .card {
-    padding: 2rem;
-  }
+  .support { padding: 0 2rem; }
+  .card { padding: 2rem; }
 }
 
 @media (max-width: 48rem) {
-  .support {
-    padding: 0 1.2rem;
-  }
-
-  .support-bottom {
-    flex-direction: column;
-  }
-
-  .support-info {
-    grid-template-columns: 1fr;
-  }
+  .support { padding: 0 1.2rem; }
+  .support-bottom { flex-direction: column; }
+  .support-info { grid-template-columns: 1fr; }
 }
 
-/* ============================= */
-/*            모달 영역          */
-/* ============================= */
+/*문의글 작성 모달*/
 
 .modal-overlay {
   position: fixed;
@@ -385,12 +528,10 @@
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 3000; // 슬라이드보다 높게 설정
 }
 
-.modal-overlay.active {
-  display: flex;
-}
+.modal-overlay.active { display: flex; }
 
 .modal {
   width: 100%;
@@ -403,14 +544,8 @@
 }
 
 @keyframes modalFade {
-  from {
-    opacity: 0;
-    transform: translateY(-0.625rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-0.625rem); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .modal-header {
@@ -419,70 +554,27 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-  }
-
-  .modal-close {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
+  h3 { font-size: 1.2rem; font-weight: 700; }
+  .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
 }
 
 .modal-body {
   padding: 2rem;
-
   .form-group {
     margin-bottom: 1.5rem;
-
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    input,
-    textarea {
+    label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+    input, textarea {
       width: 100%;
       padding: 0.5625rem 0.625rem;
       border-radius: 0.75rem;
       border: 0.0625rem solid $global-border-color;
       font-size: 0.95rem;
       resize: none;
-
-      &:focus {
-        border-color: $global-green-background-color;
-        outline: none;
-        box-shadow: 0 0 0 0.1875rem #89cc96;
-      }
+      &:focus { border-color: $global-green-background-color; outline: none; box-shadow: 0 0 0 0.1875rem #89cc96; }
     }
   }
 }
 
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.0625rem;
-}
-
-.btn-cancel {
-  padding: 0.4375rem 0.9375rem;
-  border-radius: 2rem;
-  border: 0.0625rem solid $global-border-color;
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.btn-submit {
-  padding: 0.4375rem 1.125rem;
-  border-radius: 2rem;
-  border: none;
-  background: $global-green-background-color;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-}
+.modal-footer { display: flex; justify-content: flex-end; gap: 0.0625rem; }
+.btn-cancel { padding: 0.4375rem 0.9375rem; border-radius: 2rem; border: 0.0625rem solid $global-border-color; background: #ffffff; cursor: pointer; }
+.btn-submit { padding: 0.4375rem 1.125rem; border-radius: 2rem; border: none; background: $global-green-background-color; color: #ffffff; font-weight: 600; cursor: pointer; }

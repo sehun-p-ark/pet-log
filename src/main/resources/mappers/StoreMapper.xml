@@ -4,61 +4,103 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="dev.dhkim.petlog.mappers.main.StoreMapper">
-    <insert id="insert" parameterType="dev.dhkim.petlog.entities.user.StoreEntity">
-        INSERT INTO `petlog`.store (store_id,user_id,store_name,postal_code,address_primary, address_secondary, lat, lng, category,  store_phone)
-        VALUES (#{storeId},#{userId},#{storeName}, #{postalCode}, #{addressPrimary}, #{addressSecondary}, #{lat}, #{lng},#{category}, #{storePhone})
-    </insert>
 
+       <insert id="insert" parameterType="dev.dhkim.petlog.entities.user.StoreEntity">
+              INSERT INTO `petlog`.`store` (
+                     store_id, user_id, store_name, postal_code,
+                     address_primary, address_secondary, lat, lng,
+                     category, store_phone
+              )
+              VALUES (
+                            #{storeId}, #{userId}, #{storeName}, #{postalCode},
+                            #{addressPrimary}, #{addressSecondary}, #{lat}, #{lng},
+                            #{category}, #{storePhone}
+                     )
+       </insert>
 
-    <!-- 좌표 변환 필요 장소 조회 -->
-    <select id="findStoresWithoutCoords" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
-        SELECT store_id AS storeId,
-               store_name AS storeName,
-               address_primary AS addressPrimary,
-               address_secondary AS addressSecondary,
-               category,
-               store_phone AS storePhone,
-               created_at AS createdAt,
-               lat,
-               lng
-        FROM `petlog`.`store`
-        WHERE lat IS NULL OR lng IS NULL
-    </select>
+       <insert id="insertApiStore" useGeneratedKeys="true" keyProperty="storeId" keyColumn="store_id">
+              INSERT INTO `petlog`.`store` (
+                     user_id,
+                     store_name,
+                     address_primary,
+                     category,
+                     postal_code,
+                     created_at
+              )
+              VALUES (
+                            #{userId},
+                            #{storeName},
+                            #{addressPrimary},
+                            #{category},
+                            '00000',
+                            NOW()
+                     )
+       </insert>
 
-    <!-- 위도/경도 업데이트 -->
-    <update id="updateStoreLatLng" parameterType="map">
-        UPDATE `petlog`.`store`
-        SET lat = #{lat}, lng = #{lng}
-        WHERE store_id = #{storeId}
-    </update>
+       <select id="findIdByAddressAndName" resultType="java.lang.Integer">
+              SELECT store_id
+              FROM `petlog`.`store`
+              WHERE address_primary = #{address}
+                AND store_name = #{placeName}
+              LIMIT 1
+       </select>
 
-    <!-- 카테고리별 조회 -->
-    <select id="selectStoresByCategory" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
-        SELECT store_id AS storeId,
-               store_name AS storeName,
-               address_primary AS addressPrimary,
-               address_secondary AS addressSecondary,
-               category,
-               store_phone AS storePhone,
-               lat,
-               lng
-        FROM `petlog`.`store`
-        WHERE category = #{category}
-        ORDER BY store_name
-    </select>
+       <select id="selectById" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
+              SELECT
+                     store_id AS storeId,
+                     user_id AS userId,
+                     store_name AS storeName,
+                     address_primary AS addressPrimary,
+                     category
+              FROM `petlog`.`store`
+              WHERE store_id = #{storeId}
+       </select>
 
-    <!-- 전체 스토어 조회 -->
-    <select id="selectAllStores" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
-        SELECT store_id AS storeId,
-               store_name AS storeName,
-               address_primary AS addressPrimary,
-               address_secondary AS addressSecondary,
-               category,
-               store_phone AS storePhone,
-               lat,
-               lng
-        FROM `petlog`.`store`
-        ORDER BY store_name
-    </select>
+       <select id="findStoresWithoutCoords" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
+              SELECT store_id AS storeId,
+                     store_name AS storeName,
+                     address_primary AS addressPrimary,
+                     address_secondary AS addressSecondary,
+                     category,
+                     store_phone AS storePhone,
+                     created_at AS createdAt,
+                     lat,
+                     lng
+              FROM `petlog`.`store`
+              WHERE lat IS NULL OR lng IS NULL
+       </select>
+
+       <update id="updateStoreLatLng">
+              UPDATE `petlog`.`store`
+              SET lat = #{lat}, lng = #{lng}
+              WHERE store_id = #{storeId}
+       </update>
+
+       <select id="selectStoresByCategory" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
+              SELECT store_id AS storeId,
+                     store_name AS storeName,
+                     address_primary AS addressPrimary,
+                     address_secondary AS addressSecondary,
+                     category,
+                     store_phone AS storePhone,
+                     lat,
+                     lng
+              FROM `petlog`.`store`
+              WHERE category = #{category}
+              ORDER BY store_name
+       </select>
+
+       <select id="selectAllStores" resultType="dev.dhkim.petlog.entities.user.StoreEntity">
+              SELECT store_id AS storeId,
+                     store_name AS storeName,
+                     address_primary AS addressPrimary,
+                     address_secondary AS addressSecondary,
+                     category,
+                     store_phone AS storePhone,
+                     lat,
+                     lng
+              FROM `petlog`.`store`
+              ORDER BY store_name
+       </select>
 
 </mapper>

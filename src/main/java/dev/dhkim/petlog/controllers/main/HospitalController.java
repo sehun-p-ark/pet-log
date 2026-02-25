@@ -24,8 +24,6 @@ public class HospitalController {
         return "테스트용 병원 데이터 전체 삭제 완료";
     }
 
-
-
     //  DB에 공공데이터 저장하는 API
     @GetMapping("/load-hospitals")
     public String loadHospitals() throws Exception {

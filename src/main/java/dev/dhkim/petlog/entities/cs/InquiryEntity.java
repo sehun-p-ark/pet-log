@@ -16,8 +16,9 @@ public class InquiryEntity {
         private Integer userId;
         private String title;
         private String content;
-       /* @Enumerated(EnumType.STRING)*/
+        private String answer;
         private InquiryStatus status;
         private LocalDateTime createdAt;
+        private LocalDateTime answeredAt;
 
 }

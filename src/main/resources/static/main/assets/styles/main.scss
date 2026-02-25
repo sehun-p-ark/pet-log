@@ -260,6 +260,27 @@
         overflow-y: scroll; // 스크롤 가능
         position: relative; // 기준점 추가
 
+        // --- 스크롤바 커스텀 시작 ---
+        &::-webkit-scrollbar {
+          width: 0.5rem; // 8px: 적당히 슬림한 두께
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent; // 트랙을 투명하게 해서 리스트 배경색(#f9fafb)이 보이게 함
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($global-border-green-color, 0.3); // 보더 컬러를 30% 투명하게
+          border-radius: 1rem;
+          background-clip: padding-box;
+          border: 0.125rem solid transparent; // 2px 투명 보더로 막대를 더 얇게 연출
+
+          &:hover {
+            background-color: $global-border-green-color; // 마우스 올리면 선명한 초록색
+          }
+        }
+        // --- 스크롤바 커스텀 끝 ---
+
 
         .store-panel {
           position: relative; // 여기 추가!
@@ -362,7 +383,7 @@
           .empty {
             padding: 3rem 1rem;
             text-align: center;
-            font-size: 0.9rem;
+            font-size: 1.1rem;
             color: #999;
             font-weight: 500;
 
@@ -373,7 +394,7 @@
             &::before {
               content: "🐾";
               margin-right: 0.5rem;
-              font-size: 1.1rem;
+              font-size: 1.5rem;
             }
           }
           .item-wrapper {
@@ -620,91 +641,6 @@
       .hidden {
         display: none !important;
       }
-
-
-      /*    > .description {
-            background-color: $global-description-color;
-            border: $global-border-color solid 0.0625rem;
-            @include flex(column, center, center, 1.5rem);
-            padding: 1rem;
-            height: 20rem;
-            transition: opacity 0.2s ease;
-
-
-            > .close-btn {
-              top: 0.5rem;
-              left: 21.5rem;
-              position: relative;
-              cursor: pointer;
-              transition: transform 0.15s ease, opacity 0.15s ease;
-
-              > .close {
-                width: 1rem;
-                height: 0.8rem;
-
-                &:hover {
-                  opacity: 0.7;
-                }
-
-                &:active {
-                  transform: scale(0.9);
-                  opacity: 0.5;
-                }
-              }
-            }
-            !*
-
-            &[data-visible] {
-              display: block;
-              opacity: 1;
-              pointer-events: auto;
-            }
-            *!
-
-            > .text-wrapper {
-              @include flex(column, center, center, 0.3rem);
-
-              > .image {
-                background-color: #565656;
-                border-radius: 5rem;
-                width: 5rem;
-                height: 5rem;
-              }
-
-              > .nickname {
-                color: $global-black-text-color;
-              }
-            }
-
-            .pet-card {
-              border: 0.05rem solid #ddd;
-              background-color: $global-white-text-color;
-              position: relative; !*!* tag를 absolute로 위치시키기 위한 기준 *!*!
-              padding: 1rem;
-              top: 2rem;
-              height: 9rem;
-              overflow-y: scroll;
-
-            }
-
-            .tag {
-              position: absolute;
-              top: -2.4rem;
-              left: 0;
-              background-color: $global-green-background-color;
-              padding: 0.7rem 0.5rem;
-              border-top-left-radius: 0.5rem;
-              border-top-right-radius: 0.5rem;
-              font-weight: 800;
-              font-size: 0.9rem;
-            }
-
-            .caption-wrapper {
-              @include flex(column, flex-start, flex-start, 0.5rem);
-              background-color: $global-white-text-color;
-              color: $global-black-text-color;
-            }
-          }*/
     }
   }
 }

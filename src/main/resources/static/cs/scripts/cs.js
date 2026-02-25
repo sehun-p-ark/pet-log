@@ -68,11 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const item = e.target.closest(".inquiry-item");
         const inquiryId = item.dataset.id;
 
-        if (confirm('정말 삭제하시겠습니까?')) {
-            fetch(`/cs/inquiry/delete/${inquiryId}`, { method: 'POST' })
-                .then(() => window.location.reload())
-                .catch(() => alert('삭제 실패'));
-        }
     }
 
 // 이벤트 중복 방지
@@ -112,3 +107,74 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    // 관리자 리스트 아코디언 제어
+    const adminDashboard = document.querySelector(".admin-dashboard");
+
+    adminDashboard?.addEventListener("click", (e) => {
+        // 요약 줄을 클릭했을 때만 작동
+        const summaryRow = e.target.closest(".admin-summary-row");
+        if (summaryRow) {
+            const item = summaryRow.parentElement;
+
+            // 다른 게 열려있으면 닫고 싶을 때 (선택사항)
+            // document.querySelectorAll('.admin-inquiry-item').forEach(el => {
+            //    if(el !== item) el.classList.remove('active');
+            // });
+
+            item.classList.toggle("active");
+        }
+    });
+});
+
+/**
+ * 관리자 답변 등록 함수
+ * @param {number} inquiryId - 문의글 ID
+ */
+function submitAnswer(inquiryId) {
+    const answerTextArea = document.getElementById(`answerText-${inquiryId}`);
+    const answerContent = answerTextArea?.value.trim();
+
+    if (!answerContent) {
+        alert("답변 내용을 입력해주세요.");
+        return;
+    }
+
+    // [디버그 1] 전송 전 데이터 확인
+    const requestData = {
+        id: parseInt(inquiryId), // 명시적으로 숫자로 변환
+        answer: answerContent
+    };
+    console.log("🚀 서버로 보낼 데이터:", requestData);
+
+    if (!confirm("답변을 등록하시겠습니까?")) return;
+
+    fetch("/cs/inquiry/answer", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json" // [디버그 2] 헤더 설정 확인
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(async response => {
+            // [디버그 3] 서버 응답 상태 및 상세 에러 메시지 확인
+            if (!response.ok) {
+                const errorText = await response.text(); // 서버가 보낸 에러 메세지 읽기
+                console.error(`❌ 서버 에러 발생 (상태 코드: ${response.status})`);
+                console.error("❌ 에러 내용:", errorText);
+                throw new Error(`서버가 400 에러를 반환했습니다: ${errorText}`);
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log("✅ 서버 응답 데이터:", data);
+            if (data === "SUCCESS") {
+                alert("답변이 성공적으로 등록되었습니다.");
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error("🔥 통신 에러 상세:", error);
+            alert("등록 중 오류가 발생했습니다. 콘솔창(F12)을 확인해주세요.");
+        });
+}

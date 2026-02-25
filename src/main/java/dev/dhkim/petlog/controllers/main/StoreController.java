@@ -18,14 +18,14 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    // 1️⃣ 카테고리별 또는 전체 가게 조회
+    // 카테고리별 또는 전체 가게 조회
     @GetMapping
     public ResponseEntity<List<StoreEntity>> getStores(@RequestParam(required = false) String category) {
         List<StoreEntity> stores = storeService.getStoresByCategoryOrAll(category);
         return ResponseEntity.ok(stores);
     }
 
-    // 2️⃣ 가게 등록
+    //  가게 등록
     @PostMapping
     public ResponseEntity<String> registerStore(@RequestBody StoreDto storeDto) {
         storeService.registerStore(storeDto);

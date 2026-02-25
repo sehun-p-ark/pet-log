@@ -411,9 +411,17 @@ loginButton.addEventListener('click', (e) => {
                 showMessage('아이디 또는 비밀번호를 다시 입력해주세요.');
                 break;
             case 'SUCCESS':
-                location.href = '/main';
+                // 1. 서버가 보낸 데이터를 콘솔에 찍어서 확인 (F12 누르면 보임)
+                console.log('로그인 성공 데이터:', response);
+
+                // 2. 관리자(ADMIN)인지 체크해서 리다이렉트 경로 결정
+                if (response.userType === 'ADMIN') {
+                    alert('관리자 계정으로 로그인되었습니다.');
+                    location.href = '/cs'; // 관리자가 갈 페이지 (문의 목록)
+                } else {
+                    location.href = '/main'; // 일반 유저가 갈 페이지
+                }
                 break;
-            default:
         }
     };
     xhr.open('POST', '/user/login');

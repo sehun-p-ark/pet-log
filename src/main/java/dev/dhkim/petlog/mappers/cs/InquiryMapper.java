@@ -16,4 +16,8 @@ public interface InquiryMapper {
     InquiryEntity selectById(Integer inquiryId);
 
     void deleteById(Integer inquiryId);
+
+    int updateInquiryAnswer(int id, String answer);
+
+    List<InquiryEntity> selectAllInquiries();
 }

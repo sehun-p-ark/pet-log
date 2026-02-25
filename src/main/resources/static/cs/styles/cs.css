@@ -1,7 +1,4 @@
 @charset "UTF-8";
-/* ============================= */
-/*        전체 레이아웃          */
-/* ============================= */
 .support {
   width: 100%;
   max-width: 75rem;
@@ -9,9 +6,6 @@
   padding: 0 3rem;
 }
 
-/* ============================= */
-/*            헤더               */
-/* ============================= */
 .support-header {
   align-items: stretch;
   display: flex;
@@ -37,9 +31,6 @@
   color: #565656;
 }
 
-/* ============================= */
-/*           카드 공통           */
-/* ============================= */
 .faq.card {
   width: 100%;
   background-color: #FFFFFF;
@@ -48,6 +39,20 @@
   box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.0588235294);
   max-height: 20rem;
   overflow-y: scroll;
+}
+.faq.card::-webkit-scrollbar {
+  width: 0.4rem;
+}
+.faq.card::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 1.5rem 0;
+}
+.faq.card::-webkit-scrollbar-thumb {
+  background-color: rgba(202, 226, 207, 0.25);
+  border-radius: 1rem;
+}
+.faq.card::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(202, 226, 207, 0.6);
 }
 
 .card {
@@ -58,9 +63,6 @@
   box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.0588235294);
 }
 
-/* ============================= */
-/*             FAQ               */
-/* ============================= */
 .faq {
   margin-bottom: 3.5rem;
 }
@@ -92,9 +94,6 @@
   color: #38A34C;
 }
 
-/* ============================= */
-/*     문의 + 고객센터 정보      */
-/* ============================= */
 .support-bottom {
   display: flex;
   gap: 0.7rem;
@@ -106,9 +105,6 @@
   flex: 1;
 }
 
-/* ============================= */
-/*           문의 CTA            */
-/* ============================= */
 .inquiry {
   background-color: #89CC96;
   color: #FFFFFF;
@@ -158,9 +154,7 @@
   transform: translateY(0);
 }
 
-/* ============================= */
-/*         고객센터 정보         */
-/* ============================= */
+/*고객센터 정보*/
 .support-info {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -180,9 +174,7 @@
   font-size: 0.95rem;
 }
 
-/* ============================= */
-/*       문의내역 슬라이드        */
-/* ============================= */
+/*문의내역슬라이드*/
 .inquiry-list {
   position: fixed;
   top: 0;
@@ -263,22 +255,49 @@
   font-weight: 600;
 }
 .inquiry-item .summary {
-  /* 상태별 색상 */
+  /* 답변상태 배지 스타일 */
 }
 .inquiry-item .summary .status.waiting {
-  background: #fff4e5;
+  background-color: #fff4e5;
   color: #ff8c00;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
 }
 .inquiry-item .summary .status.answered {
-  background: #e6f9ed;
+  background-color: #e6f9ed;
   color: #28a745;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+}
+.inquiry-item .summary {
+  /* 유저 리스트 내 답변 박스 스타일 */
+}
+.inquiry-item .summary .admin-reply {
+  margin-top: 0.9375rem;
+  padding: 0.9375rem;
+  background-color: #f8f9fa;
+  border-left: 0.25rem solid #28a745;
+  border-radius: 0.25rem;
+}
+.inquiry-item .summary .admin-reply p {
+  margin: 0;
+  color: #333;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.inquiry-item .summary .admin-reply strong {
+  color: #28a745;
+  margin-right: 0.3125rem;
+  font-size: 0.875rem;
 }
 .inquiry-item .content {
   padding: 0 1rem 1rem;
   font-size: 0.85rem;
   color: #555;
   line-height: 1.4;
-  border-top: 1px solid #eee;
+  border-top: 0.0625rem solid #eee;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
@@ -288,10 +307,10 @@
 }
 .inquiry-item .btn-delete {
   position: absolute;
-  top: 2.9rem;
+  top: 2.8rem;
   right: 0.5rem;
   padding: 0.25rem 0.6rem;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   border-radius: 0.5rem;
   border: none;
@@ -321,9 +340,170 @@
   background: #63b476;
 }
 
-/* ============================= */
-/*            반응형             */
-/* ============================= */
+/*관리자 전용 페이지*/
+.admin-dashboard {
+  width: 100%;
+  max-width: 75rem;
+  margin: 0 auto 5rem auto;
+}
+.admin-dashboard .admin-list-wrapper {
+  background: #fff;
+  border-radius: 1.2rem;
+  padding: 0;
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.0588235294);
+  margin-top: 2rem;
+  overflow: hidden;
+}
+.admin-dashboard .list-header {
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 1px solid #f5f5f5;
+}
+.admin-dashboard .list-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.admin-dashboard {
+  /* 각 문의 아이템 */
+}
+.admin-dashboard .admin-inquiry-item {
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  transition: background 0.2s ease;
+}
+.admin-dashboard .admin-inquiry-item:last-child {
+  border-bottom: none;
+}
+.admin-dashboard .admin-inquiry-item.active {
+  background-color: #f3f9f5;
+}
+.admin-dashboard .admin-inquiry-item.active .admin-summary-row {
+  font-weight: 700;
+}
+.admin-dashboard .admin-inquiry-item.active .admin-detail-fold {
+  max-height: 1000px;
+}
+.admin-dashboard {
+  /* 요약 줄 (클릭 영역) */
+}
+.admin-dashboard .admin-summary-row {
+  display: flex;
+  align-items: center;
+  padding: 1.2rem 2.5rem;
+  gap: 1.5rem;
+  cursor: pointer;
+}
+.admin-dashboard .admin-summary-row:hover {
+  background-color: #f9fdfa;
+}
+.admin-dashboard .admin-summary-row .badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.admin-dashboard .admin-summary-row .badge.waiting {
+  background: #fff0f0;
+  color: #ff5b5b;
+}
+.admin-dashboard .admin-summary-row .badge.complete {
+  background: #f0fff4;
+  color: #28a745;
+}
+.admin-dashboard .admin-summary-row .admin-user-info {
+  font-size: 0.85rem;
+  color: #888;
+  white-space: nowrap;
+}
+.admin-dashboard .admin-summary-row .admin-title {
+  font-size: 1rem;
+  color: #333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-dashboard .admin-summary-row .admin-date {
+  font-size: 0.85rem;
+  color: #bbb;
+}
+.admin-dashboard {
+  /* 상세 내용 (기본 숨김) */
+}
+.admin-dashboard .admin-detail-fold {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  background-color: #fafafa;
+}
+.admin-dashboard .admin-detail-fold .fold-inner {
+  padding: 2rem 2.5rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+}
+.admin-dashboard .admin-detail-fold .question-box strong, .admin-dashboard .admin-detail-fold .answer-box strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 0.6rem;
+  font-weight: 700;
+}
+.admin-dashboard .admin-detail-fold .question-box p, .admin-dashboard .admin-detail-fold .answer-box p {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+.admin-dashboard .admin-detail-fold {
+  /* 답변 입력/완료 박스 */
+}
+.admin-dashboard .admin-detail-fold .answer-box {
+  padding: 1.5rem;
+  border-radius: 0.8rem;
+}
+.admin-dashboard .admin-detail-fold .answer-box.complete {
+  background: #fff;
+  border: 1px solid #e6f9ed;
+  border-left: 4px solid #28a745;
+}
+.admin-dashboard .admin-detail-fold .answer-box.form {
+  background: #fff;
+  border: 1px solid #eee;
+}
+.admin-dashboard .admin-detail-fold .answer-box.form textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 1px solid #ddd;
+  border-radius: 0.6rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  resize: vertical;
+}
+.admin-dashboard .admin-detail-fold .answer-box.form textarea:focus {
+  border-color: #7acb8c;
+  outline: none;
+}
+.admin-dashboard .admin-detail-fold .answer-box.form .action-row {
+  display: flex;
+  justify-content: flex-end;
+}
+.admin-dashboard .admin-detail-fold .answer-box.form .action-row .btn-admin-reply {
+  background: #7acb8c;
+  color: white;
+  padding: 0.7rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.admin-dashboard .admin-detail-fold .answer-box.form .action-row .btn-admin-reply:hover {
+  background: #63b476;
+  transform: translateY(-1px);
+}
+
+/*반응형*/
 @media (max-width: 64rem) {
   .support {
     padding: 0 2rem;
@@ -343,9 +523,7 @@
     grid-template-columns: 1fr;
   }
 }
-/* ============================= */
-/*            모달 영역          */
-/* ============================= */
+/*문의글 작성 모달*/
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -356,7 +534,7 @@
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 3000;
 }
 
 .modal-overlay.active {
@@ -412,8 +590,7 @@
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
-.modal-body .form-group input,
-.modal-body .form-group textarea {
+.modal-body .form-group input, .modal-body .form-group textarea {
   width: 100%;
   padding: 0.5625rem 0.625rem;
   border-radius: 0.75rem;
@@ -421,8 +598,7 @@
   font-size: 0.95rem;
   resize: none;
 }
-.modal-body .form-group input:focus,
-.modal-body .form-group textarea:focus {
+.modal-body .form-group input:focus, .modal-body .form-group textarea:focus {
   border-color: #89CC96;
   outline: none;
   box-shadow: 0 0 0 0.1875rem #89cc96;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.dhkim.petlog.dto.main.HospitalDto;
 import dev.dhkim.petlog.entities.main.HospitalEntity;
 import dev.dhkim.petlog.mappers.main.HospitalMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -33,9 +34,16 @@ public class HospitalService {
     //json 문자 -> 자바로 파싱
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private static final int NUM_OF_ROWS = 10;
+    private static final int NUM_OF_ROWS = 100;
 
-    private static final String SERVICE_KEY = "d7e0beb3d81a4064f3ed977303249c76aa7241b310eb6acafcd84e66bda26176";
+    @Value("${public-data.service.key}")
+    private String serviceKey;
+
+    @PostConstruct
+    public void checkKey() {
+        // 서버 실행 시 콘솔창에 키가 출력됩니다.
+        System.out.println("✅ 환경 변수 로드 성공: " + serviceKey);
+    }
     /*
      */
 
@@ -140,7 +148,7 @@ public class HospitalService {
      */
     private String buildUrl(int pageNo) {
         return "https://apis.data.go.kr/1741000/animal_hospitals/info"
-                + "?serviceKey=" + SERVICE_KEY
+                + "?serviceKey=" + serviceKey
                 + "&pageNo=" + pageNo
                 + "&numOfRows=" + NUM_OF_ROWS
                 + "&returnType=json";

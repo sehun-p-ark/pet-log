@@ -21,8 +21,14 @@ public class ReservationDto {
     private String requestText;
     private String paymentMethod = "OFFLINE"; // 기본값
 
+    // --- API 장소 예약을 위해 추가하는 임시 필드 ---
+    private String placeName;   // 프론트에서 받은 장소 이름 (ex: OO병원)
+    private String address;     // 프론트에서 받은 장소 주소
+    private String category;    // 프론트에서 받은 카테고리 (ex: hospital, salon)
+    // 이 필드들은 js 랑 이름이 같으면 됨 db 랑 달라도 상관 없음
 
-    @Override
+
+/*    @Override
     public String toString() {
         return "ReservationDto{" +
                 "reservationId=" + reservationId +
@@ -33,5 +39,5 @@ public class ReservationDto {
                 ", requestText='" + requestText + '\'' +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 '}';
-    }
+    }*/
 }

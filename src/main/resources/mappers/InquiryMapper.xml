@@ -13,7 +13,14 @@
 
     <!-- 유저별 문의 조회 -->
     <select id="selectByUserId" parameterType="int" resultType="dev.dhkim.petlog.entities.cs.InquiryEntity">
-        SELECT id, user_id, title, content, status, created_at
+        SELECT
+            `id`,
+            `user_id` AS `userId`,
+            `title`,
+            `content`,
+            `status`,
+            `answer`,      `created_at` AS `createdAt`,
+            `updated_at` AS `updatedAt`
         FROM `petlog`.inquiry
         WHERE user_id = #{userId}
         ORDER BY created_at DESC
@@ -31,4 +38,29 @@
         DELETE FROM `petlog`.`inquiry`
         WHERE id = #{inquiryId}
     </delete>
+
+  <!--  관리자 문의글 답변 및 상태 변경-->
+    <update id="updateInquiryAnswer">
+    update `petlog`.`inquiry`
+    set `answer` = #{answer},
+        `status` = 'COMPLETED',
+        `updated_at` = now(),
+        `answered_at` = now()
+    where  `id` = #{id}
+    </update>
+
+
+    <select id="selectAllInquiries" resultType="dev.dhkim.petlog.entities.cs.InquiryEntity">
+        SELECT
+            `id` AS `id`,
+            `user_id` AS `userId`,
+            `title` AS `title`,
+            `content` AS `content`,
+            `status` AS `status`,
+            `answer` AS `answer`,
+            `created_at` AS `createdAt`,
+            `updated_at` AS `updatedAt`
+        FROM `petlog`.`inquiry`
+        ORDER BY `created_at` DESC
+    </select>
 </mapper>

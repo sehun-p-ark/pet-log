@@ -1,12 +1,12 @@
-package dev.dhkim.petlog.services.cs;
 
+package dev.dhkim.petlog.services.cs;
 import dev.dhkim.petlog.dto.cs.InquiryDto;
 import dev.dhkim.petlog.entities.cs.InquiryEntity;
 import dev.dhkim.petlog.enums.cs.InquiryStatus;
 import dev.dhkim.petlog.mappers.cs.InquiryMapper;
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,29 +14,17 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class InquiryService {
-
     private final InquiryMapper inquiryMapper;
 
+    // [문의 작성]
     public void writeInquiry(int userId, InquiryDto dto) {
+        if (dto == null) throw new IllegalArgumentException("문의 데이터가 없습니다.");
 
-        if (dto == null) {
-            throw new IllegalArgumentException("문의 데이터가 없습니다.");
+        if (dto.getTitle() == null || dto.getTitle().trim().length() < 5) {
+            throw new IllegalArgumentException("제목이 너무 짧습니다.");
         }
-
-        String title = dto.getTitle();
-        String content = dto.getContent();
-
-        if (title == null || title.trim().length() < 5 || title.length() > 100) {
-            throw new IllegalArgumentException("제목은 5자 이상 100자 이하로 입력해주세요.");
-        }
-
-        if (content == null || content.trim().length() < 10 || content.length() > 2000) {
-            throw new IllegalArgumentException("내용은 10자 이상 2000자 이하로 입력해주세요.");
-        }
-
 
         InquiryEntity inquiry = new InquiryEntity();
-
         inquiry.setUserId(userId);
         inquiry.setTitle(dto.getTitle());
         inquiry.setContent(dto.getContent());
@@ -46,28 +34,28 @@ public class InquiryService {
         inquiryMapper.insertInquiry(inquiry);
     }
 
-    public List<InquiryEntity> findByUserId(Integer userId) {
-        if (userId == null) return List.of();  // null이면 빈 리스트 반환
+    // [일반 유저용] 본인 글만 조회
+    public List<InquiryEntity> getInquiriesByUserId(Integer userId) {
+        if (userId == null) return List.of();
         return inquiryMapper.selectByUserId(userId);
     }
 
-    public void deleteInquiry(Integer inquiryId, Integer sessionUserId) {
-        if (inquiryId == null) return; // null 방지
-
-        InquiryEntity inquiry = inquiryMapper.selectById(inquiryId);
-
-        if (inquiry == null) {
-            System.out.println("삭제할 inquiry가 없음 id=" + inquiryId);
-            return;
-        }
-
-        // 테스트용: 세션 유저 상관없이 삭제
-        inquiryMapper.deleteById(inquiryId);
-        System.out.println("삭제 완료 id=" + inquiryId);
+    // [관리자용] 모든 유저 글 조회
+    public List<InquiryEntity> getAllInquiries() {
+        return inquiryMapper.selectAllInquiries();
     }
 
+    // [답변 등록]
+    @Transactional
+    public boolean replyInquiry(int id, String answer) {
+        // DB에서 answer 업데이트 및 status를 'COMPLETED'로 변경하는 쿼리 호출
+        return this.inquiryMapper.updateInquiryAnswer(id, answer) > 0;
+    }
 
-
-
+    // [삭제]
+    public void deleteInquiry(Integer inquiryId) {
+        if (inquiryId != null) {
+            inquiryMapper.deleteById(inquiryId);
+        }
+    }
 }
-

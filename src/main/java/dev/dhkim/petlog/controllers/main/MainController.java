@@ -47,10 +47,6 @@ public class MainController {
                 double myLat = myAddress.getLat();
                 double myLng = myAddress.getLng();
 
-//               List<PetDto> nearbyFriends = friendService.getNearbyFriends(sessionUser.getUserId(), myLat, myLng);
-//                modelAndView.addObject("nearbyFriendsPets", nearbyFriends); // 여기 이름을 템플릿과 맞춤*/
-
-
                 System.out.println("[DEBUG] 내 펫 리스트: " + pets.size());
             } else {
                 System.out.println("[DEBUG] 기본 주소 없음 또는 위도/경도 없음");
@@ -59,19 +55,5 @@ public class MainController {
 
         return modelAndView;
     }
-
- /*   @GetMapping("/api/friends/nearby")
-    @ResponseBody
-    public List<PetDto> getNearbyFriends(
-            @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser,
-            @RequestParam double lat,
-            @RequestParam double lng,
-            @RequestParam(required = false) Integer testUserId // 테스트용
-    ) {
-        Integer userId = (sessionUser != null) ? sessionUser.getUserId() : testUserId;
-        if (userId == null) return List.of(); // userId 없으면 빈 리스트
-
-        return friendService.getNearbyFriends(userId, lat, lng);
-    }*/
 
 }

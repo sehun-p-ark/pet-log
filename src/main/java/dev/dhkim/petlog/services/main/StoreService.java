@@ -120,11 +120,6 @@ public class StoreService {
                 .collect(Collectors.toList());
     }
 
-  /*  public StoreDto getStore(Integer storeId) {
-        StoreEntity entity = storeMapper.selectById(storeId);
-        return entity != null ? entityToDto(entity) : null;
-    }*/
-
     // ================= 카테고리별 조회 또는 전체 =================
     public List<StoreEntity> getStoresByCategoryOrAll(String category) {
         List<StoreEntity> stores = (category == null || category.isBlank())
