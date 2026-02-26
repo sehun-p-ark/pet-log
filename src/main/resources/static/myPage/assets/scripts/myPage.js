@@ -3090,15 +3090,15 @@ imageInput?.addEventListener('change', () => {
     imageInput.value = '';
 });
 
-const filterSelect = filterSelect?.addEventListener('change', () => {
+const filterSelect = document.querySelector('.filter');
+filterSelect?.addEventListener('change', () => {
     const period = filterSelect.value;
-    const menuIndex = getCurrentMenuIndex();
-    location.href = `/my?menu=${menuIndex}&period=${period}`;
+    location.href = `/my?menu=4&period=${period}`;
 });
 
+// 리뷰내역 버튼
 document.querySelector('.my-review-filter')?.addEventListener('click', () => {
-    const menuIndex = getCurrentMenuIndex();
-    location.href = `/my?menu=${menuIndex}&tab=review`;
+    location.href = '/my?menu=4&tab=review';
 });
 
 // ===== 리뷰 남기기 버튼 (마이페이지) =====
