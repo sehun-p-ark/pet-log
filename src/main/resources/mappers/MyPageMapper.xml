@@ -495,25 +495,25 @@
 
     <!-- 주문 내역 -->
     <select id="selectOrderItems" resultType="map">
-        SELECT oi.id,
-        oi.product_id AS productId,
+        SELECT oi.id          AS orderItemId,
+        oi.product_id  AS productId,
         oi.quantity,
         oi.price,
-        p.price AS originalPrice,
-        p.name AS productName,
-        pi.image_url AS productImageUrl,
+        p.price        AS originalPrice,
+        p.name         AS productName,
+        pi.image_url   AS productImageUrl,
         opt.option_name AS optionName,
-        o.id AS orderId,
-        o.created_at AS orderDate,
-        r.id AS reviewId,
-        r.rating AS reviewRating,
-        r.content AS reviewContent
+        o.id           AS orderId,
+        o.created_at   AS orderDate,
+        r.id           AS reviewId,
+        r.rating       AS reviewRating,
+        r.content      AS reviewContent
         FROM petlog.order_item oi
-        JOIN petlog.order o ON oi.order_id = o.id
+        JOIN petlog.`order` o ON oi.order_id = o.id
         JOIN petlog.product p ON oi.product_id = p.id
         LEFT JOIN petlog.product_image pi ON pi.product_id = p.id AND pi.is_thumbnail = true
         LEFT JOIN petlog.`option` opt ON oi.option_id = opt.id
-        LEFT JOIN petlog.review r ON r.product_id = oi.product_id AND r.user_id = o.user_id
+        LEFT JOIN petlog.review r ON r.order_item_id = oi.id
         WHERE o.user_id = #{userId}
         <choose>
             <when test="period == '1month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)</when>

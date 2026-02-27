@@ -8,21 +8,11 @@
         p.name AS petName,
         p.image_url AS profileImageUrl,
         opt.option_name AS optionName
-        FROM `petlog`.review r
-        JOIN `petlog`.users u ON r.user_id = u.id
-        LEFT JOIN `petlog`.pets p ON u.id = p.user_id AND p.is_primary = true
-        LEFT JOIN (
-        SELECT oi.option_id, o.user_id, oi.product_id
-        FROM `petlog`.order_item oi
-        JOIN `petlog`.`order` o ON oi.order_id = o.id
-        WHERE (o.user_id, oi.product_id, o.created_at) IN (
-        SELECT o2.user_id, oi2.product_id, MAX(o2.created_at)
-        FROM `petlog`.order_item oi2
-        JOIN `petlog`.`order` o2 ON oi2.order_id = o2.id
-        GROUP BY o2.user_id, oi2.product_id
-        )
-        ) latest_oi ON latest_oi.user_id = r.user_id AND latest_oi.product_id = r.product_id
-        LEFT JOIN `petlog`.`option` opt ON latest_oi.option_id = opt.id
+        FROM petlog.review r
+        JOIN petlog.users u ON r.user_id = u.id
+        LEFT JOIN petlog.pets p ON u.id = p.user_id AND p.is_primary = true
+        LEFT JOIN petlog.order_item oi ON r.order_item_id = oi.id
+        LEFT JOIN petlog.`option` opt ON oi.option_id = opt.id
         WHERE r.product_id = #{productId}
         <choose>
             <when test="sort == 'new'">ORDER BY r.created_at DESC</when>
@@ -63,8 +53,8 @@
 
     <!--리뷰 등록-->
     <insert id="insertReview">
-        INSERT INTO petlog.review (user_id, product_id, rating, content)
-        VALUES (#{userId}, #{productId}, #{rating}, #{content})
+        INSERT INTO petlog.review (user_id, product_id, order_item_id, rating, content)
+        VALUES (#{userId}, #{productId}, #{orderItemId}, #{rating}, #{content})
     </insert>
 
     <select id="getLastInsertId" resultType="Integer">
@@ -77,17 +67,16 @@
     </insert>
 
     <select id="checkCanWriteReview" resultType="boolean">
-        SELECT (
-                   SELECT COUNT(*) FROM petlog.order_item oi
-                   JOIN petlog.`order` o ON oi.order_id = o.id
-                   WHERE o.user_id = #{userId}
-                     AND oi.product_id = #{productId}
-                     AND o.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-               ) > (
-                   SELECT COUNT(*) FROM petlog.review
-                   WHERE user_id = #{userId}
-                     AND product_id = #{productId}
-               )
+        SELECT COUNT(*) > 0
+        FROM petlog.order_item oi
+                 JOIN petlog.`order` o ON oi.order_id = o.id
+        WHERE o.user_id = #{userId}
+          AND oi.product_id = #{productId}
+          AND oi.id = #{orderItemId}
+          AND NOT EXISTS (
+            SELECT 1 FROM petlog.review r
+            WHERE r.order_item_id = oi.id
+        )
     </select>
 
     <!--리뷰 수정-->

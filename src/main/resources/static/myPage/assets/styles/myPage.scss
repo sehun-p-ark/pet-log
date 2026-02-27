@@ -4117,9 +4117,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
         }
       }
 
-
-
-      > .right-wrapper {
+      .right-wrapper {
         @include flex(row, stretch, flex-end, 1rem);
 
         > .point-wrapper,

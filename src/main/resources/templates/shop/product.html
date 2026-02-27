@@ -210,7 +210,6 @@
                                  th:src="${imgUrl}" class="review-img" alt="리뷰이미지">
                         </div>
                         <div class="review-text" th:text="${review['content']}"></div>
-                        <div class="update" th:if="${session.sessionUser != null && session.sessionUser.userId == review['userId']}">수정</div>
                     </div>
                     <div class="empty" th:if="${#lists.isEmpty(reviews)}">등록된 리뷰가 없습니다.</div>
                 </div>

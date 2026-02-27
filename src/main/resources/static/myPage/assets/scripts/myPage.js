@@ -3299,10 +3299,13 @@ document.querySelector('.my-review-filter')?.addEventListener('click', () => {
 });
 
 // ===== 리뷰 남기기 버튼 (마이페이지) =====
+let currentOrderItemId = null;
+
 document.addEventListener('click', (e) => {
     const btn = e.target.closest('.review-btn');
     if (!btn) return;
     currentProductId = btn.dataset.productId;
+    currentOrderItemId = btn.dataset.orderItemId;
     setWriteMode();
     overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -3398,6 +3401,7 @@ submitReviewBtn?.addEventListener('click', () => {
 
     const formData = new FormData();
     formData.append('productId', currentProductId);
+    formData.append('orderItemId', currentOrderItemId);
     formData.append('rating', selectedRating);
     formData.append('content', content);
     selectedFiles.forEach(file => formData.append('images', file));

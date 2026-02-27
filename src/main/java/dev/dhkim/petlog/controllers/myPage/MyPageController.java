@@ -66,9 +66,15 @@ public class MyPageController {
 
             List<Map<String, Object>> orderItems = myPageService.getOrderItems(sessionUser.getUserId(), period);
             orderItems.forEach(item -> {
+                Object orderItemIdObj = item.get("orderItemId");
+                if (orderItemIdObj == null) {
+                    item.put("canWriteReview", false);
+                    return;
+                }
                 boolean canWrite = reviewMapper.checkCanWriteReview(
                         sessionUser.getUserId(),
-                        ((Number) item.get("productId")).intValue()
+                        ((Number) item.get("productId")).intValue(),
+                        ((Number) orderItemIdObj).intValue()
                 );
                 item.put("canWriteReview", canWrite);
             });

@@ -559,7 +559,6 @@ function renderReviews(reviews) {
             ${(review.reviewImages || []).map(img => `<img src="${img}" class="review-img" alt="리뷰이미지">`).join('')}
         </div>
         <div class="review-text">${review.content || ''}</div>
-        ${review.userId && currentUserId && review.userId == currentUserId ? '<div class="update">수정</div>' : ''}
         `;
 
         item.querySelector('.update')?.addEventListener('click', () => {
