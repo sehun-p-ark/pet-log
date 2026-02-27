@@ -7,7 +7,7 @@ import dev.dhkim.petlog.dto.user.StoreDto;
 import dev.dhkim.petlog.entities.user.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
+import java.util.Map;
 import java.util.List;
 
 @Mapper
@@ -157,4 +157,12 @@ public interface MyPageMapper {
     int deleteStore(@Param(value = "storeId") int storeId,
                     @Param(value = "userId") int userId);
 
+    // 리뷰 남기기
+    List<Map<String, Object>> selectOrderItems(@Param("userId") Integer userId, @Param("period") String period);
+
+    // 주문 내역
+    Map<String, Object> selectOrderDetail(@Param("orderId") int orderId, @Param("userId") int userId);
+
+    // 주문내역 필터
+    List<Map<String, Object>> selectOrdersByPeriod(@Param("userId") Integer userId, @Param("period") String period);
 }

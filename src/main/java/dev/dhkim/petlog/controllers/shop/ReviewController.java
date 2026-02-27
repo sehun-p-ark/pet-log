@@ -122,4 +122,11 @@ public class ReviewController {
         reviewService.deleteReviewImage(reviewId, imageUrl);
         return Map.of("success", true);
     }
+
+    @GetMapping("/{id}/reviews/{reviewId}")
+    public Map<String, Object> getMyReview(
+            @PathVariable Integer id,
+            @PathVariable Integer reviewId) {
+        return reviewService.getReviewById(reviewId);
+    }
 }

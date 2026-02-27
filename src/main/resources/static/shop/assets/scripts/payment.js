@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const defaultDeliveryItem = document.querySelector('.delivery-item .default-badge')?.closest('.delivery-item');
 
     if (defaultDeliveryItem) {
-        const deliveryName = defaultDeliveryItem.querySelector('.delivery-name').textContent;
         const recipient = defaultDeliveryItem.querySelector('.recipient').textContent;
         const postal = defaultDeliveryItem.querySelector('.postal').textContent;
         const addr = defaultDeliveryItem.querySelector('.addr').textContent;

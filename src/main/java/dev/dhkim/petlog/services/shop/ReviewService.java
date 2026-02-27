@@ -86,4 +86,11 @@ public class ReviewService {
     public void addReviewImage(Integer reviewId, String imageUrl) {
         reviewMapper.insertReviewImage(reviewId, imageUrl, 0);
     }
+
+    public Map<String, Object> getReviewById(Integer reviewId) {
+        Map<String, Object> review = reviewMapper.selectReviewById(reviewId);
+        List<String> images = reviewMapper.selectReviewImages(reviewId);
+        review.put("images", images);
+        return review;
+    }
 }

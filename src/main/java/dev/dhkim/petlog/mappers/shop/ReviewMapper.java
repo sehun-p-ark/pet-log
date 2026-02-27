@@ -41,4 +41,8 @@ public interface ReviewMapper {
     void updateReview(@Param("reviewId") Integer reviewId, @Param("userId") Integer userId, @Param("rating") Integer rating, @Param("content") String content);
 
     void deleteReviewImage(@Param("reviewId") Integer reviewId, @Param("imageUrl") String imageUrl);
+
+    Map<String, Object> selectReviewById(int reviewId);
+
+    List<Map<String, Object>> selectMyReviews(@Param("userId") Integer userId);
 }

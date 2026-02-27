@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -652,5 +653,15 @@ public class MyPageService {
             return Pair.of(MyPageResult.FAILURE, null);
         }
         return Pair.of(MyPageResult.SUCCESS, dbBusinessUser);
+    }
+
+    // 리뷰 남기기
+    public List<Map<String, Object>> getOrderItems(Integer userId, String period) {
+        return myPageMapper.selectOrderItems(userId, period);
+    }
+
+    // 주문 내역
+    public Map<String, Object> getOrderDetail(int orderId, int userId) {
+        return myPageMapper.selectOrderDetail(orderId, userId);
     }
 }

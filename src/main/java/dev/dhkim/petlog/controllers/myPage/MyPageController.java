@@ -2,6 +2,7 @@ package dev.dhkim.petlog.controllers.myPage;
 
 import dev.dhkim.petlog.dto.user.*;
 import dev.dhkim.petlog.entities.user.*;
+import dev.dhkim.petlog.mappers.shop.ReviewMapper;
 import dev.dhkim.petlog.results.MyPageResult;
 import dev.dhkim.petlog.services.myPage.MyPageService;
 import jakarta.servlet.http.HttpSession;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -25,10 +26,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping(value = "/my")
 public class MyPageController {
     private final MyPageService myPageService;
+    private final ReviewMapper reviewMapper;
 
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getMyPage(ModelAndView modelAndView,
+                                  @RequestParam(defaultValue = "1month") String period,
                                   @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
         if (sessionUser == null) {
             modelAndView.setViewName("/user/login");
@@ -60,6 +63,35 @@ public class MyPageController {
             modelAndView.addObject("deliveryAddresses", deliveryAddresses.getRight());
             modelAndView.addObject("deliveryPrimaryAddress", deliveryAddress.getRight());
             modelAndView.addObject("reservations", reservations.getRight());
+
+            List<Map<String, Object>> orderItems = myPageService.getOrderItems(sessionUser.getUserId(), period);
+            orderItems.forEach(item -> {
+                boolean canWrite = reviewMapper.checkCanWriteReview(
+                        sessionUser.getUserId(),
+                        ((Number) item.get("productId")).intValue()
+                );
+                item.put("canWriteReview", canWrite);
+            });
+
+            Map<LocalDate, Map<Long, List<Map<String, Object>>>> groupedOrders = orderItems.stream()
+                    .collect(Collectors.groupingBy(
+                            item -> {
+                                Object date = item.get("orderDate");
+                                LocalDateTime dt = (date instanceof java.sql.Timestamp)
+                                        ? ((java.sql.Timestamp) date).toLocalDateTime()
+                                        : (LocalDateTime) date;
+                                return dt.toLocalDate();
+                            },
+                            LinkedHashMap::new,
+                            Collectors.groupingBy(
+                                    item -> ((Number) item.get("orderId")).longValue(),
+                                    LinkedHashMap::new,
+                                    Collectors.toList()
+                            )
+                    ));
+            modelAndView.addObject("orderItems", orderItems);
+            modelAndView.addObject("groupedOrders", groupedOrders);
+            modelAndView.addObject("currentPeriod", period);
         } else {
             Pair<MyPageResult, AddressEntity> businessAddress = this.myPageService.getBusinessAddress(sessionUser.getUserId());
             modelAndView.addObject("businessAddress", businessAddress.getRight());
@@ -459,5 +491,14 @@ public class MyPageController {
         return response;
     }
 
-
+    // 주문 내역
+    @RequestMapping(value = "/order/{orderId}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getOrderDetail(@PathVariable int orderId,
+                                              @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
+            return Map.of("result", "FAILURE_SESSION_EXPIRED");
+        }
+        return myPageService.getOrderDetail(orderId, sessionUser.getUserId());
+    }
 }
