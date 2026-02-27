@@ -83,10 +83,19 @@ public class ReviewController {
             @RequestParam Integer rating,
             @RequestParam(required = false) String content,
             @RequestParam(required = false) List<MultipartFile> images,
+            @RequestParam(required = false) List<String> remainingImageUrls,
             HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         if (sessionUser == null) {
             return Map.of("success", false, "message", "로그인이 필요합니다.");
+        }
+
+        // 기존 이미지 중 remainingImageUrls에 없는 것 삭제
+        List<String> existingImages = reviewService.getReviewImages(reviewId);
+        for (String existingUrl : existingImages) {
+            if (remainingImageUrls == null || !remainingImageUrls.contains(existingUrl)) {
+                reviewService.deleteReviewImage(reviewId, existingUrl);
+            }
         }
 
         if (images != null) {

@@ -4052,9 +4052,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   position: relative;
   @include flex(column, stretch, flex-start);
   min-width: 0;
-
-
-
+  overflow: hidden;
 
   /* ----------------- 내 정보 관리 --------------- */
 
@@ -4063,12 +4061,27 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     pointer-events: none;
     display: none;
     width: 100%;
-    max-width: 100rem;
     padding: 2rem;
+    overflow-y: auto;
 
     &.visible {
       display: flex;
       pointer-events: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d6d6d6;
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     .info-card {
@@ -4077,7 +4090,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
       border-radius: 1rem;
       box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.05);
       padding: 1rem;
-      height: 100%;
+      flex: 1;
     }
 
     /* 프로필 영역 */
@@ -4316,12 +4329,28 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     pointer-events: none;
     display: none;
     width: 100%;
-    max-width: 100rem;
     padding: 2rem;
+    min-height: 0;
+    overflow-y: auto;
 
     &.visible {
       display: flex;
       pointer-events: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d6d6d6;
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     .info-card {
@@ -4330,7 +4359,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
       border-radius: 1rem;
       box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.05);
       padding: 1rem;
-      height: 100%;
+      flex: 1;
     }
 
     /* 프로필 영역 */
@@ -4652,10 +4681,6 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
         }
       }
     }
-
-
-
-
   }
 
   > .petInformation,
@@ -4665,12 +4690,28 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     display: none;
     pointer-events: none;
     width: 100%;
-    height: 100%;
     padding: 2rem;
+    overflow-y: auto;
+    min-height: 0;
 
     &.visible {
       display: block;
       pointer-events: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d6d6d6;
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     > .title {
@@ -5630,6 +5671,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 
 @media (max-width: 880px) {
   .pet-grid,
+  .reservation-grid,
   .store-grid {
     grid-template-columns: repeat(1, 1fr) !important;
   }

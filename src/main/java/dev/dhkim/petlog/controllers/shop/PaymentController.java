@@ -153,6 +153,10 @@ public class PaymentController {
 
         Map<String, Object> ordererInfo = orderService.getOrdererInfo(userId);
 
+        // 배송지 전체 가져오기
+        Pair<MyPageResult, List<DeliveryAddressEntity>> allDeliveryAddress = this.myPageService.getAllDeliveryAddress(sessionUser.getUserId());
+        modelAndView.addObject("allDeliveryAddress", allDeliveryAddress.getRight());
+
         modelAndView.addObject("ordererInfo", ordererInfo);
         modelAndView.addObject("selectedItems", selectedItems);
         modelAndView.addObject("totalPrice", totalPrice);

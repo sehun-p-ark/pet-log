@@ -3119,6 +3119,13 @@ if (petInformation) {
 // endregion
 
 
+
+
+
+
+
+
+
 // 리뷰 모달
 const overlay = document.querySelector('.review-modal-overlay');
 const modalClose = document.querySelector('.modal-close');
@@ -3432,6 +3439,10 @@ saveReviewBtn?.addEventListener('click', () => {
     formData.append('rating', selectedRating);
     formData.append('content', reviewContent.value);
     selectedFiles.forEach(file => formData.append('images', file));
+
+    // 남아있는 기존 이미지 URL 전송 (삭제 안 된 것들)
+    originalImages.forEach(url => formData.append('remainingImageUrls', url));
+
 
     fetch(`/shop/products/${currentProductId}/reviews/${currentReviewId}`, {
         method: 'PUT',
