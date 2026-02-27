@@ -23,6 +23,18 @@
         <button type="button" class="yes">확인</button>
     </div>
 </div>
+<div class="defaultAddressMessage" id="defaultAddressMessage">
+    <div class="button-wrapper">
+        <button type="button" class="no">취소</button>
+        <button type="button" class="yes">확인</button>
+    </div>
+</div>
+<div class="defaultDeliveryMessage" id="defaultDeliveryMessage">
+    <div class="button-wrapper">
+        <button type="button" class="no">취소</button>
+        <button type="button" class="yes">확인</button>
+    </div>
+</div>
 <div class="addressDeleteMessage" id="addressDeleteMessage">
     <div class="button-wrapper">
         <button type="button" class="no">취소</button>
@@ -70,13 +82,13 @@
                             <span class="addr" th:text="${deliveryAddress.getAddressPrimary()}"></span>
                         </div>
                         <div class="detail-addr" th:text="${deliveryAddress.getAddressSecondary()}"></div>
-                        <div class="phone" th:text="${deliveryAddress.getPhone().substring(0, 3)} + '-' + ${deliveryAddress.getPhone().substring(3, 7)} + '-' + ${deliveryAddress.getPhone().substring(7, 11)}"></div>
+                        <div class="phone" th:text="${deliveryAddress.getPhone()}"></div>
                         <div class="item-actions delivery">
                             <div class="left-actions">
                                 <button type="button" class="delete-btn">삭제</button>
                                 <button type="button" class="edit-btn">수정</button>
                             </div>
-                            <button type="button" class="select-btn">선택</button>
+                            <button type="button" class="select-btn" th:if="${!deliveryAddress.isDefault()}">기본배송지 선택</button>
                         </div>
                     </div>
                 </div>
@@ -216,7 +228,7 @@
                           data-address-secondary=${personalAddress.getAddressSecondary()}">
                     <div class="item-content">
                         <div class="item-header">
-                            <span class="default-badge" th:text="${status.count}"></span>
+                            <span class="default-badge" th:if="${personalAddress.isDefault()}">대표주소</span>
                         </div>
                         <div class="address">
                             <span class="postal" th:text="'[' + ${personalAddress.getPostalCode()} + ']'"></span>
@@ -229,6 +241,7 @@
                                 <button type="button" class="delete-btn">삭제</button>
                                 <button type="button" class="edit-btn">수정</button>
                             </div>
+                            <button type="button" class="select-btn" th:if="${!personalAddress.isDefault()}">대표주소 선택</button>
                         </div>
                     </div>
                 </div>
@@ -828,30 +841,34 @@
         <div class="personalInformation" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
             <div class="info-card">
                 <div class="profile-wrapper">
-                    <div class="profile-image">
-                        <img class="image" th:src="${primaryPet != null} ? ${primaryPet.imageUrl} : '/user/assets/images/defaultPetImage.png'"
-                             alt="#">
-                    </div>
-                    <div class="profile-text">
-                        <span class="nickname personal" th:if="${sessionUser.getUserType() == 'PERSONAL'}"
+                    <div class="left-wrapper">
+                        <div class="profile-image">
+                            <img class="image" th:src="${primaryPet != null} ? ${primaryPet.imageUrl} : '/user/assets/images/defaultPetImage.png'"
+                                 alt="#">
+                        </div>
+                        <div class="profile-text">
+                            <span class="nickname personal" th:if="${sessionUser.getUserType() == 'PERSONAL'}"
                               th:text="${personalUser.getNickname()}"></span>
-                        <span class="nickname companyName" th:if="${sessionUser.getUserType() == 'BUSINESS'}"
-                              th:text="${businessUser.getCompanyName()}"></span>
-                        <span class="email" th:text="${user.getEmail()}"></span>
-                    </div>
-                    <div class="point-wrapper">
-                        <div class="left-wrapper">
-                            <span class="title">마일리지</span>
-                            <span class="point" th:text="${#numbers.formatInteger(personalUser.getShopPoint(), 0, 'COMMA')} + '원'"></span>
+                            <span class="nickname companyName" th:if="${sessionUser.getUserType() == 'BUSINESS'}" th:text="${businessUser.getCompanyName()}"></span>
+                            <span class="email" th:text="${user.getEmail()}"></span>
                         </div>
-                        <button type="button" class="point-history">내역</button>
                     </div>
-                    <div class="coupon-wrapper">
-                        <div class="left-wrapper">
-                            <span class="title">쿠폰</span>
-                            <span class="coupon">1장</span>
+
+                    <div class="right-wrapper">
+                        <div class="point-wrapper">
+                            <div class="text-wrapper">
+                                <span class="title">마일리지</span>
+                                <span class="point" th:text="${#numbers.formatInteger(personalUser.getShopPoint(), 0, 'COMMA')} + '원'"></span>
+                            </div>
+                            <button type="button" class="point-history">내역</button>
                         </div>
-                        <button type="button" class="coupon-list">쿠폰</button>
+                        <div class="coupon-wrapper">
+                            <div class="text-wrapper">
+                                <span class="title">쿠폰</span>
+                                <span class="coupon">1장</span>
+                            </div>
+                            <button type="button" class="coupon-list">쿠폰</button>
+                        </div>
                     </div>
                 </div>
                 <div class="info-grid">
@@ -892,14 +909,14 @@
                     <div class="info-item">
                         <div class="text">
                             <span class="label">기본 주소</span>
-                            <span class="value" th:text="'현재 등록한 주소 : ' + ${personalAddresses.size()} + '개 (최대 5개)'"></span>
+                            <span class="value" th:text="${defaultAddress.getAddressPrimary()} + (${defaultAddress.getAddressSecondary() != null} ? ', ' + ${defaultAddress.getAddressSecondary()} : '')"></span>
                         </div>
                         <button class="small-button address-open-button">관리</button>
                     </div>
                     <div class="info-item">
                         <div class="text">
                             <span class="label">기본 배송지</span>
-                            <span class="value" th:if="${deliveryPrimaryAddress != null}" th:text="'[' + ${deliveryPrimaryAddress.getPostalCode()} + '] ' + ${deliveryPrimaryAddress.getAddressPrimary()} + (${deliveryPrimaryAddress.getAddressSecondary() != null} ? ', ' + ${deliveryPrimaryAddress.getAddressSecondary()} : '')">111111111</span>
+                            <span class="value" th:if="${deliveryPrimaryAddress != null}" th:text="${deliveryPrimaryAddress.getAddressPrimary()} + (${deliveryPrimaryAddress.getAddressSecondary() != null} ? ', ' + ${deliveryPrimaryAddress.getAddressSecondary()} : '')">111111111</span>
                             <span class="value" th:if="${deliveryPrimaryAddress == null}">배송지를 추가하세요.</span>
                         </div>
                         <button class="small-button delivery-open-button">관리</button>

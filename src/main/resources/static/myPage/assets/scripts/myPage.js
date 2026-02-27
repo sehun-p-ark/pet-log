@@ -250,6 +250,80 @@ if (personalInformation) {
         currentEditingItem = null;
     }
 
+
+    const addressList = addressModal.querySelector('.address-list');
+
+    // region 대표주소 설정
+    const defaultAddressMessage = document.getElementById('defaultAddressMessage');
+    const defaultAddressMessageTitle = document.createElement('span');
+    const defaultAddressMessageText = document.createElement('span');
+    const defaultAddressYesButton = defaultAddressMessage.querySelector(':scope > .button-wrapper > .yes');
+    const defaultAddressNoButton = defaultAddressMessage.querySelector(':scope > .button-wrapper > .no');
+
+    defaultAddressMessageTitle.classList.add('title');
+    defaultAddressMessageText.classList.add('text');
+    defaultAddressMessageTitle.innerText = '알림';
+    defaultAddressMessage.prepend(defaultAddressMessageTitle, defaultAddressMessageText);
+
+    let defaultAddressId = null;
+
+
+    function showDefaultAddressMessage(text) {
+        defaultAddressMessage.classList.add('visible');
+        defaultAddressMessageText.innerText = text;
+    }
+
+    defaultAddressNoButton.addEventListener('click', () => {
+        defaultAddressMessage.classList.remove('visible');
+        defaultAddressId = null;
+    });
+
+    addressList.addEventListener('click', (e) => {
+        const defaultButton = e.target.closest('.select-btn');
+        if (!defaultButton) {
+            return;
+        }
+        const addressItem = defaultButton.closest('.address-item');
+        defaultAddressId = addressItem.dataset.addressId;
+        console.log(defaultAddressId);
+        showDefaultAddressMessage('이 주소를 대표주소로 변경하시겠습니까?');
+    });
+
+    defaultAddressYesButton.addEventListener('click', () => {
+        if (!defaultAddressId) {
+            return;
+        }
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('addressId', defaultAddressId);
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('대표 주소 설정에 실패하였습니다. 다시 시도해주세요.');
+                    break;
+                case 'FAILURE_SESSION_EXPIRED':                    showMessage('로그인을 해주세요.', () => {
+                    location.href = '/user/login';
+                });
+                    break;
+                case 'SUCCESS':
+                    location.href = '/my?menu=' + getCurrentMenuIndex();
+                    break;
+                default:
+            }
+        };
+        xhr.open('POST', '/my/address/default');
+        xhr.send(formData);
+    })
+    // endregion
+
     // region 주소 삭제
     const addressDeleteMessage = document.getElementById('addressDeleteMessage');
     const addressDeleteMessageTitle = document.createElement('span');
@@ -275,7 +349,7 @@ if (personalInformation) {
         deleteAddressId = null;
     });
 
-    const addressList = addressModal.querySelector('.address-list');
+
     addressList.addEventListener('click', (e) => {
         const deleteButton = e.target.closest('.delete-btn');
         if (!deleteButton) {
@@ -318,7 +392,6 @@ if (personalInformation) {
                     break;
                 default:
             }
-
         };
         xhr.open('POST', '/my/address/delete');
         xhr.send(formData);
@@ -580,13 +653,78 @@ if (personalInformation) {
         currentEditingItem = null;
     }
 
+    const deliveryAddressList = deliveryModal.querySelector('.delivery-list');
 
-    const selectBtns = document.querySelectorAll('.select-btn');
-    selectBtns.forEach(selectBtn => {
-        selectBtn.addEventListener('click', () => {
-            closeDeliveryModal(deliveryModal);
-        })
+    // region 대표배송지 설정
+    const defaultDeliveryMessage = document.getElementById('defaultDeliveryMessage');
+    const defaultDeliveryMessageTitle = document.createElement('span');
+    const defaultDeliveryMessageText = document.createElement('span');
+    const defaultDeliveryYesButton = defaultDeliveryMessage.querySelector(':scope > .button-wrapper > .yes');
+    const defaultDeliveryNoButton = defaultDeliveryMessage.querySelector(':scope > .button-wrapper > .no');
+
+    defaultDeliveryMessageTitle.classList.add('title');
+    defaultDeliveryMessageText.classList.add('text');
+    defaultDeliveryMessageTitle.innerText = '알림';
+    defaultDeliveryMessage.prepend(defaultDeliveryMessageTitle, defaultDeliveryMessageText);
+
+    let defaultDeliveryId = null;
+
+
+    function showDefaultDeliveryMessage(text) {
+        defaultDeliveryMessage.classList.add('visible');
+        defaultDeliveryMessageText.innerText = text;
+    }
+
+    defaultDeliveryNoButton.addEventListener('click', () => {
+        defaultDeliveryMessage.classList.remove('visible');
+        defaultDeliveryId = null;
+    });
+
+    deliveryAddressList.addEventListener('click', (e) => {
+        const defaultButton = e.target.closest('.select-btn');
+        if (!defaultButton) {
+            return;
+        }
+        const addressItem = defaultButton.closest('.delivery-item');
+        defaultDeliveryId = addressItem.dataset.deliveryAddressId;
+        console.log(defaultDeliveryId);
+        showDefaultDeliveryMessage('이 주소를 대표 배송지로 변경하시겠습니까?');
+    });
+
+    defaultDeliveryYesButton.addEventListener('click', () => {
+        if (!defaultDeliveryId) {
+            return;
+        }
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('addressId', defaultDeliveryId);
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('대표 배송지 설정에 실패하였습니다. 다시 시도해주세요.');
+                    break;
+                case 'FAILURE_SESSION_EXPIRED':                    showMessage('로그인을 해주세요.', () => {
+                    location.href = '/user/login';
+                });
+                    break;
+                case 'SUCCESS':
+                    location.href = '/my?menu=' + getCurrentMenuIndex();
+                    break;
+                default:
+            }
+        };
+        xhr.open('POST', '/my/delivery/default');
+        xhr.send(formData);
     })
+    // endregion
 
 
     // region 배송지 삭제
@@ -614,7 +752,6 @@ if (personalInformation) {
         deleteDeliveryAddressId = null;
     });
 
-    const deliveryAddressList = deliveryModal.querySelector('.delivery-list');
     deliveryAddressList.addEventListener('click', (e) => {
         const deleteButton = e.target.closest('.delete-btn');
         if (!deleteButton) {
@@ -693,8 +830,8 @@ if (personalInformation) {
             deliveryAddressModifyAddressPrimaryInput.value = card.dataset.addressPrimary;
             deliveryAddressModifyAddressSecondaryInput.value = card.dataset.addressSecondary || '';
             deliveryAddressModifyFirstNumber.value = card.dataset.phone.substring(0, 3);
-            deliveryAddressModifyMiddleNumber.value = card.dataset.phone.substring(3, 7);
-            deliveryAddressModifyLastNumber.value = card.dataset.phone.substring(7, 11);
+            deliveryAddressModifyMiddleNumber.value = card.dataset.phone.substring(4, 8);
+            deliveryAddressModifyLastNumber.value = card.dataset.phone.substring(9, 13);
         });
     });
 
@@ -768,6 +905,27 @@ if (personalInformation) {
         }
         if (deliveryAddressModifyAddressSecondaryInput.value.length > 100) {
             showMessage('상세주소는 최대 100자까지 가능합니다.');
+            return;
+        }
+        if (deliveryAddressModifyFirstNumber.value === '') {
+            showMessage('전화번호를 모두 입력해주세요.');
+            return;
+        }
+        if (deliveryAddressModifyMiddleNumber.value === '') {
+            showMessage('전화번호를 모두 입력해주세요.');
+            return;
+        }
+        if (deliveryAddressModifyLastNumber.value === '') {
+            showMessage('전화번호를 모두 입력해주세요.');
+            return;
+        }
+        if (!/^\d{4}$/.test(deliveryAddressModifyMiddleNumber.value) ||
+            !/^\d{4}$/.test(deliveryAddressModifyLastNumber.value)) {
+            showMessage('전화번호는 숫자 4자리로 입력해주세요.');
+            return;
+        }
+        if (deliveryAddressModifyPhone.length > 11) {
+            showMessage('전화번호를 다시 확인해주세요.');
             return;
         }
         const xhr = new XMLHttpRequest();
@@ -921,11 +1079,12 @@ if (personalInformation) {
             showMessage('전화번호를 모두 입력해주세요.');
             return;
         }
-        if (deliveryAddressPhone.length > 11) {
-            showMessage('전화번호를 다시 확인해주세요.');
+        if (!/^\d{4}$/.test(deliveryAddressMiddleNumberInput.value) ||
+            !/^\d{4}$/.test(deliveryAddressLastNumberInput.value)) {
+            showMessage('전화번호는 숫자 4자리로 입력해주세요.');
             return;
         }
-        if (deliveryAddressMiddleNumberInput.value.length !== 4 || deliveryAddressLastNumberInput.value.length !== 4) {
+        if (deliveryAddressPhone.length > 11) {
             showMessage('전화번호를 다시 확인해주세요.');
             return;
         }

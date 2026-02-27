@@ -1,6 +1,5 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Chewy&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
-@use "sass:color";
 [data-object=button] {
   align-items: center;
   display: flex;
@@ -863,8 +862,8 @@ ol, ul {
   margin-top: 1rem;
 }
 
-body:has(> .message.visible) > .cover {
-  opacity: 1;
+body:has(.message.visible) .cover {
+  opacity: 1 !important;
   pointer-events: auto;
 }
 

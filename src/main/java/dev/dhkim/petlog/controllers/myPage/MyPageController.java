@@ -52,9 +52,11 @@ public class MyPageController {
         }
         if (sessionUser.getUserType().equals("PERSONAL")) {
             Pair<MyPageResult, List<AddressEntity>> personalAddresses = this.myPageService.getPersonalAddress(sessionUser.getUserId());
+            Pair<MyPageResult, AddressEntity> defaultAddress = this.myPageService.getDefaultAddress(sessionUser.getUserId());
             Pair<MyPageResult, List<DeliveryAddressEntity>> deliveryAddresses = this.myPageService.getAllDeliveryAddress(sessionUser.getUserId());
             Pair<MyPageResult, DeliveryAddressEntity> deliveryAddress = this.myPageService.getDeliveryAddress(sessionUser.getUserId());
             modelAndView.addObject("personalAddresses", personalAddresses.getRight());
+            modelAndView.addObject("defaultAddress", defaultAddress.getRight());
             modelAndView.addObject("deliveryAddresses", deliveryAddresses.getRight());
             modelAndView.addObject("deliveryPrimaryAddress", deliveryAddress.getRight());
             modelAndView.addObject("reservations", reservations.getRight());
@@ -180,6 +182,21 @@ public class MyPageController {
         return response;
     }
 
+    // 기본주소 대표주소 변경
+    @RequestMapping(value = "/address/default", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postDefaultAddress(@RequestParam(value = "addressId") int addressId,
+                                                  @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.changeDefaultAddress(addressId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
 
     // 기본주소 추가 등록
     @RequestMapping(value = "/address/registration", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -228,6 +245,21 @@ public class MyPageController {
         return response;
     }
 
+    // 대표 배송지 변경
+    @RequestMapping(value = "/delivery/default", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postDefaultDelivery(@RequestParam(value = "addressId") int addressId,
+                                                  @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.changeDefaultDelivery(addressId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
 
     // 배송지 등록
     @RequestMapping(value = "/delivery/registration", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -239,8 +271,12 @@ public class MyPageController {
             response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
             return response;
         }
-        MyPageResult result = this.myPageService.postDeliveryAddress(deliveryAddress, sessionUser.getUserId());
-        response.put("result", result.name());
+        Pair<MyPageResult, DeliveryAddressEntity> result = this.myPageService.postDeliveryAddress(deliveryAddress, sessionUser.getUserId());
+        response.put("result", result.getLeft());
+        if (result.getLeft() == MyPageResult.SUCCESS) {
+            response.put("newDeliveryId", result.getRight().getDeliveryAddressId());
+            response.put("isDefault", result.getRight().isDefault());
+        }
         return response;
     }
 
@@ -357,7 +393,7 @@ public class MyPageController {
                                                    @RequestParam(value = "addressPrimary") String addressPrimary,
                                                    @RequestParam(value = "addressSecondary") String addressSecondary,
                                                    @RequestParam(value = "password") String password,
-                                                   @SessionAttribute(value = "sessionUser") SessionUser sessionUser) {
+                                                   @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
         Map<String, Object> response = new HashMap<>();
         if (sessionUser == null) {
             response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
@@ -395,7 +431,7 @@ public class MyPageController {
     @ResponseBody
     public Map<String, Object> patchStore(@RequestParam(value = "storeId") int storeId,
                                           StoreDto store,
-                                          @SessionAttribute(value = "sessionUser") SessionUser sessionUser) {
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
         Map<String, Object> response = new HashMap<>();
         if (sessionUser == null) {
             response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);

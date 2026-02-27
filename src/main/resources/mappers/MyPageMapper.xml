@@ -12,14 +12,17 @@
                 #{store.storePhone})
     </insert>
     <insert id="insertPersonalAddress">
-        INSERT INTO `petlog`.`address` (user_id, address_type, postal_code, address_primary, address_secondary)
+        INSERT INTO `petlog`.`address` (user_id, address_type, postal_code, address_primary, address_secondary, is_default)
         VALUES (#{userId},
                 'MAP',
                 #{address.postalCode},
                 #{address.addressPrimary},
-                #{address.addressSecondary})
+                #{address.addressSecondary},
+                #{address.isDefault})
     </insert>
-    <insert id="insertDeliveryAddress">
+    <insert id="insertDeliveryAddress"
+            useGeneratedKeys="true"
+            keyProperty="deliveryAddress.deliveryAddressId">
         INSERT INTO `petlog`.`delivery_address` (user_id, delivery_name, receiver_name, phone, postal_code, address_primary, address_secondary, is_default)
         VALUES (#{userId},
                 #{deliveryAddress.deliveryName},
@@ -138,6 +141,26 @@
         WHERE `delivery_address_id` = #{deliveryAddressId}
           AND `user_id` = #{userId}
     </update>
+    <update id="updateDefaultAddress">
+        UPDATE `petlog`.`address`
+        SET `is_default` = TRUE
+        WHERE `address_id` = #{addressId}
+    </update>
+    <update id="updateAllDefaultAddressFalse">
+        UPDATE `petlog`.`address`
+        SET `is_default` = FALSE
+        WHERE `user_id` = #{userId}
+    </update>
+    <update id="updateAllDeliveryDefaultFalse">
+        UPDATE `petlog`.`delivery_address`
+        SET `is_default` = FALSE
+        WHERE `user_id` = #{userId}
+    </update>
+    <update id="updateDeliveryDefault">
+        UPDATE `petlog`.`delivery_address`
+        SET `is_default` = TRUE
+        WHERE `delivery_address_id` = #{addressId}
+    </update>
     <delete id="deletePet">
         DELETE
         FROM `petlog`.`pets`
@@ -200,6 +223,7 @@
                `address_secondary` AS addressSecondary,
                `lat`               AS lat,
                `lng`               AS lng,
+               `is_default`        AS isDefault,
                `created_at`        AS createdAt,
                `updated_at`        AS updatedAt
         FROM `petlog`.`address`
@@ -419,5 +443,55 @@
         WHERE `nickname` = #{nickname}
         LIMIT 1
     </select>
+    <select id="selectPersonalAddressByAddressId" resultType="dev.dhkim.petlog.entities.user.AddressEntity">
+        SELECT `address_id`        AS addressId,
+               `user_id`           AS userId,
+               `address_type`      AS addressType,
+               `postal_code`       AS postalCode,
+               `address_primary`   AS addressPrimary,
+               `address_secondary` AS addressSecondary,
+               `lat`               AS lat,
+               `lng`               AS lng,
+               `is_default`        AS isDefault,
+               `created_at`        AS createdAt,
+               `updated_at`        AS updatedAt
+        FROM `petlog`.`address`
+        WHERE `address_id` = #{addressId}
+        LIMIT 1
+    </select>
+    <select id="selectDefaultAddressByUserId" resultType="dev.dhkim.petlog.entities.user.AddressEntity">
+        SELECT `address_id`        AS addressId,
+               `user_id`           AS userId,
+               `address_type`      AS addressType,
+               `postal_code`       AS postalCode,
+               `address_primary`   AS addressPrimary,
+               `address_secondary` AS addressSecondary,
+               `lat`               AS lat,
+               `lng`               AS lng,
+               `is_default`        AS isDefault,
+               `created_at`        AS createdAt,
+               `updated_at`        AS updatedAt
+        FROM `petlog`.`address`
+        WHERE `user_id` = #{userId}
+          AND `is_default` = TRUE
+        LIMIT 1
+    </select>
+    <select id="selectDeliveryByAddressId" resultType="dev.dhkim.petlog.entities.user.DeliveryAddressEntity">
+        SELECT `delivery_address_id` AS deliveryAddressId,
+               `user_id`             AS userId,
+               `delivery_name`       AS deliveryName,
+               `receiver_name`       AS receiverName,
+               `phone`               AS phone,
+               `postal_code`         AS postalCode,
+               `address_primary`     AS addressPrimary,
+               `address_secondary`   AS addressSecondary,
+               `is_default`          AS isDefault,
+               `created_at`          AS createdAt,
+               `updated_at`          AS updatedAt
+        FROM `petlog`.`delivery_address`
+        WHERE `delivery_address_id` = #{addressId}
+        LIMIT 1
+    </select>
+
 
 </mapper>

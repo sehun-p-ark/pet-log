@@ -471,8 +471,8 @@ ol, ul {
   }
 }
 
-body:has(> .message.visible) > .cover {
-  opacity: 1;
+body:has(.message.visible) .cover {
+  opacity: 1 !important;
   pointer-events: auto;
 }
 

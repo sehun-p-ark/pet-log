@@ -121,6 +121,8 @@ UserService {
             }
         }
 
+
+        dto.getAddress().setDefault(true);
         int dbAddressInsert = userMapper.insertAddress(userId, dto.getAddress());
         if (dbAddressInsert < 1) {
             return RegisterResult.FAILURE;

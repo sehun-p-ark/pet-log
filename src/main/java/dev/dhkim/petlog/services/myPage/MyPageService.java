@@ -1,5 +1,6 @@
 package dev.dhkim.petlog.services.myPage;
 
+import ch.qos.logback.core.spi.FilterAttachableImpl;
 import dev.dhkim.petlog.dto.user.*;
 import dev.dhkim.petlog.entities.user.*;
 import dev.dhkim.petlog.mappers.myPage.MyPageMapper;
@@ -14,6 +15,7 @@ import org.springframework.dao.annotation.PersistenceExceptionTranslationPostPro
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -252,6 +254,37 @@ public class MyPageService {
     }
 
 
+    // 대표주소 하나 불러오기
+    public Pair<MyPageResult, AddressEntity> getDefaultAddress(int userId) {
+        if (userId < 1) {
+            return Pair.of(MyPageResult.FAILURE, null);
+        }
+        AddressEntity dbDefaultAddress = this.myPageMapper.selectDefaultAddressByUserId(userId);
+        if (dbDefaultAddress == null) {
+            return Pair.of(MyPageResult.FAILURE, null);
+        }
+        return Pair.of(MyPageResult.SUCCESS, dbDefaultAddress);
+    }
+
+    // 대표주소로 변경
+    public MyPageResult changeDefaultAddress(int addressId, int userId) {
+        if (addressId < 1 ||
+                userId < 1) {
+            return MyPageResult.FAILURE;
+        }
+        AddressEntity dbAddress = this.myPageMapper.selectPersonalAddressByAddressId(addressId);
+
+        if (dbAddress == null || dbAddress.getUserId() != userId) {
+            return MyPageResult.FAILURE;
+        }
+
+        this.myPageMapper.updateAllDefaultAddressFalse(userId);
+        return this.myPageMapper.updateDefaultAddress(addressId) > 0
+                ? MyPageResult.SUCCESS
+                : MyPageResult.FAILURE;
+
+    }
+
     // 기본주소 추가 등록
     public MyPageResult postAddress(AddressDto addressDto, int userId) {
         if (!UserValidator.validateAddress(addressDto) ||
@@ -262,6 +295,7 @@ public class MyPageService {
         if (dbPersonalAddresses.size() >= 5) {
             return MyPageResult.FAILURE;
         }
+        addressDto.setDefault(false);
         return this.myPageMapper.insertPersonalAddress(addressDto, userId) > 0
                 ? MyPageResult.SUCCESS
                 : MyPageResult.FAILURE;
@@ -280,6 +314,7 @@ public class MyPageService {
     }
 
     // 기본주소 삭제
+    @Transactional
     public MyPageResult deleteAddress(int addressId, int userId) {
         if (addressId < 1 ||
                 userId < 1) {
@@ -289,7 +324,40 @@ public class MyPageService {
         if (dbAddresses.size() == 1) {
             return MyPageResult.FAILURE;
         }
-        return this.myPageMapper.deleteAddress(addressId, userId) > 0
+
+        AddressEntity dbAddress = this.myPageMapper.selectPersonalAddressByAddressId(addressId);
+        if (dbAddress == null) {
+            return MyPageResult.FAILURE;
+        }
+        boolean wasIsDefault = dbAddress.isDefault();
+
+        int delete = this.myPageMapper.deleteAddress(addressId, userId);
+        if (delete <= 0) {
+            return MyPageResult.FAILURE;
+        }
+        if (wasIsDefault) {
+            List<AddressEntity> dbRemain = this.myPageMapper.selectPersonalAddressesByUserId(userId);
+            int newDefaultId = dbRemain.get(0).getAddressId();
+            this.myPageMapper.updateDefaultAddress(newDefaultId);
+        }
+        return MyPageResult.SUCCESS;
+    }
+
+
+    // 대표배송지로 변경
+    public MyPageResult changeDefaultDelivery(int addressId, int userId) {
+        if (addressId < 1 ||
+                userId < 1) {
+            return MyPageResult.FAILURE;
+        }
+        DeliveryAddressEntity dbAddress = this.myPageMapper.selectDeliveryAddressByDeliveryAddressIdAndUserId(addressId, userId);
+
+        if (dbAddress == null) {
+            return MyPageResult.FAILURE;
+        }
+
+        this.myPageMapper.updateAllDeliveryDefaultFalse(userId);
+        return this.myPageMapper.updateDeliveryDefault(addressId) > 0
                 ? MyPageResult.SUCCESS
                 : MyPageResult.FAILURE;
 
@@ -303,6 +371,9 @@ public class MyPageService {
         List<DeliveryAddressEntity> dbDeliveryAddresses = this.myPageMapper.selectDeliveryAddressesByUserId(userId);
         if (dbDeliveryAddresses == null) {
             return Pair.of(MyPageResult.FAILURE, null);
+        }
+        for (DeliveryAddressEntity dbDeliveryAddress : dbDeliveryAddresses) {
+            dbDeliveryAddress.setPhone(PhoneUtil.phoneNumberFormat(dbDeliveryAddress.getPhone()));
         }
         return Pair.of(MyPageResult.SUCCESS, dbDeliveryAddresses);
     }
@@ -358,18 +429,19 @@ public class MyPageService {
 
 
     // 배송지 등록
-    public MyPageResult postDeliveryAddress(DeliveryAddressEntity deliveryAddress, int userId) {
+    public Pair<MyPageResult, DeliveryAddressEntity> postDeliveryAddress(DeliveryAddressEntity deliveryAddress, int userId) {
         if (!UserValidator.validateDeliveryAddress(deliveryAddress) ||
                 userId < 1) {
-            return MyPageResult.FAILURE;
+            return Pair.of(MyPageResult.FAILURE, null);
         }
         List<DeliveryAddressEntity> dbDeliveryAddresses = this.myPageMapper.selectDeliveryAddressesByUserId(userId);
         if (dbDeliveryAddresses.isEmpty()) {
             deliveryAddress.setDefault(true);
         }
+
         return this.myPageMapper.insertDeliveryAddress(deliveryAddress, userId) > 0
-                ? MyPageResult.SUCCESS
-                : MyPageResult.FAILURE;
+                ? Pair.of(MyPageResult.SUCCESS, deliveryAddress)
+                : Pair.of(MyPageResult.FAILURE, null);
     }
 
     // 비밀번호 변경
@@ -420,10 +492,6 @@ public class MyPageService {
     }
 
 
-
-
-
-
     // 예약 집어넣기
     public MyPageResult postReservation(MyPageReservationDto reservationDto) {
         return MyPageResult.SUCCESS;
@@ -441,7 +509,6 @@ public class MyPageService {
         }
         return Pair.of(MyPageResult.SUCCESS, dbReservations);
     }
-
 
 
     /*----------------------------사업자 정보 관리------------------------------------*/

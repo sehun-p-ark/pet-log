@@ -42,12 +42,13 @@
                 #{pet.isPrimary})
     </insert>
     <insert id="insertAddress">
-        INSERT INTO `petlog`.`address` (user_id, address_type, postal_code, address_primary, address_secondary)
+        INSERT INTO `petlog`.`address` (user_id, address_type, postal_code, address_primary, address_secondary, is_default)
         VALUES (#{userId},
                 #{address.addressType},
                 #{address.postalCode},
                 #{address.addressPrimary},
-                #{address.addressSecondary})
+                #{address.addressSecondary},
+                #{address.isDefault})
     </insert>
     <insert id="insertTerm">
         INSERT INTO `petlog`.`user_terms_agreement` (user_id, terms_id, agreed)

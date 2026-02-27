@@ -257,7 +257,7 @@ function renderProducts(selector, products) {
                 <div class="percent">${product.discountRate}%</div>
                 <div class="number">${product.price.toLocaleString()}원</div>
             </div>
-            <div class="price">${discountedPrice.toLocaleString()}원</div>` : 
+            <div class="price">${discountedPrice.toLocaleString()}원</div>` :
             `<div class="price">${product.price.toLocaleString()}원</div>`}
             </a>
 `;
@@ -286,6 +286,26 @@ document.addEventListener('DOMContentLoaded', () => {
             loadBestProducts(category);
         });
     });
+});
+
+// 뒤로가기 시
+window.addEventListener('pageshow', (e) => {
+    const newContainer = document.querySelector('.new-product .product');
+    const bestContainer = document.querySelector('.best-product .product');
+    if (newContainer) newContainer.innerHTML = '';
+    if (bestContainer) bestContainer.innerHTML = '';
+
+    const newRadios = document.querySelectorAll('input[name="new-category"]');
+    const allNewRadio = document.querySelector('input[name="new-category"][value="all"]');
+    const allBestRadio = document.querySelector('input[name="best-category"][value="all"]');
+    newRadios.forEach(radio => {
+        radio.checked = false;
+    })
+    if (allNewRadio) allNewRadio.checked = true;
+    if (allBestRadio) allBestRadio.checked = true;
+
+    loadNewProducts();
+    loadBestProducts();
 });
 
 // 프리뷰 이미지 클릭 이벤트
