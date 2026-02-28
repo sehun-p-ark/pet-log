@@ -72,20 +72,30 @@
                 <div class="friend-tab-content">
                     <!-- 친구 리스트 영역 -->
                     <ul id="friendList" class="main friend-list" th:if="${sessionUser != null}">
-                        <li class="item" th:each="pet : ${nearbyFriendsPets}">
+                        <li class="item" th:each="friend : ${nearbyFriends}">
                             <div class="item-wrapper"
-                                 th:attr=" data-user-id=${pet.userId},data-pet-id=${pet.petId},data-birth=${pet.birthDate}, data-gender=${pet.gender}">
+                                 th:attr="data-user-id=${friend.userId},
+                      data-birth=${friend.birthDate},
+                      data-gender=${friend.gender},
+                      data-introduction=${friend.introduction}">
+
                                 <div class="image">
-                                    <img th:src="${pet.imageUrl != null ? pet.imageUrl : '/images/defaultPetImage.png'}" alt="pet image" />
+                                    <img th:src="${friend.imageUrl != null ? friend.imageUrl : '/images/defaultPetImage.png'}"
+                                         alt="user profile"/>
                                 </div>
                                 <div class="text-wrapper">
-                                    <span class="nickname" th:text="${pet.name}">Pet Name</span>
-                                    <span class="caption" th:text="${pet.species}">Species</span>
+                                    <span class="nickname" th:text="${friend.name}">User Nickname</span>
+                                    <span class="species"
+                                          th:text="${friend.species != null ? friend.species : '반려동물 정보 없음'}">Species</span>
+                                    <span class="distance" th:if="${friend.distance != null}">
+                                    <span>📍</span>
+                                    <span th:text="${#numbers.formatDecimal(friend.distance, 1, 1)} + 'km'">0.0km</span>
+                                    </span>
                                 </div>
-                                <button
-                                        th:class="${pet.isFollowing} ? 'button following' : 'button follow'"
-                                        th:text="${pet.isFollowing} ? '팔로잉' : '팔로우'"
-                                        th:attr="data-user-id=${pet.userId}">
+
+                                <button th:class="${friend.isFollowing} ? 'button following' : 'button follow'"
+                                        th:text="${friend.isFollowing} ? '팔로잉' : '팔로우'"
+                                        th:attr="data-user-id=${friend.userId}">
                                 </button>
                             </div>
                         </li>
@@ -130,7 +140,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="descriptionContainer"></div>
+
             </div>
 
 
@@ -140,7 +150,7 @@
                 const nearbyFriendsPets = /*[[${nearbyFriendsPets}]]*/ [];
                 /*]]>*/
             </script>
-
+            <div id="descriptionContainer"></div>
         </div>
     </div>
 </main>
@@ -190,15 +200,18 @@
                     </label>
                 </div>
             </div>
-
         </div>
-
         <!-- 푸터 -->
         <div class="modal-footer">
             <button class="btn cancel">취소</button>
-            <button class="btn confirm" data-store-id="">예약 확정</button>
+            <button th:if="${sessionUser!= null}" class="btn confirm" data-store-id="">예약 확정</button>
         </div>
     </div>
+</div>
+<div id="messageBox" class="message-box">
+    <span class="title">알림</span>
+    <span class="text"></span>
+    <button class="button">확인</button>
 </div>
 <div th:replace="~{fragments/chat :: chatModal}"></div>
 </body>

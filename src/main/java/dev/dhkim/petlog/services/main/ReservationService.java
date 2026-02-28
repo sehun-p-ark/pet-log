@@ -26,6 +26,7 @@ public class ReservationService {
         // [DEBUG 3] 프론트에서 넘어온 DTO 값 확인
         System.out.println("🚀 [DEBUG 3] 서버 수신 DTO: " + reservation.toString());
 
+
         if (reservation.getStoreId() == null) {
             System.out.println("💡 [DEBUG 4] storeId가 null임 -> 신규 등록 로직 진입");
            //store_id 가 등록 되어있는지 확인(api 데이터인지 직접 등록한 데이터 인지 확인)

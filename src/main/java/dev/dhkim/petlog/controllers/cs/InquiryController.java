@@ -76,10 +76,21 @@ public class InquiryController {
             return "FAILURE";
         }
     }
-/*
     @ResponseBody
     @DeleteMapping("/inquiry/delete/{id}")
-    public void deleteAnswer(@)*/
+    public String deleteInquiry(@PathVariable Integer id,
+                                @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+
+        // 로그인 체크
+        if (sessionUser == null) {
+            return "FAILURE";
+        }
+
+        // (선택) 본인 글만 삭제 가능하게 하려면 여기서 검증 추가 가능
+
+        inquiryService.deleteInquiry(id);
+        return "SUCCESS";
+    }
 
 
 }

@@ -1,3 +1,14 @@
+// 브라우저의 기본 alert 기능을 showMessage로 덮어씌웁니다.
+window.alert = function(text) {
+    if (typeof showMessage === 'function') {
+        showMessage(text);
+    } else {
+        // 혹시 showMessage가 로드 안 됐을 때를 대비한 백업
+        console.log("Custom alert:", text);
+    }
+};
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     /* =========================
@@ -59,17 +70,64 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* =========================
-          4. 문의 삭제 버튼
-       ========================== */
-    // 기존 이벤트 제거 후 다시 등록
+    4. 문의 삭제 버튼
+ ========================= */
+
+    const deleteConfirmOverlay = document.getElementById("deleteConfirmOverlay");
+    const deleteSuccessOverlay = document.getElementById("deleteSuccessOverlay");
+    const deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+    const deleteCancelBtn = document.getElementById("deleteCancelBtn");
+    const deleteSuccessOkBtn = document.getElementById("deleteSuccessOkBtn");
+
+    let selectedInquiryId = null;
+
+// 삭제 버튼 클릭 감지
     function handleDeleteClick(e) {
         if (!e.target.classList.contains("btn-delete")) return;
 
         const item = e.target.closest(".inquiry-item");
-        const inquiryId = item.dataset.id;
+        selectedInquiryId = item.dataset.id;
 
+        //삭제 확인 모달 표시
+        deleteConfirmOverlay?.classList.add("visible");
     }
 
+// 이벤트 중복 방지
+    listSection?.removeEventListener("click", handleDeleteClick);
+    listSection?.addEventListener("click", handleDeleteClick);
+
+// 취소 버튼
+    deleteCancelBtn?.addEventListener("click", () => {
+        deleteConfirmOverlay.classList.remove("visible");
+        selectedInquiryId = null;
+    });
+
+// 확인 버튼
+    deleteConfirmBtn?.addEventListener("click", () => {
+        if (!selectedInquiryId) return;
+
+        fetch(`/cs/inquiry/delete/${selectedInquiryId}`, {
+            method: "DELETE"
+        })
+            .then(res => {
+                if (!res.ok) throw new Error("삭제 실패");
+                return res.text();
+            })
+            .then(() => {
+                deleteConfirmOverlay.classList.remove("visible");
+                deleteSuccessOverlay?.classList.add("visible");
+            })
+            .catch(err => {
+                console.error(err);
+                alert("삭제 중 오류가 발생했습니다.");
+            });
+    });
+
+// 삭제 완료 확인 버튼
+    deleteSuccessOkBtn?.addEventListener("click", () => {
+        deleteSuccessOverlay.classList.remove("visible");
+        location.reload();
+    });
 // 이벤트 중복 방지
     listSection?.removeEventListener("click", handleDeleteClick);
     listSection?.addEventListener("click", handleDeleteClick);
@@ -104,7 +162,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+    /* =========================
+       로그인 성공 알림 (커스텀 모달)
+    ========================== */
+    const urlParams = new URLSearchParams(window.location.search);
+    const loginStatus = urlParams.get('status'); // 컨트롤러에서 보내는 파라미터명 확인 필요
+
+    // 예: /cs?status=admin_success 로 접속했을 때
+    if (loginStatus === 'admin_success') {
+        // 기존의 alert("관리자 계정으로...") 대신 showMessage 사용
+        if (typeof showMessage === 'function') {
+            showMessage("관리자 계정으로 로그인 되었습니다.", () => {
+                // 확인 버튼 누르면 URL의 파라미터를 지워줍니다 (새로고침 시 또 뜨지 않게)
+                window.history.replaceState({}, document.title, window.location.pathname);
+            });
+        }
+    }
 });
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -117,19 +192,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (summaryRow) {
             const item = summaryRow.parentElement;
 
-            // 다른 게 열려있으면 닫고 싶을 때 (선택사항)
-            // document.querySelectorAll('.admin-inquiry-item').forEach(el => {
-            //    if(el !== item) el.classList.remove('active');
-            // });
-
             item.classList.toggle("active");
         }
     });
 });
 
 /**
- * 관리자 답변 등록 함수
- * @param {number} inquiryId - 문의글 ID
+ * 관리자 답변 등록 로직
  */
 function submitAnswer(inquiryId) {
     const answerTextArea = document.getElementById(`answerText-${inquiryId}`);
@@ -140,41 +209,44 @@ function submitAnswer(inquiryId) {
         return;
     }
 
-    // [디버그 1] 전송 전 데이터 확인
+    // 1. 서버에 보낼 데이터 준비
     const requestData = {
-        id: parseInt(inquiryId), // 명시적으로 숫자로 변환
+        id: parseInt(inquiryId),
         answer: answerContent
     };
-    console.log("🚀 서버로 보낼 데이터:", requestData);
 
-    if (!confirm("답변을 등록하시겠습니까?")) return;
-
+    // 2. 서버 전송
     fetch("/cs/inquiry/answer", {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json" // [디버그 2] 헤더 설정 확인
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData)
     })
         .then(async response => {
-            // [디버그 3] 서버 응답 상태 및 상세 에러 메시지 확인
-            if (!response.ok) {
-                const errorText = await response.text(); // 서버가 보낸 에러 메세지 읽기
-                console.error(`❌ 서버 에러 발생 (상태 코드: ${response.status})`);
-                console.error("❌ 에러 내용:", errorText);
-                throw new Error(`서버가 400 에러를 반환했습니다: ${errorText}`);
-            }
+            if (!response.ok) throw new Error(await response.text());
             return response.text();
         })
         .then(data => {
-            console.log("✅ 서버 응답 데이터:", data);
             if (data === "SUCCESS") {
-                alert("답변이 성공적으로 등록되었습니다.");
-                location.reload();
+                // 3. 성공 시 "답변이 등록되었습니다" 창 띄우기
+                const successOverlay = document.getElementById('replySuccessOverlay');
+                const successOkBtn = document.getElementById('replySuccessOkBtn');
+
+                if (successOverlay) {
+                    successOverlay.classList.add('visible');
+
+                    // 확인 버튼 클릭 시 페이지 새로고침
+                    successOkBtn.onclick = () => {
+                        location.reload();
+                    };
+                } else {
+                    // 만약 오버레이를 못 찾으면 기본 알림이라도 띄움
+                    alert("답변이 등록되었습니다.");
+                    location.reload();
+                }
             }
         })
         .catch(error => {
-            console.error("🔥 통신 에러 상세:", error);
-            alert("등록 중 오류가 발생했습니다. 콘솔창(F12)을 확인해주세요.");
+            console.error(" 에러:", error);
+            alert("등록 중 오류가 발생했습니다.");
         });
 }

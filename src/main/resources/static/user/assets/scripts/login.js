@@ -411,15 +411,26 @@ loginButton.addEventListener('click', (e) => {
                 showMessage('아이디 또는 비밀번호를 다시 입력해주세요.');
                 break;
             case 'SUCCESS':
-                // 1. 서버가 보낸 데이터를 콘솔에 찍어서 확인 (F12 누르면 보임)
                 console.log('로그인 성공 데이터:', response);
 
-                // 2. 관리자(ADMIN)인지 체크해서 리다이렉트 경로 결정
+              /*이거 문의글 답글 다는 관리작 계정 전용 쇼메세지임----------------------------------------------*/
+
                 if (response.userType === 'ADMIN') {
-                    alert('관리자 계정으로 로그인되었습니다.');
-                    location.href = '/cs'; // 관리자가 갈 페이지 (문의 목록)
+                    // 1. 공통 함수를 쓰지 않고 직접 텍스트를 갈아끼우고 창을 띄웁니다.
+                    $text.innerText = '관리자 계정으로 로그인되었습니다.';
+                    registerMessage.classList.add('visible');
+
+                    // 2. 중요! 기존에 버튼에 걸려있던 클릭 이벤트들을 싹 지워야 합니다. (다른 기능 방해 금지)
+                    const newButton = warningButton.cloneNode(true);
+                    warningButton.parentNode.replaceChild(newButton, warningButton);
+
+                    // 3. 나만의 새로운 클릭 이벤트를 붙입니다.
+                    newButton.addEventListener('click', () => {
+                        registerMessage.classList.remove('visible');
+                        location.href = '/cs'; // 확인 누르면 그때 이동!
+                    });
                 } else {
-                    location.href = '/main'; // 일반 유저가 갈 페이지
+                    location.href = '/main';
                 }
                 break;
         }

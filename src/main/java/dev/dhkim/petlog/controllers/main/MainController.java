@@ -27,33 +27,11 @@ public class MainController {
         modelAndView.setViewName("main/main");
         modelAndView.addObject("sessionUser", sessionUser);
 
-        List<PetDto> pets = List.of();
-
-
         if (sessionUser != null) {
-            pets = friendService.getFriendPets(sessionUser.getUserId());
-            modelAndView.addObject("pets", pets);
-
-            // 디버깅: 리스트 크기와 각 요소 확인
-            System.out.println("[DEBUG] 내 펫 리스트 크기: " + pets.size());
-            for (PetDto pet : pets) {
-                System.out.println("[DEBUG] Pet name: " + pet.getName() + ", Species: " + pet.getSpecies());
-            }
-            AddressEntity myAddress = friendService.getOrCreateAddressWithLatLng(sessionUser.getUserId());
-
-            if (myAddress != null && myAddress.getLat() != null && myAddress.getLng() != null
-                    && myAddress.getLat() != 0.0 && myAddress.getLng() != 0.0) {
-
-                double myLat = myAddress.getLat();
-                double myLng = myAddress.getLng();
-
-                System.out.println("[DEBUG] 내 펫 리스트: " + pets.size());
-            } else {
-                System.out.println("[DEBUG] 기본 주소 없음 또는 위도/경도 없음");
-            }
+            // 좌표 보정만 수행 (필요 시)
+            friendService.getOrCreateAddressWithLatLng(sessionUser.getUserId());
         }
 
         return modelAndView;
     }
-
 }

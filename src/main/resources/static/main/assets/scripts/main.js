@@ -77,68 +77,67 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ==================== 친구 클릭 ====================
+// ==================== 친구 클릭 ====================
     if (friendContent && container) {
         const friendList = friendContent.querySelector('.friend-list');
 
         friendList.addEventListener('click', (e) => {
             const item = e.target.closest('.item-wrapper');
-            if (!item) return;
-            if (e.target.closest('.button')) return;
+            if (!item || e.target.closest('.button')) return;
 
-            const petId = item.dataset.petId;
+            // petId 대신 userId를 기준으로 열고 닫기 체크 (DTO에 맞춤)
+            const userId = item.dataset.userId;
 
-            if (container.style.display === "block" && container.dataset.openId === petId) {
+            if (container.style.display === "block" && container.dataset.openId === userId) {
                 container.style.display = "none";
                 container.innerHTML = '';
                 container.dataset.openId = '';
                 return;
             }
 
-            const name = item.querySelector('.nickname')?.textContent || '이름 없음';
+            // 펫 이름을 가져옴 (data-pet-name)
+            const petName = item.dataset.petName || '이름 없음';
             const species = item.querySelector('.species')?.textContent || '종 없음';
             const image = item.querySelector('img')?.src || '';
             const birthDate = item.dataset.birth || '';
             const gender = item.dataset.gender || '';
             const introduction = item.dataset.introduction || '';
 
-            function calculateAge(birth) {
-                if (!birth) return '';
+            // 나이 계산 함수
+            const calculateAge = (birth) => {
+                if (!birth) return '0';
                 const b = new Date(birth);
                 const today = new Date();
                 let age = today.getFullYear() - b.getFullYear();
-                const m = today.getMonth() - b.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < b.getDate())) age--;
+                if (new Date(today.getFullYear(), today.getMonth(), today.getDate()) <
+                    new Date(today.getFullYear(), b.getMonth(), b.getDate())) age--;
                 return age;
-            }
+            };
 
             container.innerHTML = `
-        <div class="friend description">
-            <button type="button" class="close-btn">X</button>
-            <div class="text-wrapper">
-                <div class="image">
-                    <img src="${image}">
-                </div>
-                <div class="caption-wrapper">
-                    <div><strong>이름:</strong> ${name}</div>
-                    <div><strong>타입:</strong> ${species}</div>
-                    <div><strong>생년월일:</strong> ${birthDate} (${calculateAge(birthDate)}살)</div>
-                    <div><strong>성별:</strong> ${gender}</div>
-                    <div><strong>한줄 소개:</strong> ${introduction}</div>
+            <div class="friend description">
+                <button type="button" class="close-btn">X</button>
+                <div class="text-wrapper">
+                    <div class="image"><img src="${image}"></div>
+                    <div class="caption-wrapper">
+                        <div><strong>펫 이름:</strong> ${petName}</div>
+                        <div><strong>타입:</strong> ${species}</div>
+                        <div><strong>생년월일:</strong> ${birthDate} (${calculateAge(birthDate)}살)</div>
+                        <div><strong>성별:</strong> ${gender}</div>
+                        <div><strong>한줄 소개:</strong> ${introduction}</div>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 
             container.style.display = "block";
-            container.dataset.openId = petId;
+            container.dataset.openId = userId;
 
-            container.querySelector('.close-btn')
-                .addEventListener('click', () => {
-                    container.style.display = "none";
-                    container.innerHTML = '';
-                    container.dataset.openId = '';
-                });
+            container.querySelector('.close-btn').onclick = () => {
+                container.style.display = "none";
+                container.innerHTML = '';
+                container.dataset.openId = '';
+            };
         });
     }
 

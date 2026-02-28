@@ -73,7 +73,9 @@ window.addEventListener('DOMContentLoaded', () => {
     if (moreBtn) {
         moreBtn.addEventListener('click', (e) => {
             e.stopPropagation();
+            moreCategory.classList.remove('hidden')
             moreCategory.classList.toggle('open');
+
         });
     }
     kakao.maps.load(initMap);
@@ -195,13 +197,18 @@ function initMap() {
 }
 
 // ================== 마커 생성 ==================
+
+
+
+
 // createMarker 함수 수정
+
 function createMarker({position, name, address, category}) {
+    // image 옵션을 넣지 않으면 카카오 맵 기본 마커가 사용됩니다.
     const marker = new kakao.maps.Marker({
-        map,          // 지도에 바로 표시
+        map,
         position,
         category
-        // image: defaultMarkerImage  ← 이 부분은 나중에 이미지 바꿀때 필요
     });
 
     const info = new kakao.maps.InfoWindow({
@@ -214,13 +221,13 @@ function createMarker({position, name, address, category}) {
     });
 
     kakao.maps.event.addListener(marker, 'click', () => {
-        // 선택 마커 기능은 필요하면 여기에 넣을 수 있음
+        if (currentInfo) currentInfo.close();
         info.open(map, marker);
+        currentInfo = info;
     });
 
     return {marker, info};
 }
-
 
 function bindSearch() {
     const input = document.getElementById('placeInput');
@@ -234,7 +241,7 @@ function bindSearch() {
 
     //  실제 검색 로직을 함수로 분리
     const doSearch = () => {
-        // 🔥 현재 위치 마커 제거
+        //  현재 위치 마커 제거
         const keyword = input.value.trim();
         if (!keyword) return;
 
@@ -311,11 +318,16 @@ function addSingleMarker(lat, lng, title, address) {
     if (selectedMarker) {
         selectedMarker.setMap(null);
     }
-
+    const markerImageSrc = '/main/assets/images/currentMarker.png';
+    const markerImageSize = new kakao.maps.Size(32, 32);
+    const markerImageOption = {offset: new kakao.maps.Point(16, 32)};
+    const customMarkerImage = new kakao.maps.MarkerImage(markerImageSrc, markerImageSize, markerImageOption);
     // 새 마커 생성
     const marker = new kakao.maps.Marker({
         position,
-        map // 바로 지도에 올림
+        map, // 바로 지도에 올림
+        image: customMarkerImage
+
     });
 
     const info = new kakao.maps.InfoWindow({
@@ -524,24 +536,24 @@ window.addEventListener('DOMContentLoaded', () => {
 //선택 전용 함수
 function selectPlace(place) {
 
-    // 🔥 이전 선택 복구
+    //  이전 선택 복구
     if (selectedPlace && selectedPlace.marker) {
         selectedPlace.marker.setImage(defaultMarkerImage);
     }
 
-    // 🔥 이전 인포 닫기
+    //  이전 인포 닫기
     if (currentInfo) {
         currentInfo.close();
         currentInfo = null;
     }
 
-    // 🔥 현재 선택 저장
+    //  현재 선택 저장
     selectedPlace = place;
 
-    // 🔥 선택 아이콘 적용
+    //  선택 아이콘 적용
     place.marker.setImage(selectedMarkerImage);
 
-    // 🔥 인포 열기
+    //  인포 열기
     place.info.open(map, place.marker);
     currentInfo = place.info;
 
@@ -608,10 +620,14 @@ function getCurrentLocation() {
             if (currentLocationMarker) {
                 currentLocationMarker.setMap(null);
             }
-
+            const markerImageSrc = '/main/assets/images/currentMarker.png';
+            const markerImageSize = new kakao.maps.Size(32, 32);
+            const markerImageOption = {offset: new kakao.maps.Point(16, 32)};
+            const customMarkerImage = new kakao.maps.MarkerImage(markerImageSrc, markerImageSize, markerImageOption);
             currentLocationMarker = new kakao.maps.Marker({
                 map,
-                position: latlng
+                position: latlng,
+                image: customMarkerImage // 내 위치도 바꾼 이미지로!
             });
 
             // 주소 가져오기
@@ -764,7 +780,7 @@ function renderStoreList(places) {
     });
 }
 
-//화면 모드(리스트 하나 누르면 상세로 )전환을 담당하는 상태 관리 함수
+//화면 모드(리스트 하나 누르면 장소 상세설명으로 )전환을 담당하는 상태 관리 함수
 function switchView(mode, place = null) {
     const listView = document.querySelector('.place-list-view');
     const detailView = document.querySelector('.place-detail-view');
@@ -883,16 +899,15 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+
         // ----- 예약 확정 버튼 리스너 -----
         const confirmBtn = modal.querySelector('.btn.confirm');
+
         if (confirmBtn) {
             confirmBtn.addEventListener('click', async () => {
                 const dateInput = document.getElementById('reserveDate');
                 const timeSelect = document.getElementById('reserveTime');
                 const requestInput = document.getElementById('reserveRequest');
-
-
-
 
                 // 모달 제목과 주소에서 텍스트 직접 추출
                 const pName = modal.querySelector('.modal-title')?.innerText || '';
@@ -924,7 +939,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     paymentMethod: 'OFFLINE'
                 };
 
-                console.log("🚀 최종 전송 데이터:", payload);
 
                 try {
                     const res = await fetch('/reservation/create', {
@@ -934,14 +948,16 @@ window.addEventListener('DOMContentLoaded', () => {
                     });
 
                     if (res.ok) {
-                        alert('예약이 완료되었습니다.');
                         modal.classList.remove('open');
-                    } else {
-                        const errorMsg = await res.text();
-                        alert('예약 실패: ' + errorMsg);
+
+                        showMessage(' 예약이 성공적으로 완료되었습니다.');
                     }
+
                 } catch (err) {
                     console.error("Fetch 에러:", err);
+                    showMessage({
+                        text: '서버와의 통신 중 오류가 발생했습니다.'
+                    });
                 }
             });
         }
@@ -963,88 +979,69 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function renderFriendList(friends) {
-
-    console.log("=== renderFriendList 시작 ===");
-    console.log("friends 전체:", friends);
-    console.log("Array인가?", Array.isArray(friends));
-    console.log("길이:", friends?.length);
-
     const listEl = document.getElementById('friendList');
-    console.log("listEl:", listEl);
-
-    if (!listEl) {
-        console.error("❌ .friend-list 요소 없음");
-        return;
-    }
-
+    if (!listEl) return;
     listEl.innerHTML = '';
 
-    //  데이터가 없을 때
-    if (!friends || !Array.isArray(friends) || friends.length === 0) {
-
-        const emptyLi = document.createElement('li');
-        emptyLi.className = 'empty';
-        emptyLi.textContent = '주변에 친구가 없습니다.';
-
-        listEl.appendChild(emptyLi);
+    if (!friends || friends.length === 0) {
+        listEl.innerHTML = '<li class="empty">주변에 친구가 없습니다.</li>';
         return;
     }
 
-    if (!friends || !Array.isArray(friends)) {
-        console.error("❌ friends가 배열이 아님:", friends);
-        return;
-    }
-
-    friends.forEach((friend, index) => {
-
-        console.log(`--- ${index}번째 friend ---`);
-        console.log("friend 객체:", friend);
-        console.log("distanceKm:", friend.distanceKm);
-        console.log("distanceKm 타입:", typeof friend.distanceKm);
-
+    friends.forEach(friend => {
         const li = document.createElement('li');
         li.className = 'item';
-
-        const imageUrl = friend.imageUrl
-            ? friend.imageUrl
-            : '/images/defaultPetImage.png';
-
-        const distanceHtml = friend.distanceKm != null
-            ? `<div class="distance">📍 ${Number(friend.distanceKm).toFixed(1)}km</div>`
-            : `<div class="distance">❌ distance 없음</div>`;
-        const isFollowing = friend.isFollowing === true;
-
-        const buttonClass = isFollowing ? 'button following' : 'button follow';
-        const buttonText = isFollowing ? '팔로잉' : '팔로우';
-
+        const imageUrl = friend.imageUrl || '/images/defaultPetImage.png';
 
         li.innerHTML = `
             <div class="item-wrapper"
-             data-user-id="${friend.userId ?? ''}"
-         data-pet-id="${friend.petId ?? ''}"
-         data-birth="${friend.birthDate ?? ''}"
-         data-gender="${friend.gender ?? ''}"
-         data-introduction="${friend.introduction ?? ''}">
-                <div class="image">
-                    <img src="${imageUrl}" alt="pet image">
-                </div>
-
+                 data-user-id="${friend.userId}"
+                 data-pet-name="${friend.petName ?? ''}" 
+                 data-birth="${friend.birthDate ?? ''}"
+                 data-gender="${friend.gender ?? ''}"
+                 data-introduction="${friend.introduction ?? ''}">
+                <div class="image"><img src="${imageUrl}"></div>
                 <div class="text-wrapper">
-                    <div class="nickname">${friend.name}</div>
-                    <div class="species">${friend.species ?? ''}</div>
-                    ${distanceHtml}
+                    <div class="nickname">${friend.nickname ?? '이름 없음'}</div>
+                    <div class="species">${friend.species ?? '정보 없음'}</div>
+                    <div class="distance">📍 ${Number(friend.distance).toFixed(1)}km</div>
                 </div>
-                   <button class="${buttonClass}"
-                    data-user-id="${friend.userId}">
-                ${buttonText}
-            </button>
+                <button class="button ${friend.isFollowing ? 'following' : 'follow'}" data-user-id="${friend.userId}">
+                    ${friend.isFollowing ? '팔로잉' : '팔로우'}
+                </button>
             </div>
         `;
-
-        console.log("생성된 HTML:", li.innerHTML);
-
         listEl.appendChild(li);
     });
-
-    console.log("=== renderFriendList 종료 ===");
 }
+/*
+window.addEventListener('DOMContentLoaded', () => {
+
+    const overlay = document.getElementById('messageOverlay');
+    if (!overlay) {
+        console.error("messageOverlay 없음");
+        return;
+    }
+
+    const messageText = overlay.querySelector('.text');
+    const messageButton = overlay.querySelector('.button');
+
+    let onMessageClose = null;
+
+    // 전역 등록
+    window.showMessage = function (text, callback = null) {
+        messageText.innerText = text;
+        overlay.classList.add('visible');
+        onMessageClose = callback;
+    };
+
+    messageButton.addEventListener('click', () => {
+        overlay.classList.remove('visible');
+
+        if (onMessageClose) {
+            onMessageClose();
+            onMessageClose = null;
+        }
+    });
+
+});*/

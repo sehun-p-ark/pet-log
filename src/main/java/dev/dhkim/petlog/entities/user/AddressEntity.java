@@ -20,4 +20,5 @@ public class AddressEntity {
     private Double lng;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Boolean isDefault;
 }
