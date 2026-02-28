@@ -13,6 +13,8 @@ function closeCover() {
     $cover.classList.remove('visible');
 }
 
+
+
 // 로그인 창 경고모달
 const registerMessage = document.getElementById('register-message');
 const $title = document.createElement('span');
@@ -347,9 +349,29 @@ $passwordChangeResultButton.addEventListener('click', () => {
 
 // 비밀번호 찾기 전체 닫기
 function closeSearchPassword() {
-    resetSearchPasswordForm();
     $searchPasswordForm.classList.remove('visible');
-    closeCover();
+
+    // 모든 입력값 초기화
+    $searchPasswordIdInput.value = '';
+    $searchPasswordEmailInput.value = '';
+    $searchPasswordEmailVerifyInput.value = '';
+    $searchPasswordChangePasswordInput.value = '';
+    $searchPasswordChangePasswordCheckInput.value = '';
+
+    // disabled 초기화
+    $searchPasswordIdInput.removeAttribute('disabled');
+    $searchPasswordEmailInput.removeAttribute('disabled');
+    $searchPasswordEmailSendButton.removeAttribute('disabled');
+    $emailVerifyNumberInput.setAttribute('disabled', '');
+    $searchPasswordEmailVerifyButton.setAttribute('disabled', '');
+    $searchPasswordChangePasswordInput.setAttribute('disabled', '');
+    $searchPasswordChangePasswordCheckInput.setAttribute('disabled', '');
+
+    // 비밀번호 변경 영역 숨기기
+    $changePasswordLabel.classList.remove('visible');
+
+    $cover.classList.remove('visible');
+
 }
 
 // 비밀번호 찾기 내용 리셋
@@ -383,6 +405,15 @@ function resetSearchPasswordForm() {
 const loginButton = $loginForm.querySelector(':scope > .login-button');
 const loginIdInput = $loginForm.querySelector(':scope > .label > .id');
 const passwordInput = $loginForm.querySelector(':scope > .label > .password');
+
+// 저장된 아이디 불러오기
+const $rememberCheckbox = $loginForm.querySelector('.remember .checkbox');
+const savedId = localStorage.getItem('savedLoginId');
+if (savedId) {
+    loginIdInput.value = savedId;
+    $rememberCheckbox.checked = true;
+}
+
 loginButton.addEventListener('click', (e) => {
     e.preventDefault();
     if (loginIdInput.value === '') {
@@ -411,6 +442,13 @@ loginButton.addEventListener('click', (e) => {
                 showMessage('아이디 또는 비밀번호를 다시 입력해주세요.');
                 break;
             case 'SUCCESS':
+                // 아이디 저장 처리
+                if ($rememberCheckbox.checked) {
+                    localStorage.setItem('savedLoginId', loginIdInput.value);
+                } else {
+                    localStorage.removeItem('savedLoginId');
+                }
+
                 // 1. 서버가 보낸 데이터를 콘솔에 찍어서 확인 (F12 누르면 보임)
                 console.log('로그인 성공 데이터:', response);
 

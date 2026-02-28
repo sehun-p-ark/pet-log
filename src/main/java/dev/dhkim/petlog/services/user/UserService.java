@@ -1,6 +1,5 @@
 package dev.dhkim.petlog.services.user;
 
-import ch.qos.logback.core.spi.FilterAttachableImpl;
 import dev.dhkim.petlog.dto.user.PetDto;
 import dev.dhkim.petlog.dto.user.RegisterDto;
 import dev.dhkim.petlog.entities.user.BusinessUserEntity;
@@ -16,18 +15,32 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.apache.commons.lang3.RandomStringUtils;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import static dev.dhkim.petlog.enums.user.UserType.BUSINESS;
 import static dev.dhkim.petlog.enums.user.UserType.PERSONAL;
@@ -44,7 +57,7 @@ UserService {
 
 
     @Transactional
-    public RegisterResult register(RegisterDto dto) {
+    public RegisterResult register(RegisterDto dto, List<MultipartFile> petImages) {
         if (!UserValidator.validateCommon(dto)) {
             return RegisterResult.FAILURE;
         }
@@ -101,6 +114,15 @@ UserService {
             if (dto.getPets() != null) {
                 for (int i = 0; i < dto.getPets().size(); i++) {
                     PetDto pet = dto.getPets().get(i);
+
+                    // 이미지 저장 처리
+                    String imageUrl = "/user/assets/images/defaultPetImage.png"; // 기본값
+                    if (petImages != null && i < petImages.size() && petImages.get(i) != null
+                            && !petImages.get(i).isEmpty()) {
+                        imageUrl = savePetImage(petImages.get(i));
+                    }
+                    pet.setImageUrl(imageUrl);
+
                     int dbPetInsert = userMapper.insertPet(userId, pet);
                     if (dbPetInsert < 1) {
                         return RegisterResult.FAILURE;
@@ -140,6 +162,33 @@ UserService {
             return RegisterResult.FAILURE;
         }
         return RegisterResult.SUCCESS;
+    }
+
+    // 이미지 저장 메서드 추가
+    private String savePetImage(MultipartFile file) {
+        try {
+            // 저장 디렉토리 (프로젝트 외부 경로 권장)
+            String uploadDir = System.getProperty("user.dir") + "/uploads/pets/";
+            Path dirPath = Paths.get(uploadDir);
+            if (!Files.exists(dirPath)) {
+                Files.createDirectories(dirPath);
+            }
+
+            // 파일명: uuid + 원본 확장자
+            String originalFilename = file.getOriginalFilename();
+            String ext = originalFilename != null && originalFilename.contains(".")
+                    ? originalFilename.substring(originalFilename.lastIndexOf("."))
+                    : ".jpg";
+            String savedFilename = UUID.randomUUID() + ext;
+
+            Path savePath = dirPath.resolve(savedFilename);
+            Files.copy(file.getInputStream(), savePath);
+
+            return "/uploads/pets/" + savedFilename;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "/user/assets/images/defaultPetImage.png"; // 실패 시 기본이미지
+        }
     }
 
 
@@ -424,4 +473,145 @@ UserService {
                 ? FindPasswordResult.SUCCESS
                 : FindPasswordResult.FAILURE;
     }
+
+
+
+
+
+
+
+
+    // 네이버로그인
+    @Transactional
+    public UserEntity loginOrRegisterByNaver(String code, String state) {
+
+        try {
+            // 1️⃣ access token 요청
+            String tokenUrl = "https://nid.naver.com/oauth2.0/token" +
+                    "?grant_type=authorization_code" +
+                    "&client_id=" + System.getenv("NAVER_CLIENT_ID") +
+                    "&client_secret=" + System.getenv("NAVER_CLIENT_SECRET") +
+                    "&code=" + code +
+                    "&state=" + state;
+
+            RestTemplate restTemplate = new RestTemplate();
+            Map<String, Object> tokenResponse = restTemplate.getForObject(tokenUrl, Map.class);
+            if (tokenResponse == null || !tokenResponse.containsKey("access_token")) {
+                return null;
+            }
+            String accessToken = (String) tokenResponse.get("access_token");
+
+            // 2️⃣ 사용자 정보 요청
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Bearer " + accessToken);
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<Map> userResponse = restTemplate.exchange(
+                    "https://openapi.naver.com/v1/nid/me",
+                    HttpMethod.GET,
+                    entity,
+                    Map.class
+            );
+
+            if (userResponse.getBody() == null || !userResponse.getBody().containsKey("response")) {
+                return null;
+            }
+
+            Map<String, Object> naverUser = (Map<String, Object>) userResponse.getBody().get("response");
+            String email = (String) naverUser.get("email");
+            String name = (String) naverUser.get("name");
+            String nickname = (String) naverUser.get("nickname");
+
+            if (email == null) {
+                return null; // 이메일 없으면 로그인 불가
+            }
+
+            // 3️⃣ DB 확인
+            UserEntity dbUser = userMapper.selectByEmail(email);
+
+            if (dbUser == null) {
+                return null;
+            }
+
+            return dbUser;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+
+
+
+
+
+// 구글 로그인
+    @Transactional
+    public UserEntity loginOrRegisterByGoogle(String code) {
+        try {
+            // 1️⃣ access token 요청
+            String tokenUrl = "https://oauth2.googleapis.com/token";
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("code", code);
+            params.add("client_id", System.getenv("GOOGLE_CLIENT_ID"));
+            params.add("client_secret", System.getenv("GOOGLE_CLIENT_SECRET"));
+            params.add("redirect_uri", "http://localhost:8080/user/login/google/callback");
+            params.add("grant_type", "authorization_code");
+
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+
+            Map<String, Object> tokenResponse = restTemplate.postForObject(tokenUrl, request, Map.class);
+            if (tokenResponse == null || !tokenResponse.containsKey("access_token")) {
+                return null;
+            }
+            String accessToken = (String) tokenResponse.get("access_token");
+
+            // 2️⃣ 사용자 정보 요청
+            HttpHeaders userHeaders = new HttpHeaders();
+            userHeaders.set("Authorization", "Bearer " + accessToken);
+            HttpEntity<String> userEntity = new HttpEntity<>(userHeaders);
+
+            ResponseEntity<Map> userResponse = restTemplate.exchange(
+                    "https://www.googleapis.com/oauth2/v2/userinfo",
+                    HttpMethod.GET,
+                    userEntity,
+                    Map.class
+            );
+
+            if (userResponse.getBody() == null || !userResponse.getBody().containsKey("email")) {
+                return null;
+            }
+
+            Map<String, Object> googleUser = userResponse.getBody();
+            String email = (String) googleUser.get("email");
+            String name = (String) googleUser.get("name");
+            String nickname = (String) googleUser.get("given_name");
+
+            if (email == null) {
+                return null; // 이메일 없으면 로그인 불가
+            }
+
+            // 3️⃣ DB 확인
+            UserEntity dbUser = userMapper.selectByEmail(email);
+
+            if (dbUser == null) {
+                return null;
+            }
+
+            return dbUser;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

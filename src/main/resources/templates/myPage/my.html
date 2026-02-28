@@ -967,10 +967,10 @@
             <li class="menu" th:if="${sessionUser.getUserType() == 'BUSINESS'}">
                 <span>가게 관리</span>
             </li>
-            <li class="menu">
+            <li class="menu" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
                 <span>예약 조회</span>
             </li>
-            <li class="menu">
+            <li class="menu" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
                 <span>쇼핑 내역</span>
             </li>
         </ul>
@@ -1127,7 +1127,7 @@
                         <div class="text">
                             <span class="label">회사 주소</span>
                             <span class="value"
-                                  th:text="'[' + ${businessAddress.getPostalCode()} + '] ' + ${businessAddress.getAddressPrimary()} + (${businessAddress.getAddressSecondary() != null} ? (' ,' + ${businessAddress.getAddressSecondary()}) : '')"></span>
+                                  th:text="${businessAddress.getAddressPrimary()} + (${businessAddress.getAddressSecondary() != null} ? (' ,' + ${businessAddress.getAddressSecondary()}) : '')"></span>
                         </div>
                         <button class="small-button companyAddress-open-button">수정</button>
                     </div>

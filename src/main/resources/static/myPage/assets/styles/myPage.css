@@ -6664,6 +6664,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   display: block;
   word-break: break-word;
   white-space: normal;
+  line-height: 1.35;
 }
 .content > .storeInformation > .store-grid > .store-card > .store-footer {
   align-items: center;

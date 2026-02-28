@@ -1532,6 +1532,7 @@ if (businessInformation) {
 
         // region 가게 삭제 모달
         const deleteStoreModal = document.getElementById('delete-store-modal');
+        const deleteStoreModalContent = deleteStoreModal.querySelector('.modal-content');
         const deleteStoreModalCancelButton = deleteStoreModal.querySelector('.close-btn');
         const deleteStoreButton = deleteStoreModal.querySelector('.delete-button');
         let selectedStoreId = null;
@@ -1543,11 +1544,13 @@ if (businessInformation) {
             deleteStoreModalOpen.addEventListener('click', () => {
                 selectedStoreId = card.dataset.storeId;
                 deleteStoreModal.classList.add('visible');
+                deleteStoreModalContent.classList.add('visible');
             })
         })
 
         deleteStoreModalCancelButton.addEventListener('click', () => {
             deleteStoreModal.classList.remove('visible');
+            deleteStoreModalContent.classList.remove('visible');
         });
 
 
@@ -1587,6 +1590,7 @@ if (businessInformation) {
                         break;
                     case 'SUCCESS':
                         deleteStoreModal.classList.remove('visible');
+                        deleteStoreModalContent.classList.remove('visible');
                         location.href = '/my?menu=' + getCurrentMenuIndex();
                         break;
                     default:
@@ -2804,7 +2808,7 @@ if (petInformation) {
 
         const petData = {
             name: petNameInput.value,
-            imageUrl: fileInput.files.length > 0
+            imagePreview: fileInput.files.length > 0   // 화면 미리보기용만
                 ? preview.src
                 : editMod
                     ? editMod.imageUrl
@@ -2828,15 +2832,31 @@ if (petInformation) {
 
             // 서버로 수정 내용 전송
             try {
+                const updateFormData = new FormData();
+
+                const updatePayload = {
+                    petId: editMod.petId,
+                    name: petData.name,
+                    species: petData.species,
+                    birthDate: petData.birthDate,
+                    introduction: petData.introduction,
+                    gender: petData.gender,
+                    weight: petData.weight,
+                    bodyType: petData.bodyType
+                };
+                updateFormData.append('data', new Blob([JSON.stringify(updatePayload)], { type: 'application/json' }));
+
+// 새 이미지가 있으면 파일 전송, 없으면 기존 이미지 URL 전송
+                if (fileInput.files.length > 0) {
+                    updateFormData.append('petImage', fileInput.files[0]);
+                } else {
+                    // 기존 이미지 경로 유지 (서버에서 파일 없으면 기존 값 유지하도록)
+                    updateFormData.append('existingImageUrl', editMod.imageUrl || '');
+                }
+
                 const res = await fetch('/my/pet/update', {
-                    method: 'POST', // 혹은 POST
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        petId: editMod.petId, // 기존 애완동물 ID
-                        ...petData
-                    })
+                    method: 'POST',
+                    body: updateFormData
                 });
                 const result = await res.json();
                 if (result.result === 'SUCCESS') {
@@ -2855,12 +2875,28 @@ if (petInformation) {
             // 수정모드는 resetAllDialog 호출 안함
             currentStep = 1;
         } else {
+            const formData = new FormData();
+
+            // petData에서 imageUrl 제거하고 나머지 필드만 JSON으로
+            const petPayload = {
+                name: petData.name,
+                species: petData.species,
+                birthDate: petData.birthDate,
+                introduction: petData.introduction,
+                gender: petData.gender,
+                weight: petData.weight,
+                bodyType: petData.bodyType
+            };
+            formData.append('data', new Blob([JSON.stringify(petPayload)], { type: 'application/json' }));
+
+            // 이미지 파일이 있으면 추가
+            if (fileInput.files.length > 0) {
+                formData.append('petImage', fileInput.files[0]);
+            }
+
             const res = await fetch("/my/pet/registration", {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(petData)
+                body: formData  // Content-Type 헤더 설정 X
             });
             const data = await res.json();
             console.log(data)
