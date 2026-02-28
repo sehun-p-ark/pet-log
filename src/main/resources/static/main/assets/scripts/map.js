@@ -992,13 +992,16 @@ function renderFriendList(friends) {
         const li = document.createElement('li');
         li.className = 'item';
         const imageUrl = friend.imageUrl || '/images/defaultPetImage.png';
+        const genderText =
+            friend.gender === 'MALE' ? '남아' :
+             friend.gender === 'FEMALE' ? '여아' : '';
 
         li.innerHTML = `
             <div class="item-wrapper"
                  data-user-id="${friend.userId}"
                  data-pet-name="${friend.petName ?? ''}" 
                  data-birth="${friend.birthDate ?? ''}"
-                 data-gender="${friend.gender ?? ''}"
+                 data-gender="${genderText ?? ''}"
                  data-introduction="${friend.introduction ?? ''}">
                 <div class="image"><img src="${imageUrl}"></div>
                 <div class="text-wrapper">
