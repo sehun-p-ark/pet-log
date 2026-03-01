@@ -136,15 +136,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const description = document.querySelector('textarea[name="description"]').value.trim();
 
         if (selectedMedia.length === 0) {
-            alert("이미지 또는 동영상을 최소 1개 업로드해주세요.");
+            showMessage("이미지 또는 동영상을 최소 1개 업로드해주세요.");
             return;
         }
-        if (!title) {
-            alert("제목을 입력해주세요.");
+        if (!title || title.length === 0) {
+            showMessage("제목을 입력해주세요.");
             return;
         }
-        if (!description) {
-            alert("내용을 입력해주세요.");
+        if (title.length > 50) {
+            showMessage("제목의 최대길이는 50자입니다.")
+        }
+        if (!description || description.length === 0) {
+            showMessage("내용을 입력해주세요.");
+            return;
+        }
+        if (description.length > 1000) {
+            showMessage("내용의 최대길이는 1000자입니다.")
             return;
         }
 

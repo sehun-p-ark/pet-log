@@ -106,12 +106,12 @@
 
     /* ===== 메세지 ===== */
     .btn-message {
-        background-color: $global-gray-background-color;
+        background-color: lighten($global-gray-background-color, 5%);
         border: 1px solid $global-border-color;
         color: $global-gray-text-color;
 
         &:hover {
-            background-color: lighten($global-gray-background-color, 4%);
+            background-color: $global-gray-background-color;
             transform: translateY(-2px);
         }
     }

@@ -1,6 +1,7 @@
 package dev.dhkim.petlog.mappers.feed;
 
 import dev.dhkim.petlog.dto.feed.FeedDto;
+import dev.dhkim.petlog.dto.feed.FeedSearchDto;
 import dev.dhkim.petlog.dto.feed.FeedThumbnailDto;
 import dev.dhkim.petlog.entities.feed.FeedEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -21,12 +22,13 @@ public interface FeedMapper {
     // 피드 삭제
     int deleteFeed(int feedId);
 
-    // 무한 스크롤 피드 조회 (최신순)
-    List<FeedDto> selectFeeds(@Param("sort") String sort,
-                              @Param("lastFeedId") Integer lastFeedId,
-                              @Param("lastLikeCount") Integer lastLikeCount,
-                              @Param("lastCreatedAt") String lastCreatedAt,
-                              @Param("size") int size);
+    // 무한 스크롤 피드 조회
+    List<FeedDto> selectFeeds(String sort,
+                              String keyword,
+                              Integer lastFeedId,
+                              Integer lastLikeCount,
+                              String lastCreatedAt,
+                              int size);
 
     // 해당 DTO 정보 가져오기 (ID 기준)
     FeedDto selectFeedById(int id);
@@ -61,4 +63,9 @@ public interface FeedMapper {
     // 댓글 갯수 감소
     int decreaseCommentCount(@Param("feedId") int feedId,
                              @Param("count") int count);
+
+    // 검색 기능
+    List<FeedSearchDto> searchFeeds(@Param("keyword") String keyword,
+                                    @Param("sort") String sort,
+                                    @Param("userId") Integer userId);
 }

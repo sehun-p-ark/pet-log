@@ -4,32 +4,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AddressUtil {
+    private static final String[] SUFFIXES = {
+            "특별자치도",
+            "특별자치시",
+            "특별시",
+            "광역시",
+            "도",
+    };
 
-    public String extractCity (String  address) {
-        if (address == null || address.isBlank())
-            return "";
+    public String extractCity(String address) {
+        if (address == null || address.isBlank()) return "";
 
-        String[] parts = address.trim().split(" ");
-        if (parts.length == 0) return "";
+        String first = address.trim().split(" ")[0];
 
-        String first = parts[0];
-        String second = parts.length > 1 ? parts[1] : "";
-
-        if (first.endsWith("특별시") || first.endsWith("광역시") || first.endsWith("특별자치도")) {
-            return first.replace("특별시","")
-                    .replace("광역시","")
-                    .replace("특별자치도","")
-                    .replace("시","");
+        for (String suffix : SUFFIXES) {
+            if (first.endsWith(suffix)) {
+                return first.substring(0, first.length() - suffix.length());
+            }
         }
 
-        if (first.endsWith("도")) {
-            return second.replace("시","")
-                    .replace("군","")
-                    .replace("구","");
-        }
-
-        return first.replace("특별자치시","")
-                .replace("군","")
-                .replace("구","");
+        return first;
     }
 }

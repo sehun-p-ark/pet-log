@@ -1,10 +1,10 @@
 @charset "UTF-8";
-@use "sass:color";
 body:has(> .register-message.visible) > .cover,
 body:has(> .petDeleteMessage.visible) > .cover,
 body:has(> .checkMessage.visible) > .cover {
   opacity: 1;
-  pointer-events: auto; }
+  pointer-events: auto;
+}
 
 .loading {
   content: "";
@@ -13,19 +13,22 @@ body:has(> .checkMessage.visible) > .cover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #212121a0;
+  background-color: rgba(33, 33, 33, 0.6274509804);
   z-index: 29;
   opacity: 0;
-  pointer-events: none; }
-  .loading.visible {
-    opacity: 1; }
+  pointer-events: none;
+}
+.loading.visible {
+  opacity: 1;
+}
 
 /*body:has(> .address-wrapper.visible) > *:not(.address-wrapper) {
   pointer-events: none;
 }*/
 body:has(> .address-wrapper.visible) > .cover {
   opacity: 1;
-  pointer-events: auto; }
+  pointer-events: auto;
+}
 
 .address-wrapper {
   align-items: flex-end;
@@ -33,6 +36,16 @@ body:has(> .address-wrapper.visible) > .cover {
   flex-direction: column;
   gap: 0;
   justify-content: flex-start;
+}
+.address-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.address-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.address-wrapper {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -42,22 +55,20 @@ body:has(> .address-wrapper.visible) > .cover {
   border-radius: 0.35rem;
   opacity: 0;
   pointer-events: none;
-  z-index: 30; }
-  .address-wrapper > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .address-wrapper > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .address-wrapper.visible {
-    opacity: 1;
-    pointer-events: auto; }
-  .address-wrapper > .button {
-    padding: 0.35rem;
-    cursor: pointer; }
-    .address-wrapper > .button > .image {
-      width: 1.5rem;
-      height: 1.5rem; }
+  z-index: 30;
+}
+.address-wrapper.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.address-wrapper > .button {
+  padding: 0.35rem;
+  cursor: pointer;
+}
+.address-wrapper > .button > .image {
+  width: 1.5rem;
+  height: 1.5rem;
+}
 
 .checkMessage {
   align-items: stertch;
@@ -65,6 +76,16 @@ body:has(> .address-wrapper.visible) > .cover {
   flex-direction: column;
   gap: 1rem;
   justify-content: flex-start;
+}
+.checkMessage > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.checkMessage > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.checkMessage {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -75,61 +96,68 @@ body:has(> .address-wrapper.visible) > .cover {
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  width: 25rem; }
-  .checkMessage > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .checkMessage > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .checkMessage.visible {
-    opacity: 1;
-    pointer-events: auto; }
-  .checkMessage > .title {
-    font-size: 1.35rem;
-    font-weight: 500; }
-  .checkMessage > .text {
-    font-size: 1rem; }
-  .checkMessage > .button-wrapper {
-    align-items: stretch;
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    justify-content: center; }
-    .checkMessage > .button-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .checkMessage > .button-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .checkMessage > .button-wrapper > .yes {
-      background-color: #38A34C;
-      border-radius: 0.35rem;
-      color: #ffffff;
-      cursor: pointer;
-      height: 2.25rem;
-      margin-top: 1rem;
-      width: 9rem;
-      transition-duration: 250ms;
-      transition-property: background-color; }
-      .checkMessage > .button-wrapper > .yes:hover {
-        background-color: #2F8F43; }
-      .checkMessage > .button-wrapper > .yes:active {
-        background-color: #287A39; }
-    .checkMessage > .button-wrapper > .no {
-      background-color: #e2e2e2;
-      color: #898989;
-      border-radius: 0.35rem;
-      cursor: pointer;
-      height: 2.25rem;
-      margin-top: 1rem;
-      width: 9rem;
-      transition-duration: 250ms;
-      transition-property: background-color; }
-      .checkMessage > .button-wrapper > .no:hover {
-        background-color: #D6D6D6; }
-      .checkMessage > .button-wrapper > .no:active {
-        background-color: #C8C8C8; }
+  width: 25rem;
+}
+.checkMessage.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.checkMessage > .title {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+.checkMessage > .text {
+  font-size: 1rem;
+}
+.checkMessage > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+}
+.checkMessage > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.checkMessage > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.checkMessage > .button-wrapper > .yes {
+  background-color: #38A34C;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  height: 2.25rem;
+  margin-top: 1rem;
+  width: 9rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.checkMessage > .button-wrapper > .yes:hover {
+  background-color: #2F8F43;
+}
+.checkMessage > .button-wrapper > .yes:active {
+  background-color: #287A39;
+}
+.checkMessage > .button-wrapper > .no {
+  background-color: rgb(226.25, 226.25, 226.25);
+  color: #898989;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  height: 2.25rem;
+  margin-top: 1rem;
+  width: 9rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.checkMessage > .button-wrapper > .no:hover {
+  background-color: #D6D6D6;
+}
+.checkMessage > .button-wrapper > .no:active {
+  background-color: #C8C8C8;
+}
 
 .register-message {
   align-items: stertch;
@@ -137,6 +165,16 @@ body:has(> .address-wrapper.visible) > .cover {
   flex-direction: column;
   gap: 1rem;
   justify-content: flex-start;
+}
+.register-message > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-message > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-message {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -147,34 +185,35 @@ body:has(> .address-wrapper.visible) > .cover {
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  min-width: 25rem; }
-  .register-message > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .register-message > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .register-message.visible {
-    opacity: 1;
-    pointer-events: auto; }
-  .register-message > .title {
-    font-size: 1.35rem;
-    font-weight: 500; }
-  .register-message > .text {
-    font-size: 1rem;
-    line-height: 1.3; }
-  .register-message > .button {
-    background-color: #38A34C;
-    border-radius: 0.35rem;
-    color: #ffffff;
-    cursor: pointer;
-    height: 2.25rem;
-    transition-duration: 250ms;
-    transition-property: background-color; }
-    .register-message > .button:hover {
-      background-color: #2F8F43; }
-    .register-message > .button:active {
-      background-color: #287A39; }
+  min-width: 25rem;
+}
+.register-message.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.register-message > .title {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+.register-message > .text {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+.register-message > .button {
+  background-color: #38A34C;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  height: 2.25rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-message > .button:hover {
+  background-color: #2F8F43;
+}
+.register-message > .button:active {
+  background-color: #287A39;
+}
 
 .petDeleteMessage {
   align-items: stertch;
@@ -182,6 +221,16 @@ body:has(> .address-wrapper.visible) > .cover {
   flex-direction: column;
   gap: 1rem;
   justify-content: flex-start;
+}
+.petDeleteMessage > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.petDeleteMessage > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.petDeleteMessage {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -192,63 +241,70 @@ body:has(> .address-wrapper.visible) > .cover {
   z-index: 100;
   opacity: 0;
   pointer-events: none;
-  min-width: 25rem; }
-  .petDeleteMessage > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .petDeleteMessage > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .petDeleteMessage.visible {
-    opacity: 1;
-    pointer-events: auto; }
-  .petDeleteMessage > .title {
-    font-size: 1.35rem;
-    font-weight: 500; }
-  .petDeleteMessage > .text {
-    font-size: 1rem; }
-  .petDeleteMessage > .button-wrapper {
-    align-items: stretch;
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    justify-content: center; }
-    .petDeleteMessage > .button-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .petDeleteMessage > .button-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .petDeleteMessage > .button-wrapper > .delete {
-      background-color: #38A34C;
-      border-radius: 0.35rem;
-      color: #ffffff;
-      cursor: pointer;
-      height: 2.25rem;
-      margin-top: 1rem;
-      width: 9rem;
-      transition-duration: 250ms;
-      transition-property: background-color;
-      flex-grow: 1; }
-      .petDeleteMessage > .button-wrapper > .delete:hover {
-        background-color: #2F8F43; }
-      .petDeleteMessage > .button-wrapper > .delete:active {
-        background-color: #287A39; }
-    .petDeleteMessage > .button-wrapper > .cancel {
-      background-color: #e2e2e2;
-      color: #898989;
-      border-radius: 0.35rem;
-      cursor: pointer;
-      height: 2.25rem;
-      margin-top: 1rem;
-      width: 9rem;
-      transition-duration: 250ms;
-      transition-property: background-color;
-      flex-grow: 1; }
-      .petDeleteMessage > .button-wrapper > .cancel:hover {
-        background-color: #D6D6D6; }
-      .petDeleteMessage > .button-wrapper > .cancel:active {
-        background-color: #C8C8C8; }
+  min-width: 25rem;
+}
+.petDeleteMessage.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.petDeleteMessage > .title {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+.petDeleteMessage > .text {
+  font-size: 1rem;
+}
+.petDeleteMessage > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+}
+.petDeleteMessage > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.petDeleteMessage > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.petDeleteMessage > .button-wrapper > .delete {
+  background-color: #38A34C;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  height: 2.25rem;
+  margin-top: 1rem;
+  width: 9rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+  flex-grow: 1;
+}
+.petDeleteMessage > .button-wrapper > .delete:hover {
+  background-color: #2F8F43;
+}
+.petDeleteMessage > .button-wrapper > .delete:active {
+  background-color: #287A39;
+}
+.petDeleteMessage > .button-wrapper > .cancel {
+  background-color: rgb(226.25, 226.25, 226.25);
+  color: #898989;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  height: 2.25rem;
+  margin-top: 1rem;
+  width: 9rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+  flex-grow: 1;
+}
+.petDeleteMessage > .button-wrapper > .cancel:hover {
+  background-color: #D6D6D6;
+}
+.petDeleteMessage > .button-wrapper > .cancel:active {
+  background-color: #C8C8C8;
+}
 
 .register-container {
   align-items: center;
@@ -256,1020 +312,1294 @@ body:has(> .address-wrapper.visible) > .cover {
   flex-direction: row;
   gap: 0;
   justify-content: center;
+}
+.register-container > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container {
   min-height: calc(100vh - 5rem);
-  margin-top: 5rem; }
-  .register-container > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .register-container > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .register-container > .register-first {
-    width: 100%;
-    max-width: 45rem;
-    min-height: 40rem;
-    background-color: #f9f9f9;
-    border-radius: 0.75rem;
-    border: 0.0625rem solid #E7E5E4;
-    overflow: hidden auto;
-    padding: 3rem 5.5rem; }
-    .register-container > .register-first.hidden {
-      display: none; }
-    .register-container > .register-first > .title {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 4rem; }
-    .register-container > .register-first > .text {
-      font-size: 1.25rem;
-      color: #565656; }
-      .register-container > .register-first > .text::before {
-        content: "";
-        width: 0.75rem;
-        height: 0.75rem;
-        display: inline-block;
-        background-color: #38A34C;
-        border-radius: 999rem;
-        margin-bottom: 0.1rem;
-        margin-right: 0.5rem; }
-    .register-container > .register-first > .select-wrapper {
-      align-items: stretch;
-      display: flex;
-      flex-direction: row;
-      gap: 2rem;
-      justify-content: flex-start;
-      height: 100%;
-      margin-top: 2rem; }
-      .register-container > .register-first > .select-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-first > .select-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-first > .select-wrapper > .personal-member,
-      .register-container > .register-first > .select-wrapper > .business-member {
-        flex-grow: 1;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        justify-content: center;
-        /*width: 16rem;*/
-        /*min-height: 23rem;*/
-        background-color: #f1f1f1;
-        border: 0.0625rem solid #E7E5E4;
-        border-radius: 0.35rem;
-        padding: 2rem;
-        cursor: pointer; }
-        .register-container > .register-first > .select-wrapper > .personal-member > *,
-        .register-container > .register-first > .select-wrapper > .business-member > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-first > .select-wrapper > .personal-member > .-flex-stretch,
-        .register-container > .register-first > .select-wrapper > .business-member > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-first > .select-wrapper > .personal-member:has(> .memberType:checked),
-        .register-container > .register-first > .select-wrapper > .business-member:has(> .memberType:checked) {
-          background-color: #FDD072;
-          border-color: #FDD072;
-          color: #ffffff; }
-          .register-container > .register-first > .select-wrapper > .personal-member:has(> .memberType:checked) > .description,
-          .register-container > .register-first > .select-wrapper > .business-member:has(> .memberType:checked) > .description {
-            color: #ffffff; }
-          .register-container > .register-first > .select-wrapper > .personal-member:has(> .memberType:checked) > .image,
-          .register-container > .register-first > .select-wrapper > .business-member:has(> .memberType:checked) > .image {
-            filter: invert(1); }
-        .register-container > .register-first > .select-wrapper > .personal-member:hover,
-        .register-container > .register-first > .select-wrapper > .business-member:hover {
-          background-color: #FDD072;
-          border-color: #FDD072;
-          color: #ffffff; }
-          .register-container > .register-first > .select-wrapper > .personal-member:hover > .description,
-          .register-container > .register-first > .select-wrapper > .business-member:hover > .description {
-            color: #ffffff; }
-          .register-container > .register-first > .select-wrapper > .personal-member:hover > .image,
-          .register-container > .register-first > .select-wrapper > .business-member:hover > .image {
-            filter: invert(1); }
-        .register-container > .register-first > .select-wrapper > .personal-member > .title,
-        .register-container > .register-first > .select-wrapper > .business-member > .title {
-          font-size: 1.25rem;
-          font-weight: 600; }
-        .register-container > .register-first > .select-wrapper > .personal-member > .description,
-        .register-container > .register-first > .select-wrapper > .business-member > .description {
-          text-align: center;
-          color: #565656;
-          font-size: 1.1rem;
-          font-weight: 500;
-          line-height: 1.5; }
-    .register-container > .register-first > .button-wrapper {
-      align-items: stretch;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 3.5rem; }
-      .register-container > .register-first > .button-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-first > .button-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-first > .button-wrapper > .cancel {
-        width: 5rem;
-        height: 2.75rem;
-        background-color: #CFCFCF;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-first > .button-wrapper > .cancel:hover {
-          background-color: #c2c2c2; }
-        .register-container > .register-first > .button-wrapper > .cancel:active {
-          background-color: #b6b6b6; }
-  .register-container > .register-second {
-    width: 100%;
-    max-width: 60rem;
-    max-height: calc(100dvh - 11rem);
-    background-color: #f9f9f9;
-    border-radius: 0.75rem;
-    border: 0.0625rem solid #E7E5E4;
-    padding: 3rem 4rem;
-    overflow: hidden auto; }
-    .register-container > .register-second.hidden {
-      display: none; }
-    .register-container > .register-second::-webkit-scrollbar {
-      width: 6px; }
-    .register-container > .register-second::-webkit-scrollbar-thumb {
-      background-color: #d6d6d6;
-      border-radius: 999px; }
-    .register-container > .register-second::-webkit-scrollbar-track {
-      background-color: transparent; }
-    .register-container > .register-second > .register-title {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 2.5rem; }
-    .register-container > .register-second > .agreement-wrapper {
-      align-items: stretch;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      justify-content: center; }
-      .register-container > .register-second > .agreement-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-second > .agreement-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-second > .agreement-wrapper > .agreement {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        justify-content: center; }
-        .register-container > .register-second > .agreement-wrapper > .agreement > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-second > .agreement-wrapper > .agreement > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-second > .agreement-wrapper > .agreement > .semiTitle {
-          margin-top: 1rem;
-          font-size: 1.15rem;
-          font-weight: 500; }
-        .register-container > .register-second > .agreement-wrapper > .agreement > .semiTitle::before {
-          content: "";
-          width: 0.5rem;
-          height: 0.5rem;
-          border-radius: 999rem;
-          background-color: #89CC96;
-          display: inline-block;
-          margin-right: 0.5rem;
-          margin-bottom: 0.2rem; }
-        .register-container > .register-second > .agreement-wrapper > .agreement > .text-box {
-          align-items: stretch;
-          display: flex;
-          flex-direction: column;
-          gap: 0;
-          justify-content: flex-start;
-          max-height: 8rem;
-          overflow: hidden auto;
-          background-color: #f3f3f3;
-          border-radius: 0.35rem;
-          padding: 1rem;
-          font-size: 0.85rem;
-          line-height: 1.4;
-          color: #565656; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box > * {
-            flex-grow: 0;
-            flex-shrink: 0; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box > .-flex-stretch {
-            flex-grow: 1;
-            flex-shrink: 1; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box > .title {
-            font-size: 0.9rem;
-            font-weight: 500; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box > ul {
-            list-style-type: revert;
-            margin-left: 1.5rem; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box::-webkit-scrollbar {
-            width: 4px; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box::-webkit-scrollbar-thumb {
-            background-color: #cfcfcf;
-            border-radius: 999px; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .text-box::-webkit-scrollbar-track {
-            background-color: #eaeaea;
-            border-radius: 999px; }
-        .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-          gap: 0;
-          justify-content: center;
-          text-align: center;
-          cursor: pointer;
-          font-size: 0.85rem;
-          color: #565656;
-          width: fit-content; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > * {
-            flex-grow: 0;
-            flex-shrink: 0; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .-flex-stretch {
-            flex-grow: 1;
-            flex-shrink: 1; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .text {
-            font-size: 1rem; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .circle {
-            width: 1.1625rem;
-            height: 1.1625rem;
-            border-radius: 999rem;
-            border: 0.0625rem solid #89CC96;
-            margin-right: 0.5rem; }
-            .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .circle > .image {
-              width: 1rem;
-              height: 1rem;
-              display: none; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check:has(.checkbox:checked) > .circle {
-            background-color: #89CC96; }
-            .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check:has(.checkbox:checked) > .circle > .image {
-              display: block; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check.required .text::before {
-            content: "[필수] ";
-            color: #f44336;
-            font-size: 1rem; }
-          .register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check.optional > .text::before {
-            content: "[선택] ";
-            color: #a9a9a9;
-            font-size: 1rem; }
-    .register-container > .register-second > .button-wrapper {
-      align-items: stretch;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 3.5rem; }
-      .register-container > .register-second > .button-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-second > .button-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-second > .button-wrapper > .cancel {
-        width: 5rem;
-        height: 2.75rem;
-        background-color: #CFCFCF;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-second > .button-wrapper > .cancel:hover {
-          background-color: #c2c2c2; }
-        .register-container > .register-second > .button-wrapper > .cancel:active {
-          background-color: #b6b6b6; }
-      .register-container > .register-second > .button-wrapper > .previous {
-        width: 6rem;
-        height: 2.75rem;
-        background-color: #c4c4c4;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-second > .button-wrapper > .previous:hover {
-          background-color: #b7b7b7; }
-        .register-container > .register-second > .button-wrapper > .previous:active {
-          background-color: #ababab; }
-      .register-container > .register-second > .button-wrapper > .next {
-        width: 6rem;
-        height: 2.75rem;
-        background-color: #FDD072;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-second > .button-wrapper > .next:hover {
-          background-color: #F7C95F; }
-        .register-container > .register-second > .button-wrapper > .next:active {
-          background-color: #F2C255; }
-  .register-container > .register-third {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    justify-content: flex-start;
-    width: 100%;
-    max-width: 45rem;
-    max-height: calc(100vh - 11rem);
-    background-color: #f9f9f9;
-    border-radius: 0.75rem;
-    border: 0.0625rem solid #E7E5E4;
-    padding: 2.5rem 4rem;
-    overflow: auto; }
-    .register-container > .register-third > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .register-container > .register-third > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .register-container > .register-third.hidden {
-      display: none; }
-    .register-container > .register-third::-webkit-scrollbar {
-      width: 6px; }
-    .register-container > .register-third::-webkit-scrollbar-thumb {
-      background-color: #d6d6d6;
-      border-radius: 999px; }
-    .register-container > .register-third::-webkit-scrollbar-track {
-      background-color: transparent; }
-    .register-container > .register-third > .title {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem; }
-    .register-container > .register-third > .semiTitle {
-      margin-top: 1rem;
-      font-size: 1.25rem; }
-    .register-container > .register-third > .semiTitle::before {
-      content: "";
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 999rem;
-      background-color: #89CC96;
-      display: inline-block;
-      margin-right: 0.5rem;
-      margin-bottom: 0.2rem; }
-    .register-container > .register-third > .label {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      justify-content: flex-start;
-      height: 3rem; }
-      .register-container > .register-third > .label > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-third > .label > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        justify-content: flex-start;
-        margin-top: 1.5rem; }
-        .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .countTime {
-          align-self: flex-end;
-          color: #565656; }
-        .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber:disabled {
-          border-color: #e7e5e4 !important; }
-          .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber:disabled::placeholder {
-            color: #898989; }
-      .register-container > .register-third > .label.emailVerifyLabel > .button:disabled {
-        border-color: #e7e5e4 !important;
-        background-color: #e2e2e2 !important;
-        color: #898989;
-        cursor: default; }
-      .register-container > .register-third > .label.addressLabel > .input, .register-container > .register-third > .label.primaryAddressLabel > .input {
-        cursor: default;
-        border-color: #e7e5e4 !important; }
-      .register-container > .register-third > .label > .caption {
-        width: 8rem;
-        color: #565656;
-        font-size: 1.1rem;
-        font-weight: 500; }
-      .register-container > .register-third > .label > .id-wrapper {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        justify-content: flex-start;
-        margin-top: 1.5rem;
-        flex-grow: 1; }
-        .register-container > .register-third > .label > .id-wrapper > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-third > .label > .id-wrapper > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-third > .label > .id-wrapper > .text {
-          opacity: 0;
-          color: #ff4646;
-          pointer-events: none;
-          padding: 0.5rem 0 0 0;
-          margin-top: 0;
-          transition-duration: 250ms;
-          transition-property: opacity; }
-          .register-container > .register-third > .label > .id-wrapper > .text.visible {
-            opacity: 1; }
-      .register-container > .register-third > .label > .phone-wrapper {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        justify-content: flex-start;
-        margin-top: 1.5rem;
-        flex-grow: 1; }
-        .register-container > .register-third > .label > .phone-wrapper > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-third > .label > .phone-wrapper > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-third > .label > .phone-wrapper > .number-wrapper {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-          gap: 1rem;
-          justify-content: flex-start; }
-          .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > * {
-            flex-grow: 0;
-            flex-shrink: 0; }
-          .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .-flex-stretch {
-            flex-grow: 1;
-            flex-shrink: 1; }
-          .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .firstNumber {
-            width: 6rem;
-            height: 2.35rem;
-            border: 0.0625rem solid #e7e5e4;
-            flex-grow: 1;
-            color: #565656; }
-          .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .contactNumber {
-            width: 6rem;
-            flex-grow: 1; }
-        .register-container > .register-third > .label > .phone-wrapper > .text {
-          opacity: 0;
-          color: #ff4646;
-          pointer-events: none;
-          padding: 0.5rem 0 0 0;
-          margin-top: 0;
-          transition-duration: 250ms;
-          transition-property: opacity; }
-          .register-container > .register-third > .label > .phone-wrapper > .text.visible {
-            opacity: 1; }
-      .register-container > .register-third > .label > .nickname-wrapper {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        justify-content: flex-start;
-        margin-top: 1.5rem;
-        flex-grow: 1; }
-        .register-container > .register-third > .label > .nickname-wrapper > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-third > .label > .nickname-wrapper > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-third > .label > .nickname-wrapper > .text {
-          opacity: 0;
-          color: #ff4646;
-          pointer-events: none;
-          padding: 0.5rem 0 0 0;
-          margin-top: 0;
-          transition-duration: 250ms;
-          transition-property: opacity; }
-          .register-container > .register-third > .label > .nickname-wrapper > .text.visible {
-            opacity: 1; }
-      .register-container > .register-third > .label > .businessId-wrapper {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        justify-content: flex-start;
-        margin-top: 1.5rem;
-        flex-grow: 1; }
-        .register-container > .register-third > .label > .businessId-wrapper > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-third > .label > .businessId-wrapper > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-third > .label > .businessId-wrapper > .text {
-          opacity: 0;
-          color: #ff4646;
-          pointer-events: none;
-          padding: 0.5rem 0 0 0;
-          margin-top: 0;
-          transition-duration: 250ms;
-          transition-property: opacity; }
-          .register-container > .register-third > .label > .businessId-wrapper > .text.visible {
-            opacity: 1; }
-      .register-container > .register-third > .label > .input,
-      .register-container > .register-third > .label > .id-wrapper > .input,
-      .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input,
-      .register-container > .register-third > .label > .nickname-wrapper > .input,
-      .register-container > .register-third > .label > .businessId-wrapper > .input,
-      .register-container > .register-third > .label > .verifyNumber-wrapper > .input {
-        border-bottom: 0.1rem solid #E7E5E4;
-        height: 2rem;
-        font-size: 1rem;
-        transition-duration: 300ms;
-        transition-property: border-bottom-color;
-        flex-grow: 1; }
-        .register-container > .register-third > .label > .input:disabled,
-        .register-container > .register-third > .label > .id-wrapper > .input:disabled,
-        .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:disabled,
-        .register-container > .register-third > .label > .nickname-wrapper > .input:disabled,
-        .register-container > .register-third > .label > .businessId-wrapper > .input:disabled,
-        .register-container > .register-third > .label > .verifyNumber-wrapper > .input:disabled {
-          border-color: #e7e5e4 !important;
-          color: #bcbcbc; }
-          .register-container > .register-third > .label > .input:disabled::placeholder,
-          .register-container > .register-third > .label > .id-wrapper > .input:disabled::placeholder,
-          .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:disabled::placeholder,
-          .register-container > .register-third > .label > .nickname-wrapper > .input:disabled::placeholder,
-          .register-container > .register-third > .label > .businessId-wrapper > .input:disabled::placeholder,
-          .register-container > .register-third > .label > .verifyNumber-wrapper > .input:disabled::placeholder {
-            color: #898989; }
-        .register-container > .register-third > .label > .input:hover,
-        .register-container > .register-third > .label > .id-wrapper > .input:hover,
-        .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:hover,
-        .register-container > .register-third > .label > .nickname-wrapper > .input:hover,
-        .register-container > .register-third > .label > .businessId-wrapper > .input:hover,
-        .register-container > .register-third > .label > .verifyNumber-wrapper > .input:hover {
-          border-bottom-color: #abaaa9; }
-        .register-container > .register-third > .label > .input:focus-within,
-        .register-container > .register-third > .label > .id-wrapper > .input:focus-within,
-        .register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:focus-within,
-        .register-container > .register-third > .label > .nickname-wrapper > .input:focus-within,
-        .register-container > .register-third > .label > .businessId-wrapper > .input:focus-within,
-        .register-container > .register-third > .label > .verifyNumber-wrapper > .input:focus-within {
-          border-bottom-color: #abaaa9; }
-      .register-container > .register-third > .label > .button {
-        margin-bottom: 0.75rem;
-        width: 7rem;
-        height: 2.5rem;
-        background-color: #89CC96;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        font-size: 0.95rem;
-        transition-duration: 300ms;
-        transition-property: background-color; }
-        .register-container > .register-third > .label > .button:disabled {
-          border-color: #e7e5e4 !important;
-          background-color: #e2e2e2 !important;
-          color: #898989;
-          cursor: revert; }
-        .register-container > .register-third > .label > .button:hover {
-          background-color: #78C38A; }
-        .register-container > .register-third > .label > .button:active {
-          background-color: #66B879; }
-    .register-container > .register-third > .passwordCheckLabel {
-      margin-bottom: 2rem; }
-    .register-container > .register-third > .button-wrapper {
-      align-items: stretch;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 1rem; }
-      .register-container > .register-third > .button-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-third > .button-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-third > .button-wrapper > .cancel {
-        width: 5rem;
-        height: 2.75rem;
-        background-color: #CFCFCF;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-third > .button-wrapper > .cancel:hover {
-          background-color: #c2c2c2; }
-        .register-container > .register-third > .button-wrapper > .cancel:active {
-          background-color: #b6b6b6; }
-      .register-container > .register-third > .button-wrapper > .previous {
-        width: 6rem;
-        height: 2.75rem;
-        background-color: #c4c4c4;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-third > .button-wrapper > .previous:hover {
-          background-color: #b7b7b7; }
-        .register-container > .register-third > .button-wrapper > .previous:active {
-          background-color: #ababab; }
-      .register-container > .register-third > .button-wrapper > .next {
-        width: 6rem;
-        height: 2.75rem;
-        background-color: #FDD072;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-third > .button-wrapper > .next:hover {
-          background-color: #F7C95F; }
-        .register-container > .register-third > .button-wrapper > .next:active {
-          background-color: #F2C255; }
-  .register-container > .register-forth {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    justify-content: flex-start;
-    width: 100%;
-    max-width: 35rem;
-    max-height: calc(100vh - 11rem);
-    background-color: #f9f9f9;
-    border-radius: 0.75rem;
-    border: 0.0625rem solid #E7E5E4;
-    padding: 2.5rem 4rem;
-    overflow: auto; }
-    .register-container > .register-forth > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .register-container > .register-forth > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .register-container > .register-forth.business {
-      max-width: 45rem !important; }
-    .register-container > .register-forth.hidden {
-      display: none; }
-    .register-container > .register-forth::-webkit-scrollbar {
-      width: 6px; }
-    .register-container > .register-forth::-webkit-scrollbar-thumb {
-      background-color: #d6d6d6;
-      border-radius: 999px; }
-    .register-container > .register-forth::-webkit-scrollbar-track {
-      background-color: transparent; }
-    .register-container > .register-forth > .title {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem; }
-    .register-container > .register-forth > .petRegistration {
-      margin-bottom: 0.75rem;
-      max-height: 2.5rem;
-      min-height: 2.5rem;
-      background-color: #89CC96;
-      border-radius: 0.35rem;
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition-duration: 300ms;
-      transition-property: background-color; }
-      .register-container > .register-forth > .petRegistration:hover {
-        background-color: #78C38A; }
-      .register-container > .register-forth > .petRegistration:active {
-        background-color: #66B879; }
-    .register-container > .register-forth > .pet-list {
-      align-items: stretch;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      justify-content: flex-start; }
-      .register-container > .register-forth > .pet-list > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-forth > .pet-list > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-forth > .pet-list > .pet {
-        align-items: stretch;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        justify-content: flex-start;
-        flex-grow: 1;
-        background-color: #ffffff;
-        border: 0.0625rem solid #e7e5e4;
-        border-radius: 0.35rem;
-        padding: 1rem 2rem;
-        position: relative; }
-        .register-container > .register-forth > .pet-list > .pet > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-forth > .pet-list > .pet > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-forth > .pet-list > .pet > .petInformation {
-          align-items: stretch;
-          display: flex;
-          flex-direction: row;
-          gap: 0;
-          justify-content: flex-start; }
-          .register-container > .register-forth > .pet-list > .pet > .petInformation > * {
-            flex-grow: 0;
-            flex-shrink: 0; }
-          .register-container > .register-forth > .pet-list > .pet > .petInformation > .-flex-stretch {
-            flex-grow: 1;
-            flex-shrink: 1; }
-          .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper {
-            align-items: center;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            justify-content: flex-start; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > * {
-              flex-grow: 0;
-              flex-shrink: 0; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .-flex-stretch {
-              flex-grow: 1;
-              flex-shrink: 1; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper {
-              align-items: center;
-              display: flex;
-              flex-direction: column;
-              gap: 0;
-              justify-content: center;
-              background-color: #ffffff;
-              border-radius: 999rem;
-              width: 6rem;
-              height: 6rem;
-              border: 0.0625rem solid #e7e5e4;
-              margin-left: 0.5rem; }
-              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > * {
-                flex-grow: 0;
-                flex-shrink: 0; }
-              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .-flex-stretch {
-                flex-grow: 1;
-                flex-shrink: 1; }
-              .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .petImage {
-                width: 5rem;
-                height: 5rem;
-                object-fit: cover;
-                border-radius: 999rem; }
-          .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail {
-            align-items: stretch;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            justify-content: flex-start;
-            margin-left: 3rem;
-            min-width: 0;
-            flex: 1; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > * {
-              flex-grow: 0;
-              flex-shrink: 0; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .-flex-stretch {
-              flex-grow: 1;
-              flex-shrink: 1; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .petName {
-              font-size: 1.1rem;
-              font-weight: 500; }
-              .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .petName > .gender {
-                width: 1rem;
-                height: 1rem; }
-            .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .introduction {
-              display: block;
-              max-width: 14rem;
-              white-space: normal;
-              word-break: break-word;
-              overflow-wrap: break-word; }
-        .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper {
-          align-items: stretch;
-          display: flex;
-          flex-direction: row;
-          gap: 0.5rem;
-          justify-content: flex-start; }
-          .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > * {
-            flex-grow: 0;
-            flex-shrink: 0; }
-          .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .-flex-stretch {
-            flex-grow: 1;
-            flex-shrink: 1; }
-          .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            gap: 0;
-            justify-content: center;
-            width: 7rem;
-            height: 1.75rem;
-            cursor: pointer;
-            background-color: #F9F9F9;
-            border: 0.0625rem solid #e7e5e4;
-            border-radius: 0.35rem;
-            color: #000000; }
-            .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember > * {
-              flex-grow: 0;
-              flex-shrink: 0; }
-            .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember > .-flex-stretch {
-              flex-grow: 1;
-              flex-shrink: 1; }
-            .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember > .text::before {
-              content: '대표지정'; }
-            .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember:has(> .checkbox:checked) {
-              background-color: #38A34C;
-              color: #FFFFFF; }
-              .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember:has(> .checkbox:checked) > .text::before {
-                content: '대표동물'; }
-          .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .modify {
-            cursor: pointer;
-            color: #565656; }
-          .register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .delete {
-            cursor: pointer;
-            color: #565656; }
-    .register-container > .register-forth > .warning {
-      font-size: 0.8rem;
-      font-weight: 300;
-      color: #888888; }
-      .register-container > .register-forth > .warning::before {
-        content: "";
-        width: 0.35rem;
-        height: 0.35rem;
-        border-radius: 999rem;
-        background-color: #afafaf;
-        display: inline-block;
-        margin-right: 0.45rem;
-        margin-bottom: 0.1rem; }
-      .register-container > .register-forth > .warning > .next-warning {
-        margin-left: 0.35rem; }
-    .register-container > .register-forth.business > .semiTitle::after {
-      content: '(선택)';
-      font-size: 1rem;
-      color: #565656; }
-    .register-container > .register-forth > .semiTitle {
-      margin-top: 1rem;
-      font-size: 1.25rem; }
-    .register-container > .register-forth > .semiTitle::before {
-      content: "";
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 999rem;
-      background-color: #89CC96;
-      display: inline-block;
-      margin-right: 0.5rem;
-      margin-bottom: 0.2rem; }
-    .register-container > .register-forth > .label {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      gap: 0.75rem;
-      justify-content: flex-start;
-      height: 3rem; }
-      .register-container > .register-forth > .label > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-forth > .label > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-forth > .label > .tel-wrapper {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        justify-content: flex-start;
-        flex-grow: 1; }
-        .register-container > .register-forth > .label > .tel-wrapper > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .register-container > .register-forth > .label > .tel-wrapper > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .register-container > .register-forth > .label > .tel-wrapper > .telFirst {
-          width: 6rem;
-          height: 2rem;
-          border-bottom: 0.1rem solid #E7E5E4;
-          font-size: 1rem;
-          transition-duration: 300ms;
-          transition-property: border-bottom-color; }
-        .register-container > .register-forth > .label > .tel-wrapper > .telMiddle,
-        .register-container > .register-forth > .label > .tel-wrapper > .telLast {
-          border-bottom: 0.1rem solid #E7E5E4;
-          height: 2rem;
-          font-size: 1rem;
-          width: 6rem;
-          transition-duration: 300ms;
-          transition-property: border-bottom-color;
-          flex-grow: 1; }
-          .register-container > .register-forth > .label > .tel-wrapper > .telMiddle:hover,
-          .register-container > .register-forth > .label > .tel-wrapper > .telLast:hover {
-            border-bottom-color: #dbd8d7; }
-          .register-container > .register-forth > .label > .tel-wrapper > .telMiddle:focus-within,
-          .register-container > .register-forth > .label > .tel-wrapper > .telLast:focus-within {
-            border-bottom-color: #cfcbc9; }
-      .register-container > .register-forth > .label > .caption {
-        width: 8rem;
-        color: #565656;
-        font-size: 1.1rem;
-        font-weight: 500; }
-      .register-container > .register-forth > .label > .category {
-        width: 6rem;
-        height: 2.35rem;
-        border: 0.0625rem solid #e7e5e4;
-        border-radius: 0.35rem;
-        flex-grow: 1;
-        color: #565656;
-        cursor: pointer;
-        padding: 0 0.75rem; }
-      .register-container > .register-forth > .label > .input {
-        border-bottom: 0.1rem solid #E7E5E4;
-        height: 2rem;
-        width: 17.5rem;
-        font-size: 1rem;
-        transition-duration: 300ms;
-        transition-property: border-bottom-color;
-        flex-grow: 1; }
-        .register-container > .register-forth > .label > .input:hover {
-          border-bottom-color: #dbd8d7; }
-        .register-container > .register-forth > .label > .input:focus-within {
-          border-bottom-color: #cfcbc9; }
-      .register-container > .register-forth > .label > .button {
-        margin-bottom: 0.75rem;
-        width: 7rem;
-        height: 2.5rem;
-        background-color: #89CC96;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        font-size: 0.95rem;
-        transition-duration: 300ms;
-        transition-property: background-color; }
-        .register-container > .register-forth > .label > .button:hover {
-          background-color: #78C38A; }
-        .register-container > .register-forth > .label > .button:active {
-          background-color: #66B879; }
-    .register-container > .register-forth > .button-wrapper {
-      align-items: stretch;
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 1rem; }
-      .register-container > .register-forth > .button-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .register-container > .register-forth > .button-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .register-container > .register-forth > .button-wrapper > .cancel {
-        width: 5rem;
-        height: 2.75rem;
-        background-color: #CFCFCF;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-forth > .button-wrapper > .cancel:hover {
-          background-color: #c2c2c2; }
-        .register-container > .register-forth > .button-wrapper > .cancel:active {
-          background-color: #b6b6b6; }
-      .register-container > .register-forth > .button-wrapper > .previous {
-        width: 6rem;
-        height: 2.75rem;
-        background-color: #c4c4c4;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-forth > .button-wrapper > .previous:hover {
-          background-color: #b7b7b7; }
-        .register-container > .register-forth > .button-wrapper > .previous:active {
-          background-color: #ababab; }
-      .register-container > .register-forth > .button-wrapper > .complete {
-        width: 7.5rem;
-        height: 2.75rem;
-        background-color: #38A34C;
-        border-radius: 0.35rem;
-        color: #ffffff;
-        cursor: pointer;
-        transition-duration: 250ms;
-        transition-property: background-color; }
-        .register-container > .register-forth > .button-wrapper > .complete:hover {
-          background-color: #2F8F43; }
-        .register-container > .register-forth > .button-wrapper > .complete:active {
-          background-color: #287A39; }
+  margin-top: 5rem;
+}
+.register-container > .register-first {
+  width: 100%;
+  max-width: 45rem;
+  min-height: 40rem;
+  background-color: #f9f9f9;
+  border-radius: 0.75rem;
+  border: 0.0625rem solid #E7E5E4;
+  overflow: hidden auto;
+  padding: 3rem 5.5rem;
+}
+.register-container > .register-first.hidden {
+  display: none;
+}
+.register-container > .register-first > .title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 4rem;
+}
+.register-container > .register-first > .text {
+  font-size: 1.25rem;
+  color: #565656;
+}
+.register-container > .register-first > .text::before {
+  content: "";
+  width: 0.75rem;
+  height: 0.75rem;
+  display: inline-block;
+  background-color: #38A34C;
+  border-radius: 999rem;
+  margin-bottom: 0.1rem;
+  margin-right: 0.5rem;
+}
+.register-container > .register-first > .select-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: flex-start;
+}
+.register-container > .register-first > .select-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-first > .select-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-first > .select-wrapper {
+  height: 100%;
+  margin-top: 2rem;
+}
+.register-container > .register-first > .select-wrapper > .personal-member,
+.register-container > .register-first > .select-wrapper > .business-member {
+  flex-grow: 1;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+.register-container > .register-first > .select-wrapper > .personal-member > *,
+.register-container > .register-first > .select-wrapper > .business-member > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-first > .select-wrapper > .personal-member > .-flex-stretch,
+.register-container > .register-first > .select-wrapper > .business-member > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-first > .select-wrapper > .personal-member,
+.register-container > .register-first > .select-wrapper > .business-member {
+  /*width: 16rem;*/
+  /*min-height: 23rem;*/
+  background-color: #f1f1f1;
+  border: 0.0625rem solid #E7E5E4;
+  border-radius: 0.35rem;
+  padding: 2rem;
+  cursor: pointer;
+}
+.register-container > .register-first > .select-wrapper > .personal-member:has(> .memberType:checked),
+.register-container > .register-first > .select-wrapper > .business-member:has(> .memberType:checked) {
+  background-color: #FDD072;
+  border-color: #FDD072;
+  color: #ffffff;
+}
+.register-container > .register-first > .select-wrapper > .personal-member:has(> .memberType:checked) > .description,
+.register-container > .register-first > .select-wrapper > .business-member:has(> .memberType:checked) > .description {
+  color: #ffffff;
+}
+.register-container > .register-first > .select-wrapper > .personal-member:has(> .memberType:checked) > .image,
+.register-container > .register-first > .select-wrapper > .business-member:has(> .memberType:checked) > .image {
+  filter: invert(1);
+}
+.register-container > .register-first > .select-wrapper > .personal-member:hover,
+.register-container > .register-first > .select-wrapper > .business-member:hover {
+  background-color: #FDD072;
+  border-color: #FDD072;
+  color: #ffffff;
+}
+.register-container > .register-first > .select-wrapper > .personal-member:hover > .description,
+.register-container > .register-first > .select-wrapper > .business-member:hover > .description {
+  color: #ffffff;
+}
+.register-container > .register-first > .select-wrapper > .personal-member:hover > .image,
+.register-container > .register-first > .select-wrapper > .business-member:hover > .image {
+  filter: invert(1);
+}
+.register-container > .register-first > .select-wrapper > .personal-member > .title,
+.register-container > .register-first > .select-wrapper > .business-member > .title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.register-container > .register-first > .select-wrapper > .personal-member > .description,
+.register-container > .register-first > .select-wrapper > .business-member > .description {
+  text-align: center;
+  color: #565656;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.register-container > .register-first > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+.register-container > .register-first > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-first > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-first > .button-wrapper {
+  margin-top: 3.5rem;
+}
+.register-container > .register-first > .button-wrapper > .cancel {
+  width: 5rem;
+  height: 2.75rem;
+  background-color: #CFCFCF;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-first > .button-wrapper > .cancel:hover {
+  background-color: rgb(194.25, 194.25, 194.25);
+}
+.register-container > .register-first > .button-wrapper > .cancel:active {
+  background-color: rgb(181.5, 181.5, 181.5);
+}
+.register-container > .register-second {
+  width: 100%;
+  max-width: 60rem;
+  max-height: calc(100dvh - 11rem);
+  background-color: #f9f9f9;
+  border-radius: 0.75rem;
+  border: 0.0625rem solid #E7E5E4;
+  padding: 3rem 4rem;
+  overflow: hidden auto;
+}
+.register-container > .register-second.hidden {
+  display: none;
+}
+.register-container > .register-second::-webkit-scrollbar {
+  width: 6px;
+}
+.register-container > .register-second::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 999px;
+}
+.register-container > .register-second::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.register-container > .register-second > .register-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+}
+.register-container > .register-second > .agreement-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+}
+.register-container > .register-second > .agreement-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-second > .agreement-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .semiTitle {
+  margin-top: 1rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .semiTitle::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999rem;
+  background-color: #89CC96;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: flex-start;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box {
+  max-height: 8rem;
+  overflow: hidden auto;
+  background-color: #f3f3f3;
+  border-radius: 0.35rem;
+  padding: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #565656;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box > .title {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box > ul {
+  list-style-type: revert;
+  margin-left: 1.5rem;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box::-webkit-scrollbar {
+  width: 4px;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box::-webkit-scrollbar-thumb {
+  background-color: #cfcfcf;
+  border-radius: 999px;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .text-box::-webkit-scrollbar-track {
+  background-color: #eaeaea;
+  border-radius: 999px;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: center;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check {
+  text-align: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #565656;
+  width: fit-content;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .text {
+  font-size: 1rem;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .circle {
+  width: 1.1625rem;
+  height: 1.1625rem;
+  border-radius: 999rem;
+  border: 0.0625rem solid #89CC96;
+  margin-right: 0.5rem;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check > .circle > .image {
+  width: 1rem;
+  height: 1rem;
+  display: none;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check:has(.checkbox:checked) > .circle {
+  background-color: #89CC96;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check:has(.checkbox:checked) > .circle > .image {
+  display: block;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check.required .text::before {
+  content: "[필수] ";
+  color: #f44336;
+  font-size: 1rem;
+}
+.register-container > .register-second > .agreement-wrapper > .agreement > .agreement-check.optional > .text::before {
+  content: "[선택] ";
+  color: #a9a9a9;
+  font-size: 1rem;
+}
+.register-container > .register-second > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+.register-container > .register-second > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-second > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-second > .button-wrapper {
+  margin-top: 3.5rem;
+}
+.register-container > .register-second > .button-wrapper > .cancel {
+  width: 5rem;
+  height: 2.75rem;
+  background-color: #CFCFCF;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-second > .button-wrapper > .cancel:hover {
+  background-color: rgb(194.25, 194.25, 194.25);
+}
+.register-container > .register-second > .button-wrapper > .cancel:active {
+  background-color: rgb(181.5, 181.5, 181.5);
+}
+.register-container > .register-second > .button-wrapper > .previous {
+  width: 6rem;
+  height: 2.75rem;
+  background-color: #c4c4c4;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-second > .button-wrapper > .previous:hover {
+  background-color: rgb(183.25, 183.25, 183.25);
+}
+.register-container > .register-second > .button-wrapper > .previous:active {
+  background-color: rgb(170.5, 170.5, 170.5);
+}
+.register-container > .register-second > .button-wrapper > .next {
+  width: 6rem;
+  height: 2.75rem;
+  background-color: #FDD072;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-second > .button-wrapper > .next:hover {
+  background-color: #F7C95F;
+}
+.register-container > .register-second > .button-wrapper > .next:active {
+  background-color: #F2C255;
+}
+.register-container > .register-third {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third {
+  width: 100%;
+  max-width: 45rem;
+  max-height: calc(100vh - 11rem);
+  background-color: #f9f9f9;
+  border-radius: 0.75rem;
+  border: 0.0625rem solid #E7E5E4;
+  padding: 2.5rem 4rem;
+  overflow: auto;
+}
+.register-container > .register-third.hidden {
+  display: none;
+}
+.register-container > .register-third::-webkit-scrollbar {
+  width: 6px;
+}
+.register-container > .register-third::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 999px;
+}
+.register-container > .register-third::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.register-container > .register-third > .title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.register-container > .register-third > .semiTitle {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+.register-container > .register-third > .semiTitle::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999rem;
+  background-color: #89CC96;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.register-container > .register-third > .label {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label {
+  height: 3rem;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper {
+  margin-top: 1.5rem;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .countTime {
+  display: none;
+  align-self: flex-end;
+  color: #565656;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .countTime.visible {
+  display: revert;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber:disabled {
+  border-color: #e7e5e4 !important;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber:disabled::placeholder {
+  color: #898989;
+}
+.register-container > .register-third > .label.emailVerifyLabel > .button:disabled {
+  border-color: #e7e5e4 !important;
+  background-color: rgb(226.25, 226.25, 226.25) !important;
+  color: #898989;
+  cursor: default;
+}
+.register-container > .register-third > .label.addressLabel > .input, .register-container > .register-third > .label.primaryAddressLabel > .input {
+  cursor: default;
+  border-color: #e7e5e4 !important;
+}
+.register-container > .register-third > .label > .caption {
+  width: 8rem;
+  color: #565656;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.register-container > .register-third > .label > .id-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label > .id-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label > .id-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label > .id-wrapper {
+  margin-top: 1.5rem;
+  flex-grow: 1;
+}
+.register-container > .register-third > .label > .id-wrapper > .text {
+  opacity: 0;
+  color: #ff4646;
+  pointer-events: none;
+  padding: 0.5rem 0 0 0;
+  margin-top: 0;
+  transition-duration: 250ms;
+  transition-property: opacity;
+}
+.register-container > .register-third > .label > .id-wrapper > .text.visible {
+  opacity: 1;
+}
+.register-container > .register-third > .label > .phone-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label > .phone-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label > .phone-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label > .phone-wrapper {
+  margin-top: 1.5rem;
+  flex-grow: 1;
+}
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .firstNumber {
+  width: 6rem;
+  height: 2.35rem;
+  border: 0.0625rem solid #e7e5e4;
+  flex-grow: 1;
+  color: #565656;
+}
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .contactNumber {
+  width: 6rem;
+  flex-grow: 1;
+}
+.register-container > .register-third > .label > .phone-wrapper > .text {
+  opacity: 0;
+  color: #ff4646;
+  pointer-events: none;
+  padding: 0.5rem 0 0 0;
+  margin-top: 0;
+  transition-duration: 250ms;
+  transition-property: opacity;
+}
+.register-container > .register-third > .label > .phone-wrapper > .text.visible {
+  opacity: 1;
+}
+.register-container > .register-third > .label > .nickname-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label > .nickname-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label > .nickname-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label > .nickname-wrapper {
+  margin-top: 1.5rem;
+  flex-grow: 1;
+}
+.register-container > .register-third > .label > .nickname-wrapper > .text {
+  opacity: 0;
+  color: #ff4646;
+  pointer-events: none;
+  padding: 0.5rem 0 0 0;
+  margin-top: 0;
+  transition-duration: 250ms;
+  transition-property: opacity;
+}
+.register-container > .register-third > .label > .nickname-wrapper > .text.visible {
+  opacity: 1;
+}
+.register-container > .register-third > .label > .businessId-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: flex-start;
+}
+.register-container > .register-third > .label > .businessId-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .label > .businessId-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .label > .businessId-wrapper {
+  margin-top: 1.5rem;
+  flex-grow: 1;
+}
+.register-container > .register-third > .label > .businessId-wrapper > .text {
+  opacity: 0;
+  color: #ff4646;
+  pointer-events: none;
+  padding: 0.5rem 0 0 0;
+  margin-top: 0;
+  transition-duration: 250ms;
+  transition-property: opacity;
+}
+.register-container > .register-third > .label > .businessId-wrapper > .text.visible {
+  opacity: 1;
+}
+.register-container > .register-third > .label > .input,
+.register-container > .register-third > .label > .id-wrapper > .input,
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input,
+.register-container > .register-third > .label > .nickname-wrapper > .input,
+.register-container > .register-third > .label > .businessId-wrapper > .input,
+.register-container > .register-third > .label > .verifyNumber-wrapper > .input {
+  border-bottom: 0.1rem solid #E7E5E4;
+  height: 2rem;
+  font-size: 1rem;
+  transition-duration: 300ms;
+  transition-property: border-bottom-color;
+  flex-grow: 1;
+}
+.register-container > .register-third > .label > .input:disabled,
+.register-container > .register-third > .label > .id-wrapper > .input:disabled,
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:disabled,
+.register-container > .register-third > .label > .nickname-wrapper > .input:disabled,
+.register-container > .register-third > .label > .businessId-wrapper > .input:disabled,
+.register-container > .register-third > .label > .verifyNumber-wrapper > .input:disabled {
+  border-color: #e7e5e4 !important;
+  color: #bcbcbc;
+}
+.register-container > .register-third > .label > .input:disabled::placeholder,
+.register-container > .register-third > .label > .id-wrapper > .input:disabled::placeholder,
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:disabled::placeholder,
+.register-container > .register-third > .label > .nickname-wrapper > .input:disabled::placeholder,
+.register-container > .register-third > .label > .businessId-wrapper > .input:disabled::placeholder,
+.register-container > .register-third > .label > .verifyNumber-wrapper > .input:disabled::placeholder {
+  color: #898989;
+}
+.register-container > .register-third > .label > .input:hover,
+.register-container > .register-third > .label > .id-wrapper > .input:hover,
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:hover,
+.register-container > .register-third > .label > .nickname-wrapper > .input:hover,
+.register-container > .register-third > .label > .businessId-wrapper > .input:hover,
+.register-container > .register-third > .label > .verifyNumber-wrapper > .input:hover {
+  border-bottom-color: #abaaa9;
+}
+.register-container > .register-third > .label > .input:focus-within,
+.register-container > .register-third > .label > .id-wrapper > .input:focus-within,
+.register-container > .register-third > .label > .phone-wrapper > .number-wrapper > .input:focus-within,
+.register-container > .register-third > .label > .nickname-wrapper > .input:focus-within,
+.register-container > .register-third > .label > .businessId-wrapper > .input:focus-within,
+.register-container > .register-third > .label > .verifyNumber-wrapper > .input:focus-within {
+  border-bottom-color: #abaaa9;
+}
+.register-container > .register-third > .label > .button {
+  margin-bottom: 0.75rem;
+  width: 7rem;
+  height: 2.5rem;
+  background-color: #89CC96;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition-duration: 300ms;
+  transition-property: background-color;
+}
+.register-container > .register-third > .label > .button:disabled {
+  border-color: #e7e5e4 !important;
+  background-color: rgb(226.25, 226.25, 226.25) !important;
+  color: #898989;
+  cursor: revert;
+}
+.register-container > .register-third > .label > .button:hover {
+  background-color: #78C38A;
+}
+.register-container > .register-third > .label > .button:active {
+  background-color: #66B879;
+}
+.register-container > .register-third > .passwordCheckLabel {
+  margin-bottom: 2rem;
+}
+.register-container > .register-third > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+.register-container > .register-third > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-third > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-third > .button-wrapper {
+  margin-top: 1rem;
+}
+.register-container > .register-third > .button-wrapper > .cancel {
+  width: 5rem;
+  height: 2.75rem;
+  background-color: #CFCFCF;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-third > .button-wrapper > .cancel:hover {
+  background-color: rgb(194.25, 194.25, 194.25);
+}
+.register-container > .register-third > .button-wrapper > .cancel:active {
+  background-color: rgb(181.5, 181.5, 181.5);
+}
+.register-container > .register-third > .button-wrapper > .previous {
+  width: 6rem;
+  height: 2.75rem;
+  background-color: #c4c4c4;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-third > .button-wrapper > .previous:hover {
+  background-color: rgb(183.25, 183.25, 183.25);
+}
+.register-container > .register-third > .button-wrapper > .previous:active {
+  background-color: rgb(170.5, 170.5, 170.5);
+}
+.register-container > .register-third > .button-wrapper > .next {
+  width: 6rem;
+  height: 2.75rem;
+  background-color: #FDD072;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-third > .button-wrapper > .next:hover {
+  background-color: #F7C95F;
+}
+.register-container > .register-third > .button-wrapper > .next:active {
+  background-color: #F2C255;
+}
+.register-container > .register-forth {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth {
+  width: 100%;
+  max-width: 35rem;
+  max-height: calc(100vh - 11rem);
+  background-color: #f9f9f9;
+  border-radius: 0.75rem;
+  border: 0.0625rem solid #E7E5E4;
+  padding: 2.5rem 4rem;
+  overflow: auto;
+}
+.register-container > .register-forth.business {
+  max-width: 45rem !important;
+}
+.register-container > .register-forth.hidden {
+  display: none;
+}
+.register-container > .register-forth::-webkit-scrollbar {
+  width: 6px;
+}
+.register-container > .register-forth::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 999px;
+}
+.register-container > .register-forth::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.register-container > .register-forth > .title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.register-container > .register-forth > .petRegistration {
+  margin-bottom: 0.75rem;
+  max-height: 2.5rem;
+  min-height: 2.5rem;
+  background-color: #89CC96;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition-duration: 300ms;
+  transition-property: background-color;
+}
+.register-container > .register-forth > .petRegistration:hover {
+  background-color: #78C38A;
+}
+.register-container > .register-forth > .petRegistration:active {
+  background-color: #66B879;
+}
+.register-container > .register-forth > .pet-list {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .pet-list > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .pet-list > .pet > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet {
+  flex-grow: 1;
+  background-color: #ffffff;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  padding: 1rem 2rem;
+  position: relative;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper {
+  background-color: #ffffff;
+  border-radius: 999rem;
+  width: 6rem;
+  height: 6rem;
+  border: 0.0625rem solid #e7e5e4;
+  margin-left: 0.5rem;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .petImage {
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 999rem;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail {
+  margin-left: 3rem;
+  min-width: 0;
+  flex: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .petName {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .petName > .gender {
+  width: 1rem;
+  height: 1rem;
+}
+.register-container > .register-forth > .pet-list > .pet > .petInformation > .detail > .introduction {
+  display: block;
+  max-width: 14rem;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: center;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember {
+  width: 7rem;
+  height: 1.75rem;
+  cursor: pointer;
+  background-color: #F9F9F9;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  color: #000000;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember > .text::before {
+  content: "대표지정";
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember:has(> .checkbox:checked) {
+  background-color: #38A34C;
+  color: #FFFFFF;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .remember:has(> .checkbox:checked) > .text::before {
+  content: "대표동물";
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .modify {
+  cursor: pointer;
+  color: #565656;
+}
+.register-container > .register-forth > .pet-list > .pet > .bottom-wrapper > .delete {
+  cursor: pointer;
+  color: #565656;
+}
+.register-container > .register-forth > .warning {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #888888;
+}
+.register-container > .register-forth > .warning::before {
+  content: "";
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999rem;
+  background-color: #afafaf;
+  display: inline-block;
+  margin-right: 0.45rem;
+  margin-bottom: 0.1rem;
+}
+.register-container > .register-forth > .warning > .next-warning {
+  margin-left: 0.35rem;
+}
+.register-container > .register-forth.business > .semiTitle::after {
+  content: "(선택)";
+  font-size: 1rem;
+  color: #565656;
+}
+.register-container > .register-forth > .semiTitle {
+  margin-top: 1rem;
+  font-size: 1.25rem;
+}
+.register-container > .register-forth > .semiTitle::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999rem;
+  background-color: #89CC96;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+.register-container > .register-forth > .label {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .label > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .label > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .label {
+  height: 3rem;
+}
+.register-container > .register-forth > .label > .tel-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.register-container > .register-forth > .label > .tel-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .label > .tel-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .label > .tel-wrapper {
+  flex-grow: 1;
+}
+.register-container > .register-forth > .label > .tel-wrapper > .telFirst {
+  width: 6rem;
+  height: 2rem;
+  border-bottom: 0.1rem solid #E7E5E4;
+  font-size: 1rem;
+  transition-duration: 300ms;
+  transition-property: border-bottom-color;
+}
+.register-container > .register-forth > .label > .tel-wrapper > .telMiddle,
+.register-container > .register-forth > .label > .tel-wrapper > .telLast {
+  border-bottom: 0.1rem solid #E7E5E4;
+  height: 2rem;
+  font-size: 1rem;
+  width: 6rem;
+  transition-duration: 300ms;
+  transition-property: border-bottom-color;
+  flex-grow: 1;
+}
+.register-container > .register-forth > .label > .tel-wrapper > .telMiddle:hover,
+.register-container > .register-forth > .label > .tel-wrapper > .telLast:hover {
+  border-bottom-color: rgb(219, 216, 214.5);
+}
+.register-container > .register-forth > .label > .tel-wrapper > .telMiddle:focus-within,
+.register-container > .register-forth > .label > .tel-wrapper > .telLast:focus-within {
+  border-bottom-color: #cfcbc9;
+}
+.register-container > .register-forth > .label > .caption {
+  width: 8rem;
+  color: #565656;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.register-container > .register-forth > .label > .category {
+  width: 6rem;
+  height: 2.35rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  flex-grow: 1;
+  color: #565656;
+  cursor: pointer;
+  padding: 0 0.75rem;
+}
+.register-container > .register-forth > .label > .input {
+  border-bottom: 0.1rem solid #E7E5E4;
+  height: 2rem;
+  width: 17.5rem;
+  font-size: 1rem;
+  transition-duration: 300ms;
+  transition-property: border-bottom-color;
+  flex-grow: 1;
+}
+.register-container > .register-forth > .label > .input:hover {
+  border-bottom-color: rgb(219, 216, 214.5);
+}
+.register-container > .register-forth > .label > .input:focus-within {
+  border-bottom-color: #cfcbc9;
+}
+.register-container > .register-forth > .label > .button {
+  margin-bottom: 0.75rem;
+  width: 7rem;
+  height: 2.5rem;
+  background-color: #89CC96;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition-duration: 300ms;
+  transition-property: background-color;
+}
+.register-container > .register-forth > .label > .button:hover {
+  background-color: #78C38A;
+}
+.register-container > .register-forth > .label > .button:active {
+  background-color: #66B879;
+}
+.register-container > .register-forth > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+.register-container > .register-forth > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.register-container > .register-forth > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.register-container > .register-forth > .button-wrapper {
+  margin-top: 1rem;
+}
+.register-container > .register-forth > .button-wrapper > .cancel {
+  width: 5rem;
+  height: 2.75rem;
+  background-color: #CFCFCF;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-forth > .button-wrapper > .cancel:hover {
+  background-color: rgb(194.25, 194.25, 194.25);
+}
+.register-container > .register-forth > .button-wrapper > .cancel:active {
+  background-color: rgb(181.5, 181.5, 181.5);
+}
+.register-container > .register-forth > .button-wrapper > .previous {
+  width: 6rem;
+  height: 2.75rem;
+  background-color: #c4c4c4;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-forth > .button-wrapper > .previous:hover {
+  background-color: rgb(183.25, 183.25, 183.25);
+}
+.register-container > .register-forth > .button-wrapper > .previous:active {
+  background-color: rgb(170.5, 170.5, 170.5);
+}
+.register-container > .register-forth > .button-wrapper > .complete {
+  width: 7.5rem;
+  height: 2.75rem;
+  background-color: #38A34C;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.register-container > .register-forth > .button-wrapper > .complete:hover {
+  background-color: #2F8F43;
+}
+.register-container > .register-forth > .button-wrapper > .complete:active {
+  background-color: #287A39;
+}
 
 body:has(> .dialog.visible) .cover {
   opacity: 1;
-  pointer-events: auto; }
+  pointer-events: auto;
+}
 
 .cover {
   content: "";
@@ -1278,10 +1608,11 @@ body:has(> .dialog.visible) .cover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #212121a0;
+  background-color: rgba(33, 33, 33, 0.6274509804);
   z-index: 29;
   opacity: 0;
-  pointer-events: none; }
+  pointer-events: none;
+}
 
 .loading {
   align-items: center;
@@ -1289,48 +1620,60 @@ body:has(> .dialog.visible) .cover {
   flex-direction: column;
   gap: 1.5rem;
   justify-content: center;
+}
+.loading > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.loading > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.loading {
   width: 100%;
   height: 100%;
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #212121a0;
+  background-color: rgba(33, 33, 33, 0.6274509804);
   opacity: 0;
   z-index: 29;
   pointer-events: none;
   transition-duration: 175ms;
-  transition-property: opacity; }
-  .loading > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .loading > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .loading.visible {
-    opacity: 1;
-    pointer-events: auto; }
-  .loading > .icon {
-    width: 3.5rem;
-    height: 3.5rem;
-    animation-duration: 1s;
-    animation-iteration-count: infinite;
-    animation-name: anim;
-    animation-timing-function: linear;
-    background-image: url("data:image/svg+xml;utf8,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0,0,256,256'%3E%3Cg fill='%23ffffff' fill-rule='nonzero' stroke='none' stroke-width='1' stroke-linecap='butt' stroke-linejoin='miter' stroke-miterlimit='10' stroke-dasharray='' stroke-dashoffset='0' font-family='none' font-weight='none' font-size='none' text-anchor='none' style='mix-blend-mode: normal'%3E%3Cg transform='scale(5.12,5.12)'%3E%3Cpath d='M25.00586,2.00195c-9.51246,0 -17.67532,5.78862 -21.17187,14.03711c-0.02548,0.04319 -0.04768,0.08824 -0.06641,0.13477c-0.0838,0.20186 -0.15089,0.40642 -0.22852,0.60938c-0.105,0.27404 -0.21585,0.54525 -0.31055,0.82422c-0.17304,0.5093 -0.32878,1.02156 -0.46484,1.53516c-0.00134,0.0052 -0.00265,0.01041 -0.00391,0.01563c-0.00813,0.03105 -0.01934,0.06069 -0.02734,0.0918c-0.1379,0.53496 0.1839,1.08044 0.71882,1.21848c0.53492,0.13804 1.08049,-0.1836 1.21868,-0.71848c0.00372,-0.01446 0.00797,-0.02852 0.01172,-0.04297c0.12864,-0.49539 0.2802,-0.98045 0.44336,-1.46094c0.08624,-0.25364 0.18664,-0.50564 0.2832,-0.75781c3.02232,-7.88054 10.64077,-13.48633 19.59766,-13.48633c11.60854,0 20.99805,9.3895 20.99805,20.99805c-0.0051,0.36064 0.18438,0.69608 0.49587,0.87789c0.3115,0.18181 0.69676,0.18181 1.00825,0c0.3115,-0.18181 0.50097,-0.51725 0.49587,-0.87789c0,-12.68946 -10.30859,-22.99805 -22.99805,-22.99805zM2.70898,24.0918l-0.64453,0.62305l-0.05664,0.34766l0.01563,0.94141l0.00195,0.0293l0.00195,0.02734l0.0918,1.24805l0.00195,0.0293l0.00391,0.02734l0.16406,1.23828l0.00391,0.02734l0.00586,0.02734l0.23047,1.22461l0.00586,0.02734l0.00781,0.02734l0.24609,0.99219l0.58398,0.68164l0.89453,-0.06055l0.48633,-0.75195l-0.02344,-0.35156l-0.24219,-0.97266l-0.2168,-1.13281l-0.00195,-0.01758l-0.15625,-1.18945l-0.08984,-1.20508l-0.00195,-0.01758l-0.01367,-0.88281l-0.41406,-0.79492zM6.05273,34.95508l-0.84375,0.30664l-0.25977,0.85742l0.12109,0.33008l0.35547,0.61523l0.01563,0.02539l0.01367,0.02344l0.68359,1.03906l0.01563,0.02344l0.01758,0.02344l0.74219,1.00195l0.01563,0.02344l0.01953,0.02148l0.79883,0.96094l0.01953,0.02148l0.01953,0.02148l0.85742,0.91797l0.83984,0.31055l0.75195,-0.48633l0.06055,-0.89453l-0.19141,-0.29492l-0.8457,-0.9043l-0.01172,-0.01367l-0.74609,-0.89844l-0.69141,-0.93164l-0.65234,-0.99023l-0.00586,-0.01172l-0.35156,-0.60547zM40.38867,39.71094c-0.25937,0.00517 -0.50658,0.11091 -0.68945,0.29492c-0.22789,0.22312 -0.45979,0.44062 -0.69727,0.65234c-0.28155,0.23352 -0.41315,0.60213 -0.34315,0.96117c0.07,0.35903 0.33043,0.65121 0.67909,0.76186c0.34866,0.11065 0.72991,0.02213 0.99414,-0.23084c0.26052,-0.23227 0.51552,-0.46997 0.76563,-0.71484c0.29905,-0.2844 0.3927,-0.72327 0.23578,-1.10497c-0.15691,-0.38169 -0.53216,-0.62781 -0.94477,-0.61964zM13.80859,42.9707c-0.44313,0.02511 -0.81671,0.33927 -0.91743,0.77154c-0.10073,0.43226 0.09549,0.8792 0.48189,1.09761c0.89063,0.52058 1.82698,0.98916 2.80664,1.39648c0.01804,0.00704 0.03627,0.01355 0.05469,0.01953c0.306,0.12682 0.61334,0.24763 0.92188,0.35938c0.33773,0.12869 0.71862,0.06514 0.99629,-0.16622c0.27767,-0.23136 0.4089,-0.59452 0.34328,-0.94993c-0.06562,-0.35541 -0.3179,-0.64776 -0.65988,-0.76471c-0.29715,-0.10762 -0.5927,-0.22296 -0.88672,-0.3457c-0.00065,0 -0.0013,0 -0.00195,0c-0.89634,-0.37268 -1.75108,-0.79997 -2.56445,-1.27539c-0.17265,-0.10435 -0.37281,-0.15405 -0.57422,-0.14258zM34.22656,43.94727l-0.3418,0.08008l-1.02734,0.44531l-0.01367,0.00586l-0.90234,0.32422l-0.61719,0.65039l0.15039,0.88281l0.79883,0.4082l0.3457,-0.05859l0.91602,-0.33008l0.0293,-0.01172l0.0293,-0.01172l1.08398,-0.46875l0.57617,-0.6875l-0.20508,-0.87109zM25.90234,45.96875l-0.49805,0.0293l-1.55469,-0.02734v0.02148l-0.78711,0.30859l-0.23633,0.86328l0.55078,0.70703l0.33984,0.09375l0.02734,0.00195l0.03711,0.00391h0.03711l1.60938,0.02734h0.03711l0.03711,-0.00195l0.51563,-0.0293l0.77734,-0.44727l0.10742,-0.88867l-0.64844,-0.61914z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain; }
+  transition-property: opacity;
+}
+.loading.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
 @keyframes anim {
   from {
-    transform: rotateZ(0deg); }
+    transform: rotateZ(0deg);
+  }
   to {
-    transform: rotateZ(360deg); } }
-  .loading > .message {
-    color: #ffffff;
-    font-size: 1.25rem;
-    font-weight: 300; }
-    .loading > .message:before {
-      content: '잠시만 기다려 주세요.'; }
+    transform: rotateZ(360deg);
+  }
+}
+.loading > .icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: anim;
+  animation-timing-function: linear;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='50px' height='50px' viewBox='0,0,256,256'%3E%3Cg fill='%23ffffff' fill-rule='nonzero' stroke='none' stroke-width='1' stroke-linecap='butt' stroke-linejoin='miter' stroke-miterlimit='10' stroke-dasharray='' stroke-dashoffset='0' font-family='none' font-weight='none' font-size='none' text-anchor='none' style='mix-blend-mode: normal'%3E%3Cg transform='scale(5.12,5.12)'%3E%3Cpath d='M25.00586,2.00195c-9.51246,0 -17.67532,5.78862 -21.17187,14.03711c-0.02548,0.04319 -0.04768,0.08824 -0.06641,0.13477c-0.0838,0.20186 -0.15089,0.40642 -0.22852,0.60938c-0.105,0.27404 -0.21585,0.54525 -0.31055,0.82422c-0.17304,0.5093 -0.32878,1.02156 -0.46484,1.53516c-0.00134,0.0052 -0.00265,0.01041 -0.00391,0.01563c-0.00813,0.03105 -0.01934,0.06069 -0.02734,0.0918c-0.1379,0.53496 0.1839,1.08044 0.71882,1.21848c0.53492,0.13804 1.08049,-0.1836 1.21868,-0.71848c0.00372,-0.01446 0.00797,-0.02852 0.01172,-0.04297c0.12864,-0.49539 0.2802,-0.98045 0.44336,-1.46094c0.08624,-0.25364 0.18664,-0.50564 0.2832,-0.75781c3.02232,-7.88054 10.64077,-13.48633 19.59766,-13.48633c11.60854,0 20.99805,9.3895 20.99805,20.99805c-0.0051,0.36064 0.18438,0.69608 0.49587,0.87789c0.3115,0.18181 0.69676,0.18181 1.00825,0c0.3115,-0.18181 0.50097,-0.51725 0.49587,-0.87789c0,-12.68946 -10.30859,-22.99805 -22.99805,-22.99805zM2.70898,24.0918l-0.64453,0.62305l-0.05664,0.34766l0.01563,0.94141l0.00195,0.0293l0.00195,0.02734l0.0918,1.24805l0.00195,0.0293l0.00391,0.02734l0.16406,1.23828l0.00391,0.02734l0.00586,0.02734l0.23047,1.22461l0.00586,0.02734l0.00781,0.02734l0.24609,0.99219l0.58398,0.68164l0.89453,-0.06055l0.48633,-0.75195l-0.02344,-0.35156l-0.24219,-0.97266l-0.2168,-1.13281l-0.00195,-0.01758l-0.15625,-1.18945l-0.08984,-1.20508l-0.00195,-0.01758l-0.01367,-0.88281l-0.41406,-0.79492zM6.05273,34.95508l-0.84375,0.30664l-0.25977,0.85742l0.12109,0.33008l0.35547,0.61523l0.01563,0.02539l0.01367,0.02344l0.68359,1.03906l0.01563,0.02344l0.01758,0.02344l0.74219,1.00195l0.01563,0.02344l0.01953,0.02148l0.79883,0.96094l0.01953,0.02148l0.01953,0.02148l0.85742,0.91797l0.83984,0.31055l0.75195,-0.48633l0.06055,-0.89453l-0.19141,-0.29492l-0.8457,-0.9043l-0.01172,-0.01367l-0.74609,-0.89844l-0.69141,-0.93164l-0.65234,-0.99023l-0.00586,-0.01172l-0.35156,-0.60547zM40.38867,39.71094c-0.25937,0.00517 -0.50658,0.11091 -0.68945,0.29492c-0.22789,0.22312 -0.45979,0.44062 -0.69727,0.65234c-0.28155,0.23352 -0.41315,0.60213 -0.34315,0.96117c0.07,0.35903 0.33043,0.65121 0.67909,0.76186c0.34866,0.11065 0.72991,0.02213 0.99414,-0.23084c0.26052,-0.23227 0.51552,-0.46997 0.76563,-0.71484c0.29905,-0.2844 0.3927,-0.72327 0.23578,-1.10497c-0.15691,-0.38169 -0.53216,-0.62781 -0.94477,-0.61964zM13.80859,42.9707c-0.44313,0.02511 -0.81671,0.33927 -0.91743,0.77154c-0.10073,0.43226 0.09549,0.8792 0.48189,1.09761c0.89063,0.52058 1.82698,0.98916 2.80664,1.39648c0.01804,0.00704 0.03627,0.01355 0.05469,0.01953c0.306,0.12682 0.61334,0.24763 0.92188,0.35938c0.33773,0.12869 0.71862,0.06514 0.99629,-0.16622c0.27767,-0.23136 0.4089,-0.59452 0.34328,-0.94993c-0.06562,-0.35541 -0.3179,-0.64776 -0.65988,-0.76471c-0.29715,-0.10762 -0.5927,-0.22296 -0.88672,-0.3457c-0.00065,0 -0.0013,0 -0.00195,0c-0.89634,-0.37268 -1.75108,-0.79997 -2.56445,-1.27539c-0.17265,-0.10435 -0.37281,-0.15405 -0.57422,-0.14258zM34.22656,43.94727l-0.3418,0.08008l-1.02734,0.44531l-0.01367,0.00586l-0.90234,0.32422l-0.61719,0.65039l0.15039,0.88281l0.79883,0.4082l0.3457,-0.05859l0.91602,-0.33008l0.0293,-0.01172l0.0293,-0.01172l1.08398,-0.46875l0.57617,-0.6875l-0.20508,-0.87109zM25.90234,45.96875l-0.49805,0.0293l-1.55469,-0.02734v0.02148l-0.78711,0.30859l-0.23633,0.86328l0.55078,0.70703l0.33984,0.09375l0.02734,0.00195l0.03711,0.00391h0.03711l1.60938,0.02734h0.03711l0.03711,-0.00195l0.51563,-0.0293l0.77734,-0.44727l0.10742,-0.88867l-0.64844,-0.61914z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.loading > .message {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+.loading > .message:before {
+  content: "잠시만 기다려 주세요.";
+}
 
 .dialog {
   align-items: stretch;
@@ -1338,6 +1681,16 @@ body:has(> .dialog.visible) .cover {
   flex-direction: column;
   gap: 0;
   justify-content: flex-start;
+}
+.dialog > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog {
   top: 50%;
   left: 50%;
   width: 35rem;
@@ -1352,923 +1705,1155 @@ body:has(> .dialog.visible) .cover {
   z-index: 30;
   opacity: 0;
   pointer-events: none;
-  overflow: hidden; }
-  .dialog > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .dialog > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .dialog > .dialogCover {
-    z-index: 31;
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #212121a0;
-    opacity: 0;
-    pointer-events: none;
-    margin: 0;
-    padding: 0; }
-    .dialog > .dialogCover.visible {
-      opacity: 1;
-      pointer-events: auto;
-      border-color: #212121a0; }
-  .dialog > .cancel {
-    position: absolute;
-    top: 3%;
-    right: 3%;
-    width: 2rem;
-    height: 2rem;
-    cursor: pointer; }
-    .dialog > .cancel > .cancelButton {
-      width: 1.5rem;
-      height: 1.5rem; }
-  .dialog.visible {
-    opacity: 1;
-    pointer-events: auto; }
-  .dialog > .title {
-    font-size: 1.25rem;
-    font-weight: 500;
-    margin-bottom: 3rem; }
-    .dialog > .title > .point {
-      color: #3BFF3B; }
-  .dialog > .select-wrapper {
-    height: 12rem;
-    background-color: #ffffff;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem; }
-    .dialog > .select-wrapper > .select {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      justify-content: center;
-      border: 0.0625rem solid #D5D5D5;
-      border-radius: 0.75rem;
-      cursor: pointer; }
-      .dialog > .select-wrapper > .select > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog > .select-wrapper > .select > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog > .select-wrapper > .select:has(> input:checked) {
-        background-color: #eaeaea; }
-      .dialog > .select-wrapper > .select > .image {
-        width: 9rem;
-        height: 9rem;
-        image-rendering: auto; }
-      .dialog > .select-wrapper > .select > .dog,
-      .dialog > .select-wrapper > .select > .cat,
-      .dialog > .select-wrapper > .select > .another {
-        font-size: 1rem;
-        font-weight: 500;
-        margin-bottom: 0.5rem; }
-  .dialog > .petName-wrapper {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    justify-content: flex-start;
-    margin-top: 3rem; }
-    .dialog > .petName-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog > .petName-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog > .petName-wrapper > .text {
-      margin-bottom: 0.5rem;
-      color: #909090;
-      font-size: 0.85rem; }
-      .dialog > .petName-wrapper > .text::before {
-        content: "";
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 999rem;
-        background-color: #89CC96;
-        display: inline-block;
-        margin-right: 0.5rem;
-        margin-bottom: 0.1rem; }
-    .dialog > .petName-wrapper > .petName {
-      height: 3rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      padding-left: 0.75rem;
-      transition-duration: 250ms;
-      transition-property: border-color; }
-      .dialog > .petName-wrapper > .petName:focus-within {
-        border-color: #cfcbc9; }
-  .dialog > .anotherType-wrapper {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    justify-content: flex-start;
-    opacity: 0;
-    pointer-events: none; }
-    .dialog > .anotherType-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog > .anotherType-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog > .anotherType-wrapper > .text {
-      margin-bottom: 0.5rem;
-      margin-top: 1.5rem; }
-      .dialog > .anotherType-wrapper > .text::before {
-        content: "";
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 999rem;
-        background-color: #89CC96;
-        display: inline-block;
-        margin-right: 0.5rem;
-        margin-bottom: 0.1rem; }
-    .dialog > .anotherType-wrapper > .typeSelect {
-      height: 3rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      cursor: pointer;
-      padding-left: 0.75rem;
-      transition-duration: 250ms;
-      transition-property: border-color; }
-      .dialog > .anotherType-wrapper > .typeSelect:focus-within {
-        border-color: #cfcbc9; }
-  .dialog > .button {
-    height: 3rem;
-    background-color: #89CC96;
-    border-radius: 0.35rem;
-    color: #ffffff;
-    cursor: pointer;
-    font-weight: 500;
-    transition-duration: 250ms;
-    transition-property: background-color; }
-    .dialog > .button:disabled {
-      border-color: #e7e5e4 !important;
-      background-color: #e2e2e2 !important;
-      color: #898989;
-      cursor: revert; }
-      .dialog > .button:disabled:hover {
-        cursor: revert; }
-    .dialog > .button:hover {
-      background-color: #77c486; }
-    .dialog > .button:active {
-      background-color: #65bd76; }
-  .dialog > .complete {
-    height: 3rem;
-    background-color: #38A34C;
-    border-radius: 0.35rem;
-    color: #ffffff;
-    cursor: pointer;
-    font-weight: 500;
-    transition-duration: 250ms;
-    transition-property: background-color; }
-    .dialog > .complete:disabled {
-      border-color: #e7e5e4 !important;
-      background-color: #e2e2e2 !important;
-      color: #898989;
-      cursor: default; }
-    .dialog > .complete:hover {
-      background-color: #2F8F43; }
-    .dialog > .complete:active {
-      background-color: #287A39; }
+  overflow: hidden;
+}
+.dialog > .dialogCover {
+  z-index: 31;
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(33, 33, 33, 0.6274509804);
+  opacity: 0;
+  pointer-events: none;
+  margin: 0;
+  padding: 0;
+}
+.dialog > .dialogCover.visible {
+  opacity: 1;
+  pointer-events: auto;
+  border-color: rgba(33, 33, 33, 0.6274509804);
+}
+.dialog > .cancel {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+}
+.dialog > .cancel > .cancelButton {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.dialog.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.dialog > .title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 3rem;
+}
+.dialog > .title > .point {
+  color: #3BFF3B;
+}
+.dialog > .select-wrapper {
+  height: 12rem;
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.dialog > .select-wrapper > .select {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.dialog > .select-wrapper > .select > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog > .select-wrapper > .select > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog > .select-wrapper > .select {
+  border: 0.0625rem solid #D5D5D5;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+.dialog > .select-wrapper > .select:has(> input:checked) {
+  background-color: #eaeaea;
+}
+.dialog > .select-wrapper > .select > .image {
+  width: 9rem;
+  height: 9rem;
+  image-rendering: auto;
+}
+.dialog > .select-wrapper > .select > .dog,
+.dialog > .select-wrapper > .select > .cat,
+.dialog > .select-wrapper > .select > .another {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.dialog > .petName-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: flex-start;
+}
+.dialog > .petName-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog > .petName-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog > .petName-wrapper {
+  margin-top: 3rem;
+}
+.dialog > .petName-wrapper > .text {
+  margin-bottom: 0.5rem;
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog > .petName-wrapper > .text::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999rem;
+  background-color: #89CC96;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.1rem;
+}
+.dialog > .petName-wrapper > .petName {
+  height: 3rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  padding-left: 0.75rem;
+  transition-duration: 250ms;
+  transition-property: border-color;
+}
+.dialog > .petName-wrapper > .petName:focus-within {
+  border-color: #cfcbc9;
+}
+.dialog > .anotherType-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: flex-start;
+}
+.dialog > .anotherType-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog > .anotherType-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog > .anotherType-wrapper {
+  opacity: 0;
+  pointer-events: none;
+}
+.dialog > .anotherType-wrapper > .text {
+  margin-bottom: 0.5rem;
+  margin-top: 1.5rem;
+}
+.dialog > .anotherType-wrapper > .text::before {
+  content: "";
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999rem;
+  background-color: #89CC96;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.1rem;
+}
+.dialog > .anotherType-wrapper > .typeSelect {
+  height: 3rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  padding-left: 0.75rem;
+  transition-duration: 250ms;
+  transition-property: border-color;
+}
+.dialog > .anotherType-wrapper > .typeSelect:focus-within {
+  border-color: #cfcbc9;
+}
+.dialog > .button {
+  height: 3rem;
+  background-color: #89CC96;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 500;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.dialog > .button:disabled {
+  border-color: #e7e5e4 !important;
+  background-color: rgb(226.25, 226.25, 226.25) !important;
+  color: #898989;
+  cursor: revert;
+}
+.dialog > .button:disabled:hover {
+  cursor: revert;
+}
+.dialog > .button:hover {
+  background-color: rgb(119.1952662722, 196.3047337278, 134.1568047337);
+}
+.dialog > .button:active {
+  background-color: rgb(101.3905325444, 188.6094674556, 118.3136094675);
+}
+.dialog > .complete {
+  height: 3rem;
+  background-color: #38A34C;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: 500;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.dialog > .complete:disabled {
+  border-color: #e7e5e4 !important;
+  background-color: rgb(226.25, 226.25, 226.25) !important;
+  color: #898989;
+  cursor: default;
+}
+.dialog > .complete:hover {
+  background-color: #2F8F43;
+}
+.dialog > .complete:active {
+  background-color: #287A39;
+}
 
 .dialog-first:has(> .select-wrapper > .another > input:checked) > .anotherType-wrapper.visible {
   opacity: 1;
-  pointer-events: auto; }
+  pointer-events: auto;
+}
 
 .dialog-first {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 0;
-  justify-content: center; }
-  .dialog-first > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .dialog-first > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
+  justify-content: center;
+}
+.dialog-first > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-first > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
 
 .dialog-second {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 0;
-  justify-content: flex-start; }
-  .dialog-second > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .dialog-second > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .dialog-second > .previous {
-    position: fixed;
-    top: 3%;
-    left: 3%;
-    cursor: pointer; }
-    .dialog-second > .previous > .image {
-      width: 1.5rem;
-      height: 1.5rem; }
-  .dialog-second .image-wrapper {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    justify-content: center; }
-    .dialog-second .image-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-second .image-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-second .image-wrapper .circle {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      justify-content: center;
-      width: 8rem;
-      height: 8rem;
-      background-color: #eaeaea;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 999rem;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden; }
-      .dialog-second .image-wrapper .circle > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog-second .image-wrapper .circle > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog-second .image-wrapper .circle.visible .add {
-        display: none; }
-      .dialog-second .image-wrapper .circle.visible .preview {
-        display: block; }
-      .dialog-second .image-wrapper .circle > .preview {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: none; }
-      .dialog-second .image-wrapper .circle:hover {
-        background-color: #d1d1d1; }
-        .dialog-second .image-wrapper .circle:hover > .add {
-          filter: brightness(100%); }
-      .dialog-second .image-wrapper .circle:active {
-        border-color: #cfcbc9; }
-      .dialog-second .image-wrapper .circle > .image {
-        position: absolute; }
-      .dialog-second .image-wrapper .circle > .add {
-        top: 50%;
-        left: 50%;
-        font-size: 4rem;
-        color: #ffffff;
-        position: absolute;
-        transform: translate(-50%, -56%);
-        filter: brightness(80%); }
-  .dialog-second > .selectedPetType {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    justify-content: flex-start;
-    margin-top: 2.5rem; }
-    .dialog-second > .selectedPetType > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-second > .selectedPetType > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-second > .selectedPetType.hidden {
-      display: none;
-      pointer-events: none; }
-    .dialog-second > .selectedPetType > .text {
-      color: #909090;
-      font-size: 0.85rem; }
-    .dialog-second > .selectedPetType > .petType {
-      height: 3rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      padding-left: 0.75rem;
-      cursor: pointer; }
-  .dialog-second > .selectPetType {
-    align-items: stertch;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    justify-content: flex-start;
-    width: 100%;
-    height: 60%;
-    background-color: #ffffff;
-    border: 0.0625rem solid #e7e5e4;
-    left: 0;
-    bottom: 0;
-    position: absolute;
-    transform: translateY(100%);
-    border-bottom-left-radius: 0.35rem;
-    border-bottom-right-radius: 0.35rem;
-    transition-duration: 200ms;
-    transition-property: transform;
-    padding: 2rem 2rem 1rem 2rem;
-    overflow: hidden;
-    z-index: 32; }
-    .dialog-second > .selectPetType > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-second > .selectPetType > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-second > .selectPetType.visible {
-      transform: translateY(0); }
-    .dialog-second > .selectPetType > .cancel {
-      right: 3%;
-      top: 3%;
-      position: absolute;
-      cursor: pointer; }
-      .dialog-second > .selectPetType > .cancel > .image {
-        width: 1.5rem;
-        height: 1.5rem; }
-    .dialog-second > .selectPetType > .text {
-      text-align: center;
-      font-size: 1.1rem;
-      font-weight: 500;
-      margin-bottom: 1rem; }
-    .dialog-second > .selectPetType > .typeSearch {
-      height: 2.5rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      padding-left: 0.75rem; }
-    .dialog-second > .selectPetType > .typeList {
-      align-items: stretch;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      justify-content: flex-start;
-      overflow-y: auto; }
-      .dialog-second > .selectPetType > .typeList > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog-second > .selectPetType > .typeList > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog-second > .selectPetType > .typeList::-webkit-scrollbar {
-        width: 6px; }
-      .dialog-second > .selectPetType > .typeList::-webkit-scrollbar-thumb {
-        background-color: #d6d6d6;
-        border-radius: 999px; }
-      .dialog-second > .selectPetType > .typeList::-webkit-scrollbar-track {
-        background-color: transparent; }
-      .dialog-second > .selectPetType > .typeList > .type {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        gap: 0;
-        justify-content: flex-start;
-        height: 3rem;
-        border-top: 0.0625rem solid #e7e5e4;
-        cursor: pointer;
-        margin-left: 0.5rem; }
-        .dialog-second > .selectPetType > .typeList > .type > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .dialog-second > .selectPetType > .typeList > .type > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .dialog-second > .selectPetType > .typeList > .type:hover {
-          background-color: #F9F9F9;
-          font-weight: 500; }
-        .dialog-second > .selectPetType > .typeList > .type:first-child {
-          border-top: none; }
-  .dialog-second > .birthPet {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    justify-content: flexs-start;
-    margin-top: 2.5rem; }
-    .dialog-second > .birthPet > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-second > .birthPet > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-second > .birthPet > .text {
-      color: #909090;
-      font-size: 0.85rem; }
-    .dialog-second > .birthPet > .birth-wrapper {
-      align-items: center;
-      display: flex;
-      flex-direction: row;
-      gap: 0;
-      justify-content: center; }
-      .dialog-second > .birthPet > .birth-wrapper > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog-second > .birthPet > .birth-wrapper > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog-second > .birthPet > .birth-wrapper > .field {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        justify-content: center;
-        position: relative; }
-        .dialog-second > .birthPet > .birth-wrapper > .field > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .dialog-second > .birthPet > .birth-wrapper > .field > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .dialog-second > .birthPet > .birth-wrapper > .field:not(:last-child)::after {
-          content: "/";
-          position: absolute;
-          right: -5%; }
-        .dialog-second > .birthPet > .birth-wrapper > .field > .input {
-          width: 8rem;
-          text-align: center;
-          cursor: pointer; }
-          .dialog-second > .birthPet > .birth-wrapper > .field > .input.year:hover, .dialog-second > .birthPet > .birth-wrapper > .field > .input.month:hover, .dialog-second > .birthPet > .birth-wrapper > .field > .input.date:hover {
-            font-weight: 500; }
-  .dialog-second > .yearList-wrapper,
-  .dialog-second > .monthList-wrapper,
-  .dialog-second > .dateList-wrapper {
-    align-items: stertch;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    justify-content: flex-start;
-    width: 100%;
-    height: 60%;
-    background-color: #ffffff;
-    border: 0.0625rem solid #e7e5e4;
-    left: 0;
-    bottom: 0;
-    position: absolute;
-    transform: translateY(100%);
-    border-bottom-left-radius: 0.35rem;
-    border-bottom-right-radius: 0.35rem;
-    transition-duration: 200ms;
-    transition-property: transform;
-    padding: 2.5rem 2rem 2rem 2rem;
-    overflow: hidden;
-    z-index: 32; }
-    .dialog-second > .yearList-wrapper > *,
-    .dialog-second > .monthList-wrapper > *,
-    .dialog-second > .dateList-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-second > .yearList-wrapper > .-flex-stretch,
-    .dialog-second > .monthList-wrapper > .-flex-stretch,
-    .dialog-second > .dateList-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-second > .yearList-wrapper.visible,
-    .dialog-second > .monthList-wrapper.visible,
-    .dialog-second > .dateList-wrapper.visible {
-      transform: translateY(0); }
-    .dialog-second > .yearList-wrapper > .cancel,
-    .dialog-second > .monthList-wrapper > .cancel,
-    .dialog-second > .dateList-wrapper > .cancel {
-      right: 3%;
-      top: 3%;
-      position: absolute;
-      cursor: pointer; }
-      .dialog-second > .yearList-wrapper > .cancel > .image,
-      .dialog-second > .monthList-wrapper > .cancel > .image,
-      .dialog-second > .dateList-wrapper > .cancel > .image {
-        width: 1.5rem;
-        height: 1.5rem; }
-    .dialog-second > .yearList-wrapper > .yearList,
-    .dialog-second > .yearList-wrapper > .monthList,
-    .dialog-second > .yearList-wrapper > .dateList,
-    .dialog-second > .monthList-wrapper > .yearList,
-    .dialog-second > .monthList-wrapper > .monthList,
-    .dialog-second > .monthList-wrapper > .dateList,
-    .dialog-second > .dateList-wrapper > .yearList,
-    .dialog-second > .dateList-wrapper > .monthList,
-    .dialog-second > .dateList-wrapper > .dateList {
-      align-items: stretch;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      justify-content: flex-start;
-      height: 100%;
-      overflow: hidden auto; }
-      .dialog-second > .yearList-wrapper > .yearList > *,
-      .dialog-second > .yearList-wrapper > .monthList > *,
-      .dialog-second > .yearList-wrapper > .dateList > *,
-      .dialog-second > .monthList-wrapper > .yearList > *,
-      .dialog-second > .monthList-wrapper > .monthList > *,
-      .dialog-second > .monthList-wrapper > .dateList > *,
-      .dialog-second > .dateList-wrapper > .yearList > *,
-      .dialog-second > .dateList-wrapper > .monthList > *,
-      .dialog-second > .dateList-wrapper > .dateList > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog-second > .yearList-wrapper > .yearList > .-flex-stretch,
-      .dialog-second > .yearList-wrapper > .monthList > .-flex-stretch,
-      .dialog-second > .yearList-wrapper > .dateList > .-flex-stretch,
-      .dialog-second > .monthList-wrapper > .yearList > .-flex-stretch,
-      .dialog-second > .monthList-wrapper > .monthList > .-flex-stretch,
-      .dialog-second > .monthList-wrapper > .dateList > .-flex-stretch,
-      .dialog-second > .dateList-wrapper > .yearList > .-flex-stretch,
-      .dialog-second > .dateList-wrapper > .monthList > .-flex-stretch,
-      .dialog-second > .dateList-wrapper > .dateList > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog-second > .yearList-wrapper > .yearList::-webkit-scrollbar,
-      .dialog-second > .yearList-wrapper > .monthList::-webkit-scrollbar,
-      .dialog-second > .yearList-wrapper > .dateList::-webkit-scrollbar,
-      .dialog-second > .monthList-wrapper > .yearList::-webkit-scrollbar,
-      .dialog-second > .monthList-wrapper > .monthList::-webkit-scrollbar,
-      .dialog-second > .monthList-wrapper > .dateList::-webkit-scrollbar,
-      .dialog-second > .dateList-wrapper > .yearList::-webkit-scrollbar,
-      .dialog-second > .dateList-wrapper > .monthList::-webkit-scrollbar,
-      .dialog-second > .dateList-wrapper > .dateList::-webkit-scrollbar {
-        display: none; }
-      .dialog-second > .yearList-wrapper > .yearList::-webkit-scrollbar-thumb,
-      .dialog-second > .yearList-wrapper > .monthList::-webkit-scrollbar-thumb,
-      .dialog-second > .yearList-wrapper > .dateList::-webkit-scrollbar-thumb,
-      .dialog-second > .monthList-wrapper > .yearList::-webkit-scrollbar-thumb,
-      .dialog-second > .monthList-wrapper > .monthList::-webkit-scrollbar-thumb,
-      .dialog-second > .monthList-wrapper > .dateList::-webkit-scrollbar-thumb,
-      .dialog-second > .dateList-wrapper > .yearList::-webkit-scrollbar-thumb,
-      .dialog-second > .dateList-wrapper > .monthList::-webkit-scrollbar-thumb,
-      .dialog-second > .dateList-wrapper > .dateList::-webkit-scrollbar-thumb {
-        background-color: #d6d6d6;
-        border-radius: 999px; }
-      .dialog-second > .yearList-wrapper > .yearList::-webkit-scrollbar-track,
-      .dialog-second > .yearList-wrapper > .monthList::-webkit-scrollbar-track,
-      .dialog-second > .yearList-wrapper > .dateList::-webkit-scrollbar-track,
-      .dialog-second > .monthList-wrapper > .yearList::-webkit-scrollbar-track,
-      .dialog-second > .monthList-wrapper > .monthList::-webkit-scrollbar-track,
-      .dialog-second > .monthList-wrapper > .dateList::-webkit-scrollbar-track,
-      .dialog-second > .dateList-wrapper > .yearList::-webkit-scrollbar-track,
-      .dialog-second > .dateList-wrapper > .monthList::-webkit-scrollbar-track,
-      .dialog-second > .dateList-wrapper > .dateList::-webkit-scrollbar-track {
-        background-color: transparent; }
-      .dialog-second > .yearList-wrapper > .yearList > .year,
-      .dialog-second > .yearList-wrapper > .yearList > .month,
-      .dialog-second > .yearList-wrapper > .yearList > .date,
-      .dialog-second > .yearList-wrapper > .monthList > .year,
-      .dialog-second > .yearList-wrapper > .monthList > .month,
-      .dialog-second > .yearList-wrapper > .monthList > .date,
-      .dialog-second > .yearList-wrapper > .dateList > .year,
-      .dialog-second > .yearList-wrapper > .dateList > .month,
-      .dialog-second > .yearList-wrapper > .dateList > .date,
-      .dialog-second > .monthList-wrapper > .yearList > .year,
-      .dialog-second > .monthList-wrapper > .yearList > .month,
-      .dialog-second > .monthList-wrapper > .yearList > .date,
-      .dialog-second > .monthList-wrapper > .monthList > .year,
-      .dialog-second > .monthList-wrapper > .monthList > .month,
-      .dialog-second > .monthList-wrapper > .monthList > .date,
-      .dialog-second > .monthList-wrapper > .dateList > .year,
-      .dialog-second > .monthList-wrapper > .dateList > .month,
-      .dialog-second > .monthList-wrapper > .dateList > .date,
-      .dialog-second > .dateList-wrapper > .yearList > .year,
-      .dialog-second > .dateList-wrapper > .yearList > .month,
-      .dialog-second > .dateList-wrapper > .yearList > .date,
-      .dialog-second > .dateList-wrapper > .monthList > .year,
-      .dialog-second > .dateList-wrapper > .monthList > .month,
-      .dialog-second > .dateList-wrapper > .monthList > .date,
-      .dialog-second > .dateList-wrapper > .dateList > .year,
-      .dialog-second > .dateList-wrapper > .dateList > .month,
-      .dialog-second > .dateList-wrapper > .dateList > .date {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        gap: 0;
-        justify-content: flex-start;
-        height: 3rem;
-        border-top: 0.0625rem solid #e7e5e4;
-        margin-left: 0.5rem;
-        cursor: pointer; }
-        .dialog-second > .yearList-wrapper > .yearList > .year > *,
-        .dialog-second > .yearList-wrapper > .yearList > .month > *,
-        .dialog-second > .yearList-wrapper > .yearList > .date > *,
-        .dialog-second > .yearList-wrapper > .monthList > .year > *,
-        .dialog-second > .yearList-wrapper > .monthList > .month > *,
-        .dialog-second > .yearList-wrapper > .monthList > .date > *,
-        .dialog-second > .yearList-wrapper > .dateList > .year > *,
-        .dialog-second > .yearList-wrapper > .dateList > .month > *,
-        .dialog-second > .yearList-wrapper > .dateList > .date > *,
-        .dialog-second > .monthList-wrapper > .yearList > .year > *,
-        .dialog-second > .monthList-wrapper > .yearList > .month > *,
-        .dialog-second > .monthList-wrapper > .yearList > .date > *,
-        .dialog-second > .monthList-wrapper > .monthList > .year > *,
-        .dialog-second > .monthList-wrapper > .monthList > .month > *,
-        .dialog-second > .monthList-wrapper > .monthList > .date > *,
-        .dialog-second > .monthList-wrapper > .dateList > .year > *,
-        .dialog-second > .monthList-wrapper > .dateList > .month > *,
-        .dialog-second > .monthList-wrapper > .dateList > .date > *,
-        .dialog-second > .dateList-wrapper > .yearList > .year > *,
-        .dialog-second > .dateList-wrapper > .yearList > .month > *,
-        .dialog-second > .dateList-wrapper > .yearList > .date > *,
-        .dialog-second > .dateList-wrapper > .monthList > .year > *,
-        .dialog-second > .dateList-wrapper > .monthList > .month > *,
-        .dialog-second > .dateList-wrapper > .monthList > .date > *,
-        .dialog-second > .dateList-wrapper > .dateList > .year > *,
-        .dialog-second > .dateList-wrapper > .dateList > .month > *,
-        .dialog-second > .dateList-wrapper > .dateList > .date > * {
-          flex-grow: 0;
-          flex-shrink: 0; }
-        .dialog-second > .yearList-wrapper > .yearList > .year > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .yearList > .month > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .yearList > .date > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .monthList > .year > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .monthList > .month > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .monthList > .date > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .dateList > .year > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .dateList > .month > .-flex-stretch,
-        .dialog-second > .yearList-wrapper > .dateList > .date > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .yearList > .year > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .yearList > .month > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .yearList > .date > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .monthList > .year > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .monthList > .month > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .monthList > .date > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .dateList > .year > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .dateList > .month > .-flex-stretch,
-        .dialog-second > .monthList-wrapper > .dateList > .date > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .yearList > .year > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .yearList > .month > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .yearList > .date > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .monthList > .year > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .monthList > .month > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .monthList > .date > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .dateList > .year > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .dateList > .month > .-flex-stretch,
-        .dialog-second > .dateList-wrapper > .dateList > .date > .-flex-stretch {
-          flex-grow: 1;
-          flex-shrink: 1; }
-        .dialog-second > .yearList-wrapper > .yearList > .year:hover,
-        .dialog-second > .yearList-wrapper > .yearList > .month:hover,
-        .dialog-second > .yearList-wrapper > .yearList > .date:hover,
-        .dialog-second > .yearList-wrapper > .monthList > .year:hover,
-        .dialog-second > .yearList-wrapper > .monthList > .month:hover,
-        .dialog-second > .yearList-wrapper > .monthList > .date:hover,
-        .dialog-second > .yearList-wrapper > .dateList > .year:hover,
-        .dialog-second > .yearList-wrapper > .dateList > .month:hover,
-        .dialog-second > .yearList-wrapper > .dateList > .date:hover,
-        .dialog-second > .monthList-wrapper > .yearList > .year:hover,
-        .dialog-second > .monthList-wrapper > .yearList > .month:hover,
-        .dialog-second > .monthList-wrapper > .yearList > .date:hover,
-        .dialog-second > .monthList-wrapper > .monthList > .year:hover,
-        .dialog-second > .monthList-wrapper > .monthList > .month:hover,
-        .dialog-second > .monthList-wrapper > .monthList > .date:hover,
-        .dialog-second > .monthList-wrapper > .dateList > .year:hover,
-        .dialog-second > .monthList-wrapper > .dateList > .month:hover,
-        .dialog-second > .monthList-wrapper > .dateList > .date:hover,
-        .dialog-second > .dateList-wrapper > .yearList > .year:hover,
-        .dialog-second > .dateList-wrapper > .yearList > .month:hover,
-        .dialog-second > .dateList-wrapper > .yearList > .date:hover,
-        .dialog-second > .dateList-wrapper > .monthList > .year:hover,
-        .dialog-second > .dateList-wrapper > .monthList > .month:hover,
-        .dialog-second > .dateList-wrapper > .monthList > .date:hover,
-        .dialog-second > .dateList-wrapper > .dateList > .year:hover,
-        .dialog-second > .dateList-wrapper > .dateList > .month:hover,
-        .dialog-second > .dateList-wrapper > .dateList > .date:hover {
-          font-weight: 500; }
-        .dialog-second > .yearList-wrapper > .yearList > .year:first-child,
-        .dialog-second > .yearList-wrapper > .yearList > .month:first-child,
-        .dialog-second > .yearList-wrapper > .yearList > .date:first-child,
-        .dialog-second > .yearList-wrapper > .monthList > .year:first-child,
-        .dialog-second > .yearList-wrapper > .monthList > .month:first-child,
-        .dialog-second > .yearList-wrapper > .monthList > .date:first-child,
-        .dialog-second > .yearList-wrapper > .dateList > .year:first-child,
-        .dialog-second > .yearList-wrapper > .dateList > .month:first-child,
-        .dialog-second > .yearList-wrapper > .dateList > .date:first-child,
-        .dialog-second > .monthList-wrapper > .yearList > .year:first-child,
-        .dialog-second > .monthList-wrapper > .yearList > .month:first-child,
-        .dialog-second > .monthList-wrapper > .yearList > .date:first-child,
-        .dialog-second > .monthList-wrapper > .monthList > .year:first-child,
-        .dialog-second > .monthList-wrapper > .monthList > .month:first-child,
-        .dialog-second > .monthList-wrapper > .monthList > .date:first-child,
-        .dialog-second > .monthList-wrapper > .dateList > .year:first-child,
-        .dialog-second > .monthList-wrapper > .dateList > .month:first-child,
-        .dialog-second > .monthList-wrapper > .dateList > .date:first-child,
-        .dialog-second > .dateList-wrapper > .yearList > .year:first-child,
-        .dialog-second > .dateList-wrapper > .yearList > .month:first-child,
-        .dialog-second > .dateList-wrapper > .yearList > .date:first-child,
-        .dialog-second > .dateList-wrapper > .monthList > .year:first-child,
-        .dialog-second > .dateList-wrapper > .monthList > .month:first-child,
-        .dialog-second > .dateList-wrapper > .monthList > .date:first-child,
-        .dialog-second > .dateList-wrapper > .dateList > .year:first-child,
-        .dialog-second > .dateList-wrapper > .dateList > .month:first-child,
-        .dialog-second > .dateList-wrapper > .dateList > .date:first-child {
-          border-top: none; }
-  .dialog-second > .introduction {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    justify-content: flex-start;
-    margin-top: 2.5rem; }
-    .dialog-second > .introduction > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-second > .introduction > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-second > .introduction .title {
-      color: #909090;
-      font-size: 0.85rem; }
-    .dialog-second > .introduction > .introduce {
-      height: 3rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      padding-left: 0.75rem; }
+  justify-content: flex-start;
+}
+.dialog-second > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .previous {
+  position: fixed;
+  top: 3%;
+  left: 3%;
+  cursor: pointer;
+}
+.dialog-second > .previous > .image {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.dialog-second .image-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.dialog-second .image-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second .image-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second .image-wrapper .circle {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.dialog-second .image-wrapper .circle > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second .image-wrapper .circle > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second .image-wrapper .circle {
+  width: 8rem;
+  height: 8rem;
+  background-color: #eaeaea;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 999rem;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.dialog-second .image-wrapper .circle.visible .add {
+  display: none;
+}
+.dialog-second .image-wrapper .circle.visible .preview {
+  display: block;
+}
+.dialog-second .image-wrapper .circle > .preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.dialog-second .image-wrapper .circle:hover {
+  background-color: rgb(208.5, 208.5, 208.5);
+}
+.dialog-second .image-wrapper .circle:hover > .add {
+  filter: brightness(100%);
+}
+.dialog-second .image-wrapper .circle:active {
+  border-color: #cfcbc9;
+}
+.dialog-second .image-wrapper .circle > .image {
+  position: absolute;
+}
+.dialog-second .image-wrapper .circle > .add {
+  top: 50%;
+  left: 50%;
+  font-size: 4rem;
+  color: #ffffff;
+  position: absolute;
+  transform: translate(-50%, -56%);
+  filter: brightness(80%);
+}
+.dialog-second > .selectedPetType {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  justify-content: flex-start;
+}
+.dialog-second > .selectedPetType > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .selectedPetType > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .selectedPetType {
+  margin-top: 2.5rem;
+}
+.dialog-second > .selectedPetType.hidden {
+  display: none;
+  pointer-events: none;
+}
+.dialog-second > .selectedPetType > .text {
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog-second > .selectedPetType > .petType {
+  height: 3rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  padding-left: 0.75rem;
+  cursor: pointer;
+}
+.dialog-second > .selectPetType {
+  align-items: stertch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.dialog-second > .selectPetType > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .selectPetType > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .selectPetType {
+  width: 100%;
+  height: 60%;
+  background-color: #ffffff;
+  border: 0.0625rem solid #e7e5e4;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  transform: translateY(100%);
+  border-bottom-left-radius: 0.35rem;
+  border-bottom-right-radius: 0.35rem;
+  transition-duration: 200ms;
+  transition-property: transform;
+  padding: 2rem 2rem 1rem 2rem;
+  overflow: hidden;
+  z-index: 32;
+}
+.dialog-second > .selectPetType.visible {
+  transform: translateY(0);
+}
+.dialog-second > .selectPetType > .cancel {
+  right: 3%;
+  top: 3%;
+  position: absolute;
+  cursor: pointer;
+}
+.dialog-second > .selectPetType > .cancel > .image {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.dialog-second > .selectPetType > .text {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.dialog-second > .selectPetType > .typeSearch {
+  height: 2.5rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  padding-left: 0.75rem;
+}
+.dialog-second > .selectPetType > .typeList {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: flex-start;
+}
+.dialog-second > .selectPetType > .typeList > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .selectPetType > .typeList > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .selectPetType > .typeList {
+  overflow-y: auto;
+}
+.dialog-second > .selectPetType > .typeList::-webkit-scrollbar {
+  width: 6px;
+}
+.dialog-second > .selectPetType > .typeList::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 999px;
+}
+.dialog-second > .selectPetType > .typeList::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.dialog-second > .selectPetType > .typeList > .type {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: flex-start;
+}
+.dialog-second > .selectPetType > .typeList > .type > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .selectPetType > .typeList > .type > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .selectPetType > .typeList > .type {
+  height: 3rem;
+  border-top: 0.0625rem solid #e7e5e4;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+.dialog-second > .selectPetType > .typeList > .type:hover {
+  background-color: #F9F9F9;
+  font-weight: 500;
+}
+.dialog-second > .selectPetType > .typeList > .type:first-child {
+  border-top: none;
+}
+.dialog-second > .birthPet {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: flexs-start;
+}
+.dialog-second > .birthPet > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .birthPet > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .birthPet {
+  margin-top: 2.5rem;
+}
+.dialog-second > .birthPet > .text {
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog-second > .birthPet > .birth-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: center;
+}
+.dialog-second > .birthPet > .birth-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .birthPet > .birth-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field {
+  position: relative;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field:not(:last-child)::after {
+  content: "/";
+  position: absolute;
+  right: -5%;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field > .input {
+  width: 8rem;
+  text-align: center;
+  cursor: pointer;
+}
+.dialog-second > .birthPet > .birth-wrapper > .field > .input.year:hover, .dialog-second > .birthPet > .birth-wrapper > .field > .input.month:hover, .dialog-second > .birthPet > .birth-wrapper > .field > .input.date:hover {
+  font-weight: 500;
+}
+.dialog-second > .yearList-wrapper,
+.dialog-second > .monthList-wrapper,
+.dialog-second > .dateList-wrapper {
+  align-items: stertch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.dialog-second > .yearList-wrapper > *,
+.dialog-second > .monthList-wrapper > *,
+.dialog-second > .dateList-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .yearList-wrapper > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .yearList-wrapper,
+.dialog-second > .monthList-wrapper,
+.dialog-second > .dateList-wrapper {
+  width: 100%;
+  height: 60%;
+  background-color: #ffffff;
+  border: 0.0625rem solid #e7e5e4;
+  left: 0;
+  bottom: 0;
+  position: absolute;
+  transform: translateY(100%);
+  border-bottom-left-radius: 0.35rem;
+  border-bottom-right-radius: 0.35rem;
+  transition-duration: 200ms;
+  transition-property: transform;
+  padding: 2.5rem 2rem 2rem 2rem;
+  overflow: hidden;
+  z-index: 32;
+}
+.dialog-second > .yearList-wrapper.visible,
+.dialog-second > .monthList-wrapper.visible,
+.dialog-second > .dateList-wrapper.visible {
+  transform: translateY(0);
+}
+.dialog-second > .yearList-wrapper > .cancel,
+.dialog-second > .monthList-wrapper > .cancel,
+.dialog-second > .dateList-wrapper > .cancel {
+  right: 3%;
+  top: 3%;
+  position: absolute;
+  cursor: pointer;
+}
+.dialog-second > .yearList-wrapper > .cancel > .image,
+.dialog-second > .monthList-wrapper > .cancel > .image,
+.dialog-second > .dateList-wrapper > .cancel > .image {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.dialog-second > .yearList-wrapper > .yearList,
+.dialog-second > .yearList-wrapper > .monthList,
+.dialog-second > .yearList-wrapper > .dateList,
+.dialog-second > .monthList-wrapper > .yearList,
+.dialog-second > .monthList-wrapper > .monthList,
+.dialog-second > .monthList-wrapper > .dateList,
+.dialog-second > .dateList-wrapper > .yearList,
+.dialog-second > .dateList-wrapper > .monthList,
+.dialog-second > .dateList-wrapper > .dateList {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: flex-start;
+}
+.dialog-second > .yearList-wrapper > .yearList > *,
+.dialog-second > .yearList-wrapper > .monthList > *,
+.dialog-second > .yearList-wrapper > .dateList > *,
+.dialog-second > .monthList-wrapper > .yearList > *,
+.dialog-second > .monthList-wrapper > .monthList > *,
+.dialog-second > .monthList-wrapper > .dateList > *,
+.dialog-second > .dateList-wrapper > .yearList > *,
+.dialog-second > .dateList-wrapper > .monthList > *,
+.dialog-second > .dateList-wrapper > .dateList > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .yearList-wrapper > .yearList > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .monthList > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .dateList > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .yearList > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .monthList > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .dateList > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .yearList > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .monthList > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .dateList > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .yearList-wrapper > .yearList,
+.dialog-second > .yearList-wrapper > .monthList,
+.dialog-second > .yearList-wrapper > .dateList,
+.dialog-second > .monthList-wrapper > .yearList,
+.dialog-second > .monthList-wrapper > .monthList,
+.dialog-second > .monthList-wrapper > .dateList,
+.dialog-second > .dateList-wrapper > .yearList,
+.dialog-second > .dateList-wrapper > .monthList,
+.dialog-second > .dateList-wrapper > .dateList {
+  height: 100%;
+  overflow: hidden auto;
+}
+.dialog-second > .yearList-wrapper > .yearList::-webkit-scrollbar,
+.dialog-second > .yearList-wrapper > .monthList::-webkit-scrollbar,
+.dialog-second > .yearList-wrapper > .dateList::-webkit-scrollbar,
+.dialog-second > .monthList-wrapper > .yearList::-webkit-scrollbar,
+.dialog-second > .monthList-wrapper > .monthList::-webkit-scrollbar,
+.dialog-second > .monthList-wrapper > .dateList::-webkit-scrollbar,
+.dialog-second > .dateList-wrapper > .yearList::-webkit-scrollbar,
+.dialog-second > .dateList-wrapper > .monthList::-webkit-scrollbar,
+.dialog-second > .dateList-wrapper > .dateList::-webkit-scrollbar {
+  display: none;
+}
+.dialog-second > .yearList-wrapper > .yearList::-webkit-scrollbar-thumb,
+.dialog-second > .yearList-wrapper > .monthList::-webkit-scrollbar-thumb,
+.dialog-second > .yearList-wrapper > .dateList::-webkit-scrollbar-thumb,
+.dialog-second > .monthList-wrapper > .yearList::-webkit-scrollbar-thumb,
+.dialog-second > .monthList-wrapper > .monthList::-webkit-scrollbar-thumb,
+.dialog-second > .monthList-wrapper > .dateList::-webkit-scrollbar-thumb,
+.dialog-second > .dateList-wrapper > .yearList::-webkit-scrollbar-thumb,
+.dialog-second > .dateList-wrapper > .monthList::-webkit-scrollbar-thumb,
+.dialog-second > .dateList-wrapper > .dateList::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 999px;
+}
+.dialog-second > .yearList-wrapper > .yearList::-webkit-scrollbar-track,
+.dialog-second > .yearList-wrapper > .monthList::-webkit-scrollbar-track,
+.dialog-second > .yearList-wrapper > .dateList::-webkit-scrollbar-track,
+.dialog-second > .monthList-wrapper > .yearList::-webkit-scrollbar-track,
+.dialog-second > .monthList-wrapper > .monthList::-webkit-scrollbar-track,
+.dialog-second > .monthList-wrapper > .dateList::-webkit-scrollbar-track,
+.dialog-second > .dateList-wrapper > .yearList::-webkit-scrollbar-track,
+.dialog-second > .dateList-wrapper > .monthList::-webkit-scrollbar-track,
+.dialog-second > .dateList-wrapper > .dateList::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.dialog-second > .yearList-wrapper > .yearList > .year,
+.dialog-second > .yearList-wrapper > .yearList > .month,
+.dialog-second > .yearList-wrapper > .yearList > .date,
+.dialog-second > .yearList-wrapper > .monthList > .year,
+.dialog-second > .yearList-wrapper > .monthList > .month,
+.dialog-second > .yearList-wrapper > .monthList > .date,
+.dialog-second > .yearList-wrapper > .dateList > .year,
+.dialog-second > .yearList-wrapper > .dateList > .month,
+.dialog-second > .yearList-wrapper > .dateList > .date,
+.dialog-second > .monthList-wrapper > .yearList > .year,
+.dialog-second > .monthList-wrapper > .yearList > .month,
+.dialog-second > .monthList-wrapper > .yearList > .date,
+.dialog-second > .monthList-wrapper > .monthList > .year,
+.dialog-second > .monthList-wrapper > .monthList > .month,
+.dialog-second > .monthList-wrapper > .monthList > .date,
+.dialog-second > .monthList-wrapper > .dateList > .year,
+.dialog-second > .monthList-wrapper > .dateList > .month,
+.dialog-second > .monthList-wrapper > .dateList > .date,
+.dialog-second > .dateList-wrapper > .yearList > .year,
+.dialog-second > .dateList-wrapper > .yearList > .month,
+.dialog-second > .dateList-wrapper > .yearList > .date,
+.dialog-second > .dateList-wrapper > .monthList > .year,
+.dialog-second > .dateList-wrapper > .monthList > .month,
+.dialog-second > .dateList-wrapper > .monthList > .date,
+.dialog-second > .dateList-wrapper > .dateList > .year,
+.dialog-second > .dateList-wrapper > .dateList > .month,
+.dialog-second > .dateList-wrapper > .dateList > .date {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: flex-start;
+}
+.dialog-second > .yearList-wrapper > .yearList > .year > *,
+.dialog-second > .yearList-wrapper > .yearList > .month > *,
+.dialog-second > .yearList-wrapper > .yearList > .date > *,
+.dialog-second > .yearList-wrapper > .monthList > .year > *,
+.dialog-second > .yearList-wrapper > .monthList > .month > *,
+.dialog-second > .yearList-wrapper > .monthList > .date > *,
+.dialog-second > .yearList-wrapper > .dateList > .year > *,
+.dialog-second > .yearList-wrapper > .dateList > .month > *,
+.dialog-second > .yearList-wrapper > .dateList > .date > *,
+.dialog-second > .monthList-wrapper > .yearList > .year > *,
+.dialog-second > .monthList-wrapper > .yearList > .month > *,
+.dialog-second > .monthList-wrapper > .yearList > .date > *,
+.dialog-second > .monthList-wrapper > .monthList > .year > *,
+.dialog-second > .monthList-wrapper > .monthList > .month > *,
+.dialog-second > .monthList-wrapper > .monthList > .date > *,
+.dialog-second > .monthList-wrapper > .dateList > .year > *,
+.dialog-second > .monthList-wrapper > .dateList > .month > *,
+.dialog-second > .monthList-wrapper > .dateList > .date > *,
+.dialog-second > .dateList-wrapper > .yearList > .year > *,
+.dialog-second > .dateList-wrapper > .yearList > .month > *,
+.dialog-second > .dateList-wrapper > .yearList > .date > *,
+.dialog-second > .dateList-wrapper > .monthList > .year > *,
+.dialog-second > .dateList-wrapper > .monthList > .month > *,
+.dialog-second > .dateList-wrapper > .monthList > .date > *,
+.dialog-second > .dateList-wrapper > .dateList > .year > *,
+.dialog-second > .dateList-wrapper > .dateList > .month > *,
+.dialog-second > .dateList-wrapper > .dateList > .date > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .yearList-wrapper > .yearList > .year > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .yearList > .month > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .yearList > .date > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .monthList > .year > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .monthList > .month > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .monthList > .date > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .dateList > .year > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .dateList > .month > .-flex-stretch,
+.dialog-second > .yearList-wrapper > .dateList > .date > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .yearList > .year > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .yearList > .month > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .yearList > .date > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .monthList > .year > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .monthList > .month > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .monthList > .date > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .dateList > .year > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .dateList > .month > .-flex-stretch,
+.dialog-second > .monthList-wrapper > .dateList > .date > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .yearList > .year > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .yearList > .month > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .yearList > .date > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .monthList > .year > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .monthList > .month > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .monthList > .date > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .dateList > .year > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .dateList > .month > .-flex-stretch,
+.dialog-second > .dateList-wrapper > .dateList > .date > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .yearList-wrapper > .yearList > .year,
+.dialog-second > .yearList-wrapper > .yearList > .month,
+.dialog-second > .yearList-wrapper > .yearList > .date,
+.dialog-second > .yearList-wrapper > .monthList > .year,
+.dialog-second > .yearList-wrapper > .monthList > .month,
+.dialog-second > .yearList-wrapper > .monthList > .date,
+.dialog-second > .yearList-wrapper > .dateList > .year,
+.dialog-second > .yearList-wrapper > .dateList > .month,
+.dialog-second > .yearList-wrapper > .dateList > .date,
+.dialog-second > .monthList-wrapper > .yearList > .year,
+.dialog-second > .monthList-wrapper > .yearList > .month,
+.dialog-second > .monthList-wrapper > .yearList > .date,
+.dialog-second > .monthList-wrapper > .monthList > .year,
+.dialog-second > .monthList-wrapper > .monthList > .month,
+.dialog-second > .monthList-wrapper > .monthList > .date,
+.dialog-second > .monthList-wrapper > .dateList > .year,
+.dialog-second > .monthList-wrapper > .dateList > .month,
+.dialog-second > .monthList-wrapper > .dateList > .date,
+.dialog-second > .dateList-wrapper > .yearList > .year,
+.dialog-second > .dateList-wrapper > .yearList > .month,
+.dialog-second > .dateList-wrapper > .yearList > .date,
+.dialog-second > .dateList-wrapper > .monthList > .year,
+.dialog-second > .dateList-wrapper > .monthList > .month,
+.dialog-second > .dateList-wrapper > .monthList > .date,
+.dialog-second > .dateList-wrapper > .dateList > .year,
+.dialog-second > .dateList-wrapper > .dateList > .month,
+.dialog-second > .dateList-wrapper > .dateList > .date {
+  height: 3rem;
+  border-top: 0.0625rem solid #e7e5e4;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+.dialog-second > .yearList-wrapper > .yearList > .year:hover,
+.dialog-second > .yearList-wrapper > .yearList > .month:hover,
+.dialog-second > .yearList-wrapper > .yearList > .date:hover,
+.dialog-second > .yearList-wrapper > .monthList > .year:hover,
+.dialog-second > .yearList-wrapper > .monthList > .month:hover,
+.dialog-second > .yearList-wrapper > .monthList > .date:hover,
+.dialog-second > .yearList-wrapper > .dateList > .year:hover,
+.dialog-second > .yearList-wrapper > .dateList > .month:hover,
+.dialog-second > .yearList-wrapper > .dateList > .date:hover,
+.dialog-second > .monthList-wrapper > .yearList > .year:hover,
+.dialog-second > .monthList-wrapper > .yearList > .month:hover,
+.dialog-second > .monthList-wrapper > .yearList > .date:hover,
+.dialog-second > .monthList-wrapper > .monthList > .year:hover,
+.dialog-second > .monthList-wrapper > .monthList > .month:hover,
+.dialog-second > .monthList-wrapper > .monthList > .date:hover,
+.dialog-second > .monthList-wrapper > .dateList > .year:hover,
+.dialog-second > .monthList-wrapper > .dateList > .month:hover,
+.dialog-second > .monthList-wrapper > .dateList > .date:hover,
+.dialog-second > .dateList-wrapper > .yearList > .year:hover,
+.dialog-second > .dateList-wrapper > .yearList > .month:hover,
+.dialog-second > .dateList-wrapper > .yearList > .date:hover,
+.dialog-second > .dateList-wrapper > .monthList > .year:hover,
+.dialog-second > .dateList-wrapper > .monthList > .month:hover,
+.dialog-second > .dateList-wrapper > .monthList > .date:hover,
+.dialog-second > .dateList-wrapper > .dateList > .year:hover,
+.dialog-second > .dateList-wrapper > .dateList > .month:hover,
+.dialog-second > .dateList-wrapper > .dateList > .date:hover {
+  font-weight: 500;
+}
+.dialog-second > .yearList-wrapper > .yearList > .year:first-child,
+.dialog-second > .yearList-wrapper > .yearList > .month:first-child,
+.dialog-second > .yearList-wrapper > .yearList > .date:first-child,
+.dialog-second > .yearList-wrapper > .monthList > .year:first-child,
+.dialog-second > .yearList-wrapper > .monthList > .month:first-child,
+.dialog-second > .yearList-wrapper > .monthList > .date:first-child,
+.dialog-second > .yearList-wrapper > .dateList > .year:first-child,
+.dialog-second > .yearList-wrapper > .dateList > .month:first-child,
+.dialog-second > .yearList-wrapper > .dateList > .date:first-child,
+.dialog-second > .monthList-wrapper > .yearList > .year:first-child,
+.dialog-second > .monthList-wrapper > .yearList > .month:first-child,
+.dialog-second > .monthList-wrapper > .yearList > .date:first-child,
+.dialog-second > .monthList-wrapper > .monthList > .year:first-child,
+.dialog-second > .monthList-wrapper > .monthList > .month:first-child,
+.dialog-second > .monthList-wrapper > .monthList > .date:first-child,
+.dialog-second > .monthList-wrapper > .dateList > .year:first-child,
+.dialog-second > .monthList-wrapper > .dateList > .month:first-child,
+.dialog-second > .monthList-wrapper > .dateList > .date:first-child,
+.dialog-second > .dateList-wrapper > .yearList > .year:first-child,
+.dialog-second > .dateList-wrapper > .yearList > .month:first-child,
+.dialog-second > .dateList-wrapper > .yearList > .date:first-child,
+.dialog-second > .dateList-wrapper > .monthList > .year:first-child,
+.dialog-second > .dateList-wrapper > .monthList > .month:first-child,
+.dialog-second > .dateList-wrapper > .monthList > .date:first-child,
+.dialog-second > .dateList-wrapper > .dateList > .year:first-child,
+.dialog-second > .dateList-wrapper > .dateList > .month:first-child,
+.dialog-second > .dateList-wrapper > .dateList > .date:first-child {
+  border-top: none;
+}
+.dialog-second > .introduction {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  justify-content: flex-start;
+}
+.dialog-second > .introduction > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-second > .introduction > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-second > .introduction {
+  margin-top: 2.5rem;
+}
+.dialog-second > .introduction .title {
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog-second > .introduction > .introduce {
+  height: 3rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  padding-left: 0.75rem;
+}
 
 .dialog-third > .previous {
   position: fixed;
   top: 3%;
   left: 3%;
-  cursor: pointer; }
-  .dialog-third > .previous > .image {
-    width: 1.5rem;
-    height: 1.5rem; }
+  cursor: pointer;
+}
+.dialog-third > .previous > .image {
+  width: 1.5rem;
+  height: 1.5rem;
+}
 .dialog-third > .genderLabel {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  justify-content: flex-start; }
-  .dialog-third > .genderLabel > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .dialog-third > .genderLabel > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .dialog-third > .genderLabel > .text {
-    color: #909090;
-    font-size: 0.85rem; }
-  .dialog-third > .genderLabel > .gender-wrapper {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    justify-content: center; }
-    .dialog-third > .genderLabel > .gender-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-third > .genderLabel > .gender-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-third > .genderLabel > .gender-wrapper > .maleLabel,
-    .dialog-third > .genderLabel > .gender-wrapper > .femaleLabel {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      justify-content: center;
-      width: 8rem;
-      height: 3rem;
-      background-color: #ffffff;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      cursor: pointer;
-      transition-duration: 250ms;
-      transition-property: border-color; }
-      .dialog-third > .genderLabel > .gender-wrapper > .maleLabel > *,
-      .dialog-third > .genderLabel > .gender-wrapper > .femaleLabel > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog-third > .genderLabel > .gender-wrapper > .maleLabel > .-flex-stretch,
-      .dialog-third > .genderLabel > .gender-wrapper > .femaleLabel > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog-third > .genderLabel > .gender-wrapper > .maleLabel:hover,
-      .dialog-third > .genderLabel > .gender-wrapper > .femaleLabel:hover {
-        border-color: #dbd8d7; }
-      .dialog-third > .genderLabel > .gender-wrapper > .maleLabel:active,
-      .dialog-third > .genderLabel > .gender-wrapper > .femaleLabel:active {
-        border-color: #cfcbc9; }
-      .dialog-third > .genderLabel > .gender-wrapper > .maleLabel:has(> .input:checked),
-      .dialog-third > .genderLabel > .gender-wrapper > .femaleLabel:has(> .input:checked) {
-        background-color: #89CC96;
-        color: #ffffff;
-        font-weight: 500; }
+  justify-content: flex-start;
+}
+.dialog-third > .genderLabel > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .genderLabel > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .genderLabel > .text {
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog-third > .genderLabel > .gender-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.dialog-third > .genderLabel > .gender-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel,
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel > *,
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel > .-flex-stretch,
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel,
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel {
+  width: 8rem;
+  height: 3rem;
+  background-color: #ffffff;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  transition-duration: 250ms;
+  transition-property: border-color;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel:hover,
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel:hover {
+  border-color: rgb(219, 216, 214.5);
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel:active,
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel:active {
+  border-color: #cfcbc9;
+}
+.dialog-third > .genderLabel > .gender-wrapper > .maleLabel:has(> .input:checked),
+.dialog-third > .genderLabel > .gender-wrapper > .femaleLabel:has(> .input:checked) {
+  background-color: #89CC96;
+  color: #ffffff;
+  font-weight: 500;
+}
 .dialog-third > .petWeightLabel {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   justify-content: flex-start;
-  margin-top: 4rem; }
-  .dialog-third > .petWeightLabel > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .dialog-third > .petWeightLabel > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .dialog-third > .petWeightLabel > .text {
-    color: #909090;
-    font-size: 0.85rem; }
-  .dialog-third > .petWeightLabel > .weight-wrapper {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 0;
-    justify-content: flex-start; }
-    .dialog-third > .petWeightLabel > .weight-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-third > .petWeightLabel > .weight-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-third > .petWeightLabel > .weight-wrapper > .weight {
-      height: 3rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      padding-left: 1.25rem; }
-      .dialog-third > .petWeightLabel > .weight-wrapper > .weight:hover {
-        border-color: #dbd8d7; }
-      .dialog-third > .petWeightLabel > .weight-wrapper > .weight:active {
-        border-color: #cfcbc9; }
-      .dialog-third > .petWeightLabel > .weight-wrapper > .weight:focus-within {
-        border-color: #cfcbc9; }
-    .dialog-third > .petWeightLabel > .weight-wrapper > .unit {
-      right: 10%;
-      position: fixed;
-      font-size: 1.1rem; }
+}
+.dialog-third > .petWeightLabel > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .petWeightLabel > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .petWeightLabel {
+  margin-top: 4rem;
+}
+.dialog-third > .petWeightLabel > .text {
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: flex-start;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > .weight {
+  height: 3rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  padding-left: 1.25rem;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > .weight:hover {
+  border-color: rgb(219, 216, 214.5);
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > .weight:active {
+  border-color: #cfcbc9;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > .weight:focus-within {
+  border-color: #cfcbc9;
+}
+.dialog-third > .petWeightLabel > .weight-wrapper > .unit {
+  right: 10%;
+  position: fixed;
+  font-size: 1.1rem;
+}
 .dialog-third > .weightTypeLabel {
   align-items: stretch;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   justify-content: flex-start;
-  margin-top: 4rem; }
-  .dialog-third > .weightTypeLabel > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .dialog-third > .weightTypeLabel > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .dialog-third > .weightTypeLabel > .text {
-    color: #909090;
-    font-size: 0.85rem; }
-  .dialog-third > .weightTypeLabel > .weightType-wrapper {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    justify-content: center; }
-    .dialog-third > .weightTypeLabel > .weightType-wrapper > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .dialog-third > .weightTypeLabel > .weightType-wrapper > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .dialog-third > .weightTypeLabel > .weightType-wrapper > .label {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      justify-content: center;
-      flex-grow: 1;
-      height: 3rem;
-      border: 0.0625rem solid #e7e5e4;
-      border-radius: 0.35rem;
-      cursor: pointer; }
-      .dialog-third > .weightTypeLabel > .weightType-wrapper > .label > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .dialog-third > .weightTypeLabel > .weightType-wrapper > .label > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-      .dialog-third > .weightTypeLabel > .weightType-wrapper > .label:hover {
-        border-color: #dbd8d7; }
-      .dialog-third > .weightTypeLabel > .weightType-wrapper > .label:active {
-        border-color: #cfcbc9; }
-      .dialog-third > .weightTypeLabel > .weightType-wrapper > .label:has(> .input:checked) {
-        background-color: #89CC96;
-        color: #ffffff;
-        font-weight: 500; }
+}
+.dialog-third > .weightTypeLabel > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .weightTypeLabel > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .weightTypeLabel {
+  margin-top: 4rem;
+}
+.dialog-third > .weightTypeLabel > .text {
+  color: #909090;
+  font-size: 0.85rem;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label {
+  flex-grow: 1;
+  height: 3rem;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.35rem;
+  cursor: pointer;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label:hover {
+  border-color: rgb(219, 216, 214.5);
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label:active {
+  border-color: #cfcbc9;
+}
+.dialog-third > .weightTypeLabel > .weightType-wrapper > .label:has(> .input:checked) {
+  background-color: #89CC96;
+  color: #ffffff;
+  font-weight: 500;
+}
 .dialog-third > .complete {
-  margin-top: auto; }
+  margin-top: auto;
+}
 
 @media screen and (max-width: 70rem), screen and (max-height: 50rem) {
   #topNavigator {
-    display: none; }
-
+    display: none;
+  }
   body {
-    overflow: hidden; }
-
+    overflow: hidden;
+  }
   .register-container > .register-second {
     height: 42rem !important;
     overflow: hidden auto;
-    max-height: none; }
+    max-height: none;
+  }
   .register-container > .register-third {
     height: 42rem !important;
     overflow: hidden auto;
-    max-height: none; } }
+    max-height: none;
+  }
+}
 @media screen and (max-width: 62.5rem), screen and (max-height: 45em) {
   .register-container {
     position: absolute;
@@ -2276,93 +2861,119 @@ body:has(> .dialog.visible) .cover {
     margin: 0;
     min-height: 100dvh;
     display: block;
-    padding: 0; }
-    .register-container > .register-first {
-      max-width: none;
-      width: 100vw;
-      min-height: 100dvh;
-      flex-grow: 1;
-      border-radius: 0;
-      margin: 0; }
-    .register-container > .register-second {
-      max-width: none;
-      width: 100vw;
-      max-height: 100dvh;
-      min-height: 100dvh;
-      flex-grow: 1;
-      border-radius: 0;
-      margin: 0; }
-    .register-container > .register-third {
-      max-width: none;
-      width: 100vw;
-      max-height: 100dvh;
-      min-height: 100dvh;
-      flex-grow: 1;
-      border-radius: 0;
-      margin: 0; }
-    .register-container > .register-forth {
-      max-width: none;
-      width: 100vw;
-      max-height: 100dvh;
-      min-height: 100dvh;
-      flex-grow: 1;
-      border-radius: 0;
-      margin: 0; } }
+    padding: 0;
+  }
+  .register-container > .register-first {
+    max-width: none;
+    width: 100vw;
+    min-height: 100dvh;
+    flex-grow: 1;
+    border-radius: 0;
+    margin: 0;
+  }
+  .register-container > .register-second {
+    max-width: none;
+    width: 100vw;
+    max-height: 100dvh;
+    min-height: 100dvh;
+    flex-grow: 1;
+    border-radius: 0;
+    margin: 0;
+  }
+  .register-container > .register-third {
+    max-width: none;
+    width: 100vw;
+    max-height: 100dvh;
+    min-height: 100dvh;
+    flex-grow: 1;
+    border-radius: 0;
+    margin: 0;
+  }
+  .register-container > .register-forth {
+    max-width: none;
+    width: 100vw;
+    max-height: 100dvh;
+    min-height: 100dvh;
+    flex-grow: 1;
+    border-radius: 0;
+    margin: 0;
+  }
+}
 @media screen and (max-width: 42.5rem) {
   .register-forth.business {
     width: 42.5rem;
     min-width: 42.5rem;
-    flex-shrink: 0; }
-
+    flex-shrink: 0;
+  }
   .register-forth.personal > .petRegistration {
     min-width: 0;
-    flex-shrink: 0; } }
+    flex-shrink: 0;
+  }
+}
 @media screen and (max-width: 40.625rem) {
   body {
-    overflow: auto hidden; }
-
+    overflow: auto hidden;
+  }
   .register-third {
     width: 40.625rem;
     min-width: 40.625rem;
-    flex-shrink: 0; } }
+    flex-shrink: 0;
+  }
+}
 @media screen and (max-width: 39.375rem) {
   .register-first > .select-wrapper {
     flex-direction: column !important;
-    align-items: stretch; }
-    .register-first > .select-wrapper > .personal-member,
-    .register-first > .select-wrapper > .business-member {
-      width: 100%;
-      height: 9rem !important;
-      flex-grow: 0; }
-      .register-first > .select-wrapper > .personal-member > .description,
-      .register-first > .select-wrapper > .business-member > .description {
-        font-size: 0.9rem !important; }
-      .register-first > .select-wrapper > .personal-member > .image,
-      .register-first > .select-wrapper > .business-member > .image {
-        display: none; } }
+    align-items: stretch;
+  }
+  .register-first > .select-wrapper > .personal-member,
+  .register-first > .select-wrapper > .business-member {
+    width: 100%;
+    height: 9rem !important;
+    flex-grow: 0;
+  }
+  .register-first > .select-wrapper > .personal-member > .description,
+  .register-first > .select-wrapper > .business-member > .description {
+    font-size: 0.9rem !important;
+  }
+  .register-first > .select-wrapper > .personal-member > .image,
+  .register-first > .select-wrapper > .business-member > .image {
+    display: none;
+  }
+}
 @media screen and (max-width: 35rem), screen and (max-height: 46.875rem) {
   .dialog {
     max-width: 30rem;
-    max-height: 33rem; }
-    .dialog.dialog-second {
-      max-height: 37rem; }
-    .dialog.dialog-third {
-      max-height: 40rem; }
-    .dialog > .select-wrapper {
-      max-height: 3rem;
-      min-height: 3rem; }
-      .dialog > .select-wrapper > .select > .image {
-        display: none; }
-      .dialog > .select-wrapper > .select > .dog,
-      .dialog > .select-wrapper > .select > .cat,
-      .dialog > .select-wrapper > .select > .another {
-        margin-bottom: 0; }
-    .dialog > .anotherType-wrapper {
-      flex-grow: 0;
-      flex-shrink: 0;
-      margin-bottom: 2rem; } }
+    max-height: 33rem;
+    overflow-y: scroll;
+  }
+  .dialog.dialog-second {
+    max-height: 37rem;
+  }
+  .dialog.dialog-third {
+    max-height: 40rem;
+  }
+  .dialog > .select-wrapper {
+    max-height: 3rem;
+    min-height: 3rem;
+  }
+  .dialog > .select-wrapper > .select > .image {
+    display: none;
+  }
+  .dialog > .select-wrapper > .select > .dog,
+  .dialog > .select-wrapper > .select > .cat,
+  .dialog > .select-wrapper > .select > .another {
+    margin-bottom: 0;
+  }
+  .dialog > .anotherType-wrapper {
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin-bottom: 2rem;
+  }
+}
 @media screen and (max-height: 38.125rem) {
   .register-container {
-    overflow: hidden auto; } }
+    overflow: hidden auto;
+  }
+}
 
 /*# sourceMappingURL=register.css.map */

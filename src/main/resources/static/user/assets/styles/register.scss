@@ -656,8 +656,12 @@ body:has(> .address-wrapper.visible) > .cover {
           margin-top: 1.5rem;
 
           > .countTime {
+            display: none;
             align-self: flex-end;
             color: $global-gray-text-color;
+            &.visible{
+              display: revert;
+            }
           }
 
           > .emailVerifyNumber {
@@ -2184,6 +2188,7 @@ body:has(> .dialog.visible) {
   .dialog {
     max-width: 30rem;
     max-height: 33rem;
+    overflow-y: scroll;
 
     &.dialog-second {
       max-height: 37rem;

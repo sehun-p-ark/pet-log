@@ -1,10 +1,8 @@
 package dev.dhkim.petlog.controllers.feed;
 
-import dev.dhkim.petlog.dto.feed.FeedCommentDto;
-import dev.dhkim.petlog.dto.feed.FeedDto;
-import dev.dhkim.petlog.dto.feed.FeedScrollDto;
-import dev.dhkim.petlog.dto.feed.FeedThumbnailDto;
+import dev.dhkim.petlog.dto.feed.*;
 import dev.dhkim.petlog.dto.user.SessionUser;
+import dev.dhkim.petlog.results.CommonResult;
 import dev.dhkim.petlog.results.Result;
 import dev.dhkim.petlog.services.feed.*;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +28,7 @@ public class FeedApiController {
     // 피드 조회
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public FeedScrollDto getFeeds(@RequestParam(defaultValue = "latest") String sort,
+                                  @RequestParam(required = false) String keyword,
                                   @RequestParam(required = false) Integer lastFeedId,
                                   @RequestParam(required = false) Integer lastLikeCount,
                                   @RequestParam(required = false) String lastCreatedAt,
@@ -37,7 +36,7 @@ public class FeedApiController {
                                   @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
         Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
-        return feedQueryService.getFeeds(sort, lastFeedId, lastLikeCount, lastCreatedAt, size, userId);
+        return feedQueryService.getFeeds(sort, keyword, lastFeedId, lastLikeCount, lastCreatedAt, size, userId);
     }
 
     // 상세페이지(/feed/detail) 좌측페이지 로딩
@@ -56,11 +55,7 @@ public class FeedApiController {
             return Map.of("result", "LOGIN_REQUIRED"); // 로그인 안되어 있으면 리턴
         }
         Integer userId = sessionUser.getUserId();
-        Map<String, Object> result = feedLikeService.toggleLike(id, userId);
-        return Map.of("result", "SUCCESS",
-                "liked", result.get("liked"),
-                "likeCount", result.get("likeCount")
-        );
+        return feedLikeService.toggleLike(id, userId);
     }
 
     // 글쓰기 버튼 클릭 시 로그인 여부 확인
@@ -69,28 +64,25 @@ public class FeedApiController {
         if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }
-        return Map.of("result", "SUCCESS");
+        return Map.of("result", CommonResult.SUCCESS);
     }
 
     // 프로필 탭(작성) 전환 시 로딩 (/feed/profile)
     @RequestMapping(value = "/profile/{nickname}/write", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<FeedThumbnailDto> getMyFeeds(@PathVariable String nickname) {
-        List<FeedThumbnailDto> myFeeds = feedQueryService.getMyFeeds(nickname);
-        return myFeeds;
+        return feedQueryService.getMyFeeds(nickname);
     }
 
     // 프로필 탭(좋아요) 전환 시 로딩 (/feed/profile)
     @RequestMapping(value = "/profile/{nickname}/like", method = RequestMethod.GET)
     public List<FeedThumbnailDto> getLikeFeeds(@PathVariable String nickname) {
-        List<FeedThumbnailDto> likeFeeds = feedQueryService.getLikedFeeds(nickname);
-        return likeFeeds;
+        return feedQueryService.getLikedFeeds(nickname);
     }
 
     // 프로필 탭(팔로우) 전환 시 로딩 (/feed/profile)
     @RequestMapping(value = "/profile/{nickname}/recommend", method = RequestMethod.GET)
     public List<FeedThumbnailDto> getRecommendedFeeds(@PathVariable String nickname) {
-        List<FeedThumbnailDto> recommendFeeds = feedQueryService.getRecommendedFeeds(nickname);
-        return recommendFeeds;
+        return feedQueryService.getRecommendedFeeds(nickname);
     }
 
     // 피드 생성 (게시하기)
@@ -154,7 +146,7 @@ public class FeedApiController {
         boolean following = feedFollowService.toggleFollow(userId, targetUserId);
         Map<String, Integer> follow = feedFollowService.getFollowCount(userId, targetUserId);
 
-        return Map.of("result", "SUCCESS",
+        return Map.of("result", CommonResult.SUCCESS,
                 "following", following,
                 "followerCount", follow.get("followerCount"),
                 "followingCount", follow.get("followingCount")
@@ -167,6 +159,7 @@ public class FeedApiController {
                                              @RequestBody Map<String, String> request,
                                              @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
+        System.out.println("컨트롤러 진입");
         if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }
@@ -174,7 +167,7 @@ public class FeedApiController {
         String content = request.get("content");
         FeedCommentDto comment = feedCommentService.createComment(feedId, userId, content);
         return Map.of(
-                "result", "SUCCESS",
+                "result", CommonResult.SUCCESS,
                 "comment", comment
         );
     }

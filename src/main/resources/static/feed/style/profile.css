@@ -170,12 +170,12 @@
   /* ===== 메세지 ===== */
 }
 .profile-btns .btn-message {
-  background-color: #F9F9F9;
+  background-color: white;
   border: 1px solid #e7e5e4;
   color: #565656;
 }
 .profile-btns .btn-message:hover {
-  background-color: white;
+  background-color: #F9F9F9;
   transform: translateY(-2px);
 }
 

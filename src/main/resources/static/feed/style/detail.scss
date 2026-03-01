@@ -104,10 +104,10 @@
 }
 
 // 헤더 더보기 버튼
-.more-wrap {
+.feed-more-wrap {
     position: relative;
 
-    .more-btn {
+    .feed-more-btn {
         width: 36px;
         height: 36px;
         border-radius: 999rem;
@@ -132,7 +132,7 @@
         }
     }
 
-    .more-menu {
+    .feed-more-menu {
         @include flex(column, center, flex-start, 0.3rem);
         position: absolute;
         top: 35px;
@@ -162,11 +162,11 @@
             }
         }
 
-        .more-edit {
+        .feed-more-edit {
             color: #333;
         }
 
-        .more-delete {
+        .feed-more-delete {
             color: #e53935;
 
             &:hover {

@@ -15,10 +15,11 @@ public interface FeedLikeMapper {
     int delete(@Param("feedId") int feedId,
                @Param("userId") int userId);
 
-    // 좋아요 한 피드 조회
+    // 피드(리스트) 좋아요 여부 조회
     List<Integer> selectLikedFeedIds(@Param("userId") Integer userId,
                                      @Param("feedIds") List<Integer> feedIds);
 
+    // 피드 좋아요 여부 조회
     boolean existsFeedLike (@Param("feedId") int feedId,
                             @Param("userId") Integer userId);
 

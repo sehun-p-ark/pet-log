@@ -40,8 +40,8 @@ public class FeedCommandService {
 
         if (files == null || files.isEmpty()) return CommonResult.FAILURE;
         if (newOrders == null || files.size() != newOrders.size()) return CommonResult.FAILURE;
-        if (title == null || title.isBlank()) return CommonResult.FAILURE;
-        if (description == null || description.isBlank()) return CommonResult.FAILURE;
+        if (title == null || title.isBlank() || title.length() > 50) return CommonResult.FAILURE;
+        if (description == null || description.isBlank() || description.length() > 1000) return CommonResult.FAILURE;
 
         FeedEntity feed = new FeedEntity();
         feed.setUserId(userId);
@@ -104,7 +104,7 @@ public class FeedCommandService {
         feedMediaMapper.deleteNotIn(feedId, keepMediaIds);
 
         // 기존 미디어 sort_order 업데이트
-        if (keepMediaIds.size() > 0) {
+        if (!keepMediaIds.isEmpty()) {
             if (keepOrders == null || keepOrders.size() != keepMediaIds.size()) {
                 return CommonResult.FAILURE;
             }

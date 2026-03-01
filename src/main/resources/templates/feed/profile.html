@@ -31,7 +31,7 @@
     <section class="profile-header">
         <div class="profile-avatar">
             <img th:src="${profile.profileImageUrl != null ? profile.profileImageUrl : '/feed/images/explore/user.png'}"
-                 src="/feed/images/profile/user.png" alt="프로필">
+                 alt="프로필">
         </div>
         <div class="profile-info">
             <h2 class="nickname" th:text="${profile.nickname}">sehun_pet</h2>
@@ -85,26 +85,9 @@
     </div>
 
     <section class="profile-feed">
-        <article class="feed-card">
-            <img src="/feed/images/explore/dog4.jpg" alt="">
-        </article>
-
-        <article class="feed-card">
-            <img src="/feed/images/explore/dog2.jpg" alt="">
-        </article>
-
-        <article class="feed-card">
-            <img src="/feed/images/explore/dog1.jpg" alt="">
-        </article>
-
-        <article class="feed-card">
-            <img src="/feed/images/explore/dog5.jpg" alt="">
-        </article>
-
-        <article class="feed-card">
-            <img src="/feed/images/explore/dog3.jpg" alt="">
-        </article>
-
+        <!-- ////////////////////////////////////////////////
+        피드 피드 피드 피드 피드 피드 피드 피드 피드 피드 피드 피드
+        ///////////////////////////////////////////////// -->
     </section>
 </main>
 <div th:replace="~{fragments/chat :: chatModal}"></div>

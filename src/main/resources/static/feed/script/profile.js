@@ -1,113 +1,44 @@
-const pathParts = window.location.pathname.split('/');
-const $nickname = decodeURIComponent(pathParts[pathParts.length - 1]);
+let nickname;
 // 피드
 const $feedContainer = document.querySelector('.profile-feed');
-const $profileTabNav = document.querySelector('.profile-tab-nav');
-const $tabs = $profileTabNav.querySelectorAll(':scope > .tab');
-/// 채팅
-const modal = document.getElementById("chatModal");
+// 채팅
+const modal = document.getElementById("chatRoomModal");
 
-// 탭 전환
-$tabs.forEach($tab => {
-    $tab.addEventListener("click", () => {
-        $tabs.forEach($tab => $tab.classList.remove('active'));
-        $tab.classList.add('active');
-
-        const type = $tab.getAttribute('name');
-        loadFeeds(type);
-    });
-});
-
-// 탭에 따른 api 보내기
-async function loadFeeds(type) {
-    let url = '';
-
-    if (type === 'write') url = `/api/feed/profile/${encodeURIComponent($nickname)}/write`;
-    if (type === 'heart') url = `/api/feed/profile/${encodeURIComponent($nickname)}/like`;
-    if (type === 'etc') url = `/api/feed/profile/${encodeURIComponent($nickname)}/recommend`;
-
-    try {
-        const res = await fetch(url);
-
-        if (!res.ok) {
-            console.error("API 실패:", res.status);
-            return;
-        }
-
-        const feeds = await res.json();
-
-        if (!Array.isArray(feeds)) {
-            console.error("배열이 아님:", feeds);
-            return;
-        }
-
-        // 받아온 피드들 띄우기
-        renderFeeds(feeds);
-
-    } catch (e) {
-        console.error("네트워크 오류:", e);
-    }
-}
-
-// 피드 화면에 나타내기
-function renderFeeds(feeds) {
-    $feedContainer.innerHTML = '';
-
-    feeds.forEach(feed => {
-        const a = document.createElement('a');
-        a.className = 'feed-card';
-        a.href = "/feed/" + feed.feedId
-
-        const img = document.createElement('img');
-        img.src = feed.thumbnailUrl;
-
-        a.appendChild(img);
-        $feedContainer.appendChild(a);
-    });
-}
-
-// 팔로잉, 팔로워 수 나타내기
-function formatCount(count) {
-    if (count < 1000) return String(count);
-    if (count < 1_000_000) {
-        return (count / 1000).toFixed(1).replace('.0','') + 'K';
-    }
-    if (count < 1_000_000_000) {
-        return (count / 1_000_000).toFixed(1).replace('.0','') + 'M';
-    }
-    return (count / 1_000_000_000).toFixed(1).replace('.0','') + 'B';
-}
-
-// 채팅방 모달 띄우기
-function openChatModal(roomId) {
-    modal.classList.remove("hidden");
-    modal.dataset.roomId = roomId;
-}
-// 채팅방 모달 닫기
-function closeChatModal() {
-    if(!modal) return;
-    modal.classList.add("hidden");
-}
 
 // 팔로우 상태에 따른 화면 토글
 document.addEventListener('DOMContentLoaded', () => {
     const $btnArea = document.querySelector('.profile-btns');
     if (!$btnArea) return;
-    const isMine = $btnArea.dataset.mine === 'true'; // 본인 프로필 확인
-    const isFollowing = $btnArea.dataset.following === 'true'; // 팔로우 상태 확인
+    nickname = $btnArea.dataset.nickname;
     const targetUserId = parseInt($btnArea.dataset.targetUserId); // 현재페이지 userId 확인
     const $followerCount = document.querySelector('.stats .item:nth-child(2) strong');
     const $followingCount = document.querySelector('.stats .item:nth-child(3) strong');
     const $chatClose = document.querySelector(".chat-close");
-    const $chatOverlay = document.querySelector(".chat-overlay");
+    // 피드
+    const $profileTabNav = document.querySelector('.profile-tab-nav');
+    const $tabs = $profileTabNav.querySelectorAll(':scope > .tab');
 
-    if ($followerCount) {
+    /********* 처음 화면 로딩 ***********/
+    loadFeeds('write');
+
+
+    if ($followerCount) { //팔로워 카운트
         $followerCount.textContent = formatCount($followerCount.textContent);
     }
-
-    if ($followingCount) {
+    if ($followingCount) { // 팔로잉 카운트
         $followingCount.textContent = formatCount($followingCount.textContent);
     }
+
+    // 탭 전환
+    $tabs.forEach($tab => {
+        $tab.addEventListener("click", () => {
+            $tabs.forEach($tab => $tab.classList.remove('active'));
+            $tab.classList.add('active');
+
+            const type = $tab.getAttribute('name');
+            loadFeeds(type);
+        });
+    });
 
     // 공유 버튼
     const $share = $btnArea.querySelector('.btn-share');
@@ -116,9 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // 임시 : 현재 URL 복사
             try {
                 await navigator.clipboard.writeText(window.location.href);
-                alert('프로필 링크를 복사했습니다.');
+                showMessage("프로필 링크 복사 완료");
             } catch (e) {
-                alert('복사 실패. 주소창 URL을 직접 복사해주세요.');
+                showMessage('복사 실패. 주소창 URL을 직접 복사해주세요.');
             }
         });
     }
@@ -139,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch(`/api/feed/follow/${targetUserId}`, {
                 method: `POST`
             });
+
+            if (!res.ok) {
+                showMessage("요청 처리 중 오류가 발생하였습니다.");
+                return;
+            }
 
             const data = await res.json();
 
@@ -198,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
         $messageBtn.addEventListener('click', async () => {
             try {
                 const response = await fetch("/api/chat/room", {
-                   method: `POST`,
+                    method: `POST`,
                     headers: {
-                       'Content-Type': 'application/x-www-form-urlencoded'
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: new URLSearchParams({targetUserId: targetUserId})
                 });
@@ -211,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     case "LOGIN_REQUIRED" : showMessage("로그인 후 이용 가능합니다.");
                         break;
                     case "SUCCESS" :
-                        openChatModal(data.roomId);
+                        await openChatRoom(data.roomId, $btnArea.dataset.nickname, document.querySelector(".profile-avatar img").src);
                         break;
                     default : showMessage("채팅방 생성 실패");
                 }
@@ -221,10 +157,80 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     // 채팅방 닫기
-    $chatClose.addEventListener('click', () => closeChatModal());
-    $chatOverlay.addEventListener('click', () => closeChatModal());
+    if($chatClose) {
+        $chatClose.addEventListener('click', () => closeChatModal());
+    }
 });
 
+// 탭에 따른 api 보내기
+async function loadFeeds(type) {
+    let url = '';
 
-/********* 처음 화면 로딩 ***********/
-loadFeeds('write');
+    if (type === 'write') url = `/api/feed/profile/${encodeURIComponent(nickname)}/write`;
+    else if (type === 'heart') url = `/api/feed/profile/${encodeURIComponent(nickname)}/like`;
+    else if (type === 'etc') url = `/api/feed/profile/${encodeURIComponent(nickname)}/recommend`;
+    else return;
+
+    try {
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            console.error("API 실패:", res.status);
+            showMessage("피드를 불러오지 못했습니다.");
+            return;
+        }
+
+        const feeds = await res.json();
+
+        if (!Array.isArray(feeds)) {
+            console.error("배열이 아님:", feeds);
+            return;
+        }
+
+        // 받아온 피드들 띄우기
+        renderFeeds(feeds);
+
+    } catch (e) {
+        console.error("네트워크 오류:", e);
+    }
+}
+
+// 피드 화면에 나타내기
+function renderFeeds(feeds) {
+    $feedContainer.innerHTML = '';
+
+    feeds.forEach(feed => {
+        const a = document.createElement('a');
+        a.className = 'feed-card';
+        a.href = "/feed/" + feed.feedId
+
+        const img = document.createElement('img');
+        img.src = feed.thumbnailUrl;
+
+        a.appendChild(img);
+        $feedContainer.appendChild(a);
+    });
+}
+
+// 팔로잉, 팔로워 수 나타내기
+function formatCount(count) {
+    if (count < 1000) return String(count);
+    if (count < 1_000_000) {
+        return (count / 1000).toFixed(1).replace('.0','') + 'K';
+    }
+    if (count < 1_000_000_000) {
+        return (count / 1_000_000).toFixed(1).replace('.0','') + 'M';
+    }
+    return (count / 1_000_000_000).toFixed(1).replace('.0','') + 'B';
+}
+
+// 채팅방 모달 띄우기
+function openChatModal(roomId) {
+    modal.classList.remove("hidden");
+    modal.dataset.roomId = roomId;
+}
+// 채팅방 모달 닫기
+function closeChatModal() {
+    if(!modal) return;
+    modal.classList.add("hidden");
+}

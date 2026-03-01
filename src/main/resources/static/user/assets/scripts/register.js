@@ -1647,6 +1647,7 @@ $registerThirdSteps.forEach(step => {
     const emailInput = step.querySelector(':scope > .emailSendLabel > .email');
     const emailCodeInput = step.querySelector(':scope > .emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber');
     const verifyButton = step.querySelector(':scope > .emailVerifyLabel > .button');
+    const timerText = step.querySelector(':scope > .emailVerifyLabel> .verifyNumber-wrapper > .countTime');
 
     sendButton.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1689,6 +1690,8 @@ $registerThirdSteps.forEach(step => {
                     sendButton.setAttribute('disabled', '');
                     emailCodeInput.removeAttribute('disabled');
                     verifyButton.removeAttribute('disabled');
+                    timerText.classList.add('visible');
+                    startTimer(300, timerText); // 5분
                     break;
                 default:
                     showMessage('알 수 없는 이유로 실패하였습니다. 다시 시도해주세요.');
@@ -1735,10 +1738,12 @@ $registerThirdSteps.forEach(step => {
                     sendButton.removeAttribute('disabled');
                     emailCodeInput.setAttribute('disabled', '');
                     verifyButton.setAttribute('disabled', '');
+                    timerText.classList.remove('visible');
                     break;
                 case 'SUCCESS':
                     emailCodeInput.setAttribute('disabled', '');
                     verifyButton.setAttribute('disabled', '');
+                    timerText.classList.remove('visible');
                     isEmailVerified = true;
                     showMessage('인증을 완료하였습니다.');
                     break;
@@ -1933,18 +1938,25 @@ businessIdInput.addEventListener('input', () => {
 
 
 
+// 인증 시간 함수
+function formatMMSS(totalSecond) {
+    const minutes = String(Math.floor(totalSecond / 60)).padStart(2, '0');
+    const seconds = String(totalSecond % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+}
+function startTimer(seconds, timerText) {
+    let remainSeconds = seconds;
+    timerText.textContent = formatMMSS(remainSeconds);
 
+    const timerId = setInterval(() => {
+        remainSeconds--;
 
+        if (remainSeconds <= 0) {
+            clearInterval(timerId);
+            timerText.textContent = "00:00";
+            return;
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        timerText.textContent = formatMMSS(remainSeconds);
+    }, 1000);
+}

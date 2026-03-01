@@ -34,10 +34,10 @@ public class ChatApiController {
     }
 
     // 채팅방 리스트 띄울 때
-    // 안릭은 메세지 카운트, 읽음 처리
+    // 안 읽은 메세지 카운트, 읽음 처리
     @RequestMapping(value="/room/{roomId}/read", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> postReadRoom(@PathVariable int roomId,
-                                            @SessionAttribute(value="sessionUser") SessionUser sessionUser
+                                            @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser
     ) {
         if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");

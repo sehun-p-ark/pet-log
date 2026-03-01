@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+#chatRoot {
+  z-index: 95;
+}
+
 .chat-launcher,
 #chatBtn {
   position: fixed;
@@ -12,7 +16,7 @@
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  z-index: 20;
+  z-index: 95;
   background-color: #ffffff;
   color: #212121;
   font-weight: 700;
@@ -73,6 +77,9 @@
 .chat-list-modal .friend-option > button.abc {
   padding-right: 0.75rem;
 }
+.chat-list-modal .friend-option > button.sort {
+  padding-right: 0;
+}
 .chat-list-modal .friend-option > button.active {
   color: #000000;
   font-weight: 500;
@@ -101,7 +108,7 @@
 }
 .chat-list-modal .chat-option > .search {
   width: 1.75rem;
-  height: 1.75rem;
+  height: 1.5rem;
 }
 .chat-list-modal .buttons {
   align-items: center;
@@ -119,14 +126,14 @@
   flex-shrink: 1;
 }
 .chat-list-modal .buttons {
-  padding: 1rem;
+  padding: 0.8rem;
   border-top: 1px solid #eee;
 }
 .chat-list-modal .buttons button {
   flex: 1 1 0;
   border: none;
   border-radius: 0.6rem;
-  padding: 0.4rem 0;
+  padding: 0.75rem 0;
   cursor: pointer;
   background: #f0f0f0;
 }
@@ -140,7 +147,7 @@
   flex: 1;
   display: none;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1.5rem;
   overflow-y: auto;
 }
 .chat-list-modal .friend-container.active,

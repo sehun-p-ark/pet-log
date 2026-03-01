@@ -27,10 +27,10 @@ public class FeedPageController {
     public String getExplore(@SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
                              Model model
     ) {
-        if (sessionUser != null) {
+        if (sessionUser != null) { // 로그인 되어있으면
             Integer userId = sessionUser.getUserId();
             ProfileDto profile = feedProfileService.getProfile(userId);
-            model.addAttribute("profile", profile);
+            model.addAttribute("profile", profile); // 프로필 표시해주기
         }
         return "/feed/explore";
     }
@@ -41,7 +41,7 @@ public class FeedPageController {
                             @SessionAttribute(value="sessionUser", required = false) SessionUser sessionUser,
                             Model model
     ) {
-        Integer userId = sessionUser != null ? sessionUser.getUserId() : null;
+        Integer userId = sessionUser != null ? sessionUser.getUserId() : null; // 로그인 되어있으면 id 넣어주기
         FeedDetailDto feed = feedQueryService.getFeedDetail(feedId, userId);
         if(feed == null) {
             return "redirect:/feed/explore";
@@ -85,8 +85,11 @@ public class FeedPageController {
             return "redirect:/user/login";
         }
         Integer userId = sessionUser.getUserId();
-
         FeedDto feed = feedQueryService.getFeedForEdit(feedId, userId);
+
+        if (feed == null) {
+            return "redirect:/feed/" + feedId;
+        }
 
         model.addAttribute("mode", "edit");
         model.addAttribute("feed", feed);

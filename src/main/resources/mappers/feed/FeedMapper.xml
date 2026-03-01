@@ -28,8 +28,8 @@
     </update>
     <update id="updateFeed">
         UPDATE `petlog`.`feed`
-        SET `title` = #{title},
-            `content` = #{content},
+        SET `title`      = #{title},
+            `content`    = #{content},
             `updated_at` = NOW()
         WHERE `id` = #{feedId}
     </update>
@@ -43,53 +43,68 @@
         FROM `petlog`.`feed`
         WHERE `id` = #{feedId}
     </select>
-    <select id="selectFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedDto">
-        SELECT `t1`.`id` AS `feedId`,
-        `t1`.`user_id` AS `userId`,
-        `t1`.`title` AS `title`,
-        `t1`.`content` AS `content`,
-        `t1`.`like_count` AS `likeCount`,
-        `t1`.`comment_count` AS `commentCount`,
-        `t1`.`created_at` AS `createdAt`,
-        `t1`.`updated_at` AS `updatedAt`,
-        `t2`.nickname AS `nickname`,
-        `t3`.image_url AS `profileImageUrl`,
-        `t4`.address_primary AS address
-        FROM `petlog`.`feed` AS `t1`
-        LEFT JOIN `petlog`.`personal_user` AS `t2`
-        ON `t1`.`user_id` = `t2`.`user_id`
-        LEFT JOIN `petlog`.`pets` AS `t3`
-        ON `t1`.user_id = `t3`.user_id
-        AND `t3`.is_primary = 1
-        LEFT JOIN `petlog`.`address` AS `t4`
-        ON `t1`.`user_id` = `t4`.`user_id`
-        <where>
-            <!-- 최신순 커서 -->
-            <if test="sort == 'latest' and lastCreatedAt != null and lastFeedId != null">
-                (
-                `t1`.`created_at` <![CDATA[ < ]]> #{lastCreatedAt}
-                OR (`t1`.`created_at` = #{lastCreatedAt} AND `t1`.`id` <![CDATA[ < ]]> #{lastFeedId})
-                )
-            </if>
+    <select id="selectFeeds"
+            resultType="dev.dhkim.petlog.dto.feed.FeedDto">
 
-            <!-- 인기순 커서 -->
-            <if test="sort == 'like' and lastLikeCount != null and lastFeedId != null">
-                (
-                `t1`.`like_count` <![CDATA[ < ]]> #{lastLikeCount}
-                OR (`t1`.`like_count` = #{lastLikeCount} AND `t1`.`id` <![CDATA[ < ]]> #{lastFeedId})
-                )
-            </if>
-        </where>
-        ORDER BY
+        SELECT
+        `t1`.`id`                 AS feedId,
+        `t1`.`user_id`            AS userId,
+        `t2`.`nickname`           AS nickname,
+        `t3`.`image_url`          AS profileImageUrl,
+        `t4`.`address_primary`    AS address,
+        `t1`.`title`              AS title,
+        `t1`.`content`            AS content,
+        `t1`.`like_count`         AS likeCount,
+        `t1`.`comment_count`      AS commentCount,
+        `t1`.`created_at`         AS createdAt,
+        `t1`.`updated_at`         AS updatedAt
+        FROM `petlog`.`feed` `t1`
+            JOIN `petlog`.`personal_user` `t2`
+                ON `t2`.`user_id` = `t1`.`user_id`
+            LEFT JOIN `petlog`.`pets` `t3`
+                ON `t3`.`user_id` = `t1`.`user_id`
+                    AND `t3`.is_primary = 1
+            LEFT JOIN `petlog`.`address` `t4`
+                ON `t4`.`user_id` = `t1`.`user_id`
+        <!-- 전체 조회 -->
+        WHERE 1=1
+
+        <!-- 검색 조건 -->
+        <if test="keyword != null and keyword != ''">
+            AND (
+            `t2`.nickname LIKE CONCAT('%', #{keyword}, '%')
+            OR `t1`.title LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        <!-- 커서 조건 -->
+        <if test="lastFeedId != null">
+            <choose>
+                <!-- 최신순 -->
+                <when test="sort == 'latest'">
+                    AND (`t1`.`created_at` &lt; #{lastCreatedAt}
+                        OR (`t1`.`created_at` = #{lastCreatedAt}
+                                AND `t1`.`id` &lt; #{lastFeedId}
+                            )
+                        )
+                </when>
+                <!-- 인기순 -->
+                <when test="sort == 'like'">
+                    AND (`t1`.`like_count` &lt; #{lastLikeCount}
+                        OR (`t1`.`like_count` = #{lastLikeCount}
+                            AND `t1`.`id` &lt; #{lastFeedId}
+                        )
+                    )
+                </when>
+            </choose>
+        </if>
+        <!-- 정렬 -->
         <choose>
-            <when test="sort == 'latest'">
-                `t1`.`created_at` DESC, `t1`.`id` DESC
-            </when>
             <when test="sort == 'like'">
-                `t1`.`like_count` DESC, `t1`.`id` DESC
+                ORDER BY `t1`.like_count DESC, `t1`.`id` DESC
             </when>
             <otherwise>
-                `t1`.`created_at` DESC, `t1`.`id` DESC
+                ORDER BY `t1`.`created_at` DESC, `t1`.`id` DESC
             </otherwise>
         </choose>
         LIMIT #{size}
@@ -159,9 +174,9 @@
         ORDER BY `t1`.`created_at` DESC
     </select>
     <select id="selectLikedFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedThumbnailDto">
-        SELECT `t3`.`id` AS `feedId`,
+        SELECT `t3`.`id`            AS `feedId`,
                `t4`.`thumbnail_url` AS `thumbnailUrl`,
-               `t4`.`media_type` AS `mediaType`
+               `t4`.`media_type`    AS `mediaType`
         FROM `petlog`.`personal_user` `t1`
                  JOIN `petlog`.`feed_likes` `t2` ON `t2`.`user_id` = `t1`.`user_id`
                  JOIN `petlog`.`feed` `t3` ON `t2`.`feed_id` = `t3`.`id`
@@ -188,10 +203,52 @@
         ORDER BY `t2`.`created_at` DESC
     </select>
     <select id="existsById" resultType="java.lang.Boolean">
-        SELECT EXISTS(
-            SELECT 1
-            FROM `petlog`.`feed`
-            WHERE id = #{feedId}
-        )
+        SELECT EXISTS(SELECT 1
+                      FROM `petlog`.`feed`
+                      WHERE id = #{feedId})
+    </select>
+    <select id="searchFeeds" resultType="dev.dhkim.petlog.dto.feed.FeedSearchDto">
+        SELECT
+        `t1`.`feed_id` AS feedId,
+        `t2`.`nickname` AS nickname,
+        `t1`.`address` AS address,
+        `t2`.`profile_image_url` AS profileImageUrl,
+        `t3`.`thumbnail_url` AS thumbnailUrl,
+        `t1`.`title` AS title,
+        `t1`.`like_count` AS likeCount,
+        `t1`.`comment_count` AS commentCount,
+        `t1`.`created_at` AS createdAt,
+
+        CASE
+        WHEN #{userId} IS NULL THEN 0
+        WHEN `t4`.`user_id` IS NULL THEN 0
+        ELSE 1
+        END AS liked
+
+        FROM `petlog`.`feed` `t1`
+        JOIN `petlog`.`personal_user` `t2`
+        ON `t2`.user_id = `t1`.user_id
+
+        LEFT JOIN `petlog`.`feed_media` `t3`
+        ON `t3`.feed_id = `t1`.feed_id
+        AND `t3`.sort_order = 0
+
+        LEFT JOIN `petlog`.`feed_likes` `t4`
+        ON `t4`.`feed_id` = `t1`.`feed_id`
+        AND `t4`.`user_id` = #{userId}
+
+        WHERE `t2`.`nickname` LIKE CONCAT('%', #{keyword}, '%')
+        OR `t1`.`title` LIKE CONCAT('%', #{keyword}, '%')
+
+        <choose>
+            <when test="sort == 'like'">
+                ORDER BY `t1`.`like_count` DESC, `t1`.`id` DESC
+            </when>
+            <otherwise>
+                ORDER BY `t1`.`created_at` DESC, `t1`.`id` DESC
+            </otherwise>
+        </choose>
+
+        LIMIT 20
     </select>
 </mapper>

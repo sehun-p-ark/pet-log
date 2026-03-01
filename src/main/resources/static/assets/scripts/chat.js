@@ -64,9 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        $listModal.classList.remove("hidden");
-        // 친구 리스트 불러오기
-        await loadFriends();
+        $listModal.classList.toggle("hidden");
+        if (!$listModal.classList.contains("hidden")) {
+            // 친구 리스트 불러오기
+            await loadFriends();
+        }
     });
 
     // 바깥 클릭 시 리스트 모달 닫기
@@ -160,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             switch (data.result) {
                 case "SUCCESS":
-                    openChatRoom(data.roomId, nickname, imageUrl);
+                    await openChatRoom(data.roomId, nickname, imageUrl);
                     break;
 
                 case "LOGIN_REQUIRED":
@@ -217,12 +219,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // 모달 안 닫고 페이지 이동 시에도 읽음처리
+    window.addEventListener("beforeunload", () => {
+        markRoomAsReadBeacon(currentRoomId);
+    });
 });
 
+// 읽음 처리 기능
+function markRoomAsReadBeacon(roomId) {
+    if (!roomId) return;
+
+    // unload/닫기 타이밍에도 최대한 살아남는 방식
+    const url = `/api/chat/room/${roomId}/read`;
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+    } else {
+        // fallback
+        fetch(url, { method: "POST", keepalive: true }).catch(() => {});
+    }
+}
 
 
 // 채팅방 열기
 async function openChatRoom(roomId, nickname, imageUrl) {
+    if (currentRoomId && String(currentRoomId) !== String(roomId)) {
+        markRoomAsReadBeacon(currentRoomId);
+    }
+
     if (currentSub) {
         currentSub.unsubscribe();
         currentSub = null;
@@ -269,8 +292,7 @@ async function openChatRoom(roomId, nickname, imageUrl) {
         const badge = roomItem.querySelector(".unread-badge");
         if (badge) badge.remove();
     }
-
-    loadMessages(roomId);
+    await loadMessages(roomId);
     connectWebSocket(roomId);
     await fetch(`/api/chat/room/${roomId}/read`, {
         method: "POST"
@@ -281,6 +303,10 @@ async function openChatRoom(roomId, nickname, imageUrl) {
 function closeChatRoom() {
     const $roomModal = document.getElementById("chatRoomModal");
     const $listModal = document.getElementById("chatListModal");
+
+    const roomId = $roomModal.dataset.roomId || currentRoomId;
+    markRoomAsReadBeacon(roomId);
+
     if (currentSub) { // 1. 구독 해제
         currentSub.unsubscribe();
         currentSub = null;
@@ -325,7 +351,38 @@ async function loadFriends() {
     }
 }
 
-// 채팅방 리스트 가져오기
+// 친구리스트 렌더링
+function renderChatFriend(list) {
+
+    const friendList = document.querySelector(".chat-friend-list");
+    friendList.innerHTML = "";
+
+    if (!list || list.length === 0) {
+        friendList.innerHTML =
+            "<li class='empty'>팔로우한 친구가 없습니다.</li>";
+        return;
+    }
+
+    list.forEach(friend => {
+
+        const li = document.createElement("li");
+        li.className = "item";
+        li.dataset.userId = friend.userId;
+
+        const imageUrl = friend.profileImageUrl
+            ? friend.profileImageUrl
+            : "/feed/images/explore/user.png";
+
+        li.innerHTML = `
+            <img src="${imageUrl}">
+            <span class="user-name">${friend.nickname}</span>
+        `;
+
+        friendList.appendChild(li);
+    });
+}
+
+// 채팅방 리스트 가져오기, 렌더링
 async function loadChatRooms() {
 
     try {
@@ -413,35 +470,29 @@ async function loadMessages(roomId) {
     }
 }
 
-// 친구리스트 렌더링
-function renderChatFriend(list) {
+// 메세지 렌더링
+function renderMessage(msg) {
 
-    const friendList = document.querySelector(".chat-friend-list");
-    friendList.innerHTML = "";
+    const $messagesContainer =
+        document.querySelector("#chatRoomModal .chat-messages");
 
-    if (!list || list.length === 0) {
-        friendList.innerHTML =
-            "<li class='empty'>팔로우한 친구가 없습니다.</li>";
-        return;
+    const currentUserId =
+        Number(document.getElementById("chatRoot").dataset.userId);
+
+    const messageDiv = document.createElement("div");
+    messageDiv.classList.add("chat-message");
+
+    if (msg.senderId === currentUserId) {
+        messageDiv.classList.add("me");
+    } else {
+        messageDiv.classList.add("other");
     }
 
-    list.forEach(friend => {
+    messageDiv.innerText = msg.message;
+    $messagesContainer.appendChild(messageDiv);
 
-        const li = document.createElement("li");
-        li.className = "item";
-        li.dataset.userId = friend.userId;
-
-        const imageUrl = friend.profileImageUrl
-            ? friend.profileImageUrl
-            : "/feed/images/explore/user.png";
-
-        li.innerHTML = `
-            <img src="${imageUrl}">
-            <span class="user-name">${friend.nickname}</span>
-        `;
-
-        friendList.appendChild(li);
-    });
+    $messagesContainer.scrollTop =
+        $messagesContainer.scrollHeight;
 }
 
 // 최신 메세지 실시간 업데이트
@@ -552,29 +603,4 @@ function sendMessageWs(roomId, text) {
             message: text
         })
     );
-}
-
-// 메세지 렌더링
-function renderMessage(msg) {
-
-    const $messagesContainer =
-        document.querySelector("#chatRoomModal .chat-messages");
-
-    const currentUserId =
-        Number(document.getElementById("chatRoot").dataset.userId);
-
-    const messageDiv = document.createElement("div");
-    messageDiv.classList.add("chat-message");
-
-    if (msg.senderId === currentUserId) {
-        messageDiv.classList.add("me");
-    } else {
-        messageDiv.classList.add("other");
-    }
-
-    messageDiv.innerText = msg.message;
-    $messagesContainer.appendChild(messageDiv);
-
-    $messagesContainer.scrollTop =
-        $messagesContainer.scrollHeight;
 }

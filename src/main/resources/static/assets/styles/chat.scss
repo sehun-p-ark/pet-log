@@ -5,6 +5,10 @@
     display: none !important;
 }
 
+#chatRoot {
+    z-index: 95;
+}
+
 // 런처 버튼
 .chat-launcher,
 #chatBtn {
@@ -16,7 +20,7 @@
     border-radius: 50%;
     border: none;
     cursor: pointer;
-    z-index: 20;
+    z-index: 95;
 
     background-color: #ffffff;
     color: #212121;
@@ -70,6 +74,9 @@
             &.abc {
                 padding-right: 0.75rem;
             }
+            &.sort {
+                padding-right: 0;
+            }
             &.active {
                 color: #000000;
                 font-weight: 500;
@@ -90,20 +97,20 @@
 
         > .search {
             width: 1.75rem;
-            height: 1.75rem;
+            height: 1.5rem;
         }
     }
 
     .buttons {
         @include flex(row, center, center, 0.5rem);
-        padding: 1rem;
+        padding: 0.8rem;
         border-top: 1px solid #eee;
 
         button {
             flex: 1 1 0;
             border: none;
             border-radius: 0.6rem;
-            padding: 0.4rem 0;
+            padding: 0.75rem 0;
             cursor: pointer;
             background: #f0f0f0;
 
@@ -121,7 +128,7 @@
         flex: 1;
         display: none;
         flex-direction: column;
-        padding: 1rem;
+        padding: 1.5rem;
         overflow-y: auto;
 
         &.active {

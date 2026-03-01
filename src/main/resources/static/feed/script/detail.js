@@ -8,12 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderFeedDetail(feeds);
 
     /* ===== 헤더 영역 ===== */
-    const $moreWrap = document.querySelector('.more-wrap');
-    if (!$moreWrap) return;
-    const $moreBtn = document.querySelector('.more-btn');
-    const $moreMenu = document.querySelector('.more-menu');
-    const $moreEditBtn = $moreMenu.querySelector('.more-edit');
-    const $moreDeleteBtn = $moreMenu.querySelector('.more-delete');
+    const $moreWrap = document.querySelector('.feed-more-wrap');
 
     /* ===== 슬라이드 영역 ===== */
     const track = document.querySelector('.slide-track');
@@ -35,46 +30,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     const writeCommentBtn = commentForm.querySelector('.btn');
     const commentSection = detailArea.querySelector('.comments');
 
-    // 피드 더보기 버튼
-    $moreBtn.addEventListener('click', () => {
-        $moreMenu.classList.toggle('hidden');
-    });
+    if ($moreWrap) {
+        const $moreBtn = document.querySelector('.feed-more-btn');
+        const $moreMenu = document.querySelector('.feed-more-menu');
+        const $moreEditBtn = $moreMenu.querySelector('.feed-more-edit');
+        const $moreDeleteBtn = $moreMenu.querySelector('.feed-more-delete');
 
-    // 수정하기 버튼
-    $moreEditBtn.addEventListener('click', () => {
-        window.location.href = `/feed/${feedId}/edit`;
-        $moreMenu.classList.add("hidden");
-    });
+        // 피드 더보기 버튼
+        $moreBtn.addEventListener('click', () => {
+            $moreMenu.classList.toggle('hidden');
+        });
 
-    // 삭제하기 버튼
-    $moreDeleteBtn.addEventListener('click', async () => {
-        const confirmed = confirm("게시글을 삭제하시겠습니까?");
-        if (!confirmed) {
-            alert("지켜드렸습니다 ㅋ");
-            return;
-        }
-        alert("맞아요옹~ 난 냐옹이다!");
-        try{
-            const res = await fetch(`/api/feed/${feedId}`, {
-                method: 'DELETE'
-            });
-            const data = await res.json();
-            if (data.result === "LOGIN_REQUIRED") {
-                showMessage("로그인 후 이용가능합니다.");
-                return;
+        // 수정하기 버튼
+        $moreEditBtn.addEventListener('click', () => {
+            window.location.href = `/feed/${feedId}/edit`;
+            $moreMenu.classList.add("hidden");
+        });
+
+        // 삭제하기 버튼
+        $moreDeleteBtn.addEventListener('click', async () => {
+            $moreMenu.classList.add("hidden");
+            const confirmed = await showConfirm("삭제된 게시글은 되돌릴 수 없습니다. 게시글을 삭제하시겠습니까?");
+            if (!confirmed) return;
+            try {
+                const res = await fetch(`/api/feed/${feedId}`, {
+                    method: 'DELETE'
+                });
+                const data = await res.json();
+                if (data.result === "LOGIN_REQUIRED") {
+                    showMessage("로그인 후 이용가능합니다.");
+                    return;
+                }
+                if (data.result !== "SUCCESS") {
+                    showMessage("삭제에 실패하였습니다. 다시 시도해주세요.");
+                    return;
+                }
+                showMessage("삭제되었습니다.");
+                window.location.href = `/feed/profile/${userNickname}`;
+            } catch (e) {
+                console.log("에러발생" + e);
+                showMessage("알 수 없는 오류가 발생하였습니다.")
             }
-            if (data.result !== "SUCCESS") {
-                showMessage("삭제에 실패하였습니다. 다시 시도햊쉐요.");
-                return;
-            }
-            showMessage("삭제되었습니다.");
-            window.location.href = `/feed/profile/${userNickname}`;
-        } catch (e) {
-            console.log("에러발생 삐용 삐용" + e);
-            showMessage("알 수 없는 오류가 발생하였습니다.")
-        }
-        $moreMenu.classList.add("hidden");
-    });
+        });
+    }
 
     if (slides.length > 0) {
         slides.forEach((_, i) => { // 점 생성
@@ -149,6 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 댓글 달기
     writeCommentBtn.addEventListener('click', async() => {
+        console.log("이벤트 발생");
         const content = commentInput.value.trim();
 
         if (!content || content === '') {
