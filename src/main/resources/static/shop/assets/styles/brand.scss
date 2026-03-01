@@ -9,14 +9,20 @@
   overflow: auto;
 
   > .brand-product {
-    @include flex(column, flex-start, flex-start, 2rem);
+    @include flex(column, flex-start, flex-start, 1rem);
     width: 100%;
 
     > .brand-info {
+      width: 100%;
+
       > .name {
-        font-size: 1.8rem;
+        font-size: 1.3rem;
         font-weight: 700;
         color: $global-gray-text-color;
+        border-top: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+        border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+        width: 100%;
+        padding: 1rem 0;
       }
     }
 
@@ -116,7 +122,7 @@
         width: 100%;
 
         > .title {
-          @include flex(row, center, center, 0.5rem);
+          @include flex(row, flex-end, center, 0.5rem);
 
           > .text {
             font-size: 1.3rem;

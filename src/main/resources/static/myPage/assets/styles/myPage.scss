@@ -2,6 +2,8 @@
 
 body:has(.show-message.visible),
 body:has(.checkMessage.visible),
+body:has(.defaultAddressMessage.visible),
+body:has(.defaultDeliveryMessage.visible),
 body:has(.delivery-change-modal.visible),
 body:has(.name-change-modal.visible),
 body:has(.nickname-change-modal.visible),
@@ -21,7 +23,8 @@ body:has(.dialog.visible),
 body:has(.modal-cover.visible),
 body:has(.addressDeleteMessage.visible),
 body:has(.deliveryAddressDeleteMessage.visible),
-body:has(.petDeleteMessage.visible) {
+body:has(.petDeleteMessage.visible),
+body:has(.reservationMessage.visible) {
   overflow-y: hidden;
 }
 
@@ -82,6 +85,152 @@ body:has(.petDeleteMessage.visible) {
 }
 
 .checkMessage {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .yes {
+      background-color: #38A34C;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #2F8F43;
+      }
+
+      &:active {
+        background-color: #287A39;
+      }
+    }
+
+    > .no {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
+  }
+}
+
+.defaultAddressMessage {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .yes {
+      background-color: #38A34C;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #2F8F43;
+      }
+
+      &:active {
+        background-color: #287A39;
+      }
+    }
+
+    > .no {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
+  }
+}
+
+.defaultDeliveryMessage {
   @include flex(column, stertch, flex-start, 1rem);
   top: 50%;
   left: 50%;
@@ -336,11 +485,7 @@ body:has(.petDeleteMessage.visible) {
         content: "";
         position: absolute;
         inset: 0;
-        background-color: #e8f5e9;
-        transform: scaleX(0);
-        transform-origin: left;
-        transition-property: transform;
-        transition-duration: 350ms;
+        background-color: #ffffff;
         z-index: -1;
       }
 
@@ -348,10 +493,6 @@ body:has(.petDeleteMessage.visible) {
         color: #2e7d32;
         font-weight: 600;
         border-left: 0.25rem solid #4CAF50;
-
-        &::before {
-          transform: scaleX(1);
-        }
       }
     }
   }
@@ -1128,6 +1269,80 @@ body:has(.petDeleteMessage.visible) {
   }
 }
 
+.reservationMessage {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  min-width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .yes {
+      background-color: #e53935;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: darken(#e53935, 5%);
+      }
+
+      &:active {
+        background-color: darken(#e53935, 10%);
+      }
+    }
+
+    > .no {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
+  }
+}
+
+
 body:has(> .dialog.visible) {
   .cover {
     opacity: 1;
@@ -1136,7 +1351,10 @@ body:has(> .dialog.visible) {
 }
 
 body:has(> .petDeleteMessage.visible) > .cover,
+body:has(> .reservationMessage.visible) > .cover,
 body:has(> .checkMessage.visible) > .cover,
+body:has(> .defaultAddressMessage.visible) > .cover,
+body:has(> .defaultDeliveryMessage.visible) > .cover,
 body:has(> .show-message.visible) > .cover,
 body:has(> .addressDeleteMessage.visible) > .cover,
 body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
@@ -1159,22 +1377,9 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 
 
 
-//주소 변경 모달
-.delivery-change-modal,
-.name-change-modal,
-.nickname-change-modal,
-.phone-change-modal,
-.password-change-modal,
-.delete-user-modal,
-.store-registration-modal,
-.companyName-change-modal,
-.representativeName-change-modal,
-.companyAddress-modal,
-.delete-store-modal,
-.store-modify-modal,
-.address-modal,
-.address-modify-modal,
-.delivery-address-modify-modal {
+
+// ── 배송지 변경 ───────────────────────────────────────────
+.delivery-change-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -1186,7 +1391,10 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   justify-content: center;
   align-items: center;
 
-  /* 어두운 배경 */
+  &.visible {
+    display: flex;
+  }
+
   > .modal-cover {
     position: absolute;
     inset: 0;
@@ -1200,16 +1408,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     }
   }
 
-  &.visible {
-    display: flex;
-  }
-
-  > .address-wrapper,
-  > .storeAddress-wrapper,
-  > .storeAddressModify-wrapper,
-  > .map-address-wrapper,
-  > .map-address-modify-wrapper,
-  > .delivery-address-modify-wrapper {
+  > .address-wrapper {
     @include flex(column, flex-end, flex-start);
     top: 50%;
     left: 50%;
@@ -1238,14 +1437,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     }
   }
 
-  > .modal-content,
-  > .delivery-registration,
-  > .address-registration,
-  > .store-registration,
-  > .store-modify,
-  > .companyAddress-change,
-  > .address-modify,
-  > .delivery-address-modify {
+  > .modal-content {
     background-color: #ffffff;
     border-radius: 0.35rem;
     width: 100%;
@@ -1288,8 +1480,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
       flex: 1;
       width: 100%;
 
-      > .delivery-list,
-      > .address-list {
+      > .delivery-list {
         @include flex(column, flex-start, stretch, 1rem);
 
         &.empty {
@@ -1300,8 +1491,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           color: $global-gray-text-color;
         }
 
-        > .delivery-item,
-        > .address-item {
+        > .delivery-item {
           padding: 1.5rem;
           border: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
           border-radius: 0.35rem;
@@ -1328,8 +1518,9 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
               }
 
               > .default-badge {
-                font-size: 0.8rem;
-                padding: 0.3rem 0.5rem;
+                font-size: 0.9rem;
+                font-weight: 600;
+                padding: 0.5rem 0.7rem;
                 background-color: $global-green-background-color;
                 color: #ffffff;
                 border-radius: 0.2rem;
@@ -1366,47 +1557,48 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
             }
 
             > .item-actions {
-              @include flex(row, center, flex-end);
+              @include flex(row, center, space-between);
               width: 100%;
               padding-top: 0.5rem;
-
-              &.delivery {
-                justify-content: space-between;
-              }
-
 
               > .left-actions {
                 @include flex(row, center, flex-start, 0.5rem);
 
-                > .delete-btn,
-                > .edit-btn {
+                > .delete-btn {
                   padding: 0.4rem 0.8rem;
                   font-size: 0.9rem;
-                  border: 0.0625rem solid lighten($global-gray-right-text-color, 25%);
+                  border: 0.0625rem solid #e74c3c;
                   background-color: #ffffff;
-                  color: $global-gray-text-color;
+                  color: #e74c3c;
                   border-radius: 0.25rem;
                   cursor: pointer;
                   transition: all 0.2s;
-
-                  &:hover {
-                    background-color: lighten($global-gray-right-text-color, 35%);
-                  }
-                }
-
-                > .delete-btn {
-                  color: #e74c3c;
-                  border-color: #e74c3c;
 
                   &:hover {
                     background-color: #e74c3c;
                     color: #ffffff;
                   }
                 }
+
+                > .edit-btn {
+                  padding: 0.4rem 0.8rem;
+                  font-size: 0.9rem;
+                  border: 0.0625rem solid lighten($global-green-text-color, 25%);
+                  background-color: #ffffff;
+                  color: $global-green-text-color;
+                  border-radius: 0.25rem;
+                  cursor: pointer;
+                  transition: all 0.2s;
+
+                  &:hover {
+                    background-color: $global-green-background-color;
+                    color: #ffffff;
+                  }
+                }
               }
 
               > .select-btn {
-                padding: 0.4rem 1.2rem;
+                padding: 0.65rem 1.2rem;
                 font-size: 0.9rem;
                 font-weight: 600;
                 background-color: $global-green-background-color;
@@ -1422,6 +1614,1669 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
               }
             }
           }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .add-btn {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+
+  > .delivery-registration {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .registration-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+
+      > .AddressName-wrapper {
+        @include flex(row, center, flex-start, 0.25rem);
+        margin-bottom: 1rem;
+
+        > .name {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .AddressNameInput {
+          border-bottom: 0.0625rem solid $global-border-color !important;
+          height: 2rem !important;
+          flex-grow: 1 !important;
+          flex-shrink: 1;
+          width: 0;
+          min-width: 0;
+        }
+      }
+
+      > .name-wrapper {
+        @include flex(row, center, flex-start, 0.25rem);
+        margin-bottom: 1rem;
+
+        > .name {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .nameInput {
+          border-bottom: 0.0625rem solid $global-border-color !important;
+          height: 2rem !important;
+          flex-grow: 1 !important;
+          flex-shrink: 1;
+          width: 0;
+          min-width: 0;
+        }
+      }
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .number-wrapper {
+          @include flex(row, center, flex-start, 0.5rem);
+          flex: 1;
+          min-width: 0;
+
+          > .firstNumber {
+            border: 0.0625rem solid $global-border-color;
+            height: 2rem;
+            width: 6rem;
+          }
+
+          > .input {
+            flex-shrink: 1;
+            min-width: 0;
+          }
+        }
+
+        > .input,
+        > .number-wrapper > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+        }
+
+        > .button {
+          background-color: $global-green-background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 5%);
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .registrationButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 배송지 수정 ───────────────────────────────────────────
+.delivery-address-modify-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .delivery-address-modify-wrapper {
+    @include flex(column, flex-end, flex-start);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0625rem solid $global-border-color;
+    border-radius: 0.35rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .button {
+      padding: 0.35rem;
+      cursor: pointer;
+
+      > .image {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  > .delivery-address-modify {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .delivery-modify-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+
+      > .AddressName-wrapper {
+        @include flex(row, center, flex-start, 0.25rem);
+        margin-bottom: 1rem;
+
+        > .name {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .AddressNameInput {
+          border-bottom: 0.0625rem solid $global-border-color !important;
+          height: 2rem !important;
+          flex-grow: 1 !important;
+          flex-shrink: 1;
+          width: 0;
+          min-width: 0;
+        }
+      }
+
+      > .name-wrapper {
+        @include flex(row, center, flex-start, 0.25rem);
+        margin-bottom: 1rem;
+
+        > .name {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .nameInput {
+          border-bottom: 0.0625rem solid $global-border-color !important;
+          height: 2rem !important;
+          flex-grow: 1 !important;
+          flex-shrink: 1;
+          width: 0;
+          min-width: 0;
+        }
+      }
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .number-wrapper {
+          @include flex(row, center, flex-start, 0.5rem);
+          flex: 1;
+          min-width: 0;
+
+          > .firstNumber {
+            border: 0.0625rem solid $global-border-color;
+            height: 2rem;
+            width: 6rem;
+          }
+
+          > .input {
+            flex-shrink: 1;
+            min-width: 0;
+          }
+        }
+
+        > .input,
+        > .number-wrapper > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+        }
+
+        > .button {
+          background-color: $global-green-background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 5%);
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .modifyButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 주소 관리 (PERSONAL) ──────────────────────────────────
+.address-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .map-address-wrapper {
+    @include flex(column, flex-end, flex-start);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0625rem solid $global-border-color;
+    border-radius: 0.35rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .button {
+      padding: 0.35rem;
+      cursor: pointer;
+
+      > .image {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .address-list {
+        @include flex(column, flex-start, stretch, 1rem);
+
+        &.empty {
+          @include flex(column, center, center);
+          height: 7rem;
+          min-height: 0;
+          font-size: 1.1rem;
+          color: $global-gray-text-color;
+        }
+
+        > .address-item {
+          padding: 1.5rem;
+          border: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+          border-radius: 0.35rem;
+          cursor: pointer;
+          width: 100%;
+          transition: all 0.2s;
+
+          &:hover {
+            border-color: $global-green-background-color;
+            background-color: lighten($global-green-background-color, 45%);
+          }
+
+          > .item-content {
+            @include flex(column, flex-start, flex-start, 0.4rem);
+            width: 100%;
+
+            > .item-header {
+              @include flex(row, center, flex-start, 0.5rem);
+              margin-bottom: 0.3rem;
+
+              > .default-badge {
+                font-size: 0.9rem;
+                font-weight: 600;
+                padding: 0.5rem 0.7rem;
+                background-color: $global-green-background-color;
+                color: #ffffff;
+                border-radius: 0.2rem;
+              }
+            }
+
+            > .address {
+              font-size: 0.95rem;
+              @include flex(row, center, flex-start, 0.3rem);
+
+              > .postal {
+                color: $global-gray-text-color;
+              }
+
+              > .addr {
+                color: $global-gray-text-color;
+              }
+            }
+
+            > .detail-addr {
+              font-size: 0.95rem;
+              color: $global-gray-text-color;
+            }
+
+            > .item-actions {
+              @include flex(row, center, space-between);
+              width: 100%;
+              padding-top: 0.5rem;
+
+              > .left-actions {
+                @include flex(row, center, flex-start, 0.5rem);
+
+                > .delete-btn {
+                  padding: 0.4rem 0.8rem;
+                  font-size: 0.9rem;
+                  border: 0.0625rem solid #e74c3c;
+                  background-color: #ffffff;
+                  color: #e74c3c;
+                  border-radius: 0.25rem;
+                  cursor: pointer;
+                  transition: all 0.2s;
+
+                  &:hover {
+                    background-color: #e74c3c;
+                    color: #ffffff;
+                  }
+                }
+
+                > .edit-btn {
+                  padding: 0.4rem 0.8rem;
+                  font-size: 0.9rem;
+                  border: 0.0625rem solid lighten($global-green-text-color, 25%);
+                  background-color: #ffffff;
+                  color: $global-green-text-color;
+                  border-radius: 0.25rem;
+                  cursor: pointer;
+                  transition: all 0.2s;
+
+                  &:hover {
+                    background-color: $global-green-background-color;
+                    color: #ffffff;
+                  }
+                }
+              }
+
+              > .select-btn {
+                padding: 0.65rem 1.2rem;
+                font-size: 0.9rem;
+                font-weight: 600;
+                background-color: $global-green-background-color;
+                color: #ffffff;
+                border: none;
+                border-radius: 0.25rem;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &:hover {
+                  background-color: darken($global-green-background-color, 5%);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .add-btn {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+
+  > .address-registration {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .registration-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+        }
+
+        > .button {
+          background-color: $global-green-background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 5%);
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .registrationButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 주소 수정 (PERSONAL) ──────────────────────────────────
+.address-modify-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .map-address-modify-wrapper {
+    @include flex(column, flex-end, flex-start);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0625rem solid $global-border-color;
+    border-radius: 0.35rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .button {
+      padding: 0.35rem;
+      cursor: pointer;
+
+      > .image {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  > .address-modify {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modify-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+        }
+
+        > .button {
+          background-color: $global-green-background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 5%);
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .addressModifyButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 기업 주소 변경 (BUSINESS) ─────────────────────────────
+.companyAddress-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .address-wrapper {
+    @include flex(column, flex-end, flex-start);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0625rem solid $global-border-color;
+    border-radius: 0.35rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .button {
+      padding: 0.35rem;
+      cursor: pointer;
+
+      > .image {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  > .companyAddress-change {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .companyAddressChange-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+        }
+
+        > .button {
+          background-color: $global-green-background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 5%);
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .companyAddressChangeButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 이름 변경 (PERSONAL) ──────────────────────────────────
+.name-change-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+
+        &.bottom {
+          margin-top: 1rem;
+        }
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .modify-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: $global-green-background-color;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+
+        &:active {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 닉네임 변경 (PERSONAL) ────────────────────────────────
+.nickname-change-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .modify-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: $global-green-background-color;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+
+        &:active {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 기업명 변경 (BUSINESS) ────────────────────────────────
+.companyName-change-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+
+        &.bottom {
+          margin-top: 1rem;
+        }
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .modify-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: $global-green-background-color;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+
+        &:active {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 대표자명 변경 (BUSINESS) ──────────────────────────────
+.representativeName-change-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+
+        &.bottom {
+          margin-top: 1rem;
+        }
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .modify-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: $global-green-background-color;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+
+        &:active {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 전화번호 변경 ─────────────────────────────────────────
+.phone-change-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+
+        &.bottom {
+          margin-top: 1rem;
         }
       }
 
@@ -1444,41 +3299,497 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           min-width: 0;
         }
       }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
     }
 
     > .modal-footer {
-      @include flex(row, center, center);
+      @include flex(row, center, center, 1rem);
       padding: 1.5rem;
       width: 100%;
       border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
       flex-shrink: 0;
 
-      > .add-btn,
-      > .registrationButton,
-      > .addressModifyButton,
-      > .modifyButton,
-      > .companyAddressChangeButton {
-        width: 100%;
-        padding: 0.8rem;
-        background-color: $global-green-background-color;
-        color: #ffffff;
-        border: none;
+      > .modify-button {
+        width: 6rem;
+        height: 2.5rem;
         border-radius: 0.35rem;
-        font-size: 1rem;
-        font-weight: 600;
+        color: $global-white-text-color;
         cursor: pointer;
-        transition: all 0.2s;
+        background-color: $global-green-background-color;
+        transition-duration: 250ms;
+        transition-property: background-color;
 
         &:hover {
           background-color: darken($global-green-background-color, 5%);
         }
+
+        &:active {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 비밀번호 변경 ─────────────────────────────────────────
+.password-change-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
       }
     }
 
-    > .registration-wrapper,
-    > .modify-wrapper,
-    > .delivery-modify-wrapper,
-    > .companyAddressChange-wrapper {
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .modify-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: $global-green-background-color;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+
+        &:active {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 회원 탈퇴 ─────────────────────────────────────────────
+.delete-user-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+
+        &.bottom {
+          margin-top: 1rem;
+        }
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .delete-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: #e53935;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken(#e53935, 5%);
+        }
+
+        &:active {
+          background-color: darken(#e53935, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 가게 삭제 ─────────────────────────────────────────────
+.delete-store-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .modal-content {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, stretch, flex-start, 0.5rem);
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+      width: 100%;
+
+      > .title {
+        font-size: 1rem;
+        color: #565656;
+      }
+
+      > .input {
+        border: 0.0625rem solid $global-border-color;
+        border-radius: 0.35rem;
+        height: 2.5rem;
+        padding-left: 0.5rem;
+      }
+    }
+
+    > .modal-footer {
+      @include flex(row, center, center, 1rem);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .delete-button {
+        width: 6rem;
+        height: 2.5rem;
+        border-radius: 0.35rem;
+        color: $global-white-text-color;
+        cursor: pointer;
+        background-color: #e53935;
+        transition-duration: 250ms;
+        transition-property: background-color;
+
+        &:hover {
+          background-color: darken(#e53935, 5%);
+        }
+
+        &:active {
+          background-color: darken(#e53935, 10%);
+        }
+      }
+    }
+  }
+}
+
+
+// ── 가게 등록 (BUSINESS) ──────────────────────────────────
+.store-registration-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .storeAddress-wrapper {
+    @include flex(column, flex-end, flex-start);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0625rem solid $global-border-color;
+    border-radius: 0.35rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .button {
+      padding: 0.35rem;
+      cursor: pointer;
+
+      > .image {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  > .store-registration {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+    > .registration-wrapper {
       @include flex(column, stretch, flex-start, 2.5rem);
       padding: 2rem;
       width: 100%;
@@ -1487,8 +3798,6 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
       min-height: 0;
       overflow-y: auto;
 
-      > .AddressName-wrapper,
-      > .name-wrapper,
       > .storeName-wrapper {
         @include flex(row, center, flex-start, 0.25rem);
         margin-bottom: 1rem;
@@ -1499,18 +3808,15 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           width: 6rem;
         }
 
-        > .AddressNameInput,
-        > .nameInput,
         > .storeNameInput {
           border-bottom: 0.0625rem solid $global-border-color !important;
           height: 2rem !important;
           flex-grow: 1 !important;
-          flex-shrink: 1; // 이게 핵심
-          width: 0; // flex-grow가 제대로 동작하게
+          flex-shrink: 1;
+          width: 0;
           min-width: 0;
         }
       }
-
 
       > .label {
         @include flex(row, center, flex-start, 0.25rem);
@@ -1525,12 +3831,6 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           @include flex(row, center, flex-start, 0.5rem);
           flex: 1;
           min-width: 0;
-
-          > .firstNumber {
-            border: 0.0625rem solid $global-border-color;
-            height: 2rem;
-            width: 6rem;
-          }
 
           > .input {
             flex-shrink: 1;
@@ -1570,87 +3870,240 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
         }
       }
     }
-  }
 
-  > .modal-content {
-    > .modal-body {
-      @include flex(column, stretch, flex-start, 0.5rem);
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
 
-      > .title {
+      > .registrationButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
         font-size: 1rem;
-        color: #565656;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
 
-        &.bottom {
-          margin-top: 1rem;
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
         }
       }
+    }
+  }
+}
 
-      > .input {
-        border: 0.0625rem solid $global-border-color;
-        border-radius: 0.35rem;
-        height: 2.5rem;
-        padding-left: 0.5rem;
+
+// ── 가게 수정 (BUSINESS) ──────────────────────────────────
+.store-modify-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 29;
+  justify-content: center;
+  align-items: center;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  > .storeAddressModify-wrapper {
+    @include flex(column, flex-end, flex-start);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: #ffffff;
+    border: 0.0625rem solid $global-border-color;
+    border-radius: 0.35rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    > .button {
+      padding: 0.35rem;
+      cursor: pointer;
+
+      > .image {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
+  }
+
+  > .store-modify {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
       }
     }
 
-    > .modal-footer {
-      @include flex(row, center, center, 1rem);
+    > .modify-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
 
-      > .button {
-        width: 6rem;
-        height: 2.5rem;
-        border-radius: 0.35rem;
-        color: $global-white-text-color;
-        cursor: pointer;
+      > .storeName-wrapper {
+        @include flex(row, center, flex-start, 0.25rem);
+        margin-bottom: 1rem;
 
-        &.modify-button {
+        > .name {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .storeNameInput {
+          border-bottom: 0.0625rem solid $global-border-color !important;
+          height: 2rem !important;
+          flex-grow: 1 !important;
+          flex-shrink: 1;
+          width: 0;
+          min-width: 0;
+        }
+      }
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .number-wrapper {
+          @include flex(row, center, flex-start, 0.5rem);
+          flex: 1;
+          min-width: 0;
+
+          > .input {
+            flex-shrink: 1;
+            min-width: 0;
+          }
+        }
+
+        > .input,
+        > .number-wrapper > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+
+          &.local {
+            width: 5rem;
+          }
+
+          &.category {
+            border: 0.0625rem solid $global-border-color;
+            padding-left: 0.5rem;
+          }
+        }
+
+        > .button {
           background-color: $global-green-background-color;
-          transition-duration: 250ms;
-          transition-property: background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
 
           &:hover {
             background-color: darken($global-green-background-color, 5%);
           }
-
-          &:active {
-            background-color: darken($global-green-background-color, 10%);
-          }
         }
+      }
+    }
 
-        &.delete-button {
-          background-color: #e53935;
-          transition-duration: 250ms;
-          transition-property: background-color;
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
 
-          &:hover {
-            background-color: darken(#e53935, 5%);
-          }
+      > .modifyButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
 
-          &:active {
-            background-color: darken(#e53935, 10%);
-          }
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
         }
       }
     }
   }
 }
 
-.delivery-address-modify-modal {
-  > .delivery-address-modify {
-    > .delivery-modify-wrapper {
-      > .AddressName-wrapper,
-      > .name-wrapper {
-        > .AddressNameInput,
-        > .nameInput {
-          border-bottom: 0.0625rem solid $global-border-color;
-          height: 2rem;
-          flex-grow: 1;
-          flex-shrink: 1;
-        }
-      }
-    }
-  }
-}
 
 
 
@@ -1667,9 +4120,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   position: relative;
   @include flex(column, stretch, flex-start);
   min-width: 0;
-
-
-
+  overflow: hidden;
 
   /* ----------------- 내 정보 관리 --------------- */
 
@@ -1678,12 +4129,27 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     pointer-events: none;
     display: none;
     width: 100%;
-    max-width: 100rem;
     padding: 2rem;
+    overflow-y: auto;
 
     &.visible {
       display: flex;
       pointer-events: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d6d6d6;
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     .info-card {
@@ -1692,85 +4158,84 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
       border-radius: 1rem;
       box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.05);
       padding: 1rem;
-      height: 100%;
+      flex: 1;
     }
 
     /* 프로필 영역 */
     .profile-wrapper {
       @include flex(row, center, space-between, 1rem);
 
-      .profile-image {
-        width: 5rem;
-        height: 5rem;
-        border-radius: 999rem;
+      .left-wrapper {
+        @include flex(row, stretch,center, 1rem);
 
-        > .image {
+        .profile-image {
           width: 5rem;
           height: 5rem;
-          object-fit: cover;
           border-radius: 999rem;
-          background-color: #ffffff;
-        }
-      }
 
-      .profile-text {
-        flex: 1;
-        @include flex(column, flex-start, center, 0.3rem);
-
-        .nickname {
-          font-size: 1.1rem;
-          font-weight: 600;
+          > .image {
+            width: 5rem;
+            height: 5rem;
+            object-fit: cover;
+            border-radius: 999rem;
+            background-color: #ffffff;
+          }
         }
 
-        .email {
-          font-size: 0.85rem;
-          color: $global-gray-text-color;
-        }
-      }
-
-      > .point-wrapper,
-      > .coupon-wrapper {
-        @include flex(row, center, flex-start, 1.5rem);
-        border-radius: 0.8rem;
-        width: 12rem;
-        height: 4rem;
-        background-color: #ffffff;
-        padding: 0.9rem 1rem;
-
-        > .left-wrapper {
-          @include flex(column, stretch, center, 0.25rem);
+        .profile-text {
           flex: 1;
+          @include flex(column, flex-start, center, 0.3rem);
 
-          > .title {
-            font-size: 0.8rem;
+          .nickname {
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+
+          .email {
+            font-size: 0.85rem;
             color: $global-gray-text-color;
           }
-
-          > .point,
-          > .coupon {
-            font-size: 1rem;
-          }
-        }
-
-        > .point-history,
-        > .coupon-list {
-          @include flex(column, center, center);
-          background-color: $global-green-background-color;
-          border-radius: 0.35rem;
-          width: 4rem;
-          height: 2rem;
-          color: #ffffff;
         }
       }
 
-      > .coupon {
-        @include flex(column, center, center);
-        width: 4rem;
-        height: 2.2rem;
-        border-radius: 0.35rem;
-        background-color: $global-green-background-color;
-        color: $global-white-text-color;
-        cursor: pointer;
+      .right-wrapper {
+        @include flex(row, stretch, flex-end, 1rem);
+
+        > .point-wrapper,
+        > .coupon-wrapper {
+          @include flex(row, center, flex-start, 1.5rem);
+          border-radius: 0.8rem;
+          width: 12rem;
+          height: 4rem;
+          background-color: #ffffff;
+          padding: 0.9rem 1rem;
+
+          > .text-wrapper {
+            @include flex(column, stretch, center, 0.25rem);
+            flex: 1;
+
+            > .title {
+              font-size: 0.8rem;
+              color: $global-gray-text-color;
+            }
+
+            > .point,
+            > .coupon {
+              font-size: 1rem;
+            }
+          }
+
+          > .point-history,
+          > .coupon-list {
+            @include flex(column, center, center);
+            background-color: $global-green-background-color;
+            border-radius: 0.35rem;
+            width: 4rem;
+            height: 2rem;
+            color: #ffffff;
+            cursor: pointer;
+          }
+        }
       }
 
       .edit-button {
@@ -1921,12 +4386,28 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     pointer-events: none;
     display: none;
     width: 100%;
-    max-width: 100rem;
     padding: 2rem;
+    min-height: 0;
+    overflow-y: auto;
 
     &.visible {
       display: flex;
       pointer-events: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d6d6d6;
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     .info-card {
@@ -1935,7 +4416,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
       border-radius: 1rem;
       box-shadow: 0 0.3rem 1rem rgba(0,0,0,0.05);
       padding: 1rem;
-      height: 100%;
+      flex: 1;
     }
 
     /* 프로필 영역 */
@@ -2200,6 +4681,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
               display: block;
               word-break: break-word;
               white-space: normal;
+              line-height: 1.35;
             }
           }
         }
@@ -2257,25 +4739,37 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
         }
       }
     }
-
-
-
-
   }
 
   > .petInformation,
   > .reservationInformation,
-  > .storeInformation {
+  > .storeInformation{
     @include flex(column, stretch, flex-start);
     display: none;
     pointer-events: none;
     width: 100%;
-    height: 100%;
     padding: 2rem;
+    overflow-y: auto;
+    min-height: 0;
 
     &.visible {
       display: block;
       pointer-events: auto;
+      flex: 1;
+      min-height: 0;
+    }
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #d6d6d6;
+      border-radius: 999px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
     }
 
     > .title {
@@ -2598,35 +5092,1205 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   }
 }
 
+.myPage-wrapper {
+  @include flex(row, stretch, center, 2rem);
+  padding: 4rem 10rem;
+  height: calc(100vh - 5rem);
+  box-sizing: border-box;
+  margin-top: 5rem;
+
+  .content {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 1.2rem;
+    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.08);
+    position: relative;
+    @include flex(column, stretch, flex-start);
+    min-width: 0;
+    overflow: hidden;
+
+    > .paymentDetails {
+      display: none;
+      pointer-events: none;
+      width: 100%;
+      min-height: 0;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #d6d6d6;
+        border-radius: 999px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      &.visible {
+        @include flex(column, flex-start, flex-start, 0.5rem);
+        pointer-events: auto;
+        flex: 1;
+        min-height: 0;
+        padding: 2rem 3rem;
+      }
+
+      .filter-wrapper {
+        @include flex(row, center, center, 1rem);
+
+        .filter-label{
+          .filter {
+            border: 0.0625rem solid $global-gray-text-color;
+            border-radius: 0.25rem;
+            padding: 0.3rem 0.5rem;
+          }
+        }
+
+        .my-review-filter{
+          font-size: 1rem;
+          font-weight: 500;
+          color: $global-green-text-color;
+          cursor: pointer;
+        }
+      }
+
+      .payment-list{
+        @include flex(column, flex-start, center, 1rem);
+        width: 100%;
+
+        &.empty-mode {
+          flex: 1;
+          min-height: 400px;
+          justify-content: center;
+        }
+
+        .empty-review {
+          width: 100%;
+          flex: 1;
+          min-height: 300px;
+          text-align: center;
+          color: $global-gray-text-color;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+
+          .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $global-black-text-color;
+          }
+        }
+
+        .empty-orders {
+          width: 100%;
+          flex: 1;
+          text-align: center;
+          color: $global-gray-text-color;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+
+          .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $global-black-text-color;
+          }
+
+          .empty-sub {
+            font-size: 0.95rem;
+            color: $global-gray-text-color;
+          }
+
+          .empty-shop-link {
+            margin-top: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background-color: $global-green-background-color;
+            color: #ffffff;
+            border-radius: 0.35rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+
+            &:hover {
+              background-color: darken($global-green-background-color, 5%);
+            }
+          }
+        }
 
 
+        .payment-date{
+          @include flex(row, flex-start, center, 0.5rem);
 
-@media (max-width: 1360px) {
-  .myPage-wrapper {
-    padding: 4rem 4rem;
+          .date{
+            font-size: 1.1rem;
+            font-weight: 500;
+          }
+
+          .all-count{
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: lighten($global-gray-text-color, 30%);
+            position: relative;
+            padding-left: 0.5rem;
+
+            &::before {
+              content: "";
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 0.0625rem;
+              height: 100%;
+              background-color: lighten($global-gray-text-color, 30%);
+            }
+          }
+        }
+      }
+
+      .order-detail{
+        @include flex(row, flex-start, center, 1rem);
+
+        .order-count{
+          color: lighten($global-gray-text-color, 30%);
+        }
+
+        .order-info{
+          font-weight: 500;
+          cursor: pointer;
+        }
+      }
+
+      .order-item-wrapper{
+        border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+        border-radius: 0.25rem;
+        width: 100%;
+
+        .order-item{
+          @include flex(row, flex-start, flex-start, 1rem);
+          padding: 1rem;
+          width: 100%;
+          position: relative;
+
+          &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            height: 0.0625rem;
+            background-color: lighten($global-gray-right-text-color, 45%);
+          }
+
+          &:last-child::after {
+            display: none;
+          }
+
+          .img-wrapper {
+            width: 7rem;
+            overflow: hidden;
+            flex-shrink: 0;
+
+            > a{
+              > img {
+                border: 0.0625rem solid lighten($global-gray-text-color, 50%);
+                border-radius: 0.35rem;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+          }
+
+          .product-info{
+            @include flex(column, flex-start, center, 0.5rem);
+            padding-top: 0.5rem;
+
+            > a{
+              .product-name{
+                font-size: 1rem;
+                font-weight: 600;
+              }
+            }
+
+            .product-option{
+              font-size: 0.9rem;
+              color: lighten($global-gray-text-color, 30%);
+            }
+
+            .product-price{
+              @include flex(row, flex-start, center, 0.5rem);
+
+              .discount-price{
+                font-size: 1rem;
+                font-weight: 500;
+                color: lighten($global-gray-text-color, 10%);
+              }
+
+              .prime-cost{
+                font-size: 1rem;
+                color: lighten($global-gray-text-color, 30%);
+                text-decoration: line-through;
+              }
+
+              .product-count{
+                font-size: 1rem;
+                color: lighten($global-gray-text-color, 10%);
+                font-weight: 500;
+                padding-left: 0.5rem;
+                position: relative;
+
+                &::before {
+                  content: "";
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  width: 0.0625rem;
+                  height: 100%;
+                  background-color: lighten($global-gray-text-color, 30%);
+                }
+              }
+            }
+          }
+
+          .review-btn{
+            position: absolute;
+            top: 35%;
+            right: 3%;
+            border: 0.0625rem solid $global-green-text-color;
+            border-radius: 0.25rem;
+            padding: 0.7rem 1.2rem;
+            color: $global-green-text-color;
+            cursor: pointer;
+
+            &:hover{
+              background-color: $global-green-background-color;
+              border: 0.0625rem solid $global-green-background-color;
+              color: #ffffff;
+            }
+          }
+
+          .my-review-btn{
+            position: absolute;
+            top: 35%;
+            right: 3%;
+            background-color: $global-green-background-color;
+            border: 0.0625rem solid $global-green-background-color;
+            border-radius: 0.25rem;
+            padding: 0.7rem 1.2rem;
+            color: #ffffff;
+            cursor: pointer;
+
+            &:hover{
+              background-color: darken($global-green-background-color, 10%);
+              border: 0.0625rem solid lighten($global-green-background-color, 5%);
+              color: #ffffff;
+            }
+          }
+
+          .completed{
+            position: absolute;
+            top: 35%;
+            right: 3%;
+            background-color: darken($global-gray-background-color, 10%);
+            border: 0.0625rem solid darken($global-gray-background-color, 10%);
+            border-radius: 0.25rem;
+            padding: 0.7rem 1.2rem;
+            color: darken($global-gray-text-color, 20%);
+          }
+        }
+      }
+    }
   }
 }
 
-@media (max-width: 1360px) {
-  .myPage-wrapper {
-    flex-direction: column;
-    padding: 3rem 1.5rem;
+.review-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  @include flex(column, center, center);
+
+  > .review-modal {
+    background: #fff;
+    border-radius: 0.75rem;
+    width: min(500px, 90vw);
+    max-height: 80vh;
+    overflow-y: auto;
+    @include flex(column, flex-start, flex-start);
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+
+      > .modal-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      > .modal-close {
+        font-size: 1.2rem;
+        color: $global-gray-right-text-color;
+        cursor: pointer;
+
+        &:hover {
+          color: $global-gray-text-color;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, flex-start, flex-start, 0.5rem);
+      width: 100%;
+      padding: 1.5rem;
+
+      > .rating-select {
+        @include flex(row, center, flex-start, 0.3rem);
+        width: 100%;
+        font-size: 2.3rem;
+        color: darken($global-gray-background-color, 15%);
+        cursor: pointer;
+        padding-bottom: 0.5rem;
+
+        > .star-input {
+          transition: color 0.1s;
+
+          &.active {
+            color: $global-green-background-color;
+          }
+
+          &:hover {
+            color: $global-green-background-color;
+          }
+        }
+      }
+
+      > .review-content {
+        width: 100%;
+        height: 8rem;
+        border: 0.0625rem solid lighten($global-gray-right-text-color, 35%);
+        border-radius: 0.25rem;
+        padding: 0.8rem;
+        resize: none;
+        font-size: 0.95rem;
+
+        &:focus {
+          outline: none;
+          border-color: $global-green-background-color;
+        }
+      }
+
+      > .rating-text,
+      > .image-text,
+      > .content-text{
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      > .image-upload-label {
+        > .upload-btn {
+          padding: 0.5rem 1rem;
+          border: 0.0625rem solid lighten($global-gray-right-text-color, 35%);
+          border-radius: 0.25rem;
+          font-size: 0.9rem;
+          cursor: pointer;
+          color: $global-gray-text-color;
+
+          &:hover {
+            background-color: $global-gray-background-color;
+          }
+        }
+      }
+
+      > .preview-images {
+        @include flex(row, center, flex-start, 0.5rem);
+        flex-wrap: wrap;
+        padding-bottom: 0.5rem;
+
+        > .preview-img-wrapper {
+          position: relative;
+
+          > img {
+            width: 5rem;
+            height: 5rem;
+            object-fit: cover;
+            border-radius: 0.4rem;
+            border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+            border-radius: 0.25rem;
+          }
+
+          > .remove-img {
+            position: absolute;
+            top: -0.3rem;
+            right: -0.3rem;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 99rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            font-size: 0.7rem;
+            @include flex(row, center, center);
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    > .modal-footer {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+
+      > .submit-review,
+      > .edit-review-btn{
+        width: 100%;
+        padding: 0.9rem;
+        background-color: $global-green-background-color;
+        color: white;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 10%);
+        }
+      }
+
+      > .edit-action-btns{
+        @include flex(row, center, center, 1rem);
+        width: 100%;
+
+        > .save-review-btn{
+          flex: 1;
+          padding: 0.9rem;
+          background-color: $global-green-background-color;
+          color: white;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 10%);
+          }
+        }
+
+        > .cancel-review-btn{
+          flex: 1;
+          padding: 0.9rem;
+          background-color: #FF7777;
+          color: white;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+
+          &:hover {
+            background-color: darken(#FF7777, 5%);
+          }
+        }
+      }
+    }
+  }
+}
+
+// 주문내역 모달
+.order-detail-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  @include flex(column, center, center);
+
+  > .order-detail-modal {
+    background: #fff;
+    border-radius: 0.75rem;
+    width: min(400px, 90vw);
+    overflow: hidden;
+    @include flex(column, flex-start, flex-start);
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+
+      > .modal-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+      }
+
+      > .modal-close {
+        font-size: 1.2rem;
+        color: $global-gray-right-text-color;
+        cursor: pointer;
+
+        &:hover {
+          color: $global-gray-text-color;
+        }
+      }
+    }
+
+    > .modal-body {
+      @include flex(column, flex-start, flex-start, 0);
+      width: 100%;
+      padding: 1.2rem 1.5rem;
+
+      > .price {
+        @include flex(row, center, space-between);
+        width: 100%;
+        padding: 0.75rem 0;
+
+        > .title {
+          font-size: 1rem;
+          color: $global-gray-text-color;
+        }
+
+        > .result {
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        &.payment-price {
+          margin-top: 0.5rem;
+          padding-top: 1rem;
+          border-top: 0.125rem solid $global-gray-text-color;
+
+          > .title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: inherit;
+          }
+
+          > .result {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: $global-green-background-color;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1330px) {
+  .content {
+    border-radius: 0;
   }
 
+  .myPage-wrapper {
+    border-radius: 0;
+    padding: 0;
+    flex-direction: column;
+    gap: 1rem;
+  }
   .sidebar {
     width: 100%;
+    border-radius: 0;
+    padding: 1rem 0 0 0;
+
+    .sidebar-header {
+      display: none;
+    }
+
+    > .menu-list {
+      display: flex;
+      flex-direction: row !important;
+      padding: 0;
+
+      > .menu {
+        &::before {
+          transform: none !important;
+          background-color: #ffffff;
+        }
+        &.active {
+          border-left: none;
+          border-bottom: 0.25rem solid #4CAF50 !important;
+          background-color: #ffffff;
+
+          &::before {
+            transform: none;
+            background-color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+  .profile-wrapper {
+    flex-direction: row;
+
+    > .right-wrapper {
+      flex-direction: row !important;
+      align-items: flex-end !important;
+
+      > .point-wrapper,
+      > .coupon-wrapper {
+      }
+    }
   }
 }
 
 @media (max-width: 800px) {
   .profile-wrapper {
-    flex-direction: column !important;
+    flex-direction: row !important;
+
+    .left-wrapper {
+      width: 8rem;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      .profile-image {
+        display: flex;
+      }
+
+      .profile-text {
+        display: flex;
+        align-items: center !important;
+      }
+    }
+
+    > .right-wrapper {
+      flex-direction: column !important;
+
+      > .point-wrapper,
+      > .coupon-wrapper {
+        width: 10rem !important;
+        gap: 0.25rem !important;
+
+        > .text-wrapper {
+          > .title {
+            font-size: 0.7rem;
+          }
+
+          > .point,
+          > .coupon {
+            font-size: 0.9rem !important;
+          }
+        }
+
+        .point-history,
+        .coupon-list {
+          width: 3rem !important;
+          height: 1.5rem;
+          font-size: 0.8rem;
+        }
+      }
+    }
   }
 }
 
 @media (max-width: 880px) {
   .pet-grid,
+  .reservation-grid,
   .store-grid {
     grid-template-columns: repeat(1, 1fr) !important;
   }
 }
+
+
+.paymentDetails {
+  display: none;
+}
+
+
+
+body:has(> .point-modal.visible) > .cover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+// ── 마일리지 모달 ─────────────────────────────────────────
+.point-modal {
+  @include flex(row, center, center);
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-box {
+    @include flex(column, stretch, flex-start);
+    background-color: #ffffff;
+    border-radius: 1rem;
+    width: min(32.5rem, 94vw);
+    max-height: 82vh;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.18);
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      padding: 1.4rem 1.6rem 0;
+
+      > .modal-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: $global-black-text-color;
+
+        > span {
+          font-size: 0.8rem;
+          font-weight: 400;
+          color: $global-gray-text-color;
+          margin-left: 0.5rem;
+        }
+      }
+
+
+
+      > .close-btn {
+        @include flex(row, center, center);
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-radius: 999rem;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+
+        > .image {
+          width: 1.2rem;
+          height: 1.2rem;
+        }
+      }
+    }
+
+    > .summary-card {
+      @include flex(row, center, space-between);
+      margin: 1.2rem 1.6rem 0;
+      background: linear-gradient(135deg, $global-description-color 0%, lighten($global-green-background-color, 15%) 100%);
+      border-radius: 0.8rem;
+      padding: 1.2rem 1.4rem;
+
+      > div > .title {
+        font-size: 0.82rem;
+        color: $global-green-text-color;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+      }
+
+      > div > .amount {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: darken($global-green-text-color, 10%);
+        letter-spacing: -0.03em;
+
+        > span {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-left: 0.2rem;
+        }
+      }
+
+      > .icon {
+        width: 3rem;
+        height: 3rem;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        @include flex(row, center, center);
+        font-size: 1.4rem;
+      }
+    }
+
+    > .tab-bar {
+      @include flex(row, stretch, flex-start);
+      padding: 1rem 1.6rem 0;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .tab-btn {
+        flex: 1;
+        padding: 0.65rem 0;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: $global-gray-right-text-color;
+        background: none;
+        border: none;
+        border-bottom: 0.15rem solid transparent;
+        cursor: pointer;
+        transition: color 150ms, border-color 150ms;
+
+        &.active {
+          color: $global-green-background-color;
+          border-bottom-color: $global-green-background-color;
+        }
+      }
+    }
+
+    > .filter-bar {
+      @include flex(row, center, flex-start, 0.5rem);
+      padding: 1rem 1.6rem 0;
+      flex-wrap: wrap;
+
+      > .filter-chip {
+        padding: 0.35rem 0.9rem;
+        border-radius: 999rem;
+        font-size: 0.82rem;
+        font-weight: 500;
+        border: 0.0625rem solid $global-border-color;
+        background-color: #ffffff;
+        color: $global-gray-text-color;
+        cursor: pointer;
+        transition: all 150ms;
+
+        &.active {
+          background-color: $global-green-background-color;
+          border-color: $global-green-background-color;
+          color: #ffffff;
+        }
+      }
+    }
+
+    > .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.6rem 1.6rem;
+
+      &::-webkit-scrollbar {
+        width: 0.3125rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #d0d0d0; border-radius: 999rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      > .tab-panel {
+        display: none;
+
+        &.active {
+          display: block;
+        }
+
+        > .history-list {
+          @include flex(column, stretch, flex-start);
+          max-height: 20rem;
+          min-height: 20rem;
+
+          > .history-item {
+            @include flex(row, center, space-between);
+            padding: 1rem 0;
+            border-bottom: 0.0625rem solid lighten($global-border-color, 3%);
+
+            &.empty {
+              @include flex(coulnmn, center, center);
+              color: $global-gray-text-color;
+              font-size: 1.1rem;
+              font-weight: 400;
+              height: 20rem;
+            }
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            > .left {
+              @include flex(column, flex-start, flex-start, 0.25rem);
+
+              > .desc {
+                font-size: 0.95rem;
+                font-weight: 500;
+                color: $global-black-text-color;
+              }
+
+              > .date {
+                font-size: 0.78rem;
+                color: $global-gray-right-text-color;
+              }
+            }
+
+            > .right {
+              @include flex(column, flex-end, flex-start, 0.15rem);
+
+              > .point-val {
+                font-size: 1rem;
+                font-weight: 700;
+                letter-spacing: -0.02em;
+
+                &.earn { color: $global-green-text-color; }
+                &.use  { color: #c62828; }
+              }
+
+              > .expireDate {
+                opacity: 0;
+                font-size: 0.76rem;
+                color: lighten($global-gray-right-text-color, 15%);
+                transition-duration: 250ms;
+                transition-property: opacity;
+              }
+            }
+
+            > .right:has(> .point-val:hover) > .expireDate {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+// ── 쿠폰 모달 ─────────────────────────────────────────────
+.coupon-modal {
+  @include flex(row, center, center);
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  &.visible {
+    display: flex;
+  }
+
+  > .modal-box {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    width: min(32.5rem, 94vw);
+    max-height: 82vh;
+    @include flex(column, stretch, flex-start);
+    overflow: hidden;
+    box-shadow: 0 0.5rem 2.5rem rgba(0, 0, 0, 0.18);
+    animation: modalIn 220ms ease;
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      padding: 1.4rem 1.6rem 0;
+
+      > .modal-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1b1b1b;
+      }
+
+      > .close-btn {
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        @include flex(row, center, center);
+        border-radius: 50%;
+        transition: background 150ms;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+
+        > .image {
+          width: 1.2rem;
+          height: 1.2rem;
+        }
+      }
+    }
+
+    > .summary-card {
+      @include flex(row, center, space-between);
+      margin: 1.2rem 1.6rem 0;
+      background: linear-gradient(135deg, $global-description-color 0%, lighten($global-green-background-color, 15%) 100%);
+      border-radius: 0.8rem;
+      padding: 1.2rem 1.4rem;
+
+      > div > .label {
+        font-size: 0.82rem;
+        color: $global-green-text-color;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+      }
+
+      > div > .amount {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: darken($global-green-text-color, 10%);
+        letter-spacing: -0.03em;
+      }
+
+      > .icon {
+        width: 3rem;
+        height: 3rem;
+        background-color: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        @include flex(row, center, center);
+        font-size: 1.4rem;
+      }
+    }
+
+    > .tab-bar {
+      @include flex(row, stretch, flex-start);
+      padding: 1rem 1.6rem 0;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .tab-btn {
+        flex: 1;
+        padding: 0.65rem 0;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: $global-gray-right-text-color;
+        background: none;
+        border: none;
+        border-bottom: 0.15rem solid transparent;
+        cursor: pointer;
+        transition: color 150ms, border-color 150ms;
+
+        &.active {
+          color: $global-green-background-color;
+          border-bottom-color: $global-green-background-color;
+        }
+      }
+    }
+
+    > .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.2rem 1.6rem 1.6rem;
+      margin-bottom: 1.2rem;
+
+      &::-webkit-scrollbar {
+        width: 0.3125rem;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #d0d0d0;
+        border-radius: 999rem;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      > .tab-panel {
+        display: none;
+
+        &.active {
+          display: block;
+        }
+
+        > .coupon-list {
+          @include flex(column, stretch, flex-start, 0.9rem);
+          max-height: 20rem;
+          min-height: 20rem;
+
+          > .coupon-card {
+            @include flex(row, stretch, flex-start);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 0.0625rem solid $global-border-color;
+            position: relative;
+
+            &.empty {
+              @include flex(coulnmn, center, center);
+              border: none;
+              color: $global-gray-text-color;
+              font-size: 1.1rem;
+              font-weight: 400;
+              height: 20rem;
+            }
+
+            &.used {
+              opacity: 0.45;
+            }
+
+            &.expired {
+              opacity: 0.45;
+            }
+
+            > .coupon-left {
+              background: linear-gradient(160deg, $global-green-background-color, $global-green-text-color);
+              color: #ffffff;
+              width: 5.5rem;
+              flex-shrink: 0;
+              @include flex(column, center, center, 0.3rem);
+              padding: 1rem 0.5rem;
+
+              &.gray {
+                background: linear-gradient(160deg, #9e9e9e, #616161);
+              }
+
+              &.orange {
+                background: linear-gradient(160deg, #ffb74d, #e65100);
+              }
+
+              > .discount {
+                font-size: 1.5rem;
+                font-weight: 800;
+                line-height: 1;
+              }
+
+              > .unit {
+                font-size: 0.72rem;
+                font-weight: 500;
+                opacity: 0.85;
+              }
+            }
+
+            > .coupon-right {
+              flex: 1;
+              padding: 0.9rem 1rem 0.9rem 1.3rem;
+              @include flex(column, flex-start, center, 0.3rem);
+
+              > .name {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #1b1b1b;
+              }
+
+              > .condition {
+                font-size: 0.78rem;
+                color: $global-gray-right-text-color;
+              }
+
+              > .expire {
+                font-size: 0.76rem;
+                color: lighten($global-gray-right-text-color, 15%);
+                margin-top: 0.2rem;
+              }
+            }
+
+            > .coupon-badge {
+              position: absolute;
+              top: 0.6rem;
+              right: 0.6rem;
+              font-size: 0.7rem;
+              font-weight: 700;
+              padding: 0.2rem 0.55rem;
+              border-radius: 999rem;
+
+              &.available {
+                background-color: $global-description-color;
+                color: $global-green-text-color;
+              }
+
+              &.used-badge {
+                background-color: $global-gray-background-color;
+                color: $global-gray-right-text-color;
+              }
+
+              &.expired-badge {
+                background-color: #fff3e0;
+                color: #e65100;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -7,7 +7,7 @@ import dev.dhkim.petlog.dto.user.StoreDto;
 import dev.dhkim.petlog.entities.user.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
+import java.util.Map;
 import java.util.List;
 
 @Mapper
@@ -26,6 +26,12 @@ public interface MyPageMapper {
     // 개인회원 주소 전체
     List<AddressEntity> selectPersonalAddressesByUserId(@Param(value = "userId") int userId);
 
+    // 개인회원 주소 하나만 가져오기
+    AddressEntity selectPersonalAddressByAddressId(@Param(value = "addressId") int addressId);
+
+    // 개인회원 대표주소 불러오기
+    AddressEntity selectDefaultAddressByUserId(@Param(value = "userId") int userId);
+
     // 개인회원 배송지 주소 전체
     List<DeliveryAddressEntity> selectDeliveryAddressesByUserId(@Param(value = "userId") int userId);
 
@@ -43,9 +49,16 @@ public interface MyPageMapper {
     // 배송지 제일 처음에 만든거 가져오기
     DeliveryAddressEntity selectOldestDeliveryAddressByUserId(@Param(value = "userId") int userId);
 
+
     // 배송지 삭제 후 기본배송지 바꾸는 매퍼
     int updateDefaultDeliveryAddress(@Param(value = "deliveryAddressId") int deliveryAddressId,
                                      @Param(value = "userId") int userId);
+
+    // 배송지 대표 배송지로 변경
+    int updateAllDeliveryDefaultFalse(@Param(value = "userId") int userId);
+
+    // 배송지 대표 배송지로 설정
+    int updateDeliveryDefault(@Param(value = "addressId") int addressId);
 
     // 배송지 수정
     int updateDeliveryAddress(@Param(value = "deliveryAddressId") int deliveryAddressId,
@@ -94,6 +107,10 @@ public interface MyPageMapper {
                       @Param(value = "address") AddressDto address,
                       @Param(value = "userId") int userId);
 
+    int updateAllDefaultAddressFalse(@Param(value = "userId") int userId);
+
+    int updateDefaultAddress(@Param(value = "addressId") int addressId);
+
     int updatePassword(@Param(value = "newPassword") String newPassword,
                        @Param(value = "userId") int userId);
 
@@ -139,5 +156,20 @@ public interface MyPageMapper {
     // 가게 삭제
     int deleteStore(@Param(value = "storeId") int storeId,
                     @Param(value = "userId") int userId);
+
+    // 리뷰 남기기
+    List<Map<String, Object>> selectOrderItems(@Param("userId") Integer userId, @Param("period") String period);
+
+    // 주문 내역
+    Map<String, Object> selectOrderDetail(@Param("orderId") int orderId, @Param("userId") int userId);
+
+    // 주문내역 필터
+    List<Map<String, Object>> selectOrdersByPeriod(@Param("userId") Integer userId, @Param("period") String period);
+
+
+
+    // 예약취소
+    int updateReservationCancel(@Param(value = "reservationId") int reservationId,
+                                @Param(value = "userId") int userId);
 
 }

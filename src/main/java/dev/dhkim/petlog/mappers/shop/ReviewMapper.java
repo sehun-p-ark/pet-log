@@ -30,15 +30,29 @@ public interface ReviewMapper {
     );
 
     //리뷰 등록
-    void insertReview(@Param("userId") Integer userId, @Param("productId") Integer productId, @Param("rating") Integer rating, @Param("content") String content);
+    void insertReview(
+            @Param("userId") Integer userId,
+            @Param("productId") Integer productId,
+            @Param("orderItemId") Integer orderItemId,
+            @Param("rating") Integer rating,
+            @Param("content") String content
+    );
 
     Integer getLastInsertId();
 
     void insertReviewImage(@Param("reviewId") Integer reviewId, @Param("imageUrl") String imageUrl, @Param("sortOrder") Integer sortOrder);
 
-    boolean checkCanWriteReview(@Param("userId") Integer userId, @Param("productId") Integer productId);
+    boolean checkCanWriteReview(
+            @Param("userId") Integer userId,
+            @Param("productId") Integer productId,
+            @Param("orderItemId") Integer orderItemId
+    );
 
     void updateReview(@Param("reviewId") Integer reviewId, @Param("userId") Integer userId, @Param("rating") Integer rating, @Param("content") String content);
 
     void deleteReviewImage(@Param("reviewId") Integer reviewId, @Param("imageUrl") String imageUrl);
+
+    Map<String, Object> selectReviewById(int reviewId);
+
+    List<Map<String, Object>> selectMyReviews(@Param("userId") Integer userId);
 }

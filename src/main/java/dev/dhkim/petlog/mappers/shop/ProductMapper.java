@@ -34,13 +34,16 @@ public interface ProductMapper {
     List<ProductEntity> searchProducts(
             @Param("keyword") String keyword,
             @Param("petType") String petType,
-            @Param("categoryId") Integer categoryId
+            @Param("categoryId") Integer categoryId,
+            @Param("offset") int offset,
+            @Param("size") int size
     );
 
     // 상품 목록 조회 (페이징, 정렬)
     List<ProductEntity> selectProducts(
             @Param("petType") String petType,
             @Param("categoryId") Integer categoryId,
+            @Param("subCategoryId") Integer subCategoryId,
             @Param("sort") String sort,
             @Param("offset") int offset,
             @Param("size") int size,

@@ -6,4 +6,32 @@
         FROM `petlog`.`point`
         WHERE user_id = #{userId}
     </select>
+    <select id="selectAllPointEarnByUserId" resultType="dev.dhkim.petlog.entities.shop.PointEntity">
+        SELECT `id`          AS id,
+               `user_id`     AS userId,
+               `type`        AS type,
+               `change`      AS `change`,
+               `order_id`    AS orderId,
+               `description` AS description,
+               `expire_date` AS expireDate,
+               `created_at`  AS createdAt
+        FROM `petlog`.`point`
+        WHERE `user_id` = #{userId}
+          AND `type` = 'EARN'
+        ORDER BY `createdAt` DESC
+    </select>
+    <select id="selectAllPointUseByUserId" resultType="dev.dhkim.petlog.entities.shop.PointEntity">
+        SELECT `id`          AS id,
+               `user_id`     AS userId,
+               `type`        AS type,
+               `change`      AS `change`,
+               `order_id`    AS orderId,
+               `description` AS description,
+               `expire_date` AS expireDate,
+               `created_at`  AS createdAt
+        FROM `petlog`.`point`
+        WHERE `user_id` = #{userId}
+          AND `type` = 'USE'
+        ORDER BY `createdAt` DESC
+    </select>
 </mapper>

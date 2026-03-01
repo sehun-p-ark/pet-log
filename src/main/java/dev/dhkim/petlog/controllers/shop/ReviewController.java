@@ -40,6 +40,7 @@ public class ReviewController {
     @PostMapping("/{id}/reviews")
     public Map<String, Object> submitReview(
             @PathVariable Integer id,
+            @RequestParam Integer orderItemId,
             @RequestParam Integer rating,
             @RequestParam(required = false) String content,
             @RequestParam(required = false) List<MultipartFile> images,
@@ -65,8 +66,13 @@ public class ReviewController {
                 }
             }
         }
-        reviewService.submitReview(userId, id, rating, content, imageUrls);
-        return Map.of("success", true);
+
+        try {
+            reviewService.submitReview(userId, id, orderItemId, rating, content, imageUrls);  // ✅ 추가
+            return Map.of("success", true);
+        } catch (IllegalStateException e) {
+            return Map.of("success", false, "message", e.getMessage());
+        }
     }
 
     // 리뷰 수정
@@ -77,10 +83,19 @@ public class ReviewController {
             @RequestParam Integer rating,
             @RequestParam(required = false) String content,
             @RequestParam(required = false) List<MultipartFile> images,
+            @RequestParam(required = false) List<String> remainingImageUrls,
             HttpSession session) {
         SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
         if (sessionUser == null) {
             return Map.of("success", false, "message", "로그인이 필요합니다.");
+        }
+
+        // 기존 이미지 중 remainingImageUrls에 없는 것 삭제
+        List<String> existingImages = reviewService.getReviewImages(reviewId);
+        for (String existingUrl : existingImages) {
+            if (remainingImageUrls == null || !remainingImageUrls.contains(existingUrl)) {
+                reviewService.deleteReviewImage(reviewId, existingUrl);
+            }
         }
 
         if (images != null) {
@@ -121,5 +136,12 @@ public class ReviewController {
         }
         reviewService.deleteReviewImage(reviewId, imageUrl);
         return Map.of("success", true);
+    }
+
+    @GetMapping("/{id}/reviews/{reviewId}")
+    public Map<String, Object> getMyReview(
+            @PathVariable Integer id,
+            @PathVariable Integer reviewId) {
+        return reviewService.getReviewById(reviewId);
     }
 }

@@ -22,13 +22,7 @@ public class ReviewService {
             review.put("reviewImages", images);
         });
 
-        boolean canWriteReview = false;
-        if (userId != null) {
-            canWriteReview = reviewMapper.checkCanWriteReview(userId, productId);
-        }
-
         Double averageRating = reviewMapper.selectAverageRating(productId);
-
         List<Map<String, Object>> ratingDistribution = reviewMapper.selectRatingDistribution(productId);
 
         Map<Integer, Long> ratingMap = new HashMap<>();
@@ -39,30 +33,34 @@ public class ReviewService {
         }
 
         long maxRatingCount = ratingMap.values().stream().mapToLong(Long::longValue).max().orElse(0);
-
         int bestRating = ratingMap.entrySet().stream()
                 .filter(e -> e.getValue() == maxRatingCount)
                 .mapToInt(Map.Entry::getKey)
                 .max()
                 .orElse(0);
 
+        boolean canWriteReview = userId != null && reviewMapper.checkCanWriteReview(userId, productId, null);
+
         return Map.of(
                 "reviews", reviews,
-                "canWriteReview", canWriteReview,
                 "averageRating", averageRating != null ? averageRating : 0.0,
                 "ratingMap", ratingMap,
                 "maxRatingCount", maxRatingCount,
-                "bestRating", bestRating
+                "bestRating", bestRating,
+                "canWriteReview", canWriteReview
         );
     }
 
     // 리뷰 남기기
     @Transactional
-    public void submitReview(Integer userId, Integer productId, Integer rating, String content, List<String> imageUrls) {
-        System.out.println("submitReview 호출: userId=" + userId + ", productId=" + productId + ", rating=" + rating);
-        reviewMapper.insertReview(userId, productId, rating, content);
+    public void submitReview(Integer userId, Integer productId, Integer orderItemId, Integer rating, String content, List<String> imageUrls) {
+        if (!reviewMapper.checkCanWriteReview(userId, productId, orderItemId)) {
+            throw new IllegalStateException("리뷰를 작성할 수 없는 주문입니다.");
+        }
+
+        reviewMapper.insertReview(userId, productId, orderItemId, rating, content);
         Integer reviewId = reviewMapper.getLastInsertId();
-        System.out.println("reviewId=" + reviewId);
+
         for (int i = 0; i < imageUrls.size(); i++) {
             reviewMapper.insertReviewImage(reviewId, imageUrls.get(i), i);
         }
@@ -85,5 +83,17 @@ public class ReviewService {
 
     public void addReviewImage(Integer reviewId, String imageUrl) {
         reviewMapper.insertReviewImage(reviewId, imageUrl, 0);
+    }
+
+    public Map<String, Object> getReviewById(Integer reviewId) {
+        Map<String, Object> review = reviewMapper.selectReviewById(reviewId);
+        List<String> images = reviewMapper.selectReviewImages(reviewId);
+        review.put("images", images);
+        return review;
+    }
+
+    // 리뷰 체크
+    public boolean checkCanWriteReview(Integer userId, Integer productId, Integer orderItemId) {
+        return reviewMapper.checkCanWriteReview(userId, productId, orderItemId);
     }
 }

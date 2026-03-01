@@ -140,98 +140,32 @@ if ($banner) {
     loadBanners();
 }
 
-// 카테고리
-const submenus = document.querySelectorAll('.submenu');
-if (submenus.length > 0) {
-    submenus.forEach(submenu => {
-        submenu.querySelector('.list').addEventListener('click', (e) => {
-            if (e.target.classList.contains('item')){
-                let categoryType = '';
-
-                if (submenu.classList.contains('dog')){
-                    categoryType = 'dog';
-                } else if (submenu.classList.contains('cat')){
-                    categoryType = 'cat';
-                } else if (submenu.classList.contains('etc')){
-                    categoryType = 'etc';
-                }
-
-                const mainCategoryRadio = document.querySelector(`.main .item[data-target="${categoryType}"] input[type="radio"]`);
-                if (mainCategoryRadio){
-                    mainCategoryRadio.checked = true;
-                }
-
-                document.querySelectorAll('.submenu').forEach(otherSubmenu => {
-                    if (otherSubmenu !== submenu) {
-                        otherSubmenu.querySelectorAll('input[type="radio"]').forEach(radio => {
-                            radio.checked = false;
-                        });
-                    }
-                });
-            }
-        });
-    });
-}
-
-const mainItems = document.querySelectorAll('.main .item[data-target]');
-if (mainItems.length > 0) {
-    mainItems.forEach(mainItem => {
-        mainItem.addEventListener('click', () => {
-            const target = mainItem.getAttribute('data-target');
-
-            if (target === 'all') return;
-
-            const submenu = document.querySelector(`.submenu.${target}`);
-            if (submenu) {
-                const firstRadio = submenu.querySelector('input[type="radio"]');
-                if (firstRadio) {
-                    firstRadio.checked = true;
-                }
-            }
-
-            document.querySelectorAll('.submenu').forEach(otherSubmenu => {
-                if (!otherSubmenu.classList.contains(target)) {
-                    otherSubmenu.querySelectorAll('input[type="radio"]').forEach(radio => {
-                        radio.checked = false;
-                    });
-                }
-            });
-        });
-    });
-}
-
 // 신상품 불러오기
-async function loadNewProducts(category = 'all') {
-    try {
-        let url = '/shop/products/new';
-        if (category && category !== 'all') {
-            url += `?category=${encodeURIComponent(category)}`;
-        }
+function loadNewProducts(category = 'all', petType = 'all') {
+    let url = '/shop/products/new';
+    const params = [];
+    if (category !== 'all') params.push(`category=${encodeURIComponent(category)}`);
+    if (petType !== 'all') params.push(`petType=${encodeURIComponent(petType)}`);
+    if (params.length > 0) url += '?' + params.join('&');
 
-        const response = await fetch(url);
-        const products = await response.json();
-
-        renderProducts('.new-product .product', products);
-    } catch (error) {
-        console.error('NEW 상품 로딩 실패:', error);
-    }
+    fetch(url)
+        .then(res => res.json())
+        .then(products => renderProducts('.new-product .product', products))
+        .catch(error => console.error('NEW 상품 로딩 실패:', error));
 }
 
 // BEST 상품 불러오기
-async function loadBestProducts(category = 'all') {
-    try {
-        let url = '/shop/products/best';
-        if (category && category !== 'all') {
-            url += `?category=${encodeURIComponent(category)}`;
-        }
+function loadBestProducts(category = 'all', petType = 'all') {
+    let url = '/shop/products/best';
+    const params = [];
+    if (category !== 'all') params.push(`category=${encodeURIComponent(category)}`);
+    if (petType !== 'all') params.push(`petType=${encodeURIComponent(petType)}`);
+    if (params.length > 0) url += '?' + params.join('&');
 
-        const response = await fetch(url);
-        const products = await response.json();
-
-        renderProducts('.best-product .product', products);
-    } catch (error) {
-        console.error('BEST 상품 로딩 실패:', error);
-    }
+    fetch(url)
+        .then(res => res.json())
+        .then(products => renderProducts('.best-product .product', products))
+        .catch(error => console.error('BEST 상품 로딩 실패:', error));
 }
 
 // 상품 렌더링
@@ -290,20 +224,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 뒤로가기 시
 window.addEventListener('pageshow', (e) => {
-    if (e.persisted) {
-        const newContainer = document.querySelector('.new-product .product');
-        const bestContainer = document.querySelector('.best-product .product');
-        if (newContainer) newContainer.innerHTML = '';
-        if (bestContainer) bestContainer.innerHTML = '';
+    const newContainer = document.querySelector('.new-product .product');
+    const bestContainer = document.querySelector('.best-product .product');
+    if (newContainer) newContainer.innerHTML = '';
+    if (bestContainer) bestContainer.innerHTML = '';
 
-        const allNewRadio = document.querySelector('input[name="new-category"][value="all"]');
-        const allBestRadio = document.querySelector('input[name="best-category"][value="all"]');
-        if (allNewRadio) allNewRadio.checked = true;
-        if (allBestRadio) allBestRadio.checked = true;
+    const allNewRadio = document.querySelector('input[name="new-category"][value="all"]');
+    const allBestRadio = document.querySelector('input[name="best-category"][value="all"]');
 
-        loadNewProducts();
-        loadBestProducts();
-    }
+    if (allNewRadio) allNewRadio.checked = true;
+    if (allBestRadio) allBestRadio.checked = true;
+
+    document.querySelectorAll('input[name="new-category"]').forEach(radio => {
+        if (radio.value !== 'all') radio.checked = false;
+    });
+    document.querySelectorAll('input[name="best-category"]').forEach(radio => {
+        if (radio.value !== 'all') radio.checked = false;
+    });
+
+    loadNewProducts();
+    loadBestProducts();
 });
 
 // 프리뷰 이미지 클릭 이벤트
@@ -328,71 +268,6 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const categoryItems = document.querySelectorAll('.category .item');
-
-    categoryItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            const input = this.querySelector('input[type="radio"]');
-            const value = input.value;
-            const name = input.name;
-
-            // 전체 클릭 시 메인 페이지
-            if (value === '전체' && name === 'category') {
-                window.location.href = '/shop/main';
-                return;
-            }
-
-            // 대분류 클릭 (강아지, 고양이, 기타)
-            if (name === 'category') {
-                let petType = '';
-                if (value === '강아지') petType = 'dog';
-                else if (value === '고양이') petType = 'cat';
-                else if (value === '기타') petType = 'etc';
-
-                window.location.href = `/shop/list?petType=${petType}`;
-                return;
-            }
-
-            // 소분류 클릭 (사료, 간식, 용품 등)
-            if (name.includes('-sub')) {
-                let petType = '';
-                if (name === 'dog-sub') petType = 'dog';
-                else if (name === 'cat-sub') petType = 'cat';
-                else if (name === 'etc-sub') petType = 'etc';
-
-                // 전체
-                if (value === '전체') {
-                    window.location.href = `/shop/list?petType=${petType}`;
-                    return;
-                }
-
-                // BEST
-                if (value === 'BEST') {
-                    window.location.href = `/shop/list?petType=${petType}&sort=best`;
-                    return;
-                }
-
-                // 카테고리 (사료, 간식, 용품)
-                window.location.href = `/shop/list?petType=${petType}&category=${value}`;
-            }
-        });
-    });
-
-    // 검색 폼
-    const searchForm = document.querySelector('.category .search');
-    if (searchForm) {
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const keyword = this.querySelector('.search-box').value.trim();
-
-            if (keyword) {
-                window.location.href = `/shop/list?keyword=${encodeURIComponent(keyword)}`;
-            }
-        });
-    }
 });
 
 // 페이지 로드 시 찜 상태 확인
@@ -485,43 +360,4 @@ function toggleHeart(productId, heartElement) {
     xhr.open('POST', '/shop/heart/' + productId, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
-}
-
-// 토스트 메세지
-let currentToast = null;
-
-function showToast(message, linkText = null, linkHref = null) {
-    if (currentToast) {
-        currentToast.remove();
-    }
-
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-
-    const msgSpan = document.createElement('span');
-    msgSpan.textContent = message;
-    toast.appendChild(msgSpan);
-
-    if (linkText && linkHref) {
-        const link = document.createElement('a');
-        link.href = linkHref;
-        link.textContent = linkText;
-        link.className = 'toast-link';
-        toast.appendChild(link);
-    }
-
-    document.body.appendChild(toast);
-    currentToast = toast;
-
-    setTimeout(() => toast.classList.add('show'), 10);
-
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-            if (currentToast === toast) {
-                currentToast = null;
-            }
-        }, 300);
-    }, 3000);
 }

@@ -27,6 +27,11 @@
         UPDATE `petlog`.user_coupon SET status = 'USED', used_at = NOW(), order_id = #{orderId}
         WHERE id = #{userCouponId}
     </update>
+    <update id="updatePoint">
+        UPDATE `petlog`.`personal_user`
+        SET `shop_point` = `shop_point` + #{amount}
+        WHERE `user_id` = #{userId}
+    </update>
 
     <insert id="earnPoint">
         INSERT INTO `petlog`.point (user_id, type, `change`, order_id, description)

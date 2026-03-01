@@ -221,6 +221,258 @@ ol, ul {
 
 }
 
+#category {
+  @include flex(row, flex-end, space-between, clamp(0.5rem, 2vw, 1rem));
+  width: 100%;
+  padding-bottom: 1rem;
+
+  > .menu {
+    position: relative;
+    flex-shrink: 0;
+
+    > .main{
+      > .list {
+        @include flex(row, flex-start, flex-start, 1rem);
+
+        > .item {
+          font-size: 1.2rem;
+          color: $global-gray-right-text-color;
+          font-weight: 600;
+          position: relative;
+          padding: 0 1rem;
+          cursor: pointer;
+
+          @media (max-width: 700px) {
+            font-size: 1rem;
+            padding: 0 0.5rem;
+          }
+
+          /*          &::after {
+                      content: "";
+                      position: absolute;
+                      left: 0;
+                      bottom: 0;
+                      width: 0;
+                      height: 0.15rem;
+                      background-color: darken($global-color-concept, 15%);
+                      transition: none;
+                    }*/
+
+          > input[type="radio"]{
+            display: none;
+          }
+
+          &:hover{
+            font-weight: 700;
+            color: darken($global-color-concept, 15%);
+
+            &::after {
+              width: 100%;
+              transition: width 0.2s ease;
+            }
+          }
+
+          &:has(input[type="radio"]:checked) {
+            font-weight: 700;
+            color: darken($global-color-concept, 15%);
+
+            &::after {
+              width: 100%;
+              transition: none;
+            }
+          }
+        }
+
+        > .menu-item-wrapper {
+          position: relative;
+
+          > .item {
+            font-size: 1.2rem;
+            color: $global-gray-right-text-color;
+            font-weight: 600;
+            position: relative;
+            padding: 0 1rem 0.5rem 1rem;
+            cursor: pointer;
+
+            @media (max-width: 700px) {
+              font-size: 1rem;
+              padding: 0 0.5rem 1rem 0.5rem;
+            }
+
+            /*            &::after {
+                          content: "";
+                          position: absolute;
+                          left: 0;
+                          bottom: 0;
+                          width: 0;
+                          height: 0.15rem;
+                          background-color: darken($global-color-concept, 15%);
+                          transition: none;
+                        }*/
+
+            > input[type="radio"]{
+              display: none;
+            }
+
+            &:hover{
+              font-weight: 700;
+              color: darken($global-color-concept, 15%);
+
+              &::after {
+                width: 100%;
+                transition: width 0.2s ease;
+              }
+            }
+
+            &:has(input[type="radio"]:checked) {
+              font-weight: 700;
+              color: darken($global-color-concept, 15%);
+
+              &::after {
+                width: 100%;
+                transition: none;
+              }
+            }
+          }
+
+          > .submenu {
+            @include flex(row, center, center, 1rem);
+            display: none;
+            position: absolute;
+            width: max-content;
+            z-index: 999;
+            top: calc(100% + 0.6rem);
+            left: 0;
+
+            > .list{
+              @include flex(row, center, flex-start, 1rem);
+              padding: 1rem 0.5rem;
+              width: 100%;
+              background-color: $global-white-text-color;
+              white-space: nowrap;
+
+              > .item{
+                font-size: 1rem;
+                color: $global-gray-right-text-color;
+                font-weight: 600;
+                cursor: pointer;
+                margin: 0 1rem;
+                position: relative;
+
+                > input[type="radio"]{
+                  display: none;
+                }
+
+                &:hover,
+                &:has(input[type="radio"]:checked){
+                  color: darken($global-color-concept, 15%);
+                }
+
+                &::after{
+                  content: "";
+                  position: absolute;
+                  right: -1.5rem;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  width: 0.0625rem;
+                  height: 1rem;
+                  background-color: #00000020;
+                }
+
+                &:last-child::after{
+                  display: none;
+                }
+              }
+            }
+          }
+
+          &:hover {
+            > .submenu {
+              display: flex;
+            }
+
+            > .item {
+              font-weight: 700;
+              color: darken($global-color-concept, 15%);
+
+              &::after {
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        @media (max-width: 700px) {
+          gap: 0.5rem;
+        }
+      }
+    }
+  }
+
+  > .search{
+    @include flex(row, stretch, flex-start);
+    border: 0.0625rem solid #5F646620;
+    border-radius: 999rem;
+    height: 2.7rem;
+    width: clamp(12rem, 40vw, 30rem);
+    overflow: hidden;
+
+    > .search-wrapper{
+      @include flex(row, flex-start, stretch);
+      flex: 1;
+      background-color: #ffffff;
+      height: 100%;
+      padding: 0 2rem;
+
+      @media (max-width: 700px){
+        padding: 0 1.2rem;
+      }
+
+      > .search-box{
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+
+        &::placeholder {
+          font-size: 1rem;
+        }
+
+        @media (max-width: 700px){
+          padding: 0 0 0.2rem 0;
+          &::placeholder {
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+
+    > .submit{
+      @include flex(row, center, center);
+      width: 3rem;
+      height: 100%;
+      background-color: #89CC96;
+      padding: 0 0.2rem 0 0;
+      cursor: pointer;
+
+      > .image{
+        width: 1.5rem;
+
+        @media (max-width: 700px) {
+          width: 1.3rem;
+        }
+      }
+
+      @media (max-width: 700px) {
+        width: 2.5rem;
+      }
+    }
+
+    @media (max-width: 700px){
+      height: 2.3rem;
+    }
+  }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 .message {
   @include flex(column, stretch, flex-start, 1rem);
@@ -273,7 +525,6 @@ ol, ul {
     }
   }
 }
-
 
 body:has(.message.visible) .cover {
   opacity: 1;

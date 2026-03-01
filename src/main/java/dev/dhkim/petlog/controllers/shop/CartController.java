@@ -19,7 +19,12 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping
-    public String cartPage(Model model, @SessionAttribute(value ="sessionUser") SessionUser sessionUser) {
+    public String cartPage(Model model, @SessionAttribute(value ="sessionUser", required = false) SessionUser sessionUser) {
+
+        if (sessionUser == null) {
+            return "redirect:/user/login";
+        }
+
         Integer userId = sessionUser.getUserId();
 
         if (userId != null) {
@@ -40,7 +45,7 @@ public class CartController {
     @PostMapping("/add")
     @ResponseBody
     public Map<String, Object> addToCart(@RequestBody Map<String, Object> request,
-                                         @SessionAttribute(value ="sessionUser") SessionUser sessionUser) {
+                                         @SessionAttribute(value ="sessionUser", required = false) SessionUser sessionUser) {
         Integer userId = sessionUser.getUserId();
 
         if (userId == null) {
@@ -64,7 +69,7 @@ public class CartController {
     @DeleteMapping("/delete")
     @ResponseBody
     public Map<String, Object> deleteCartItems(@RequestBody Map<String, Object> request,
-                                               @SessionAttribute(value ="sessionUser") SessionUser sessionUser) {
+                                               @SessionAttribute(value ="sessionUser", required = false) SessionUser sessionUser) {
         Integer userId = sessionUser.getUserId();
 
         if (userId == null) {

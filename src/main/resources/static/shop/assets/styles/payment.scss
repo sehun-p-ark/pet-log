@@ -1,5 +1,107 @@
 @import "../../../assets/styles/def";
 
+
+// 배송지 삭제 메시지 모달 scss
+.deliveryAddressDeleteMessage {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .yes {
+      background-color: #e53935;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: darken(#e53935, 5%);
+      }
+
+      &:active {
+        background-color: darken(#e53935, 10%);
+      }
+    }
+
+    > .no {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
+  }
+}
+.deliveryMessage-cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000070;
+  z-index: 99;
+  opacity: 0;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+body:has(> .deliveryAddressDeleteMessage.visible) > .deliveryMessage-cover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body:has(.message.visible) .modal-cover {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+
 .address-cover {
   display: none;
   position: fixed;
@@ -8,7 +110,7 @@
   background-color: #00000070;
   width: 100%;
   height: 100%;
-  z-index: 30;
+  z-index: 31;
 }
 
 .cover {
@@ -33,7 +135,7 @@
   border-radius: 0.35rem;
   opacity: 0;
   pointer-events: none;
-  z-index: 31;
+  z-index: 33;
 
   &.visible {
     opacity: 1;
@@ -257,6 +359,10 @@
                 border-radius: 0.2rem;
                 color: #ffffff;
                 cursor: pointer;
+
+                &:hover {
+                  background-color: darken($global-green-background-color, 5%);
+                }
               }
 
               > .postal-code {
@@ -442,6 +548,10 @@
               border-radius: 0.2rem;
               color: #ffffff;
               cursor: pointer;
+
+              &:hover {
+                background-color: darken($global-green-background-color, 5%);
+              }
             }
           }
 
@@ -520,7 +630,7 @@
     @include flex(column, center, center, 1rem);
     width: 17rem;
     position: sticky;
-    top: 1rem;
+    top: 7rem;
     height: fit-content;
     align-self: flex-start;
 
@@ -562,8 +672,11 @@
       background-color: $global-green-background-color;
       color: #ffffff;
       border-radius: 0.35rem;
-      border: 0.0625rem solid darken($global-green-background-color, 10%);
       cursor: pointer;
+
+      &:hover {
+        background-color: darken($global-green-background-color, 5%);
+      }
     }
   }
 
@@ -578,6 +691,7 @@
     > .summary-wrapper{
       position: static;
       width: 100%;
+
 
       > .summary{
         background-color: transparent;
@@ -618,7 +732,8 @@
 }
 
 //주소 변경 모달
-.delivery-change-modal {
+.delivery-change-modal,
+.delivery-address-modify-modal {
   display: none;
   position: fixed;
   top: 0;
@@ -634,6 +749,20 @@
     display: flex;
   }
 
+  /* 어두운 배경 */
+  > .modal-cover {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
   > .modal-content {
     background-color: #ffffff;
     border-radius: 0.35rem;
@@ -641,6 +770,11 @@
     max-width: 450px;
     max-height: 80vh;
     @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
 
     > .modal-header {
       @include flex(row, center, space-between);
@@ -674,6 +808,14 @@
 
       > .delivery-list {
         @include flex(column, flex-start, stretch, 1rem);
+
+        &.empty {
+          @include flex(column, center, center);
+          height: 7rem;
+          min-height: 0;
+          font-size: 1.1rem;
+          color: $global-gray-text-color;
+        }
 
         > .delivery-item {
           padding: 1.5rem;
@@ -748,28 +890,35 @@
               > .left-actions {
                 @include flex(row, center, flex-start, 0.5rem);
 
-                > .delete-btn,
-                > .edit-btn {
+                > .delete-btn {
                   padding: 0.4rem 0.8rem;
                   font-size: 0.9rem;
-                  border: 0.0625rem solid lighten($global-gray-right-text-color, 25%);
+                  border: 0.0625rem solid #e74c3c;
                   background-color: #ffffff;
-                  color: $global-gray-text-color;
+                  color: #e74c3c;
                   border-radius: 0.25rem;
                   cursor: pointer;
                   transition: all 0.2s;
 
                   &:hover {
-                    background-color: lighten($global-gray-right-text-color, 35%);
+                    background-color: #e74c3c;
+                    color: #ffffff;
                   }
                 }
 
-                > .delete-btn {
-                  color: #e74c3c;
-                  border-color: #e74c3c;
+                > .edit-btn {
+                  padding: 0.4rem 0.8rem;
+                  font-size: 0.9rem;
+                  border: 0.0625rem solid lighten($global-green-text-color, 25%);
+                  background-color: #ffffff;
+                  color: $global-green-text-color;
+                  border-radius: 0.25rem;
+                  cursor: pointer;
+                  transition: all 0.2s;
 
                   &:hover {
-                    background-color: lighten(#e74c3c, 45%);
+                    background-color: $global-green-background-color;
+                    color: #ffffff;
                   }
                 }
               }
@@ -815,6 +964,170 @@
 
         &:hover {
           background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+  }
+
+
+  > .delivery-registration,
+  > .delivery-address-modify {
+    background-color: #ffffff;
+    border-radius: 0.35rem;
+    width: 100%;
+    max-width: 600px;
+    max-height: 80vh;
+    @include flex(column, flex-start, stretch);
+    display: none;
+
+    &.visible {
+      display: flex;
+    }
+
+    > .modal-header {
+      @include flex(row, center, space-between);
+      width: 100%;
+      padding: 1.5rem;
+      border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+
+      > .title {
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
+
+      > .close-btn {
+        padding: 0.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+
+        > .image {
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+      }
+    }
+
+
+    > .modal-footer {
+      @include flex(row, center, center);
+      padding: 1.5rem;
+      width: 100%;
+      border-top: 0.0625rem solid lighten($global-gray-right-text-color, 30%);
+      flex-shrink: 0;
+
+      > .add-btn,
+      > .registrationButton,
+      > .addressModifyButton,
+      > .modifyButton,
+      > .companyAddressChangeButton {
+        width: 100%;
+        padding: 0.8rem;
+        background-color: $global-green-background-color;
+        color: #ffffff;
+        border: none;
+        border-radius: 0.35rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+          background-color: darken($global-green-background-color, 5%);
+        }
+      }
+    }
+
+    > .registration-wrapper,
+    > .delivery-modify-wrapper {
+      @include flex(column, stretch, flex-start, 2.5rem);
+      padding: 2rem;
+      width: 100%;
+      box-sizing: border-box;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+
+      > .AddressName-wrapper,
+      > .name-wrapper,
+      > .storeName-wrapper {
+        @include flex(row, center, flex-start, 0.25rem);
+        margin-bottom: 1rem;
+
+        > .name {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .AddressNameInput,
+        > .nameInput,
+        > .storeNameInput {
+          border-bottom: 0.0625rem solid $global-border-color !important;
+          height: 2rem !important;
+          flex-grow: 1 !important;
+          flex-shrink: 1; // 이게 핵심
+          width: 0; // flex-grow가 제대로 동작하게
+          min-width: 0;
+        }
+      }
+
+
+      > .label {
+        @include flex(row, center, flex-start, 0.25rem);
+
+        > .title {
+          font-size: 1rem;
+          color: #565656;
+          width: 6rem;
+        }
+
+        > .number-wrapper {
+          @include flex(row, center, flex-start, 0.5rem);
+          flex: 1;
+          min-width: 0;
+
+          > .firstNumber {
+            border: 0.0625rem solid $global-border-color;
+            height: 2rem;
+            width: 6rem;
+          }
+
+          > .input {
+            flex-shrink: 1;
+            min-width: 0;
+          }
+        }
+
+        > .input,
+        > .number-wrapper > .input {
+          border-bottom: 0.0625rem solid $global-border-color;
+          height: 2rem;
+          flex-grow: 1;
+
+          &.local {
+            width: 5rem;
+          }
+
+          &.category {
+            border: 0.0625rem solid $global-border-color;
+            padding-left: 0.5rem;
+          }
+        }
+
+        > .button {
+          background-color: $global-green-background-color;
+          color: $global-white-text-color;
+          border-radius: 0.35rem;
+          padding: 0.4rem 1.2rem;
+          font-size: 0.9rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background-color: darken($global-green-background-color, 5%);
+          }
         }
       }
     }

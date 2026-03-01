@@ -13,4 +13,9 @@ public interface OrderMapper {
     void useCoupon(@Param("userCouponId") int userCouponId, @Param("orderId") int orderId);
     void earnPoint(@Param("userId") int userId, @Param("amount") int amount, @Param("orderId") int orderId);
     Map<String, Object> selectOrdererInfo(@Param("userId") int userId);
+
+
+    // 포인트 업데이트(personal_user테이블에)
+    void updatePoint(@Param(value = "userId") int userId,
+                     @Param(value = "amount") int amount);
 }

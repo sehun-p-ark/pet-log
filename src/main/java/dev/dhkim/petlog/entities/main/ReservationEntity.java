@@ -23,4 +23,5 @@ public class ReservationEntity {
 
     private String request;
     private String paymentMethod;
+    private boolean canceled;
 }

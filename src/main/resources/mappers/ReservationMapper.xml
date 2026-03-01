@@ -7,9 +7,9 @@
 
     <insert id="insertReservation" parameterType="dev.dhkim.petlog.dto.main.ReservationDto" useGeneratedKeys="true" keyProperty="reservationId">
         INSERT INTO `petlog`.`reservation`
-        (user_id, store_id, reservation_date, reservation_time, request_text, payment_method)
+        (user_id, store_id, reservation_date, reservation_time, request_text, payment_method, canceled)
         VALUES
-            (#{userId}, #{storeId}, #{reservationDate}, #{reservationTime}, #{requestText}, #{paymentMethod})
+            (#{userId}, #{storeId}, #{reservationDate}, #{reservationTime}, #{requestText}, #{paymentMethod},  FALSE)
     </insert>
 
 

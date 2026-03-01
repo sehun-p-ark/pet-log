@@ -80,6 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==================== 친구 클릭 ====================
     if (friendContent && container) {
         const friendList = friendContent.querySelector('.friend-list');
+/*        if (!friendList) {
+            return;
+        }*/
 
         friendList.addEventListener('click', (e) => {
             const item = e.target.closest('.item-wrapper');

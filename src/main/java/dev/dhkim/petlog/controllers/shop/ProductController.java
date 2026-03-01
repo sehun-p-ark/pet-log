@@ -77,9 +77,11 @@ public class ProductController {
     public List<ProductEntity> searchProducts(
             @RequestParam String keyword,
             @RequestParam(required = false) String petType,
-            @RequestParam(required = false) Integer categoryId
+            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
     ) {
-        return productService.searchProducts(keyword, petType, categoryId);
+        return productService.searchProducts(keyword, petType, categoryId, page, size);
     }
 
     // 카테고리별 상품 목록 조회
@@ -87,11 +89,12 @@ public class ProductController {
     public List<ProductEntity> getProducts(
             @RequestParam(required = false) String petType,
             @RequestParam(required = false) Integer categoryId,
+            @RequestParam(required = false) Integer subCategoryId,
             @RequestParam(defaultValue = "latest") String sort,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(required = false) String brand
     ) {
-        return productService.getProducts(petType, categoryId, sort, page, size, brand);
+        return productService.getProducts(petType, categoryId, subCategoryId, sort, page, size, brand);
     }
 }

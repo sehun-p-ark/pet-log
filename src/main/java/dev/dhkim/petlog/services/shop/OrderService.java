@@ -1,5 +1,6 @@
 package dev.dhkim.petlog.services.shop;
 
+import dev.dhkim.petlog.mappers.shop.CartMapper;
 import dev.dhkim.petlog.mappers.shop.OrderMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class OrderService {
 
     private final OrderMapper orderMapper;
+    private final CartMapper cartMapper;
 
     private int toInt(Object value) {
         if (value == null) return 0;
@@ -58,6 +60,7 @@ public class OrderService {
         int usedPoint = toInt(orderInfo.get("usedPoint"));
         if (usedPoint > 0) {
             orderMapper.deductPoint(userId, usedPoint, orderId);
+            orderMapper.updatePoint(userId, -usedPoint);
         }
 
         // 쿠폰 사용 처리
@@ -73,6 +76,18 @@ public class OrderService {
         int earnPoint = (int)(finalAmount * 0.01);
         if (earnPoint > 0) {
             orderMapper.earnPoint(userId, earnPoint, orderId);
+            orderMapper.updatePoint(userId, earnPoint);
+        }
+
+        Object cartIdsObj = orderInfo.get("cartIds");
+        if (cartIdsObj != null) {
+            List<?> cartIdRaw = (List<?>) cartIdsObj;
+            List<Integer> cartIds = cartIdRaw.stream()
+                    .map(id -> ((Number) id).intValue())
+                    .collect(java.util.stream.Collectors.toList());
+            for (Integer cartId : cartIds) {
+                cartMapper.deleteCartItem(cartId);
+            }
         }
     }
 

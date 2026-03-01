@@ -8,6 +8,7 @@
     <title>주문/결제</title>
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/shop/assets/styles/payment.css">
+    <script defer src="/assets/scripts/common.js"></script>
     <script defer src="/shop/assets/scripts/main.js"></script>
     <script defer src="/shop/assets/scripts/payment.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -21,10 +22,19 @@
     </button>
     <div id="address-container"></div>
 </div>
+<!--배송지 삭제 메시지 모달-->
+<div class="deliveryMessage-cover"></div>
+<div class="deliveryAddressDeleteMessage" id="deliveryAddressDeleteMessage">
+    <div class="button-wrapper">
+        <button type="button" class="no">취소</button>
+        <button type="button" class="yes">삭제</button>
+    </div>
+</div>
 
 <!--배송지 변경 모달-->
 <div class="cover"></div>
 <div class="delivery-change-modal" id="delivery-change-modal">
+    <div class="modal-cover"></div>
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="title">배송지 변경</h2>
@@ -34,40 +44,25 @@
         </div>
         <div class="modal-body">
             <div class="delivery-list">
-                <div class="delivery-item">
+                <div class="delivery-item" th:each="deliveryAddress : ${allDeliveryAddress}" th:if="${deliveryAddress != null}" th:attr="data-delivery-address-id=${deliveryAddress.getDeliveryAddressId()},
+                          data-delivery-name=${deliveryAddress.getDeliveryName()},
+                          data-receiver-name=${deliveryAddress.getReceiverName()},
+                          data-phone=${deliveryAddress.getPhone()},
+                          data-postal-code=${deliveryAddress.getPostalCode()},
+                          data-address-primary=${deliveryAddress.getAddressPrimary()},
+                          data-address-secondary=${deliveryAddress.getAddressSecondary()}">
                     <div class="item-content">
                         <div class="item-header">
-                            <span class="delivery-name">우리집</span>
-                            <span class="default-badge">기본배송지</span>
+                            <span class="delivery-name" th:text="${deliveryAddress.getDeliveryName()}"></span>
+                            <span class="default-badge" th:if="${deliveryAddress.isDefault()}">기본배송지</span>
                         </div>
-                        <div class="recipient">뎌뎌</div>
+                        <div class="recipient" th:text="${deliveryAddress.getReceiverName()}"></div>
                         <div class="address">
-                            <span class="postal">[12345]</span>
-                            <span class="addr">대구광역시 동구 화랑로 51 동대구비스타동원</span>
+                            <span class="postal" th:text="'[' + ${deliveryAddress.postalCode} + ']'"></span>
+                            <span class="addr" th:text="${deliveryAddress.getAddressPrimary()}"></span>
                         </div>
-                        <div class="detail-addr">1호</div>
-                        <div class="phone">010-1234-5678</div>
-                        <div class="item-actions">
-                            <div class="left-actions">
-                                <button type="button" class="delete-btn">삭제</button>
-                                <button type="button" class="edit-btn">수정</button>
-                            </div>
-                            <button type="button" class="select-btn">선택</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="delivery-item">
-                    <div class="item-content">
-                        <div class="item-header">
-                            <span class="delivery-name">회사</span>
-                        </div>
-                        <div class="recipient">학원임사실</div>
-                        <div class="address">
-                            <span class="postal">[11111]</span>
-                            <span class="addr">대구광역시 중구 어딘가</span>
-                        </div>
-                        <div class="detail-addr">10층</div>
-                        <div class="phone">010-1234-0000</div>
+                        <div class="detail-addr" th:text="${deliveryAddress.getAddressSecondary()}"></div>
+                        <div class="phone" th:text="${deliveryAddress.getPhone()}"></div>
                         <div class="item-actions">
                             <div class="left-actions">
                                 <button type="button" class="delete-btn">삭제</button>
@@ -81,6 +76,105 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="add-btn">추가하기</button>
+        </div>
+    </div>
+    <div class="delivery-registration">
+        <div class="modal-header">
+            <h2 class="title">배송지 등록</h2>
+            <button type="button" class="close-btn">
+                <img class="image" src="/shop/assets/images/cancelButton.png" alt="">
+            </button>
+        </div>
+        <div class="registration-wrapper">
+            <div class="AddressName-wrapper">
+                <span class="name">배송지명</span>
+                <input class="AddressNameInput" type="text" placeholder="배송지명을 입력해주세요.">
+            </div>
+            <div class="name-wrapper">
+                <span class="name">받는 사람</span>
+                <input class="nameInput" type="text" placeholder="받는 분의 성함을 입력해주세요.">
+            </div>
+            <label class="label">
+                <span class="title">주소</span>
+                <input disabled class="postalCode input" type="text" placeholder="우편번호">
+                <button class="button">주소 검색</button>
+            </label>
+            <label class="label">
+                <span class="title"></span>
+                <input disabled class="addressPrimary input" type="text" placeholder="기본주소">
+            </label>
+            <label class="label">
+                <span class="title"></span>
+                <input class="addressSecondary input" type="text" placeholder="상세주소">
+            </label>
+            <label class="contactNumberLabel label">
+                <span class="title">전화번호</span>
+                <span class="number-wrapper">
+                    <select class="firstNumber" name="firstNumber">
+                        <option selected value="010">010</option>
+                    </select>
+                    <span>-</span>
+                    <input autocomplete="off" spellcheck="false" class="contactNumber first input" name="middle"
+                           maxlength="4" minlength="4" inputmode="numeric" placeholder="0000" type="tel">
+                    <span>-</span>
+                    <input autocomplete="off" spellcheck="false" class="contactNumber second input" name="last"
+                           maxlength="4" minlength="4" inputmode="numeric" placeholder="0000" type="tel">
+                </span>
+            </label>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="registrationButton">등록</button>
+        </div>
+    </div>
+</div>
+<div class="delivery-address-modify-modal" id="delivery-address-modify-modal">
+    <div class="modal-cover"></div>
+    <div class="delivery-address-modify">
+        <div class="modal-header">
+            <h2 class="title">배송지 수정</h2>
+            <button type="button" class="close-btn">
+                <img class="image" src="/shop/assets/images/cancelButton.png" alt="">
+            </button>
+        </div>
+        <div class="delivery-modify-wrapper">
+            <div class="AddressName-wrapper">
+                <span class="name">배송지명</span>
+                <input class="AddressNameInput" type="text" placeholder="배송지명을 입력해주세요.">
+            </div>
+            <div class="name-wrapper">
+                <span class="name">받는 사람</span>
+                <input class="nameInput" type="text" placeholder="받는 분의 성함을 입력해주세요.">
+            </div>
+            <label class="label">
+                <span class="title">주소</span>
+                <input disabled class="postalCode input" type="text" placeholder="우편번호">
+                <button class="button">주소 검색</button>
+            </label>
+            <label class="label">
+                <span class="title"></span>
+                <input disabled class="addressPrimary input" type="text" placeholder="기본주소">
+            </label>
+            <label class="label">
+                <span class="title"></span>
+                <input class="addressSecondary input" type="text" placeholder="상세주소">
+            </label>
+            <label class="contactNumberLabel label">
+                <span class="title">전화번호</span>
+                <span class="number-wrapper">
+                    <select class="firstNumber" name="firstNumber">
+                        <option selected value="010">010</option>
+                    </select>
+                    <span>-</span>
+                    <input autocomplete="off" spellcheck="false" class="contactNumber first input" name="middle"
+                           maxlength="4" minlength="4" inputmode="numeric" placeholder="0000" type="tel">
+                    <span>-</span>
+                    <input autocomplete="off" spellcheck="false" class="contactNumber second input" name="last"
+                           maxlength="4" minlength="4" inputmode="numeric" placeholder="0000" type="tel">
+                </span>
+            </label>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modifyButton">수정</button>
         </div>
     </div>
 </div>
