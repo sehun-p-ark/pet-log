@@ -21,29 +21,6 @@ public class FriendService {
         if (userId == null) return List.of();
         return friendMapper.selectFriendsByUserId(userId);
     }
-   /* *//** 내 위치 기준 1.5km 반경 친구 조회 (거리 기준 근처 유저 조회)*//*
-    public List<PetDto> getNearbyFriends(
-            Integer userId,
-            double myLat,
-            double myLng
-    ) {
-        if (userId == null) return List.of();
-
-        if (myLat == 0.0 || myLng == 0.0) return List.of();
-        //address type 가 map 인것만 가져와야 함 == 이게 개인 유저 , company 가 사업자
-
-
-        double radiusKm = 1.5;  // 여기서 고정
-
-        ensureAllOtherUsersHaveLatLng(userId);
-
-        return friendMapper.selectNearbyFriends(
-                userId,
-                myLat,
-                myLng,
-                radiusKm
-        );
-    }*/
 
     public List<FriendListDto> getNearbyFriends(Integer userId, double myLat, double myLng) {
         System.out.println("==== [DEBUG] 주변 친구 찾기 시작 ====");
