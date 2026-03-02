@@ -32,16 +32,16 @@ public class ProductService {
     }
 
     // 상품 검색
-    public List<ProductEntity> searchProducts(String keyword, String petType, Integer categoryId) {
-        return productMapper.searchProducts(keyword, petType, categoryId);
+    public List<ProductEntity> searchProducts(String keyword, String petType, Integer categoryId, int page, int size) {
+        int offset = page * size;
+        return productMapper.searchProducts(keyword, petType, categoryId, offset, size);
     }
 
     // 카테고리별 상품 목록 조회
-    public List<ProductEntity> getProducts(String petType, Integer categoryId, String sort, int page, int size, String brand) {
+    public List<ProductEntity> getProducts(String petType, Integer categoryId, Integer subCategoryId, String sort, int page, int size, String brand) {
         int offset = page * size;
-        return productMapper.selectProducts(petType, categoryId, sort, offset, size, brand);
+        return productMapper.selectProducts(petType, categoryId, subCategoryId, sort, offset, size, brand);
     }
-
 
     // 바로 구매
     public List<Map<String, Object>> getBuyNowItem(Integer productId, Integer optionId, Integer quantity) {

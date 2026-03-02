@@ -1,48 +1,92 @@
 @import "../../../assets/styles/def";
 
 #list{
-  @include flex(column, center, flex-start, 1rem);
+  @include flex(column, center, flex-start);
   width: 100%;
   height: 100%;
   padding: 1rem max(1rem, calc((100vw - 1200px) / 2));
   margin: 5rem 0 2rem 0;
 
-  > .product {
-    @include flex(column, flex-start, flex-start, 1rem);
+  > .product-section {
+    @include flex(column, flex-start, flex-start);
     width: 100%;
-    margin-top: 1rem;
 
-    > .category-wrapper{
-      @include flex(row, center, center, 1rem);
+    > .category-wrapper {
+      @include flex(column, flex-start, flex-start, 0);
+      width: 100%;
 
-      > .caption {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: $global-gray-text-color;
-      }
+      > .main-category {
+        @include flex(row, center, flex-start);
+        width: 100%;
+        border-bottom: 1px solid lighten($global-gray-right-text-color, 40%);
+        border-top: 1px solid lighten($global-gray-right-text-color, 40%);
 
-      > .category{
-        @include flex(row, center, center, 0.5rem);
-
-        > .item{
-          @include flex(row, center, center);
-          font-size: 0.9rem;
+        > .main-category-btn {
+          font-size: 0.95rem;
           font-weight: 500;
-          background-color: $global-color-disabled;
-          padding: 0.3rem 0.8rem;
-          border-radius: 999rem;
+          padding: 0.7rem 1.1rem;
+          border: none;
+          background: none;
           cursor: pointer;
+          color: $global-gray-text-color;
+          border-bottom: 2px solid transparent;
+          transition: all 0.2s;
+          position: relative;
 
-          > input[type="radio"]{
-            display: none;
+          &:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 0.9rem;
+            width: 1px;
+            background-color: lighten($global-gray-right-text-color, 40%);
           }
 
-          &:hover{
+          &:hover {
+            color: darken($global-color-concept, 15%);
+          }
+
+          &.active {
+            color: darken($global-color-concept, 15%);
+            border-bottom: 2px solid darken($global-color-concept, 15%);
+            font-weight: 700;
+          }
+        }
+      }
+
+      > .sub-category {
+        @include flex(row, center, flex-start, 0.5rem);
+        width: 100%;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+        padding: 0;
+
+        &.open {
+          max-height: 60px;
+          padding: 0.7rem 0 0 0.5rem;
+        }
+
+        > .sub-category-btn {
+          @include flex(row, center, center);
+          font-size: 0.85rem;
+          font-weight: 500;
+          background-color: $global-color-disabled;
+          padding: 0.25rem 0.75rem;
+          border-radius: 999rem;
+          cursor: pointer;
+          border: none;
+          color: inherit;
+          white-space: nowrap;
+
+          &:hover {
             background-color: darken($global-color-follow, 10%);
             color: $global-white-text-color;
           }
 
-          &:has(input[type="radio"]:checked){
+          &.active {
             background-color: darken($global-color-concept, 15%);
             color: $global-white-text-color;
           }
@@ -55,6 +99,7 @@
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 0.5rem;
       width: 100%;
+      padding-top: 1rem;
 
       @media (max-width: 768px) {
         grid-template-columns: repeat(3, 1fr);
@@ -65,12 +110,25 @@
         cursor: pointer;
         padding-bottom: 0.5rem;
 
-        > .image {
+        > .image-wrapper {
           width: 100%;
-          aspect-ratio: 1;
-          object-fit: cover;
+          overflow: hidden;
           border-radius: 0.2rem;
-          background-color: $global-green-background-color;
+          border: 0.0625rem solid lighten($global-gray-right-text-color, 45%);
+
+          > .image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            background-color: $global-green-background-color;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: block;
+
+            &:hover {
+              transform: scale(1.05);
+            }
+          }
         }
 
         > .brand{
@@ -88,17 +146,27 @@
 
         > .discount{
           @include flex(row, center, center, 0.3rem);
-          font-size: 0.8rem;
-          padding-bottom: 0.2rem;
-          text-decoration: line-through;
-          font-weight: 600;
-          color: lighten($global-gray-right-text-color, 10%);
+
+          > .percent{
+            font-size: 0.9rem;
+            padding-bottom: 0.2rem;
+            font-weight: 600;
+            color: $global-green-text-color;
+          }
+
+          > .number{
+            font-size: 0.8rem;
+            padding-bottom: 0.2rem;
+            text-decoration: line-through;
+            font-weight: 600;
+            color: lighten($global-gray-right-text-color, 10%);
+          }
         }
 
         > .price {
           font-size: 1.1rem;
-          font-weight: 700;
-          color: $global-green-text-color;
+          font-weight: 600;
+          color: $global-black-text-color;
         }
       }
     }

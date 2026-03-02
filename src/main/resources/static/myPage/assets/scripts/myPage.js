@@ -9,13 +9,17 @@ const businessInformation = content.querySelector(':scope > .businessInformation
 const petInformation = content.querySelector(':scope > .petInformation');
 const reservationInformation = content.querySelector(':scope > .reservationInformation');
 const storeInformation = content.querySelector(':scope > .storeInformation');
+const paymentDetails = content.querySelector(':scope > .paymentDetails');
+const productHeartDetails = content.querySelector(':scope > .productHeartDetails');
 
 const sections = [
     personalInformation,
     businessInformation,
     petInformation,
     storeInformation,
-    reservationInformation
+    reservationInformation,
+    paymentDetails,
+    productHeartDetails
 ].filter(section => section !== null);
 
 // 메뉴 클릭 시
@@ -250,6 +254,80 @@ if (personalInformation) {
         currentEditingItem = null;
     }
 
+
+    const addressList = addressModal.querySelector('.address-list');
+
+    // region 대표주소 설정
+    const defaultAddressMessage = document.getElementById('defaultAddressMessage');
+    const defaultAddressMessageTitle = document.createElement('span');
+    const defaultAddressMessageText = document.createElement('span');
+    const defaultAddressYesButton = defaultAddressMessage.querySelector(':scope > .button-wrapper > .yes');
+    const defaultAddressNoButton = defaultAddressMessage.querySelector(':scope > .button-wrapper > .no');
+
+    defaultAddressMessageTitle.classList.add('title');
+    defaultAddressMessageText.classList.add('text');
+    defaultAddressMessageTitle.innerText = '알림';
+    defaultAddressMessage.prepend(defaultAddressMessageTitle, defaultAddressMessageText);
+
+    let defaultAddressId = null;
+
+
+    function showDefaultAddressMessage(text) {
+        defaultAddressMessage.classList.add('visible');
+        defaultAddressMessageText.innerText = text;
+    }
+
+    defaultAddressNoButton.addEventListener('click', () => {
+        defaultAddressMessage.classList.remove('visible');
+        defaultAddressId = null;
+    });
+
+    addressList.addEventListener('click', (e) => {
+        const defaultButton = e.target.closest('.select-btn');
+        if (!defaultButton) {
+            return;
+        }
+        const addressItem = defaultButton.closest('.address-item');
+        defaultAddressId = addressItem.dataset.addressId;
+        console.log(defaultAddressId);
+        showDefaultAddressMessage('이 주소를 대표주소로 변경하시겠습니까?');
+    });
+
+    defaultAddressYesButton.addEventListener('click', () => {
+        if (!defaultAddressId) {
+            return;
+        }
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('addressId', defaultAddressId);
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('대표 주소 설정에 실패하였습니다. 다시 시도해주세요.');
+                    break;
+                case 'FAILURE_SESSION_EXPIRED':                    showMessage('로그인을 해주세요.', () => {
+                    location.href = '/user/login';
+                });
+                    break;
+                case 'SUCCESS':
+                    location.href = '/my?menu=' + getCurrentMenuIndex();
+                    break;
+                default:
+            }
+        };
+        xhr.open('POST', '/my/address/default');
+        xhr.send(formData);
+    })
+    // endregion
+
     // region 주소 삭제
     const addressDeleteMessage = document.getElementById('addressDeleteMessage');
     const addressDeleteMessageTitle = document.createElement('span');
@@ -275,7 +353,7 @@ if (personalInformation) {
         deleteAddressId = null;
     });
 
-    const addressList = addressModal.querySelector('.address-list');
+
     addressList.addEventListener('click', (e) => {
         const deleteButton = e.target.closest('.delete-btn');
         if (!deleteButton) {
@@ -318,7 +396,6 @@ if (personalInformation) {
                     break;
                 default:
             }
-
         };
         xhr.open('POST', '/my/address/delete');
         xhr.send(formData);
@@ -580,13 +657,78 @@ if (personalInformation) {
         currentEditingItem = null;
     }
 
+    const deliveryAddressList = deliveryModal.querySelector('.delivery-list');
 
-    const selectBtns = document.querySelectorAll('.select-btn');
-    selectBtns.forEach(selectBtn => {
-        selectBtn.addEventListener('click', () => {
-            closeDeliveryModal(deliveryModal);
-        })
+    // region 대표배송지 설정
+    const defaultDeliveryMessage = document.getElementById('defaultDeliveryMessage');
+    const defaultDeliveryMessageTitle = document.createElement('span');
+    const defaultDeliveryMessageText = document.createElement('span');
+    const defaultDeliveryYesButton = defaultDeliveryMessage.querySelector(':scope > .button-wrapper > .yes');
+    const defaultDeliveryNoButton = defaultDeliveryMessage.querySelector(':scope > .button-wrapper > .no');
+
+    defaultDeliveryMessageTitle.classList.add('title');
+    defaultDeliveryMessageText.classList.add('text');
+    defaultDeliveryMessageTitle.innerText = '알림';
+    defaultDeliveryMessage.prepend(defaultDeliveryMessageTitle, defaultDeliveryMessageText);
+
+    let defaultDeliveryId = null;
+
+
+    function showDefaultDeliveryMessage(text) {
+        defaultDeliveryMessage.classList.add('visible');
+        defaultDeliveryMessageText.innerText = text;
+    }
+
+    defaultDeliveryNoButton.addEventListener('click', () => {
+        defaultDeliveryMessage.classList.remove('visible');
+        defaultDeliveryId = null;
+    });
+
+    deliveryAddressList.addEventListener('click', (e) => {
+        const defaultButton = e.target.closest('.select-btn');
+        if (!defaultButton) {
+            return;
+        }
+        const addressItem = defaultButton.closest('.delivery-item');
+        defaultDeliveryId = addressItem.dataset.deliveryAddressId;
+        console.log(defaultDeliveryId);
+        showDefaultDeliveryMessage('이 주소를 대표 배송지로 변경하시겠습니까?');
+    });
+
+    defaultDeliveryYesButton.addEventListener('click', () => {
+        if (!defaultDeliveryId) {
+            return;
+        }
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('addressId', defaultDeliveryId);
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('대표 배송지 설정에 실패하였습니다. 다시 시도해주세요.');
+                    break;
+                case 'FAILURE_SESSION_EXPIRED':                    showMessage('로그인을 해주세요.', () => {
+                    location.href = '/user/login';
+                });
+                    break;
+                case 'SUCCESS':
+                    location.href = '/my?menu=' + getCurrentMenuIndex();
+                    break;
+                default:
+            }
+        };
+        xhr.open('POST', '/my/delivery/default');
+        xhr.send(formData);
     })
+    // endregion
 
 
     // region 배송지 삭제
@@ -614,7 +756,6 @@ if (personalInformation) {
         deleteDeliveryAddressId = null;
     });
 
-    const deliveryAddressList = deliveryModal.querySelector('.delivery-list');
     deliveryAddressList.addEventListener('click', (e) => {
         const deleteButton = e.target.closest('.delete-btn');
         if (!deleteButton) {
@@ -693,8 +834,8 @@ if (personalInformation) {
             deliveryAddressModifyAddressPrimaryInput.value = card.dataset.addressPrimary;
             deliveryAddressModifyAddressSecondaryInput.value = card.dataset.addressSecondary || '';
             deliveryAddressModifyFirstNumber.value = card.dataset.phone.substring(0, 3);
-            deliveryAddressModifyMiddleNumber.value = card.dataset.phone.substring(3, 7);
-            deliveryAddressModifyLastNumber.value = card.dataset.phone.substring(7, 11);
+            deliveryAddressModifyMiddleNumber.value = card.dataset.phone.substring(4, 8);
+            deliveryAddressModifyLastNumber.value = card.dataset.phone.substring(9, 13);
         });
     });
 
@@ -768,6 +909,27 @@ if (personalInformation) {
         }
         if (deliveryAddressModifyAddressSecondaryInput.value.length > 100) {
             showMessage('상세주소는 최대 100자까지 가능합니다.');
+            return;
+        }
+        if (deliveryAddressModifyFirstNumber.value === '') {
+            showMessage('전화번호를 모두 입력해주세요.');
+            return;
+        }
+        if (deliveryAddressModifyMiddleNumber.value === '') {
+            showMessage('전화번호를 모두 입력해주세요.');
+            return;
+        }
+        if (deliveryAddressModifyLastNumber.value === '') {
+            showMessage('전화번호를 모두 입력해주세요.');
+            return;
+        }
+        if (!/^\d{4}$/.test(deliveryAddressModifyMiddleNumber.value) ||
+            !/^\d{4}$/.test(deliveryAddressModifyLastNumber.value)) {
+            showMessage('전화번호는 숫자 4자리로 입력해주세요.');
+            return;
+        }
+        if (deliveryAddressModifyPhone.length > 11) {
+            showMessage('전화번호를 다시 확인해주세요.');
             return;
         }
         const xhr = new XMLHttpRequest();
@@ -921,11 +1083,12 @@ if (personalInformation) {
             showMessage('전화번호를 모두 입력해주세요.');
             return;
         }
-        if (deliveryAddressPhone.length > 11) {
-            showMessage('전화번호를 다시 확인해주세요.');
+        if (!/^\d{4}$/.test(deliveryAddressMiddleNumberInput.value) ||
+            !/^\d{4}$/.test(deliveryAddressLastNumberInput.value)) {
+            showMessage('전화번호는 숫자 4자리로 입력해주세요.');
             return;
         }
-        if (deliveryAddressMiddleNumberInput.value.length !== 4 || deliveryAddressLastNumberInput.value.length !== 4) {
+        if (deliveryAddressPhone.length > 11) {
             showMessage('전화번호를 다시 확인해주세요.');
             return;
         }
@@ -1371,6 +1534,7 @@ if (businessInformation) {
 
         // region 가게 삭제 모달
         const deleteStoreModal = document.getElementById('delete-store-modal');
+        const deleteStoreModalContent = deleteStoreModal.querySelector('.modal-content');
         const deleteStoreModalCancelButton = deleteStoreModal.querySelector('.close-btn');
         const deleteStoreButton = deleteStoreModal.querySelector('.delete-button');
         let selectedStoreId = null;
@@ -1382,11 +1546,13 @@ if (businessInformation) {
             deleteStoreModalOpen.addEventListener('click', () => {
                 selectedStoreId = card.dataset.storeId;
                 deleteStoreModal.classList.add('visible');
+                deleteStoreModalContent.classList.add('visible');
             })
         })
 
         deleteStoreModalCancelButton.addEventListener('click', () => {
             deleteStoreModal.classList.remove('visible');
+            deleteStoreModalContent.classList.remove('visible');
         });
 
 
@@ -1426,6 +1592,7 @@ if (businessInformation) {
                         break;
                     case 'SUCCESS':
                         deleteStoreModal.classList.remove('visible');
+                        deleteStoreModalContent.classList.remove('visible');
                         location.href = '/my?menu=' + getCurrentMenuIndex();
                         break;
                     default:
@@ -2643,7 +2810,7 @@ if (petInformation) {
 
         const petData = {
             name: petNameInput.value,
-            imageUrl: fileInput.files.length > 0
+            imagePreview: fileInput.files.length > 0   // 화면 미리보기용만
                 ? preview.src
                 : editMod
                     ? editMod.imageUrl
@@ -2667,15 +2834,31 @@ if (petInformation) {
 
             // 서버로 수정 내용 전송
             try {
+                const updateFormData = new FormData();
+
+                const updatePayload = {
+                    petId: editMod.petId,
+                    name: petData.name,
+                    species: petData.species,
+                    birthDate: petData.birthDate,
+                    introduction: petData.introduction,
+                    gender: petData.gender,
+                    weight: petData.weight,
+                    bodyType: petData.bodyType
+                };
+                updateFormData.append('data', new Blob([JSON.stringify(updatePayload)], { type: 'application/json' }));
+
+// 새 이미지가 있으면 파일 전송, 없으면 기존 이미지 URL 전송
+                if (fileInput.files.length > 0) {
+                    updateFormData.append('petImage', fileInput.files[0]);
+                } else {
+                    // 기존 이미지 경로 유지 (서버에서 파일 없으면 기존 값 유지하도록)
+                    updateFormData.append('existingImageUrl', editMod.imageUrl || '');
+                }
+
                 const res = await fetch('/my/pet/update', {
-                    method: 'POST', // 혹은 POST
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        petId: editMod.petId, // 기존 애완동물 ID
-                        ...petData
-                    })
+                    method: 'POST',
+                    body: updateFormData
                 });
                 const result = await res.json();
                 if (result.result === 'SUCCESS') {
@@ -2694,12 +2877,28 @@ if (petInformation) {
             // 수정모드는 resetAllDialog 호출 안함
             currentStep = 1;
         } else {
+            const formData = new FormData();
+
+            // petData에서 imageUrl 제거하고 나머지 필드만 JSON으로
+            const petPayload = {
+                name: petData.name,
+                species: petData.species,
+                birthDate: petData.birthDate,
+                introduction: petData.introduction,
+                gender: petData.gender,
+                weight: petData.weight,
+                bodyType: petData.bodyType
+            };
+            formData.append('data', new Blob([JSON.stringify(petPayload)], { type: 'application/json' }));
+
+            // 이미지 파일이 있으면 추가
+            if (fileInput.files.length > 0) {
+                formData.append('petImage', fileInput.files[0]);
+            }
+
             const res = await fetch("/my/pet/registration", {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(petData)
+                body: formData  // Content-Type 헤더 설정 X
             });
             const data = await res.json();
             console.log(data)
@@ -2960,5 +3159,654 @@ if (petInformation) {
 
 
 
+
+
+
+
+
+// 리뷰 모달
+const overlay = document.querySelector('.review-modal-overlay');
+const modalClose = document.querySelector('.modal-close');
+const stars = document.querySelectorAll('.star-input');
+const imageInput = document.querySelector('.review-image-input');
+const previewImages = document.querySelector('.preview-images');
+const submitReviewBtn = document.querySelector('.submit-review');
+const editReviewBtn = document.querySelector('.edit-review-btn');
+const saveReviewBtn = document.querySelector('.save-review-btn');
+const cancelReviewBtn = document.querySelector('.cancel-review-btn');
+const editActionBtns = document.querySelector('.edit-action-btns');
+const modalTitle = document.querySelector('.modal-title');
+const imageUploadLabel = document.querySelector('.image-upload-label');
+const reviewContent = document.querySelector('.review-content');
+const imageText = document.querySelector('.image-text');
+
+let selectedRating = 0;
+let selectedFiles = [];
+let editingReviewId = null;
+let currentReviewId = null;
+let currentProductId = null;
+let originalRating = 0;
+let originalContent = '';
+let originalImages = [];
+
+function closeModal() {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+modalClose?.addEventListener('click', () => {
+    closeModal();
+    setWriteMode(); // 닫을 때 항상 작성 모드로 초기화
+});
+
+overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+        closeModal();
+        setWriteMode();
+    }
+});
+
+// 모드 전환 함수
+function setWriteMode() {
+    modalTitle.textContent = '리뷰 작성';
+    reviewContent.disabled = false;
+    imageText.style.display = 'block';
+    imageUploadLabel.style.display = 'block';
+    submitReviewBtn.style.display = 'inline-block';
+    editReviewBtn.style.display = 'none';
+    editActionBtns.style.display = 'none';
+
+    stars.forEach(s => s.style.pointerEvents = 'auto');
+    // 초기화
+    selectedRating = 0;
+    selectedFiles = [];
+    editingReviewId = null;
+    currentReviewId = null;
+    stars.forEach(s => s.classList.remove('active'));
+    reviewContent.value = '';
+    previewImages.innerHTML = '';
+}
+
+function setReadMode() {
+    modalTitle.textContent = '내 리뷰';
+    reviewContent.disabled = true;
+    imageText.style.display = originalImages.length > 0 ? 'block' : 'none';
+    imageUploadLabel.style.display = 'none';
+    submitReviewBtn.style.display = 'none';
+    editReviewBtn.style.display = 'inline-block';
+    editActionBtns.style.display = 'none';
+
+    stars.forEach(s => s.style.pointerEvents = 'none');
+}
+
+function setEditMode() {
+    modalTitle.textContent = '리뷰 수정';
+    reviewContent.disabled = false;
+    imageText.style.display = 'block';
+    imageUploadLabel.style.display = 'block';
+    submitReviewBtn.style.display = 'none';
+    editReviewBtn.style.display = 'none';
+    editActionBtns.style.display = 'flex';
+
+    stars.forEach(s => s.style.pointerEvents = 'auto');
+}
+
+// ===== 별점 인터랙션 =====
+stars.forEach(star => {
+    star.addEventListener('mouseover', () => {
+        const val = parseInt(star.dataset.value);
+        stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= val));
+    });
+    star.addEventListener('mouseout', () => {
+        stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= selectedRating));
+    });
+    star.addEventListener('click', () => {
+        selectedRating = parseInt(star.dataset.value);
+        stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= selectedRating));
+    });
+});
+
+// 이미지 첨부
+imageInput?.addEventListener('change', () => {
+    const existingCount = originalImages.length + selectedFiles.length;
+    if (existingCount + imageInput.files.length > 3) {
+        showToast('이미지는 3장까지 첨부 가능합니다.');
+        imageInput.value = '';
+        return;
+    }
+    Array.from(imageInput.files).forEach(file => {
+        selectedFiles.push(file);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-img-wrapper';
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        const removeBtn = document.createElement('div');
+        removeBtn.className = 'remove-img';
+        removeBtn.textContent = '✕';
+        removeBtn.addEventListener('click', () => {
+            selectedFiles = selectedFiles.filter(f => f !== file);
+            wrapper.remove();
+        });
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        previewImages.appendChild(wrapper);
+    });
+    imageInput.value = '';
+});
+
+const filterSelect = document.querySelector('.filter');
+
+const currentPeriod = urlParams.get('period');
+if (currentPeriod && filterSelect) {
+    filterSelect.value = currentPeriod;
+    // period 파라미터를 URL에서 제거 (새로고침 시 초기화되도록)
+    const cleanUrl = new URL(window.location.href);
+    cleanUrl.searchParams.delete('period');
+    window.history.replaceState(null, '', cleanUrl);
+}
+
+filterSelect?.addEventListener('change', () => {
+    const period = filterSelect.value;
+    const menuIndex = sections.indexOf(paymentDetails);
+    // 리뷰 필터 초기화 후 페이지 이동
+    document.querySelectorAll('.order-item, .order-item-wrapper, .order-detail, .payment-date')
+        .forEach(el => el.style.display = '');
+    location.href = `/my?menu=${menuIndex}&period=${period}`;
+});
+
+document.querySelector('.my-review-filter')?.addEventListener('click', () => {
+    // order-item 필터링 (내가 쓴 리뷰 있는 것만)
+    document.querySelectorAll('.order-item').forEach(item => {
+        item.style.display = item.querySelector('.my-review-btn') ? '' : 'none';
+    });
+
+    // 보이는 order-item이 없는 order-item-wrapper와 그 앞 order-detail 숨기기
+    document.querySelectorAll('.order-item-wrapper').forEach(wrapper => {
+        const hasVisible = [...wrapper.querySelectorAll('.order-item')]
+            .some(item => item.style.display !== 'none');
+        wrapper.style.display = hasVisible ? '' : 'none';
+        const orderDetail = wrapper.previousElementSibling;
+        if (orderDetail?.classList.contains('order-detail')) {
+            orderDetail.style.display = hasVisible ? '' : 'none';
+        }
+    });
+
+    // 보이는 항목 없는 날짜 그룹 숨기기
+    document.querySelectorAll('.payment-date').forEach(dateEl => {
+        let next = dateEl.nextElementSibling;
+        let hasVisible = false;
+        while (next && !next.classList.contains('payment-date')) {
+            if (next.style.display !== 'none') hasVisible = true;
+            next = next.nextElementSibling;
+        }
+        dateEl.style.display = hasVisible ? '' : 'none';
+    });
+
+    const paymentList = document.querySelector('.payment-list');
+    paymentList.querySelector('.empty-review')?.remove();
+    paymentList.classList.remove('empty-mode');
+
+    const hasAnyVisible = [...document.querySelectorAll('.order-item')]
+        .some(item => item.style.display !== 'none');
+
+    if (!hasAnyVisible) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-review empty-orders';
+        empty.innerHTML = `<span class="empty-title">작성한 리뷰가 없습니다.</span>`;
+        paymentList.appendChild(empty);
+        paymentList.classList.add('empty-mode');
+    }
+});
+
+// ===== 리뷰 남기기 버튼 (마이페이지) =====
+let currentOrderItemId = null;
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.review-btn');
+    if (!btn) return;
+    currentProductId = btn.dataset.productId;
+    currentOrderItemId = btn.dataset.orderItemId;
+    setWriteMode();
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+});
+
+// ===== 내 리뷰 보기 버튼 (마이페이지) =====
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.my-review-btn');
+    if (!btn) return;
+    currentReviewId = btn.dataset.reviewId;
+    currentProductId = btn.dataset.productId;
+
+    fetch(`/shop/products/${currentProductId}/reviews/${currentReviewId}`)
+        .then(res => res.json())
+        .then(data => {
+            originalRating = data.rating;
+            originalContent = data.content;
+            originalImages = data.images || [];
+            selectedRating = data.rating;
+            selectedFiles = [];
+
+            // 별점 세팅
+            stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= data.rating));
+
+            // 내용 세팅
+            reviewContent.value = data.content;
+
+            // 이미지 세팅
+            previewImages.innerHTML = '';
+            originalImages.forEach(url => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'preview-img-wrapper';
+                const img = document.createElement('img');
+                img.src = url;
+                wrapper.appendChild(img);
+                previewImages.appendChild(wrapper);
+            });
+
+            setReadMode();
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+});
+
+// ===== 리뷰 수정 버튼 클릭 =====
+editReviewBtn?.addEventListener('click', () => {
+    setEditMode();
+    previewImages.querySelectorAll('.preview-img-wrapper').forEach((wrapper, idx) => {
+        if (wrapper.querySelector('.remove-img')) return; // 이미 있으면 skip
+        const imageUrl = originalImages[idx];
+        const removeBtn = document.createElement('div');
+        removeBtn.className = 'remove-img';
+        removeBtn.textContent = '✕';
+        removeBtn.addEventListener('click', () => {
+            originalImages = originalImages.filter(url => url !== imageUrl);
+            wrapper.remove();
+        });
+        wrapper.appendChild(removeBtn);
+    });
+});
+
+// ===== 수정 취소 =====
+cancelReviewBtn?.addEventListener('click', () => {
+    selectedRating = originalRating;
+    selectedFiles = [];
+    reviewContent.value = originalContent;
+
+    previewImages.innerHTML = '';
+    originalImages.forEach(url => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-img-wrapper';
+        const img = document.createElement('img');
+        img.src = url;
+        wrapper.appendChild(img);
+        previewImages.appendChild(wrapper);
+    });
+
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= originalRating));
+    setReadMode();
+});
+
+// ===== 리뷰 등록 =====
+submitReviewBtn?.addEventListener('click', () => {
+    if (selectedRating === 0) {
+        showToast('별점을 선택해주세요.');
+        return;
+    }
+    const content = reviewContent.value;
+    if (content.length < 20) {
+        showToast('리뷰는 최소 20자 이상 입력해주세요.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('productId', currentProductId);
+    formData.append('orderItemId', currentOrderItemId);
+    formData.append('rating', selectedRating);
+    formData.append('content', content);
+    selectedFiles.forEach(file => formData.append('images', file));
+
+    fetch(`/shop/products/${currentProductId}/reviews`, {
+        method: 'POST',
+        body: formData
+    }).then(res => {
+        if (res.ok) {
+            showToast('리뷰가 등록되었습니다.');
+            closeModal();
+            setWriteMode();
+            location.reload();
+        } else {
+            showToast('리뷰 등록에 실패했습니다.');
+        }
+    });
+});
+
+// ===== 수정 완료 =====
+saveReviewBtn?.addEventListener('click', () => {
+    if (selectedRating === 0) {
+        showToast('별점을 선택해주세요.');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('rating', selectedRating);
+    formData.append('content', reviewContent.value);
+    selectedFiles.forEach(file => formData.append('images', file));
+
+    // 남아있는 기존 이미지 URL 전송 (삭제 안 된 것들)
+    originalImages.forEach(url => formData.append('remainingImageUrls', url));
+
+
+    fetch(`/shop/products/${currentProductId}/reviews/${currentReviewId}`, {
+        method: 'PUT',
+        body: formData
+    }).then(res => {
+        if (res.ok) {
+            showToast('리뷰가 수정되었습니다.');
+            originalRating = selectedRating;
+            originalContent = reviewContent.value;
+            selectedFiles = [];
+            setReadMode();
+            // 이미지에서 X 버튼 제거
+            previewImages.querySelectorAll('.remove-img').forEach(btn => btn.remove());
+        } else {
+            showToast('리뷰 수정에 실패했습니다.');
+        }
+    });
+});
+
+// ===== 상품 상세 페이지용 수정 모달 =====
+function openEditModal(reviewId, rating, content) {
+    editingReviewId = reviewId;
+    currentProductId = getProductIdFromUrl();
+    selectedRating = rating;
+    stars.forEach(s => s.classList.toggle('active', parseInt(s.dataset.value) <= selectedRating));
+    reviewContent.value = content;
+    selectedFiles = [];
+    previewImages.innerHTML = '';
+
+    fetch(`/shop/products/0/reviews/${reviewId}/images`)
+        .then(res => res.json())
+        .then(images => {
+            images.forEach(imageUrl => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'preview-img-wrapper';
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                const removeBtn = document.createElement('div');
+                removeBtn.className = 'remove-img';
+                removeBtn.textContent = '✕';
+                removeBtn.addEventListener('click', () => {
+                    fetch(`/shop/products/0/reviews/${reviewId}/images?imageUrl=${encodeURIComponent(imageUrl)}`, {
+                        method: 'DELETE'
+                    }).then(res => {
+                        if (res.ok) wrapper.remove();
+                    });
+                });
+                wrapper.appendChild(img);
+                wrapper.appendChild(removeBtn);
+                previewImages.appendChild(wrapper);
+            });
+        });
+
+    // 상품 상세에서는 바로 수정 모드
+    setEditMode();
+    submitReviewBtn.style.display = 'none';
+    saveReviewBtn.style.display = 'inline-block';
+    cancelReviewBtn.style.display = 'none';
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// 주문상세 모달 열기
+document.querySelector('.payment-list').addEventListener('click', async (e) => {
+    if (!e.target.closest('.order-info')) return;
+
+    const orderId = e.target.closest('.order-detail').dataset.orderId;
+    const res = await fetch(`/my/order/${orderId}`);
+    const data = await res.json();
+
+    const overlay = document.querySelector('.order-detail-modal-overlay');
+    overlay.querySelector('.price.all .result').textContent = data.totalProductAmount?.toLocaleString() + '원';
+    overlay.querySelector('.price.ship-price .result').textContent = data.deliveryFee?.toLocaleString() + '원';
+    overlay.querySelector('.price.discount-coupon .result').textContent = '-' + (data.couponDiscount ?? 0).toLocaleString() + '원';
+    overlay.querySelector('.price.discount-point .result').textContent = '-' + (data.usedPoint ?? 0).toLocaleString() + '원';
+    overlay.querySelector('.price.payment-price .result').textContent = data.finalAmount?.toLocaleString() + '원';
+
+    overlay.style.display = 'flex';
+});
+
+// 주문상세 모달 닫기
+document.querySelector('.order-detail-modal .modal-close').addEventListener('click', () => {
+    document.querySelector('.order-detail-modal-overlay').style.display = 'none';
+});
+
+const paymentList = document.querySelector('.payment-list');
+if (paymentList?.querySelector('.empty-orders')) {
+    paymentList.classList.add('empty-mode');
+}
+
+
+if (personalInformation) {
+    // region 마일리지 내역
+    const pointBtn = personalInformation.querySelector('.point-history');
+    const pointModal = document.getElementById('point-modal');
+    const pointModalCloseBtn = pointModal.querySelector('.close-btn');
+    pointBtn.addEventListener('click', () => {
+        pointModal.classList.add('visible');
+        pointModal.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        })
+        pointModal.querySelectorAll('.tab-panel').forEach(panel => {
+            panel.classList.remove('active');
+        })
+        pointModal.querySelectorAll('.filter-chip').forEach(filter => {
+            filter.classList.remove('active');
+        })
+        pointModal.querySelector('.tab-btn').classList.add('active');
+        pointModal.querySelector('.tab-panel').classList.add('active');
+        pointModal.querySelector('.filter-chip').classList.add('active');
+
+        filterHistoryItems(pointModal, undefined); // 전체로 초기화
+    });
+
+    pointModalCloseBtn.addEventListener('click', () => {
+        pointModal.classList.remove('visible');
+    });
+
+// 탭 전환 공통 함수
+    function switchTab(clickedBtn) {
+        const modalBox = clickedBtn.closest('.modal-box');
+        const targetId = clickedBtn.dataset.target;
+
+        // 탭 버튼 active 전환
+        modalBox.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        clickedBtn.classList.add('active');
+
+        // 탭 패널 active 전환
+        modalBox.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        document.getElementById(targetId).classList.add('active');
+    }
+
+// 필터 칩 전환
+    function switchChip(clickedChip) {
+        const filterBar = clickedChip.closest('.filter-bar');
+        filterBar.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+        clickedChip.classList.add('active');
+
+        const months = clickedChip.dataset.months; // 전체면 undefined
+        filterHistoryItems(pointModal, months);
+    }
+
+// 필터 가져오기
+    function filterHistoryItems(modal, months) {
+        modal.querySelectorAll('.history-item').forEach(item => {
+            if (!months) {
+                // 전체 - 다 보여주기
+                item.style.display = '';
+                return;
+            }
+
+            const dateText = item.querySelector('.date').textContent.trim();
+            // "2025-06-12 / 14:30:00" 형식에서 날짜만 파싱
+            const itemDate = new Date(dateText.split(' | ')[0]);
+            const cutoff = new Date();
+            cutoff.setMonth(cutoff.getMonth() - Number(months));
+
+            item.style.display = itemDate >= cutoff ? '' : 'none';
+        });
+    }
+
+// 이벤트 등록
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchTab(btn));
+    });
+
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', () => switchChip(chip));
+    });
+// endregion
+
+
+// region 쿠폰 내역
+    const couponBtn = personalInformation.querySelector('.coupon-list');
+    const couponModal = document.getElementById('coupon-modal');
+    const couponModalCloseBtn = couponModal.querySelector('.close-btn');
+
+    couponBtn.addEventListener('click', () => {
+        couponModal.classList.add('visible');
+    })
+
+    couponModalCloseBtn.addEventListener('click', () => {
+        couponModal.classList.remove('visible');
+    })
+// endregion
+
+
+    // region 예약취소
+    const reservationMessage = document.getElementById('reservationMessage');
+    const reservationMessageMessageTitle = document.createElement('span');
+    const reservationMessageMessageText = document.createElement('span');
+    const reservationMessageYesButton = reservationMessage.querySelector(':scope > .button-wrapper > .yes');
+    const reservationMessageNoButton = reservationMessage.querySelector(':scope > .button-wrapper > .no');
+
+    reservationMessageMessageTitle.classList.add('title');
+    reservationMessageMessageText.classList.add('text');
+    reservationMessageMessageTitle.innerText = '알림';
+    reservationMessage.prepend(reservationMessageMessageTitle, reservationMessageMessageText);
+
+
+    let cancelReservationId = null;
+
+    function showReservationMessage(text) {
+        reservationMessage.classList.add('visible');
+        reservationMessageMessageText.innerText = text;
+    }
+
+    reservationMessageNoButton.addEventListener('click', () => {
+        reservationMessage.classList.remove('visible');
+        cancelReservationId = null;
+    });
+
+
+
+
+    const reservationCards = reservationInformation.querySelectorAll('.reservation-card');
+    reservationCards.forEach(card => {
+        if (!card) {
+            return;
+        }
+        const cancelBtn = card.querySelector('.cancel-btn');
+        if (!cancelBtn) {
+            return;
+        }
+        cancelBtn.addEventListener('click', () => {
+            const reservationId = card.dataset.reservationId;
+            if (!reservationId) {
+                return;
+            }
+            cancelReservationId = reservationId;
+            showReservationMessage('정말로 예약을 취소하시겠습니까?');
+        });
+
+    });
+
+    reservationMessageYesButton.addEventListener('click', () => {
+        if (!cancelReservationId) {
+            return;
+        }
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('reservationId', cancelReservationId);
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState !== XMLHttpRequest.DONE){
+                return;
+            }
+            if(xhr.status < 200 || xhr.status >= 400){
+
+                return;
+            }
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('예약 취소에 실패하였습니다. 다시 시도해주세요.');
+                    break;
+                case 'FAILURE_SESSION_EXPIRED':
+                    showMessage('로그인을 해주세요.', () => {
+                        location.href = '/user/login';
+                    });
+                    break;
+                case 'SUCCESS':
+                    location.href = '/my?menu=' + getCurrentMenuIndex();
+                    break;
+                default:
+                    showMessage('알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
+            }
+            reservationMessage.classList.remove('visible');
+            cancelReservationId = null;
+
+        };
+        xhr.open('POST', '/my/reservation/cancel');
+        xhr.send(formData);
+    })
+    // endregion
+}
+
+// 찜 취소
+if (productHeartDetails) {
+    productHeartDetails.addEventListener('click', (e) => {
+        const cancelBtn = e.target.closest('.heart-cancel-btn');
+        if (!cancelBtn) return;
+
+        const productId = cancelBtn.dataset.productId;
+
+        const formData = new FormData();
+        formData.append('productId', productId);
+
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            if (xhr.status < 200 || xhr.status >= 400) return;
+
+            const response = JSON.parse(xhr.responseText);
+            if (response.result === 'SUCCESS') {
+                location.reload();
+            } else if (response.result === 'FAILURE_SESSION_EXPIRED') {
+                showMessage('로그인을 해주세요.', () => {
+                    location.href = '/user/login';
+                });
+            }
+        };
+        xhr.open('POST', '/my/heart/delete');
+        xhr.send(formData);
+    });
+}
+
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted || sessionStorage.getItem('heartChanged') === 'true') {
+        sessionStorage.removeItem('heartChanged');
+        window.location.reload();
+    }
+});
 
 

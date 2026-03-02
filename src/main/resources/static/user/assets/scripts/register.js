@@ -1223,10 +1223,11 @@ $petDialogThirdCompleteButton.addEventListener('click', () => {
         petId: editMod ? editMod.petId : getNextPetId(),
         selectType: selectType,
         name: petNameInput.value,
-        petImage: fileInput.files.length > 0
+        petImageFile: fileInput.files.length > 0 ? fileInput.files[0] : null, // File 객체
+        petImagePreview: fileInput.files.length > 0     // 화면 미리보기용(base64)만 사용
             ? preview.src
             : editMod
-                ? editMod.petImage
+                ? editMod.petImagePreview
                 : '/user/assets/images/defaultPetImage.png',
         species: species,
         birthYear: petYear.value || petYear.placeholder,
@@ -1258,7 +1259,7 @@ $petDialogThirdCompleteButton.addEventListener('click', () => {
             li.querySelector('.birth').textContent = `나이 : ${petData.age}`;
             li.querySelector('.weight').textContent = `몸무게 : ${petData.weight}kg`;
             li.querySelector('.introduction').textContent = `소개 : ${petData.introduction}`;
-            li.querySelector('.petImage').src = petData.petImage;
+            li.querySelector('.petImage').src = petData.petImagePreview;
         }
 
         // 화면 닫고 초기화
@@ -1283,7 +1284,7 @@ function addPetToList(petData) {
     li.classList.add('pet');
     li.dataset.petId = petData.petId;
     const genderIcon = petData.gender === 'MALE' ? '/user/assets/images/male.png' : '/user/assets/images/female.png';
-    const petImage = petData.petImage;
+    const petImage = petData.petImagePreview;
     li.innerHTML = `
     <div class="petInformation">
         <div class="side-wrapper">
@@ -1460,8 +1461,8 @@ function loadPetDialog(petData) {
     const petSpecies = $petDialogSecond.querySelector(':scope > .selectedPetType > .petType');
     const introduce = $petDialogSecond.querySelector(':scope > .introduction > .introduce');
     const isDefaultImage =
-        petData.petImage === '/user/assets/images/defaultPetImage.png';
-    preview.src = petData.petImage;
+        petData.petImagePreview === '/user/assets/images/defaultPetImage.png';
+    preview.src = petData.petImagePreview;
     if (isDefaultImage) {
         circle.classList.remove('visible'); // 기본이미지면 미리보기 숨김
     } else {
@@ -1525,7 +1526,6 @@ function loadPetDialog(petData) {
 
 
 
-/* 회원가입 완료 전송 */
 $registerContainer.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (currentStep !== "4") {
@@ -1558,22 +1558,17 @@ $registerContainer.addEventListener('submit', async (e) => {
         } else {
             store = null;
         }
-
     }
 
-    // 대표동물 여부 반영
     const checkedRadio = petList.querySelector('input[name="primary"]:checked');
     const checkedId = checkedRadio ? Number(checkedRadio.value) : null;
 
-
     const petsDtoArray = pets.map(pet => {
-        // 문자열에 '년', '월', '일'이 붙어있다면 제거
         const year = Number(pet.birthYear.toString().replace(/\D/g,''));
         const month = Number(pet.birthMonth.toString().replace(/\D/g,''));
         const day = Number(pet.birthDate.toString().replace(/\D/g,''));
         pet.isPrimary = (pet.petId === checkedId);
 
-        // 숫자가 제대로 파싱되지 않으면 에러
         if (!year || !month || !day) {
             console.error('잘못된 생년월일', pet.birthYear, pet.birthMonth, pet.birthDate);
         }
@@ -1583,19 +1578,17 @@ $registerContainer.addEventListener('submit', async (e) => {
         return {
             name: pet.name,
             species: pet.species,
-            birthDate: birthDate,  // yyyy-MM-dd
+            birthDate: birthDate,
             gender: pet.gender,
             introduction: pet.introduction,
             weight: pet.weight,
             bodyType: pet.bodyType,
-            imageUrl: pet.petImage,
+            // ↓ imageUrl 제거 (서버에서 파일 저장 후 경로 세팅)
             isPrimary: pet.isPrimary
         };
     });
 
-
     const form = selectedMemberType === 'PERSONAL' ? $registerThirdPersonalStep : $registerThirdBusinessStep;
-
 
     const payload = {
         email: form.querySelector('.email').value,
@@ -1621,20 +1614,38 @@ $registerContainer.addEventListener('submit', async (e) => {
         pets: selectedMemberType === 'PERSONAL' ? petsDtoArray : null
     };
 
+    // ↓ FormData로 변경
+    const formData = new FormData();
+
+    // payload 전체를 JSON 문자열로 한 번에 담기
+    // → 서버에서 @RequestPart("data") RegisterDto dto 로 받음
+    formData.append('data', new Blob([JSON.stringify(payload)], { type: 'application/json' }));
+
+    // 애완동물 이미지 파일 순서대로 추가
+    // 이미지가 없는 인덱스는 빈 Blob으로 자리 채움 (서버에서 기본이미지 처리)
+    if (selectedMemberType === 'PERSONAL') {
+        pets.forEach((pet, index) => {
+            if (pet.petImageFile) {
+                formData.append('petImages', pet.petImageFile);
+            } else {
+                // 빈 Blob으로 자리 채워서 인덱스 순서 맞춤
+                formData.append('petImages', new Blob([]), 'empty');
+            }
+        });
+    }
+
     try {
         const res = await fetch('/user/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+            // Content-Type 헤더 직접 설정 절대 금지 → 브라우저가 boundary 자동 설정
+            body: formData
         });
 
         const data = await res.json();
         if (data.result === 'SUCCESS') {
             showMessage('가입을 환영합니다.', () => {
                 location.href = '/user/login';
-            })
+            });
         } else {
             showMessage('회원가입에 실패하였습니다. 정보를 다시 확인해주세요.');
             console.error('회원가입 실패', data);

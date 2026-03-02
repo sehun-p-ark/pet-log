@@ -1,7 +1,12 @@
 package dev.dhkim.petlog.controllers.myPage;
 
 import dev.dhkim.petlog.dto.user.*;
+import dev.dhkim.petlog.entities.shop.PointEntity;
 import dev.dhkim.petlog.entities.user.*;
+import dev.dhkim.petlog.mappers.myPage.MyPageMapper;
+import dev.dhkim.petlog.mappers.shop.CouponMapper;
+import dev.dhkim.petlog.mappers.shop.HeartMapper;
+import dev.dhkim.petlog.mappers.shop.ReviewMapper;
 import dev.dhkim.petlog.results.MyPageResult;
 import dev.dhkim.petlog.services.myPage.MyPageService;
 import jakarta.servlet.http.HttpSession;
@@ -11,12 +16,13 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -25,10 +31,13 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping(value = "/my")
 public class MyPageController {
     private final MyPageService myPageService;
-
+    private final ReviewMapper reviewMapper;
+    private final CouponMapper couponMapper;
+    private final HeartMapper heartMapper;
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getMyPage(ModelAndView modelAndView,
+                                  @RequestParam(defaultValue = "1month") String period,
                                   @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
         if (sessionUser == null) {
             modelAndView.setViewName("/user/login");
@@ -52,16 +61,67 @@ public class MyPageController {
         }
         if (sessionUser.getUserType().equals("PERSONAL")) {
             Pair<MyPageResult, List<AddressEntity>> personalAddresses = this.myPageService.getPersonalAddress(sessionUser.getUserId());
+            Pair<MyPageResult, AddressEntity> defaultAddress = this.myPageService.getDefaultAddress(sessionUser.getUserId());
             Pair<MyPageResult, List<DeliveryAddressEntity>> deliveryAddresses = this.myPageService.getAllDeliveryAddress(sessionUser.getUserId());
             Pair<MyPageResult, DeliveryAddressEntity> deliveryAddress = this.myPageService.getDeliveryAddress(sessionUser.getUserId());
+            Pair<MyPageResult, List<PointEntity>> allPointEarn = this.myPageService.getAllPointEarn(sessionUser.getUserId());
+            Pair<MyPageResult, List<PointEntity>> allPointUse = this.myPageService.getAllPointUse(sessionUser.getUserId());
+            List<Map<String, Object>> availableCoupons = couponMapper.getAvailableCoupons(sessionUser.getUserId());
+            List<Map<String, Object>> usedCoupons = couponMapper.getUsedOrExpiredCoupons(sessionUser.getUserId());
+
+            System.out.println(availableCoupons);  // 키 이름 확인
+            System.out.println(usedCoupons);
+
             modelAndView.addObject("personalAddresses", personalAddresses.getRight());
+            modelAndView.addObject("defaultAddress", defaultAddress.getRight());
             modelAndView.addObject("deliveryAddresses", deliveryAddresses.getRight());
             modelAndView.addObject("deliveryPrimaryAddress", deliveryAddress.getRight());
             modelAndView.addObject("reservations", reservations.getRight());
+            modelAndView.addObject("allPointEarn", allPointEarn.getRight());
+            modelAndView.addObject("allPointUse", allPointUse.getRight());
+            modelAndView.addObject("availableCoupons", availableCoupons);
+            modelAndView.addObject("usedCoupons", usedCoupons);
+
+            List<Map<String, Object>> orderItems = myPageService.getOrderItems(sessionUser.getUserId(), period);
+            orderItems.forEach(item -> {
+                Object orderItemIdObj = item.get("orderItemId");
+                if (orderItemIdObj == null) {
+                    item.put("canWriteReview", false);
+                    return;
+                }
+                boolean canWrite = reviewMapper.checkCanWriteReview(
+                        sessionUser.getUserId(),
+                        ((Number) item.get("productId")).intValue(),
+                        ((Number) orderItemIdObj).intValue()
+                );
+                item.put("canWriteReview", canWrite);
+            });
+
+            Map<LocalDate, Map<Long, List<Map<String, Object>>>> groupedOrders = orderItems.stream()
+                    .collect(Collectors.groupingBy(
+                            item -> {
+                                Object date = item.get("orderDate");
+                                LocalDateTime dt = (date instanceof java.sql.Timestamp)
+                                        ? ((java.sql.Timestamp) date).toLocalDateTime()
+                                        : (LocalDateTime) date;
+                                return dt.toLocalDate();
+                            },
+                            LinkedHashMap::new,
+                            Collectors.groupingBy(
+                                    item -> ((Number) item.get("orderId")).longValue(),
+                                    LinkedHashMap::new,
+                                    Collectors.toList()
+                            )
+                    ));
+            modelAndView.addObject("orderItems", orderItems);
+            modelAndView.addObject("groupedOrders", groupedOrders);
+            modelAndView.addObject("currentPeriod", period);
         } else {
             Pair<MyPageResult, AddressEntity> businessAddress = this.myPageService.getBusinessAddress(sessionUser.getUserId());
             modelAndView.addObject("businessAddress", businessAddress.getRight());
         }
+        List<Map<String, Object>> hearts = myPageService.getHearts(sessionUser.getUserId());
+        modelAndView.addObject("hearts", hearts);
         modelAndView.addObject("sessionUser", sessionUser);
         modelAndView.addObject("user", user.getRight());
         modelAndView.addObject("personalUser", personalUser.getRight());
@@ -85,10 +145,14 @@ public class MyPageController {
     }
 
     // 새 애완동물 등록
-    @RequestMapping(value = "/pet/registration", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/pet/registration", method = POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> insertPet(@SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser, @RequestBody PetDto pet) {
-        Pair<MyPageResult, Integer> result = this.myPageService.insertPetInMyPage(sessionUser.getUserId(), pet);
+    public Map<String, Object> insertPet(@SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser,
+                                         @RequestPart("data") PetDto pet,
+                                         @RequestPart(value = "petImage", required = false) MultipartFile petImage) {
+        Pair<MyPageResult, Integer> result = this.myPageService.insertPetInMyPage(sessionUser.getUserId(), pet, petImage);
         Map<String, Object> response = new HashMap<>();
         response.put("result", result.getLeft());
         response.put("petId", result.getRight());
@@ -109,11 +173,15 @@ public class MyPageController {
     }
 
     // 펫 수정해서 정보 수정시키는 컨트롤러
-    @RequestMapping(value = "/pet/update", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/pet/update", method = POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> postPet(@RequestBody PetEntity pet,
+    public Map<String, Object> postPet(@RequestPart("data") PetEntity pet,
+                                       @RequestPart(value = "petImage", required = false) MultipartFile petImage,
+                                       @RequestParam(value = "existingImageUrl", required = false) String existingImageUrl,
                                        @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
-        MyPageResult result = this.myPageService.updatePet(pet, sessionUser.getUserId());
+        MyPageResult result = this.myPageService.updatePet(pet, petImage, existingImageUrl, sessionUser.getUserId());
         Map<String, Object> response = new HashMap<>();
         response.put("result", result.name());
         return response;
@@ -180,6 +248,21 @@ public class MyPageController {
         return response;
     }
 
+    // 기본주소 대표주소 변경
+    @RequestMapping(value = "/address/default", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postDefaultAddress(@RequestParam(value = "addressId") int addressId,
+                                                  @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.changeDefaultAddress(addressId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
 
     // 기본주소 추가 등록
     @RequestMapping(value = "/address/registration", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -228,6 +311,21 @@ public class MyPageController {
         return response;
     }
 
+    // 대표 배송지 변경
+    @RequestMapping(value = "/delivery/default", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> postDefaultDelivery(@RequestParam(value = "addressId") int addressId,
+                                                  @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.changeDefaultDelivery(addressId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
 
     // 배송지 등록
     @RequestMapping(value = "/delivery/registration", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -239,8 +337,12 @@ public class MyPageController {
             response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
             return response;
         }
-        MyPageResult result = this.myPageService.postDeliveryAddress(deliveryAddress, sessionUser.getUserId());
-        response.put("result", result.name());
+        Pair<MyPageResult, DeliveryAddressEntity> result = this.myPageService.postDeliveryAddress(deliveryAddress, sessionUser.getUserId());
+        response.put("result", result.getLeft());
+        if (result.getLeft() == MyPageResult.SUCCESS) {
+            response.put("newDeliveryId", result.getRight().getDeliveryAddressId());
+            response.put("isDefault", result.getRight().isDefault());
+        }
         return response;
     }
 
@@ -357,7 +459,7 @@ public class MyPageController {
                                                    @RequestParam(value = "addressPrimary") String addressPrimary,
                                                    @RequestParam(value = "addressSecondary") String addressSecondary,
                                                    @RequestParam(value = "password") String password,
-                                                   @SessionAttribute(value = "sessionUser") SessionUser sessionUser) {
+                                                   @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
         Map<String, Object> response = new HashMap<>();
         if (sessionUser == null) {
             response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
@@ -395,7 +497,7 @@ public class MyPageController {
     @ResponseBody
     public Map<String, Object> patchStore(@RequestParam(value = "storeId") int storeId,
                                           StoreDto store,
-                                          @SessionAttribute(value = "sessionUser") SessionUser sessionUser) {
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
         Map<String, Object> response = new HashMap<>();
         if (sessionUser == null) {
             response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
@@ -423,5 +525,62 @@ public class MyPageController {
         return response;
     }
 
+    // 주문 내역
+    @RequestMapping(value = "/order/{orderId}", method = GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> getOrderDetail(@PathVariable int orderId,
+                                              @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
+            return Map.of("result", "FAILURE_SESSION_EXPIRED");
+        }
+        return myPageService.getOrderDetail(orderId, sessionUser.getUserId());
+    }
 
+
+
+
+
+    // 예약취소
+    @RequestMapping(value = "/reservation/cancel", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> patchReservationCancel(@RequestParam(value = "reservationId") int reservationId,
+                                                      @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.patchReservation(reservationId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
+    // 찜 취소
+    @RequestMapping(value = "/heart/delete", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> deleteHeart(@RequestParam(value = "productId") int productId,
+                                           @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.deleteHeart(productId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
+    @GetMapping("/heart/check")
+    @ResponseBody
+    public Map<String, Object> checkHeart(@RequestParam int productId,
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("isHearted", false);
+            return response;
+        }
+        Integer heartId = heartMapper.checkHeart(sessionUser.getUserId(), productId);
+        response.put("isHearted", heartId != null);
+        return response;
+    }
 }

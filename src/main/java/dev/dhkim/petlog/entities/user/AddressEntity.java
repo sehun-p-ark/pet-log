@@ -18,7 +18,7 @@ public class AddressEntity {
     private String addressSecondary;
     private Double lat;
     private Double lng;
+    private boolean isDefault;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Boolean isDefault;
 }

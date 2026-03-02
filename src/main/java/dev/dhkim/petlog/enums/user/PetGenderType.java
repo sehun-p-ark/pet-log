@@ -1,6 +1,6 @@
 package dev.dhkim.petlog.enums.user;
 
-public enum PetGenderType {
-    MALE,
-    FEMALE
-}
+    public enum PetGenderType {
+        MALE,
+        FEMALE
+    }

@@ -5,14 +5,15 @@ let hasMore = true;
 let currentBrand = null;
 let currentSort = 'latest';
 
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener('DOMContentLoaded', function () {
     const params = new URLSearchParams(window.location.search);
     currentBrand = params.get('brand');
 
     if (!currentBrand) return;
 
-    await loadBestProducts(currentBrand);
-    await loadAllProducts();
+    loadBestProducts(currentBrand).then(() => {
+        return loadAllProducts();
+    });
 
     // 정렬 필터
     const sortSelect = document.querySelector('.product-filter');
@@ -21,8 +22,14 @@ document.addEventListener('DOMContentLoaded', async function () {
             currentSort = this.value;
             currentPage = 0;
             hasMore = true;
+
+            const scrollY = window.scrollY;
+
             document.querySelector('.all-product .product').innerHTML = '';
-            loadAllProducts();
+
+            loadAllProducts().then(() => {
+                window.scrollTo({ top: scrollY });
+            });
         });
     }
 
@@ -38,36 +45,35 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 // 베스트 상품 (5개)
-async function loadBestProducts(brand) {
-    try {
-        const response = await fetch(`/shop/products/best?brand=${encodeURIComponent(brand)}&limit=5`);
-        const products = await response.json();
-        renderProducts('.best-product .product', products, false);
-    } catch (error) {
-        console.error('BEST 상품 로딩 실패:', error);
-    }
+function loadBestProducts(brand) {
+    return fetch(`/shop/products/best?brand=${encodeURIComponent(brand)}&limit=5`)
+        .then(res => res.json())
+        .then(products => {
+            renderProducts('.best-product .product', products, false);
+        })
+        .catch(error => {
+            console.error('BEST 상품 로딩 실패:', error);
+        });
 }
 
 // 전체 상품 (무한 스크롤)
-async function loadAllProducts() {
-    if (isLoading || !hasMore) return;
+function loadAllProducts() {
+    if (isLoading || !hasMore) return Promise.resolve();
     isLoading = true;
 
-    try {
-        const response = await fetch(
-            `/shop/products?brand=${encodeURIComponent(currentBrand)}&sort=${currentSort}&page=${currentPage}&size=${PAGE_SIZE}`
-        );
-        const products = await response.json();
-
-        if (products.length < PAGE_SIZE) hasMore = false;
-
-        renderProducts('.all-product .product', products, true);
-        currentPage++;
-    } catch (error) {
-        console.error('전체 상품 로딩 실패:', error);
-    } finally {
-        isLoading = false;
-    }
+    return fetch(`/shop/products?brand=${encodeURIComponent(currentBrand)}&sort=${currentSort}&page=${currentPage}&size=${PAGE_SIZE}`)
+        .then(res => res.json())
+        .then(products => {
+            if (products.length < PAGE_SIZE) hasMore = false;
+            renderProducts('.all-product .product', products, true);
+            currentPage++;
+        })
+        .catch(error => {
+            console.error('전체 상품 로딩 실패:', error);
+        })
+        .finally(() => {
+            isLoading = false;
+        });
 }
 
 // 상품 렌더링

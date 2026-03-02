@@ -66,21 +66,21 @@
       > .cart-item{
         @include flex(row, center, center, 1rem);
         width: 100%;
-        padding-top: 1rem;
+        padding: 1rem 0;
 
 
-        > .image{
+        .image{
           width: 6rem;
           border-radius: 0.35rem;
         }
 
-        > .item-info{
+        .item-info{
           @include flex(column, flex-start, center, 0.5rem);
           flex: 1;
           min-width: 0;
           width: 100%;
 
-          > .product{
+          .product{
             display: block;
             font-size: 1.1rem;
             font-weight: 500;
@@ -162,7 +162,7 @@
     @include flex(column, flex-start, center, 1rem);
     width: 17rem;
     position: sticky;
-    top: 1rem;
+    top: 6rem;
     height: fit-content;
     align-self: flex-start;
 
@@ -215,7 +215,7 @@
     height: auto;
     min-height: auto;
     padding: 1rem 0 5rem 0;
-    margin: 1rem 0 0 0;
+    margin: 5rem 0 0 0;
 
     > .summary-wrapper{
       position: static;

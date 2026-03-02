@@ -1,8 +1,12 @@
 package dev.dhkim.petlog.controllers.shop;
 
 import dev.dhkim.petlog.dto.user.SessionUser;
+import dev.dhkim.petlog.entities.user.DeliveryAddressEntity;
+import dev.dhkim.petlog.results.MyPageResult;
+import dev.dhkim.petlog.services.myPage.MyPageService;
 import dev.dhkim.petlog.services.shop.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,15 +28,23 @@ public class PaymentController {
     private final ProductService productService;
     private final PointService pointService;
     private final OrderService orderService;
+    private final MyPageService myPageService;
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getPayment(
             @RequestParam("cartIds") String cartIds,
-            @SessionAttribute(value ="sessionUser") SessionUser sessionUser,
+            @SessionAttribute(value ="sessionUser", required = false) SessionUser sessionUser,
             ModelAndView modelAndView) {
+
+        if (sessionUser == null) {
+            modelAndView.setViewName("/user/login");
+            return modelAndView;
+        }
 
         // 로그인한 사용자 ID 가져오기
         Integer userId = sessionUser.getUserId();
+
+
 
         // cartIds 파싱
         List<Integer> cartIdList = Arrays.stream(cartIds.split(","))
@@ -72,6 +84,10 @@ public class PaymentController {
 
         Map<String, Object> ordererInfo = orderService.getOrdererInfo(userId);
 
+        // 배송지 전체 가져오기
+        Pair<MyPageResult, List<DeliveryAddressEntity>> allDeliveryAddress = this.myPageService.getAllDeliveryAddress(sessionUser.getUserId());
+        modelAndView.addObject("allDeliveryAddress", allDeliveryAddress.getRight());
+
         modelAndView.addObject("ordererInfo", ordererInfo);
         modelAndView.addObject("selectedItems", selectedItems);
         modelAndView.addObject("totalPrice", totalPrice);
@@ -89,8 +105,13 @@ public class PaymentController {
             @RequestParam("productId") Integer productId,
             @RequestParam("optionId") String optionIdStr,
             @RequestParam("quantity") Integer quantity,
-            @SessionAttribute(value ="sessionUser") SessionUser sessionUser,
+            @SessionAttribute(value ="sessionUser", required = false) SessionUser sessionUser,
             ModelAndView modelAndView) {
+
+        if (sessionUser == null) {
+            modelAndView.setViewName("/user/login");
+            return modelAndView;
+        }
 
         Integer userId = sessionUser.getUserId();
 
@@ -132,6 +153,10 @@ public class PaymentController {
 
         Map<String, Object> ordererInfo = orderService.getOrdererInfo(userId);
 
+        // 배송지 전체 가져오기
+        Pair<MyPageResult, List<DeliveryAddressEntity>> allDeliveryAddress = this.myPageService.getAllDeliveryAddress(sessionUser.getUserId());
+        modelAndView.addObject("allDeliveryAddress", allDeliveryAddress.getRight());
+
         modelAndView.addObject("ordererInfo", ordererInfo);
         modelAndView.addObject("selectedItems", selectedItems);
         modelAndView.addObject("totalPrice", totalPrice);
@@ -149,9 +174,14 @@ public class PaymentController {
             @RequestParam String paymentKey,
             @RequestParam String orderId,
             @RequestParam Integer amount,
-            @SessionAttribute("sessionUser") SessionUser sessionUser,
+            @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser,
             HttpSession session,
             ModelAndView mav) {
+
+        if (sessionUser == null) {
+            mav.setViewName("/user/login");
+            return mav;
+        }
 
         Map<String, Object> pendingOrder = (Map<String, Object>) session.getAttribute("pendingOrder");
         orderService.saveOrder(sessionUser.getUserId(), amount, pendingOrder);

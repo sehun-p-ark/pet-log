@@ -21,4 +21,22 @@
         ORDER BY c.discount_value DESC
     </select>
 
+    <!--사용 만료 쿠폰들-->
+    <select id="getUsedOrExpiredCoupons" resultType="map">
+        SELECT uc.id                 AS userCouponId,
+               uc.status,
+               uc.used_at            AS usedAt,
+               c.name,
+               c.discount_type       AS discountType,
+               c.discount_value      AS discountValue,
+               c.min_order_amount    AS minOrderAmount,
+               c.max_discount_amount AS maxDiscountAmount,
+               c.end_date            AS endDate
+        FROM petlog.user_coupon uc
+                 JOIN petlog.coupon c ON uc.coupon_id = c.id
+        WHERE uc.user_id = #{userId}
+          AND (uc.status = 'USED' OR c.end_date &lt;= NOW())
+        ORDER BY uc.used_at DESC
+    </select>
+
 </mapper>

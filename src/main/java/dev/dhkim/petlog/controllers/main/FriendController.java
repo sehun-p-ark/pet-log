@@ -1,8 +1,6 @@
 package dev.dhkim.petlog.controllers.main;
 
-import dev.dhkim.petlog.dto.main.FriendDto;
 import dev.dhkim.petlog.dto.main.FriendListDto;
-import dev.dhkim.petlog.dto.user.PetDto;
 import dev.dhkim.petlog.dto.user.SessionUser;
 import dev.dhkim.petlog.services.main.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -17,20 +15,7 @@ public class FriendController {
 
     private final FriendService friendService;
 
-/*    @GetMapping("/nearby")
-    public List<PetDto> getNearbyFriends(
-            @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser,
-            @RequestParam("lat") double lat,
-            @RequestParam("lng") double lng
-    ) {
-        if (sessionUser == null) {
-            return List.of();
-        }
 
-        Integer userId = sessionUser.getUserId();  // 추가
-
-        return friendService.getNearbyFriends(userId, lat, lng);
-    }*/
 
     @GetMapping("/nearby")
     public List<FriendListDto> getNearbyFriends( // DTO 이름을 NearbyFriendDto로 통일 권장

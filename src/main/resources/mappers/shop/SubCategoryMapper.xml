@@ -6,4 +6,16 @@
         SELECT * FROM `petlog`.sub_category WHERE display_text = #{displayText}
     </select>
 
+    <select id="selectByCategoryId" resultType="dev.dhkim.petlog.entities.shop.SubCategoryEntity">
+        SELECT id, display_text AS displayText, category_id AS categoryId
+        FROM `petlog`.sub_category
+        WHERE category_id = #{categoryId}
+        ORDER BY id
+    </select>
+
+    <select id="selectMainCategories" resultType="dev.dhkim.petlog.entities.shop.CategoryEntity">
+        SELECT id, display_text AS displayText
+        FROM `petlog`.category
+        ORDER BY id
+    </select>
 </mapper>

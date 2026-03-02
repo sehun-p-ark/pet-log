@@ -168,6 +168,7 @@ if (infoTab && reviewTab && detail && review) {
                 .then(data => {
                     renderReviews(data.reviews);
                     renderRatingSummary(data);
+                    renderCanWriteReview(data.canWriteReview);
                 });
         }
     });
@@ -559,7 +560,6 @@ function renderReviews(reviews) {
             ${(review.reviewImages || []).map(img => `<img src="${img}" class="review-img" alt="리뷰이미지">`).join('')}
         </div>
         <div class="review-text">${review.content || ''}</div>
-        ${review.userId && currentUserId && review.userId == currentUserId ? '<div class="update">수정</div>' : ''}
         `;
 
         item.querySelector('.update')?.addEventListener('click', () => {
@@ -588,7 +588,7 @@ document.querySelectorAll('.review-wrapper .count').forEach(count => {
     });
 });
 
-// 리뷰 모달
+/*// 리뷰 모달
 const reviewBtn = document.querySelector('.review-btn .button');
 const overlay = document.querySelector('.review-modal-overlay');
 const modalClose = document.querySelector('.modal-close');
@@ -769,7 +769,7 @@ document.querySelector('.submit-review')?.addEventListener('click', () => {
                 showToast(isEdit ? '리뷰 수정에 실패했습니다.' : '리뷰 등록에 실패했습니다.');
             }
         });
-});
+});*/
 
 function renderRatingSummary(data) {
     const scoreEl = document.querySelector('.summary-score');
@@ -799,3 +799,31 @@ function renderRatingSummary(data) {
         }
     });
 }
+
+// 리뷰 작성하러 가기 버튼 클릭 시 마이페이지 결제내역으로 이동
+const reviewWriteBtn = document.querySelector('.review-btn .button');
+if (reviewWriteBtn) {
+    reviewWriteBtn.addEventListener('click', () => {
+        window.location.href = '/my?menu=3';
+    });
+}
+
+
+// 뒤로가기 시 찜 상태 재확인
+window.addEventListener('pageshow', function(e) {
+    const productId = getProductIdFromUrl();
+    fetch(`/my/heart/check?productId=${productId}&_=${Date.now()}`, {
+        cache: 'no-store'
+    })
+        .then(res => res.json())
+        .then(data => {
+            const heartBtns = document.querySelectorAll('.image.bookmark');
+            heartBtns.forEach(btn => {
+                if (data.isHearted) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        });
+});

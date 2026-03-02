@@ -46,14 +46,16 @@
                     <input class="item-checkbox" type="checkbox">
                 </label>
 
-                <img class="image"
-                     th:src="${item.get('imageUrl') != null ? item.get('imageUrl') : '/shop/assets/images/product.png'}"
-                     alt="">
+                <a th:href="@{/shop/product/{id}(id=${item.get('productId')})}">
+                    <img class="image" th:src="${item.get('imageUrl') != null ? item.get('imageUrl') : '/shop/assets/images/product.png'}" alt="">
+                </a>
 
                 <div class="item-info">
                     <div class="product">
-                        <span class="brand" th:text="'[' + ${item.get('brand')} + ']'">[레토]</span>
-                        <span class="product-name" th:text="${item.get('productName')}">강아지 장난감</span>
+                        <a th:href="@{/shop/product/{id}(id=${item.get('productId')})}">
+                            <span class="brand" th:text="'[' + ${item.get('brand')} + ']'"></span>
+                            <span class="product-name" th:text="${item.get('productName')}"></span>
+                        </a>
                     </div>
 
                     <div class="ship" th:text="${item.get('deliveryFee') == 0 ? '무료배송' : item.get('deliveryFee') + '원'}">무료배송</div>

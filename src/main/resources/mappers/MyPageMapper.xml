@@ -12,14 +12,17 @@
                 #{store.storePhone})
     </insert>
     <insert id="insertPersonalAddress">
-        INSERT INTO `petlog`.`address` (user_id, address_type, postal_code, address_primary, address_secondary)
+        INSERT INTO `petlog`.`address` (user_id, address_type, postal_code, address_primary, address_secondary, is_default)
         VALUES (#{userId},
                 'MAP',
                 #{address.postalCode},
                 #{address.addressPrimary},
-                #{address.addressSecondary})
+                #{address.addressSecondary},
+                #{address.isDefault})
     </insert>
-    <insert id="insertDeliveryAddress">
+    <insert id="insertDeliveryAddress"
+            useGeneratedKeys="true"
+            keyProperty="deliveryAddress.deliveryAddressId">
         INSERT INTO `petlog`.`delivery_address` (user_id, delivery_name, receiver_name, phone, postal_code, address_primary, address_secondary, is_default)
         VALUES (#{userId},
                 #{deliveryAddress.deliveryName},
@@ -138,6 +141,32 @@
         WHERE `delivery_address_id` = #{deliveryAddressId}
           AND `user_id` = #{userId}
     </update>
+    <update id="updateDefaultAddress">
+        UPDATE `petlog`.`address`
+        SET `is_default` = TRUE
+        WHERE `address_id` = #{addressId}
+    </update>
+    <update id="updateAllDefaultAddressFalse">
+        UPDATE `petlog`.`address`
+        SET `is_default` = FALSE
+        WHERE `user_id` = #{userId}
+    </update>
+    <update id="updateAllDeliveryDefaultFalse">
+        UPDATE `petlog`.`delivery_address`
+        SET `is_default` = FALSE
+        WHERE `user_id` = #{userId}
+    </update>
+    <update id="updateDeliveryDefault">
+        UPDATE `petlog`.`delivery_address`
+        SET `is_default` = TRUE
+        WHERE `delivery_address_id` = #{addressId}
+    </update>
+    <update id="updateReservationCancel">
+        UPDATE `petlog`.`reservation`
+        SET `canceled` = TRUE
+        WHERE `reservation_id` = #{reservationId}
+          AND `user_id` = #{userId}
+    </update>
     <delete id="deletePet">
         DELETE
         FROM `petlog`.`pets`
@@ -200,6 +229,7 @@
                `address_secondary` AS addressSecondary,
                `lat`               AS lat,
                `lng`               AS lng,
+               `is_default`        AS isDefault,
                `created_at`        AS createdAt,
                `updated_at`        AS updatedAt
         FROM `petlog`.`address`
@@ -392,8 +422,8 @@
                `t1`.`reservation_time`  AS reservationTime,
                `t1`.`request_text`      AS requestText,
                `t1`.`payment_method`    AS paymentMethod,
+               `t1`.`canceled`          AS canceled,
                `t1`.`created_at`        AS createdAt,
-
                `t2`.`store_id`          AS storeId,
                `t2`.`store_name`        AS storeName,
                `t2`.`postal_code`       AS postalCode,
@@ -419,5 +449,143 @@
         WHERE `nickname` = #{nickname}
         LIMIT 1
     </select>
+    <select id="selectPersonalAddressByAddressId" resultType="dev.dhkim.petlog.entities.user.AddressEntity">
+        SELECT `address_id`        AS addressId,
+               `user_id`           AS userId,
+               `address_type`      AS addressType,
+               `postal_code`       AS postalCode,
+               `address_primary`   AS addressPrimary,
+               `address_secondary` AS addressSecondary,
+               `lat`               AS lat,
+               `lng`               AS lng,
+               `is_default`        AS isDefault,
+               `created_at`        AS createdAt,
+               `updated_at`        AS updatedAt
+        FROM `petlog`.`address`
+        WHERE `address_id` = #{addressId}
+        LIMIT 1
+    </select>
+    <select id="selectDefaultAddressByUserId" resultType="dev.dhkim.petlog.entities.user.AddressEntity">
+        SELECT `address_id`        AS addressId,
+               `user_id`           AS userId,
+               `address_type`      AS addressType,
+               `postal_code`       AS postalCode,
+               `address_primary`   AS addressPrimary,
+               `address_secondary` AS addressSecondary,
+               `lat`               AS lat,
+               `lng`               AS lng,
+               `is_default`        AS isDefault,
+               `created_at`        AS createdAt,
+               `updated_at`        AS updatedAt
+        FROM `petlog`.`address`
+        WHERE `user_id` = #{userId}
+          AND `is_default` = TRUE
+        LIMIT 1
+    </select>
+    <select id="selectDeliveryByAddressId" resultType="dev.dhkim.petlog.entities.user.DeliveryAddressEntity">
+        SELECT `delivery_address_id` AS deliveryAddressId,
+               `user_id`             AS userId,
+               `delivery_name`       AS deliveryName,
+               `receiver_name`       AS receiverName,
+               `phone`               AS phone,
+               `postal_code`         AS postalCode,
+               `address_primary`     AS addressPrimary,
+               `address_secondary`   AS addressSecondary,
+               `is_default`          AS isDefault,
+               `created_at`          AS createdAt,
+               `updated_at`          AS updatedAt
+        FROM `petlog`.`delivery_address`
+        WHERE `delivery_address_id` = #{addressId}
+        LIMIT 1
+    </select>
 
+
+    <!-- 주문 내역 -->
+    <select id="selectOrderItems" resultType="map">
+        SELECT oi.id          AS orderItemId,
+        oi.product_id  AS productId,
+        oi.quantity,
+        oi.price,
+        p.price        AS originalPrice,
+        p.name         AS productName,
+        p.brand        AS productBrand,
+        pi.image_url   AS productImageUrl,
+        opt.option_name AS optionName,
+        o.id           AS orderId,
+        o.created_at   AS orderDate,
+        r.id           AS reviewId,
+        r.rating       AS reviewRating,
+        r.content      AS reviewContent
+        FROM petlog.order_item oi
+        JOIN petlog.`order` o ON oi.order_id = o.id
+        JOIN petlog.product p ON oi.product_id = p.id
+        LEFT JOIN petlog.product_image pi ON pi.product_id = p.id AND pi.is_thumbnail = true
+        LEFT JOIN petlog.`option` opt ON oi.option_id = opt.id
+        LEFT JOIN petlog.review r ON r.order_item_id = oi.id
+        WHERE o.user_id = #{userId}
+        <choose>
+            <when test="period == '1month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)</when>
+            <when test="period == '3month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)</when>
+            <when test="period == '6month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)</when>
+            <when test="period == '1year'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR)</when>
+            <otherwise>AND o.created_at >= DATE_SUB(NOW(), INTERVAL 2 YEAR)</otherwise>
+        </choose>
+        ORDER BY o.created_at DESC
+    </select>
+
+    <!-- 주문내역 -->
+    <select id="selectOrderDetail" resultType="map">
+        SELECT o.delivery_fee      AS deliveryFee,
+               o.final_amount      AS finalAmount,
+               o.coupon_discount   AS couponDiscount,
+               o.used_point        AS usedPoint,
+               (SELECT SUM(oi.price * oi.quantity)
+                FROM petlog.order_item oi
+                WHERE oi.order_id = o.id) AS totalProductAmount
+        FROM petlog.`order` o
+        WHERE o.id = #{orderId}
+          AND o.user_id = #{userId}
+        LIMIT 1
+    </select>
+
+    <!-- 주문내역 필터-->
+    <select id="selectOrdersByPeriod" resultType="map">
+        SELECT oi.id, oi.product_id, oi.option_id, oi.quantity, oi.price,
+        o.created_at AS orderDate, o.id AS orderId
+        FROM order_item oi
+        JOIN `order` o ON oi.order_id = o.id
+        WHERE o.user_id = #{userId}
+        <choose>
+            <when test="period == '1month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)</when>
+            <when test="period == '3month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 3 MONTH)</when>
+            <when test="period == '6month'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 6 MONTH)</when>
+            <when test="period == '1year'">AND o.created_at >= DATE_SUB(NOW(), INTERVAL 1 YEAR)</when>
+            <otherwise>AND o.created_at >= DATE_SUB(NOW(), INTERVAL 2 YEAR)</otherwise>
+        </choose>
+        ORDER BY o.created_at DESC
+    </select>
+
+    <!--찜목록-->
+    <select id="selectHeartsByUserId" resultType="map">
+        SELECT h.id          AS heartId,
+               h.created_at  AS createdAt,
+               p.id          AS productId,
+               p.name        AS productName,
+               p.brand         AS productBrand,
+               p.price       AS originalPrice,
+               p.discount_rate AS discountRate,
+               FLOOR(p.price * (1 - p.discount_rate / 100)) AS discountPrice,
+               pi.image_url  AS productImageUrl
+        FROM petlog.heart h
+                 JOIN petlog.product p ON h.product_id = p.id
+                 LEFT JOIN petlog.product_image pi ON pi.product_id = p.id AND pi.is_thumbnail = true
+        WHERE h.user_id = #{userId}
+        ORDER BY h.created_at DESC
+    </select>
+
+    <!--찜삭제-->
+    <delete id="deleteHeart">
+        DELETE FROM petlog.heart
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </delete>
 </mapper>

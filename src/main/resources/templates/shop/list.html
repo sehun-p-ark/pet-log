@@ -9,16 +9,52 @@
     <link rel="stylesheet" href="/assets/styles/common.css">
     <link rel="stylesheet" href="/shop/assets/styles/list.css">
     <script defer src="/shop/assets/scripts/main.js"></script>
+    <script defer src="/shop/assets/scripts/list.js"></script>
+    <script defer src="/assets/scripts/shop-fragment.js"></script>
 </head>
 <body>
 <th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
 <div id="list">
     <th:block th:replace="~{/fragments/shop.html :: category}"></th:block>
 
-    <div class="product">
+    <div class="product-section"
+         th:data-pet-type="${petType}"
+         th:data-category="${category}"
+         th:data-category-id="${categoryId}"
+         th:data-sub-category-id="${subCategoryId}"
+         th:data-keyword="${keyword}"
+         th:data-has-more="${products != null && products.size() == 20}">
         <div class="category-wrapper">
-            <div class="caption" id="category-caption">전체 상품</div>
-            <div class="category" id="sub-category-container"></div>
+            <!-- 대분류 -->
+            <div class="main-category">
+                <button class="main-category-btn"
+                        th:classappend="${categoryId == null} ? 'active'"
+                        th:data-url="@{/shop/list(petType=${petType})}">전체</button>
+                <th:block th:if="${mainCategories != null}">
+                    <button class="main-category-btn"
+                            th:each="cat : ${mainCategories}"
+                            th:text="${cat.displayText}"
+                            th:classappend="${categoryId == cat.id} ? 'active'"
+                            th:data-url="@{/shop/list(petType=${petType},categoryId=${cat.id},category=${cat.displayText})}">
+                    </button>
+                </th:block>
+            </div>
+
+            <!-- 소분류 (슬라이드) -->
+            <div class="sub-category" id="sub-category-container"
+                 th:classappend="${subCategories != null} ? 'open'">
+                <th:block th:if="${subCategories != null}">
+                    <button class="sub-category-btn"
+                            th:classappend="${subCategoryId == null} ? 'active'"
+                            th:data-url="@{/shop/list(petType=${petType},category=${category},categoryId=${categoryId})}">전체</button>
+                    <button class="sub-category-btn"
+                            th:each="sub : ${subCategories}"
+                            th:classappend="${subCategoryId == sub.id} ? 'active'"
+                            th:text="${sub.displayText}"
+                            th:data-url="@{/shop/list(petType=${petType},category=${category},categoryId=${categoryId},subCategoryId=${sub.id})}">
+                    </button>
+                </th:block>
+            </div>
         </div>
 
         <div class="product">
@@ -28,12 +64,13 @@
                  th:onclick="|location.href='/shop/product/${product.id}'|"
                  style="cursor: pointer;">
 
-                <img class="image"
-                     th:src="${product.productImages != null && !product.productImages.isEmpty()
+                <div class="image-wrapper">
+                    <img class="image"
+                         th:src="${product.productImages != null && !product.productImages.isEmpty()
                               ? product.productImages[0].imageUrl
                               : '/shop/assets/images/default-product.png'}"
-                     th:alt="${product.name}">
-
+                         th:alt="${product.name}">
+                </div>
                 <div class="brand" th:text="${product.brand}">브랜드</div>
                 <div class="name" th:text="${product.name}">상품명</div>
 
@@ -58,6 +95,7 @@
                 <p>등록된 상품이 없습니다.</p>
             </div>
         </div>
+        <div id="scroll-sentinel"></div>
     </div>
 </div>
 <div th:replace="~{fragments/chat :: chatModal}"></div>

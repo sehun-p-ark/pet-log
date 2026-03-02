@@ -18,6 +18,7 @@ public class MyPageReservationDto {
     private LocalDate reservationDate;
     private LocalTime reservationTime;
     private String requestText;
+    private boolean canceled;
 
     // 가게정보
     private int storeId;

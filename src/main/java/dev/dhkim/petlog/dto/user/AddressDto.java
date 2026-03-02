@@ -14,5 +14,5 @@ public class AddressDto {
     private String postalCode;
     private String addressPrimary;
     private String addressSecondary;
-    private Boolean isDefault;
+    private boolean isDefault;
 }

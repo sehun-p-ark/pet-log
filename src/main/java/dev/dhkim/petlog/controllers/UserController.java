@@ -17,9 +17,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -56,11 +61,15 @@ public class UserController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/", method = RequestMethod.POST,
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String, Object> postUser(@RequestBody RegisterDto dto) {
+    public Map<String, Object> postUser(
+            @RequestPart("data") RegisterDto dto,
+            @RequestPart(value = "petImages", required = false) List<MultipartFile> petImages) {
         Map<String, Object> response = new HashMap<>();
-        RegisterResult result = userService.register(dto);
+        RegisterResult result = userService.register(dto, petImages);
         response.put("result", result.name());
         return response;
     }
@@ -209,4 +218,115 @@ public class UserController {
         return response;
     }
 
+
+
+
+
+
+
+
+
+    // 카카오로그인
+    @RequestMapping(value="/login/kakao", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getKakaoLogin() {
+        String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize" +
+                "?client_id=" + System.getenv("KAKAO_REST_KEY") +
+                "&redirect_uri=http://localhost:8080/user/login/kakao/callback" +
+                "&response_type=code";
+        return "redirect:" + kakaoAuthUrl;
+    }
+
+    @RequestMapping(value="/login/kakao/callback", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getKakaoCallback(@RequestParam String code, HttpSession session) {
+        // 1. code로 access token 요청
+        // 2. access token으로 사용자 정보 조회
+        // 3. DB 가입/로그인 처리 후 세션 저장
+        // 예: session.setAttribute("sessionUser", new SessionUser(...));
+        return "redirect:/main"; // 로그인 완료 후 이동
+    }
+
+
+
+
+    // 네이버 로그인
+    @RequestMapping(value="/login/naver", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getNaverLogin() {
+        String naverAuthUrl = "https://nid.naver.com/oauth2.0/authorize" +
+                "?client_id=" + System.getenv("NAVER_CLIENT_ID") +
+                "&response_type=code" +
+                "&redirect_uri=http://localhost:8080/user/login/naver/callback";
+        return "redirect:" + naverAuthUrl;
+    }
+
+    @RequestMapping(value="/login/naver/callback", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getNaverCallback(@RequestParam String code,
+                                   @RequestParam String state,
+                                   HttpSession session) throws Exception {
+
+
+        System.out.println("NAVER_CLIENT_ID = " + System.getenv("NAVER_CLIENT_ID"));
+        System.out.println("NAVER_CLIENT_SECRET = " + System.getenv("NAVER_CLIENT_SECRET"));
+        // 1. 서비스 호출 → UserEntity 반환
+        UserEntity user = userService.loginOrRegisterByNaver(code, state);
+        System.out.println("네이버 로그인 user = " + user);
+
+        if (user == null) {
+            return "redirect:/user/login?error=naver_login";
+        }
+
+        // 2. 세션 등록
+        SessionUser sessionUser = new SessionUser(user.getId(), user.getUserType());
+        session.setAttribute("sessionUser", sessionUser);
+
+        return "redirect:/main";
+    }
+
+
+
+
+
+    // 구글로그인
+    // 구글 로그인
+    @RequestMapping(value="/login/google", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getGoogleLogin() throws UnsupportedEncodingException {
+        String clientId = System.getenv("GOOGLE_CLIENT_ID");
+        String redirectUri = URLEncoder.encode("http://localhost:8080/user/login/google/callback", StandardCharsets.UTF_8);
+
+        System.out.println(">>> GOOGLE_CLIENT_ID = " + clientId);
+        System.out.println(">>> redirect_uri = " + redirectUri);
+
+        String googleAuthUrl = "https://accounts.google.com/o/oauth2/v2/auth" +
+                "?scope=email%20profile" +
+                "&access_type=offline" +
+                "&include_granted_scopes=true" +
+                "&response_type=code" +
+                "&client_id=" + clientId +
+                "&redirect_uri=" + redirectUri;
+
+        System.out.println(">>> googleAuthUrl = " + googleAuthUrl);
+
+        return "redirect:" + googleAuthUrl;
+    }
+
+    @RequestMapping(value="/login/google/callback", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public String getGoogleCallback(@RequestParam String code,
+                                    HttpSession session) throws Exception {
+
+        System.out.println("GOOGLE_CLIENT_ID = " + System.getenv("GOOGLE_CLIENT_ID"));
+        System.out.println("GOOGLE_CLIENT_SECRET = " + System.getenv("GOOGLE_CLIENT_SECRET"));
+
+        // 서비스 호출 → UserEntity 반환
+        UserEntity user = userService.loginOrRegisterByGoogle(code);
+        System.out.println("구글 로그인 user = " + user);
+
+        if (user == null) {
+            return "redirect:/user/login?error=google_login";
+        }
+
+        // 세션 등록
+        SessionUser sessionUser = new SessionUser(user.getId(), user.getUserType());
+        session.setAttribute("sessionUser", sessionUser);
+
+        return "redirect:/main";
+    }
 }

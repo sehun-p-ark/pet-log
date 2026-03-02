@@ -1,5 +1,5 @@
 // 수량 조절
-document.addEventListener('click', async (e) => {
+document.addEventListener('click', (e) => {
     if (e.target.classList.contains('plus')) {
         const input = e.target.closest('.quantity-control').querySelector('.quantity-input');
         const cartItem = e.target.closest('.cart-item');
@@ -9,9 +9,10 @@ document.addEventListener('click', async (e) => {
         if (value < 999) {
             const newValue = value + 1;
             input.value = newValue;
-            await updateQuantityInDB(cartId, newValue);
-            updateItemPrice(cartItem, newValue);
-            updateCartSummary();
+            updateQuantityInDB(cartId, newValue).then(() => {
+                updateItemPrice(cartItem, newValue);
+                updateCartSummary();
+            });
         }
     }
 
@@ -24,9 +25,10 @@ document.addEventListener('click', async (e) => {
         if (value > 1) {
             const newValue = value - 1;
             input.value = newValue;
-            await updateQuantityInDB(cartId, newValue);
-            updateItemPrice(cartItem, newValue);
-            updateCartSummary();
+            updateQuantityInDB(cartId, newValue).then(() => {
+                updateItemPrice(cartItem, newValue);
+                updateCartSummary();
+            });
         }
     }
 });
@@ -43,7 +45,7 @@ document.addEventListener('input', (e) => {
     }
 });
 
-document.addEventListener('blur', async (e) => {
+document.addEventListener('blur', (e) => {
     if (e.target.classList.contains('quantity-input')) {
         const input = e.target;
         const cartItem = input.closest('.cart-item');
@@ -56,9 +58,10 @@ document.addEventListener('blur', async (e) => {
         }
 
         input.value = value;
-        await updateQuantityInDB(cartId, value);
-        updateItemPrice(cartItem, value);
-        updateCartSummary();
+        updateQuantityInDB(cartId, value).then(() => {
+            updateItemPrice(cartItem, value);
+            updateCartSummary();
+        });
     }
 }, true);
 
@@ -76,23 +79,21 @@ document.addEventListener('keydown', (e) => {
 });
 
 // DB에 수량 업데이트
-async function updateQuantityInDB(cartId, quantity) {
-    try {
-        const response = await fetch('/shop/cart/update-quantity', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ cartId, quantity })
+function updateQuantityInDB(cartId, quantity) {
+    return fetch('/shop/cart/update-quantity', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cartId, quantity })
+    })
+        .then(res => res.json())
+        .then(result => {
+            if (!result.success) {
+                console.error('수량 업데이트 실패:', result.message);
+            }
+        })
+        .catch(error => {
+            console.error('수량 업데이트 오류:', error);
         });
-
-        const result = await response.json();
-        if (!result.success) {
-            console.error('수량 업데이트 실패:', result.message);
-        }
-    } catch (error) {
-        console.error('수량 업데이트 오류:', error);
-    }
 }
 
 // 개별 상품 가격 업데이트
@@ -138,92 +139,77 @@ document.addEventListener('change', (e) => {
 // 선택삭제
 const choiceDeleteBtn = document.querySelector('.choice-delete');
 if (choiceDeleteBtn) {
-    choiceDeleteBtn.addEventListener('click', async () => {
+    choiceDeleteBtn.addEventListener('click', () => {
         const checkedItems = Array.from(document.querySelectorAll('.item-checkbox')).filter(cb => cb.checked);
 
-        if (checkedItems.length === 0) {
-            return;
-        }
+        if (checkedItems.length === 0) return;
 
         const cartIds = checkedItems.map(checkbox => {
             const cartItem = checkbox.closest('.cart-item');
             return parseInt(cartItem.dataset.cartId);
         });
 
-        try {
-            const response = await fetch('/shop/cart/delete', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ cartIds })
-            });
+        fetch('/shop/cart/delete', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartIds })
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    checkedItems.forEach(checkbox => {
+                        checkbox.closest('.cart-item').remove();
+                    });
 
-            const result = await response.json();
+                    const selectAll = document.getElementById('select-all');
+                    if (selectAll) selectAll.checked = false;
 
-            if (result.success) {
-                checkedItems.forEach(checkbox => {
-                    const cartItem = checkbox.closest('.cart-item');
-                    cartItem.remove();
-                });
-
-                const selectAll = document.getElementById('select-all');
-                if (selectAll) {
-                    selectAll.checked = false;
+                    checkEmptyCart();
+                    updateCartSummary();
+                } else {
+                    showToast('삭제에 실패했습니다.');
                 }
-
-                checkEmptyCart();
-                updateCartSummary();
-            } else {
+            })
+            .catch(error => {
+                console.error('삭제 오류:', error);
                 showToast('삭제에 실패했습니다.');
-            }
-        } catch (error) {
-            console.error('삭제 오류:', error);
-            showToast('삭제에 실패했습니다.');
-        }
+            });
     });
 }
 
 // 전체삭제
 const allDeleteBtn = document.querySelector('.all-delete');
 if (allDeleteBtn) {
-    allDeleteBtn.addEventListener('click', async () => {
+    allDeleteBtn.addEventListener('click', () => {
         const allItems = document.querySelectorAll('.cart-item');
 
-        if (allItems.length === 0) {
-            return;
-        }
+        if (allItems.length === 0) return;
 
         const cartIds = Array.from(allItems).map(item => parseInt(item.dataset.cartId));
 
-        try {
-            const response = await fetch('/shop/cart/delete', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ cartIds })
-            });
+        fetch('/shop/cart/delete', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ cartIds })
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success) {
+                    allItems.forEach(item => item.remove());
 
-            const result = await response.json();
+                    const selectAll = document.getElementById('select-all');
+                    if (selectAll) selectAll.checked = false;
 
-            if (result.success) {
-                allItems.forEach(item => item.remove());
-
-                const selectAll = document.getElementById('select-all');
-                if (selectAll) {
-                    selectAll.checked = false;
+                    checkEmptyCart();
+                    updateCartSummary();
+                } else {
+                    showToast('삭제에 실패했습니다.');
                 }
-
-                checkEmptyCart();
-                updateCartSummary();
-            } else {
+            })
+            .catch(error => {
+                console.error('삭제 오류:', error);
                 showToast('삭제에 실패했습니다.');
-            }
-        } catch (error) {
-            console.error('삭제 오류:', error);
-            showToast('삭제에 실패했습니다.');
-        }
+            });
     });
 }
 
@@ -306,115 +292,110 @@ document.addEventListener('DOMContentLoaded', () => {
 // 옵션 변경 모달
 let currentEditingItem = null;
 
-document.addEventListener('click', async (e) => {
+document.addEventListener('click', (e) => {
     if (e.target.classList.contains('option-change')) {
         currentEditingItem = e.target.closest('.cart-item');
         const productId = parseInt(currentEditingItem.dataset.productId);
-        await showOptionModal(currentEditingItem, productId);
+        showOptionModal(currentEditingItem, productId);
     }
 });
 
-async function showOptionModal(cartItem, productId) {
+function showOptionModal(cartItem, productId) {
     const currentOptionId = cartItem.dataset.optionId;
 
-    // 상품의 옵션 목록 가져오기
-    try {
-        const response = await fetch(`/shop/cart/options/${productId}`);
-        const result = await response.json();
+    return fetch(`/shop/cart/options/${productId}`)
+        .then(res => res.json())
+        .then(result => {
+            if (!result.success) {
+                showToast('옵션을 불러오는데 실패했습니다');
+                return;
+            }
 
-        if (!result.success) {
-            showToast('옵션을 불러오는데 실패했습니다');
-            return;
-        }
+            const options = result.options;
 
-        const options = result.options;
+            if (!options || options.length === 0) {
+                showToast('이 상품은 옵션이 없습니다');
+                return;
+            }
 
-        if (!options || options.length === 0) {
-            showToast('이 상품은 옵션이 없습니다');
-            return;
-        }
+            const modal = document.createElement('div');
+            modal.className = 'option-modal';
 
-        const modal = document.createElement('div');
-        modal.className = 'option-modal';
+            const optionsHTML = options.map(opt => {
+                const selected = opt.optionId == currentOptionId ? 'selected' : '';
+                return `<option value="${opt.optionId}" data-price="${opt.additionalPrice}" ${selected}>${opt.optionName} ${opt.additionalPrice > 0 ? '(+' + opt.additionalPrice.toLocaleString() + '원)' : ''}</option>`;
+            }).join('');
 
-        const optionsHTML = options.map(opt => {
-            const selected = opt.optionId == currentOptionId ? 'selected' : '';
-            return `<option value="${opt.optionId}" data-price="${opt.additionalPrice}" ${selected}>${opt.optionName} ${opt.additionalPrice > 0 ? '(+' + opt.additionalPrice.toLocaleString() + '원)' : ''}</option>`;
-        }).join('');
-
-        modal.innerHTML = `
-            <div class="modal-overlay"></div>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>옵션 변경</h3>
-                    <button class="modal-close">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="option-list">
-                        <select class="option-select">
-                            ${optionsHTML}
-                        </select>
+            modal.innerHTML = `
+                <div class="modal-overlay"></div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>옵션 변경</h3>
+                        <button class="modal-close">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="option-list">
+                            <select class="option-select">
+                                ${optionsHTML}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="modal-cancel">취소</button>
+                        <button class="modal-confirm">변경</button>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="modal-cancel">취소</button>
-                    <button class="modal-confirm">변경</button>
-                </div>
-            </div>
-        `;
+            `;
 
-        document.body.appendChild(modal);
+            document.body.appendChild(modal);
 
-        modal.querySelector('.modal-close').addEventListener('click', () => closeModal(modal));
-        modal.querySelector('.modal-overlay').addEventListener('click', () => closeModal(modal));
-        modal.querySelector('.modal-cancel').addEventListener('click', () => closeModal(modal));
+            modal.querySelector('.modal-close').addEventListener('click', () => closeModal(modal));
+            modal.querySelector('.modal-overlay').addEventListener('click', () => closeModal(modal));
+            modal.querySelector('.modal-cancel').addEventListener('click', () => closeModal(modal));
 
-        modal.querySelector('.modal-confirm').addEventListener('click', async () => {
-            const selectElement = modal.querySelector('.option-select');
-            const selectedOption = selectElement.options[selectElement.selectedIndex];
-            const newOptionId = parseInt(selectedOption.value);
-            const newOptionName = selectedOption.textContent;
-            const additionalPrice = parseInt(selectedOption.dataset.price);
-            const cartId = parseInt(cartItem.dataset.cartId);
+            modal.querySelector('.modal-confirm').addEventListener('click', () => {
+                const selectElement = modal.querySelector('.option-select');
+                const selectedOption = selectElement.options[selectElement.selectedIndex];
+                const newOptionId = parseInt(selectedOption.value);
+                const newOptionName = selectedOption.textContent;
+                const additionalPrice = parseInt(selectedOption.dataset.price);
+                const cartId = parseInt(cartItem.dataset.cartId);
 
-            try {
-                const response = await fetch('/shop/cart/update-option', {
+                fetch('/shop/cart/update-option', {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ cartId, optionId: newOptionId })
-                });
+                })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.success) {
+                            cartItem.dataset.optionId = newOptionId;
+                            cartItem.dataset.additionalPrice = additionalPrice;
 
-                const result = await response.json();
+                            const optionEl = cartItem.querySelector('.option');
+                            if (optionEl) {
+                                optionEl.textContent = newOptionName.split('(')[0].trim();
+                            }
 
-                if (result.success) {
-                    // 화면 업데이트
-                    cartItem.dataset.optionId = newOptionId;
-                    cartItem.dataset.additionalPrice = additionalPrice;
+                            const quantity = parseInt(cartItem.querySelector('.quantity-input').value);
+                            updateItemPrice(cartItem, quantity);
+                            updateCartSummary();
 
-                    const optionEl = cartItem.querySelector('.option');
-                    if (optionEl) {
-                        optionEl.textContent = newOptionName.split('(')[0].trim();
-                    }
-
-                    const quantity = parseInt(cartItem.querySelector('.quantity-input').value);
-                    updateItemPrice(cartItem, quantity);
-                    updateCartSummary();
-
-                    closeModal(modal);
-                } else {
-                    showToast(result.message || '옵션 변경에 실패했습니다');
-                }
-            } catch (error) {
-                console.error('옵션 변경 오류:', error);
-                showToast('옵션 변경에 실패했습니다');
-            }
+                            closeModal(modal);
+                        } else {
+                            showToast(result.message || '옵션 변경에 실패했습니다');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('옵션 변경 오류:', error);
+                        showToast('옵션 변경에 실패했습니다');
+                    });
+            });
+        })
+        .catch(error => {
+            console.error('옵션 조회 오류:', error);
+            showToast('옵션을 불러오는데 실패했습니다');
         });
-    } catch (error) {
-        console.error('옵션 조회 오류:', error);
-        showToast('옵션을 불러오는데 실패했습니다');
-    }
 }
 
 function closeModal(modal) {

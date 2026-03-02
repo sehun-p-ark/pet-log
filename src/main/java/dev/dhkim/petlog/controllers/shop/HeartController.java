@@ -18,12 +18,13 @@ public class HeartController {
     // 찜하기/취소 토글
     @PostMapping("/heart/{productId}")
     public Map<String, Object> toggleHeart(@PathVariable int productId,
-                                           @SessionAttribute(value ="sessionUser")SessionUser sessionUser) {
-        Integer userId = sessionUser.getUserId();
-        System.out.println(sessionUser);
-        if (userId == null) {
+                                           @SessionAttribute(value ="sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
             return Map.of("success", false, "message", "로그인이 필요합니다");
         }
+        Integer userId = sessionUser.getUserId();
+        System.out.println(sessionUser);
+
 
         Integer existing = heartMapper.checkHeart(userId, productId);
 
@@ -39,13 +40,13 @@ public class HeartController {
     // 찜 상태 확인
     @GetMapping("/heart/{productId}/status")
     public Map<String, Object> checkHeartStatus(@PathVariable int productId,
-                                                @SessionAttribute(value ="sessionUser")SessionUser sessionUser) {
-        Integer userId = sessionUser.getUserId();
+                                                @SessionAttribute(value ="sessionUser", required = false)SessionUser sessionUser) {
 
-
-        if (userId == null) {
+        if (sessionUser == null) {
             return Map.of("isHearted", false);
         }
+        Integer userId = sessionUser.getUserId();
+
 
         Integer existing = heartMapper.checkHeart(userId, productId);
         return Map.of("isHearted", existing != null);
