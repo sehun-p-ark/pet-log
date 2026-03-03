@@ -50,7 +50,9 @@ if ($banner) {
 
     // 배너 클릭 처리
     function handleBannerClick(banner) {
-        if (banner.targetType === 'category' && banner.categoryId) {
+        if (banner.targetType === 'category' && banner.subCategoryId) {
+            location.href = '/shop/list?eventCategoryId=' + banner.subCategoryId;
+        } else if (banner.targetType === 'category' && banner.categoryId) {
             location.href = '/shop/list?categoryId=' + banner.categoryId;
         } else if (banner.targetType === 'brand' && banner.brandName) {
             location.href = '/shop/brand?brand=' + encodeURIComponent(banner.brandName);
@@ -58,6 +60,8 @@ if ($banner) {
             location.href = '/shop/list?sort=sale';
         } else if (banner.targetType === 'new') {
             location.href = '/shop/list?sort=new';
+        } else if (banner.targetType === 'event' && banner.id === 3) {
+            location.href = '/shop/welcome';
         }
     }
 
@@ -94,7 +98,7 @@ if ($banner) {
                     $banner.style.transition = 'none';
                     $banner.style.transform = 'translateX(0%)';
                     index = 0;
-                }, 500);
+                }, 1000);
             }
         };
 

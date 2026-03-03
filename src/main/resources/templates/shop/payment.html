@@ -263,7 +263,7 @@
                  th:data-product-id="${item.get('productId')}"
                  th:data-option-id="${item.get('optionId')}"
                  th:data-quantity="${item.get('quantity')}"
-                 th:data-price="${(item.get('discountPrice') != null and item.get('discountPrice') > 0 ? item.get('discountPrice') : item.get('price')) * item.get('quantity')}">
+                 th:data-price="${((item.get('discountPrice') != null and item.get('discountPrice') > 0 ? item.get('discountPrice') : item.get('price')) + (item.get('additionalPrice') ?: 0)) * item.get('quantity')}">
                 <img class="image"
                      th:src="${item.get('imageUrl') != null ? item.get('imageUrl') : '/shop/assets/images/product.png'}"
                      alt="">
@@ -274,9 +274,9 @@
                     </div>
                     <div class="option" th:if="${item.get('optionName') != null}" th:text="${item.get('optionName')}">노란색</div>
                     <div class="price-info">
-                        <span class="price"
-                              th:text="${#numbers.formatInteger((item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - (item.get('discountRate') != null ? item.get('discountRate') : 0)) / 100 * item.get('quantity'), 0, 'COMMA') + '원'}">
-                        </span>
+                    <span class="price" th:with="base=${item.get('discountPrice') != null and item.get('discountPrice') > 0 ? item.get('discountPrice') : item.get('price')},                   add=${item.get('additionalPrice') ?: 0}"
+                          th:text="${#numbers.formatInteger((base + add) * item.get('quantity'), 0, 'COMMA') + '원'}">
+                    </span>
                         <span class="quantity" th:text="${item.get('quantity')} + '개'">1개</span>
                     </div>
                 </div>

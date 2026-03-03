@@ -67,7 +67,8 @@ public class PaymentController {
             int quantity = (int) item.get("quantity");
 
             int itemTotal = (price + additionalPrice) * quantity;
-            int discount = discountPrice > 0 ? (price + additionalPrice) * quantity - discountPrice * quantity : 0;
+
+            int discount = discountPrice > 0 ? (price - discountPrice) * quantity : 0;
 
             totalPrice += itemTotal;
             totalDiscount += discount;

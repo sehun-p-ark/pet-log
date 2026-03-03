@@ -47,7 +47,8 @@ public interface ProductMapper {
             @Param("sort") String sort,
             @Param("offset") int offset,
             @Param("size") int size,
-            @Param("brand") String brand
+            @Param("brand") String brand,
+            @Param("eventCategoryId") Integer eventCategoryId
     );
 
     // 리뷰 개수 조회

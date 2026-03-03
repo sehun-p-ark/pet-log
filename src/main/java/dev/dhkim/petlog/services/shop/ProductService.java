@@ -38,9 +38,9 @@ public class ProductService {
     }
 
     // 카테고리별 상품 목록 조회
-    public List<ProductEntity> getProducts(String petType, Integer categoryId, Integer subCategoryId, String sort, int page, int size, String brand) {
+    public List<ProductEntity> getProducts(String petType, Integer categoryId, Integer subCategoryId, String sort, int page, int size, String brand, Integer eventCategoryId) {
         int offset = page * size;
-        return productMapper.selectProducts(petType, categoryId, subCategoryId, sort, offset, size, brand);
+        return productMapper.selectProducts(petType, categoryId, subCategoryId, sort, offset, size, brand, eventCategoryId);
     }
 
     // 바로 구매

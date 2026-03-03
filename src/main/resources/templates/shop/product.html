@@ -22,7 +22,7 @@
             <div class="preview">
                 <div class="img-container"
                      th:each="image, stat : ${product.productImages}"
-                     th:if="${stat.index < 2}"
+                     th:if="${stat.index < 5}"
                      th:data-index="${stat.index}">
                     <img class="image" th:src="${image.imageUrl}" alt="">
                 </div>

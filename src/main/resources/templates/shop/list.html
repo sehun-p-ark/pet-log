@@ -23,21 +23,31 @@
          th:data-category="${category}"
          th:data-category-id="${categoryId}"
          th:data-sub-category-id="${subCategoryId}"
+         th:data-event-category-id="${eventCategoryId}"
          th:data-keyword="${keyword}"
          th:data-has-more="${products != null && products.size() == 20}">
         <div class="category-wrapper">
             <!-- 대분류 -->
-            <div class="main-category">
-                <button class="main-category-btn"
-                        th:classappend="${categoryId == null} ? 'active'"
-                        th:data-url="@{/shop/list(petType=${petType})}">전체</button>
-                <th:block th:if="${mainCategories != null}">
+            <div class="main-category" th:classappend="${eventCategoryId != null} ? 'event-mode'">
+                <th:block th:if="${eventCategoryId == null}">
                     <button class="main-category-btn"
-                            th:each="cat : ${mainCategories}"
-                            th:text="${cat.displayText}"
-                            th:classappend="${categoryId == cat.id} ? 'active'"
-                            th:data-url="@{/shop/list(petType=${petType},categoryId=${cat.id},category=${cat.displayText})}">
-                    </button>
+                            th:classappend="${categoryId == null} ? 'active'"
+                            th:data-url="@{/shop/list(petType=${petType})}">전체</button>
+                    <th:block th:if="${mainCategories != null}">
+                        <th:block th:each="cat : ${mainCategories}">
+                            <button class="main-category-btn"
+                                    th:if="${cat.displayText != '이벤트'}"
+                                    th:text="${cat.displayText}"
+                                    th:classappend="${categoryId == cat.id} ? 'active'"
+                                    th:data-url="@{/shop/list(petType=${petType},categoryId=${cat.id},category=${cat.displayText})}">
+                            </button>
+                        </th:block>
+                    </th:block>
+                </th:block>
+
+                <!-- 이벤트 배너로 진입했을 때 -->
+                <th:block th:if="${eventCategoryId != null}">
+                    <span class="event-category-title">이벤트상품</span>
                 </th:block>
                 <div class="sort-filter">
                     <select id="sortSelect">

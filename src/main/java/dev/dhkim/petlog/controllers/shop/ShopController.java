@@ -43,7 +43,7 @@ public class ShopController {
             ModelAndView modelAndView) {
 
         int size = 20;
-        List<ProductEntity> products = productService.getProducts(null, null, null, null, page, size, brand);
+        List<ProductEntity> products = productService.getProducts(null, null, null, null, page, size, brand, null);
 
         modelAndView.addObject("products", products);
         modelAndView.addObject("brand", brand);
@@ -60,6 +60,7 @@ public class ShopController {
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String sort,
             @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) Integer eventCategoryId,
             ModelAndView modelAndView
     ) {
         int size = 20;
@@ -68,7 +69,8 @@ public class ShopController {
         if (keyword != null && !keyword.isEmpty()) {
             products = productService.searchProducts(keyword, petType, null, page, size);
         } else {
-            products = productService.getProducts(petType, categoryId, subCategoryId, sort, page, size, null);
+            if (sort == null) sort = "popular";
+            products = productService.getProducts(petType, categoryId, subCategoryId, sort, page, size, null, eventCategoryId);
         }
 
         // 서브카테고리
@@ -81,8 +83,9 @@ public class ShopController {
         modelAndView.addObject("petType", petType);
         modelAndView.addObject("category", category);
         modelAndView.addObject("categoryId", categoryId);
-        modelAndView.addObject("subCategoryId", subCategoryId);  // 추가
+        modelAndView.addObject("subCategoryId", subCategoryId);
         modelAndView.addObject("sort", sort);
+        modelAndView.addObject("eventCategoryId", eventCategoryId);
         modelAndView.setViewName("shop/list");
 
         return modelAndView;

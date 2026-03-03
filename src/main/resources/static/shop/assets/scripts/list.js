@@ -15,13 +15,14 @@ let page = 1;
 let loading = false;
 let hasMore = section?.dataset.hasMore === 'true';
 
+// 1. params 초기값에 기본 sort 설정
 const params = {
     petType: section?.dataset.petType || '',
     category: section?.dataset.category || '',
     categoryId: section?.dataset.categoryId || '',
     subCategoryId: section?.dataset.subCategoryId || '',
     keyword: section?.dataset.keyword || '',
-    sort: new URLSearchParams(location.search).get('sort') || '',
+    sort: new URLSearchParams(location.search).get('sort') || 'popular',
 };
 
 function buildUrl() {
@@ -128,7 +129,7 @@ document.addEventListener('click', function(e) {
 const sortSelect = document.getElementById('sortSelect');
 
 // 현재 sort 파라미터로 select 초기화
-const currentSort = new URLSearchParams(location.search).get('sort') || '';
+const currentSort = new URLSearchParams(location.search).get('sort') || 'popular';
 if (currentSort) sortSelect.value = currentSort;
 
 sortSelect.addEventListener('change', function() {

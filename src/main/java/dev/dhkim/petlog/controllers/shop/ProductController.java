@@ -90,11 +90,12 @@ public class ProductController {
             @RequestParam(required = false) String petType,
             @RequestParam(required = false) Integer categoryId,
             @RequestParam(required = false) Integer subCategoryId,
-            @RequestParam(defaultValue = "latest") String sort,
+            @RequestParam(defaultValue = "popular") String sort,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @RequestParam(required = false) String brand
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) Integer eventCategoryId
     ) {
-        return productService.getProducts(petType, categoryId, subCategoryId, sort, page, size, brand);
+        return productService.getProducts(petType, categoryId, subCategoryId, sort, page, size, brand, eventCategoryId);
     }
 }

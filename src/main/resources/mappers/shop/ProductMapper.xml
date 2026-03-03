@@ -190,6 +190,9 @@
             <if test="subCategoryId != null">
                 AND p.sub_category_id = #{subCategoryId}
             </if>
+            <if test="eventCategoryId != null">
+                AND p.event_category_id = #{eventCategoryId}
+            </if>
             <if test="categoryId != null and subCategoryId == null">
                 AND p.sub_category_id IN (SELECT id FROM sub_category WHERE category_id = #{categoryId})
             </if>

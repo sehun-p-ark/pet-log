@@ -99,11 +99,12 @@ function updateQuantityInDB(cartId, quantity) {
 // 개별 상품 가격 업데이트
 function updateItemPrice(cartItem, quantity) {
     const price = parseInt(cartItem.dataset.price || 0);
-    const additionalPrice = cartItem.dataset.additionalPrice ? parseInt(cartItem.dataset.additionalPrice) : 0;
-    const discountRate = parseInt(cartItem.dataset.discountRate || 0);
+    const discountPrice = parseInt(cartItem.dataset.discountPrice || 0);
+    const additionalPrice = parseInt(cartItem.dataset.additionalPrice || 0);
 
-    const totalPrice = (price + additionalPrice) * quantity;
-    const finalPrice = totalPrice * (100 - discountRate) / 100;
+    const basePrice = (discountPrice > 0) ? discountPrice : price;
+
+    const finalPrice = (basePrice + additionalPrice) * quantity;
 
     const priceEl = cartItem.querySelector('.single-price');
     if (priceEl) {
@@ -231,48 +232,57 @@ function updateCartSummary() {
     const checkedItems = document.querySelectorAll('.item-checkbox:checked');
     let totalPrice = 0;
     let totalDeliveryFee = 0;
-    let totalDiscount = 0;
+    let totalOriginalPrice = 0;
 
     checkedItems.forEach(checkbox => {
         const item = checkbox.closest('.cart-item');
+
         const price = parseInt(item.dataset.price || 0);
-        const additionalPrice = item.dataset.additionalPrice ? parseInt(item.dataset.additionalPrice) : 0;
-        const discountRate = parseInt(item.dataset.discountRate || 0);
+        const discountPrice = parseInt(item.dataset.discountPrice || 0);
+        const additionalPrice = parseInt(item.dataset.additionalPrice || 0);
         const deliveryFee = parseInt(item.dataset.deliveryFee || 0);
         const quantity = parseInt(item.querySelector('.quantity-input').value || 1);
 
-        const itemTotal = (price + additionalPrice) * quantity;
-        const discount = itemTotal * discountRate / 100;
+        const rawPrice = price || 0;
+        const discount = discountPrice || 0;
+        const addPrice = additionalPrice || 0;
+
+        const effectivePrice = (discount > 0 ? discount : rawPrice) + addPrice;
+        const itemTotal = effectivePrice * quantity;
 
         totalPrice += itemTotal;
-        totalDiscount += discount;
         totalDeliveryFee += deliveryFee;
     });
 
-    const finalAmount = totalPrice - totalDiscount + totalDeliveryFee;
+    const finalAmount = totalPrice + totalDeliveryFee;
 
-    // 금액 업데이트
     const allPriceEl = document.querySelector('.price.all .result');
     const shipPriceEl = document.querySelector('.price.ship-price .result');
-    const discountPriceEl = document.querySelector('.price.discount-price .result');
     const paymentPriceEl = document.querySelector('.price.payment-price .result');
+
+    const discountPriceEl = document.querySelector('.price.discount-price .result');
 
     if (allPriceEl) allPriceEl.textContent = totalPrice.toLocaleString() + '원';
     if (shipPriceEl) shipPriceEl.textContent = '+' + totalDeliveryFee.toLocaleString() + '원';
-    if (discountPriceEl) discountPriceEl.textContent = '-' + totalDiscount.toLocaleString() + '원';
     if (paymentPriceEl) paymentPriceEl.textContent = finalAmount.toLocaleString() + '원';
+    if (discountPriceEl) discountPriceEl.textContent = '0원';
 
-    // 결제 버튼 업데이트 부분
-    const paymentBtn = document.querySelector('.payment');
+    // 결제 버튼 업데이트
+    const paymentBtn = document.querySelector('.payment'); // 버튼 찾기
+
     if (paymentBtn) {
-        if (checkedItems.length > 0) {
-            paymentBtn.textContent = `${checkedItems.length}개 상품 주문하기`;
-            paymentBtn.classList.add('active');
+        const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
+
+        if (checkedCount > 0) {
             paymentBtn.classList.remove('disabled');
+            paymentBtn.classList.add('active');
+            paymentBtn.disabled = false;
+            paymentBtn.textContent = `${checkedCount}개 상품 주문하기`;
         } else {
-            paymentBtn.textContent = '상품을 선택해주세요.';
-            paymentBtn.classList.add('disabled');
             paymentBtn.classList.remove('active');
+            paymentBtn.classList.add('disabled');
+            paymentBtn.disabled = true;
+            paymentBtn.textContent = '상품을 선택해주세요.';
         }
     }
 }
@@ -427,3 +437,21 @@ if (paymentButton) {
         window.location.href = `/shop/payment?cartIds=${cartIds.join(',')}`;
     });
 }
+
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted || (window.performance && window.performance.getEntriesByType("navigation")[0].type === "back_forward")) {
+
+        document.querySelectorAll('.item-checkbox').forEach(cb => cb.checked = false);
+        const selectAll = document.getElementById('select-all');
+        if (selectAll) selectAll.checked = false;
+
+        document.querySelectorAll('.cart-item').forEach(cartItem => {
+            const quantityInput = cartItem.querySelector('.quantity-input');
+            const quantity = parseInt(quantityInput.value || 1);
+            updateItemPrice(cartItem, quantity);
+        });
+
+        checkEmptyCart();
+        updateCartSummary();
+    }
+});
