@@ -1,5 +1,6 @@
 body {
-  background: #EAF3F8; }
+  background: #EAF3F8;
+}
 
 .coupon-event {
   align-items: center;
@@ -7,54 +8,67 @@ body {
   flex-direction: column;
   gap: 0;
   justify-content: center;
+}
+.coupon-event > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.coupon-event > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.coupon-event {
   text-align: center;
   max-height: 100%;
   margin: auto 0;
-  background-image: url("../images/coupon-back.png"); }
-  .coupon-event > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .coupon-event > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
+  background-image: url("../images/coupon-back.png");
+}
 
 .event-wrapper {
   background-color: #EAF3F8;
-  padding: 1rem 3rem 0 3rem; }
+  padding: 1rem 3rem 0 3rem;
+}
 
 .event-title {
   font-size: 1rem;
   letter-spacing: 0.0625rem;
   margin-bottom: 1.75rem;
-  color: #5A6B8C; }
+  color: #5A6B8C;
+}
 
 .event-main {
   font-size: 4rem;
   font-weight: 700;
   color: #1F2A6D;
   margin: 0;
-  line-height: 4.5rem; }
-  .event-main > span {
-    font-size: 4.375rem;
-    color: #3C82D9; }
+  line-height: 4.5rem;
+}
+.event-main > span {
+  font-size: 4.375rem;
+  color: #3C82D9;
+}
 
 .event-desc {
   margin: 1.75rem 0 4.25rem;
-  color: #5A6B8C; }
+  color: #5A6B8C;
+}
 
 .coupon-wrapper {
-  position: relative; }
-  .coupon-wrapper > .image {
-    position: absolute;
-    top: -4.5rem;
-    left: 0;
-    width: 8rem;
-    height: 8rem;
-    z-index: 2; }
-    .coupon-wrapper > .image.dog {
-      left: 23rem;
-      top: -4.25rem;
-      transform: rotate(15deg); }
+  position: relative;
+}
+.coupon-wrapper > .image {
+  position: absolute;
+  top: -4.5rem;
+  left: 0;
+  width: 8rem;
+  height: 8rem;
+  z-index: 2;
+}
+.coupon-wrapper > .image.dog {
+  left: 23rem;
+  top: -4.25rem;
+  transform: rotate(15deg);
+}
 
 .coupon-card {
   position: relative;
@@ -65,29 +79,37 @@ body {
   border-radius: 1rem;
   background: linear-gradient(135deg, #6C8EF5, #9C7BEF);
   color: white;
-  z-index: 3; }
-  .coupon-card > .coupon-left {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    justify-content: center;
-    width: 7rem;
-    writing-mode: vertical-rl;
-    border-right: 0.125rem dashed rgba(255, 255, 255, 0.6);
-    font-size: 0.95rem; }
-    .coupon-card > .coupon-left > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .coupon-card > .coupon-left > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-  .coupon-card > .coupon-right {
-    flex: 1;
-    padding: 1.75rem; }
-    .coupon-card > .coupon-right > .discount {
-      font-size: 3rem;
-      font-weight: 700; }
+  z-index: 3;
+}
+.coupon-card > .coupon-left {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.coupon-card > .coupon-left > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.coupon-card > .coupon-left > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.coupon-card > .coupon-left {
+  width: 7rem;
+  writing-mode: vertical-rl;
+  border-right: 0.125rem dashed rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+}
+.coupon-card > .coupon-right {
+  flex: 1;
+  padding: 1.75rem;
+}
+.coupon-card > .coupon-right > .discount {
+  font-size: 3rem;
+  font-weight: 700;
+}
 
 .download-btn {
   align-items: center;
@@ -95,25 +117,32 @@ body {
   flex-direction: row;
   gap: 0.375rem;
   justify-content: flex-start;
+}
+.download-btn > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.download-btn > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.download-btn {
   background: #222;
   color: white;
   padding: 1rem 2.5rem;
   border: none;
   font-size: 1rem;
   cursor: pointer;
-  border-radius: 0.5rem; }
-  .download-btn > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .download-btn > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .download-btn > .icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    fill: #ffffff; }
+  border-radius: 0.5rem;
+}
+.download-btn > .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: #ffffff;
+}
 
 .download-btn:hover {
-  background: #000; }
+  background: #000;
+}
 
 /*# sourceMappingURL=welcome.css.map */

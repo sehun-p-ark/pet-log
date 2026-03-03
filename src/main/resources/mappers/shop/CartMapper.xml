@@ -38,7 +38,7 @@
             p.brand,
             p.name AS productName,
             p.price,
-            p.discount_price AS discountRate,
+            p.discount_price AS discountPrice,
             p.delivery_fee AS deliveryFee,
             o.option_name AS optionName,
             o.additional_price AS additionalPrice,

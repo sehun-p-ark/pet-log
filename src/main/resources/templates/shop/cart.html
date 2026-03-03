@@ -40,7 +40,7 @@
                  th:data-option-id="${item.get('optionId') != null ? item.get('optionId') : ''}"
                  th:data-price="${item.get('price')}"
                  th:data-additional-price="${item.get('additionalPrice') != null ? item.get('additionalPrice') : 0}"
-                 th:data-discount-rate="${item.get('discountRate')}"
+                 th:data-discount-price="${item.get('discountPrice')}"
                  th:data-delivery-fee="${item.get('deliveryFee')}">
 
                 <label class="checkbox-label">
@@ -74,7 +74,7 @@
                         </label>
                         <button class="option-change" type="button"
                                 th:if="${item.get('optionName') != null}">옵션변경</button>
-                        <div class="single-price" th:text="${#numbers.formatInteger((item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountRate')) / 100, 0, 'COMMA') + '원'}"></div>
+                        <div class="single-price" th:text="${#numbers.formatInteger((item.get('price') + (item.get('additionalPrice') != null ? item.get('additionalPrice') : 0)) * (100 - item.get('discountPrice')) / 100, 0, 'COMMA') + '원'}"></div>
                     </div>
                 </div>
             </div>
