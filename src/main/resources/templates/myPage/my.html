@@ -792,7 +792,7 @@
         </label>
         <label class="cat select">
             <input hidden type="radio" name="type">
-            <img class="image" src="/user/assets/images/catImage.png" alt="">
+            <img class="image cat" src="/user/assets/images/catImage.png" alt="">
             <span class="cat">고양이</span>
         </label>
         <label class="another select">
@@ -954,6 +954,12 @@
         <button type="button" class="yes">확인</button>
     </div>
 </div>
+<div class="businessReservationMessage" id="businessReservationMessage">
+    <div class="button-wrapper">
+        <button type="button" class="no">취소</button>
+        <button type="button" class="yes">확인</button>
+    </div>
+</div>
 <div class="myPage-wrapper" id="myPage">
     <div class="sidebar">
         <div class="sidebar-header">마이페이지</div>
@@ -969,6 +975,9 @@
             </li>
             <li class="menu" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
                 <span>예약 조회</span>
+            </li>
+            <li class="menu" th:if="${sessionUser.getUserType() == 'BUSINESS'}">
+                <span>예약 관리</span>
             </li>
             <li class="menu" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
                 <span>주문 내역</span>
@@ -1245,7 +1254,7 @@
                 </li>
             </ul>
         </div>
-        <div class="reservationInformation">
+        <div class="reservationInformation" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
             <ul class="reservation-grid">
                 <li class="reservation-card" th:each="reservation : ${reservations}" th:if="${reservation != null}" th:attr="data-reservation-id = ${reservation.getReservationId()}">
                     <div class="card-header">
@@ -1293,6 +1302,63 @@
                     </div>
                 </li>
             </ul>
+            <div class="reservation empty" th:if="${#lists.isEmpty(reservations)}">
+                <span class="empty-title">아직 예약내역이 없어요.</span>
+                <span class="empty-text">지도에서 예약을 진행할 수 있습니다 🐾</span>
+                <a href="/main" class="main-link">지도 바로가기</a>
+            </div>
+        </div>
+        <div class="reservationManagement" th:if="${sessionUser.getUserType() == 'BUSINESS'}">
+            <ul class="reservation-grid">
+                <li class="reservation-card" th:each="businessReservation : ${businessReservations}" th:if="${businessReservation != null}" th:attr="data-reservation-id=${businessReservation.getReservationId()}">
+                    <div class="card-header">
+                        <div class="place-info">
+                            <span class="place" th:text="${businessReservation.getStoreName()}">동대구 동물병원</span>
+                            <span class="category" th:text="
+                        ${businessReservation.category == 'hospital'} ? '동물병원' :
+                        (${businessReservation.category == 'cafe'} ? '카페' :
+                        (${businessReservation.category == 'salon'} ? '미용실' :
+                        (${businessReservation.category == 'school'} ? '유치원' :
+                        (${businessReservation.category == 'park'} ? '공원' :
+                        (${businessReservation.category == 'camp'} ? '캠핑장' : '')))))">동물병원</span>
+                        </div>
+                        <span class="status" th:classappend="${businessReservation.canceled} ? ' canceled' : ' complete'"></span>
+                    </div>
+                    <div class="date-time">
+                        <div class="date-box">
+                            <span class="day" th:text="${#temporals.format(businessReservation.getReservationDate(), 'dd')}">18</span>
+                            <span class="month" th:text="${#temporals.format(businessReservation.getReservationDate(), 'MMM', T(java.util.Locale).ENGLISH).toUpperCase()}">FEB</span>
+                        </div>
+                        <div class="time-info">
+                            <span class="date" th:text="${#temporals.format(businessReservation.getReservationDate(), 'yyyy.MM.dd (E)', T(java.util.Locale).KOREAN)}">2026.02.18 (화)</span>
+                            <span class="time" th:text="${#temporals.format(businessReservation.getReservationTime(), 'HH:mm')}">14:30</span>
+                        </div>
+                    </div>
+                    <div class="store-info">
+                        <div class="row">
+                            <span class="label">예약자 실명</span>
+                            <span class="value" th:text="${businessReservation.getReserverName()}">김멍섭</span>
+                        </div>
+                        <div class="row">
+                            <span class="label">예약자 전화번호</span>
+                            <span class="value" th:text="${businessReservation.getReserverPhone()}">02-1234-5678</span>
+                        </div>
+                    </div>
+                    <div class="request">
+                        <span class="label">요청사항</span>
+                        <p class="text" th:text="${businessReservation.getRequestText()}">
+                            강아지가 예민해서 최대한 조심히 진료 부탁드립니다.
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="cancel-btn" th:if="${!businessReservation.canceled}">예약취소</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="reservation empty" th:if="${#lists.isEmpty(businessReservations)}">
+                <span class="empty-title">관리할 예약내역이 없어요.</span>
+                <span class="empty-text">유저들이 회원님의 가게를 예약한 기록이 없습니다. 🐾</span>
+            </div>
         </div>
         <div class="paymentDetails">
             <th:block th:if="${groupedOrders == null or groupedOrders.isEmpty()}">

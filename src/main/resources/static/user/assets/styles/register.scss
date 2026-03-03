@@ -656,11 +656,11 @@ body:has(> .address-wrapper.visible) > .cover {
           margin-top: 1.5rem;
 
           > .countTime {
-            display: none;
+            opacity: 0;
             align-self: flex-end;
-            color: $global-gray-text-color;
+            color: red;
             &.visible{
-              display: revert;
+              opacity: 1;
             }
           }
 
@@ -1011,10 +1011,11 @@ body:has(> .address-wrapper.visible) > .cover {
               margin-left: 0.5rem;
 
               > .petImage {
-                width: 5rem;
-                height: 5rem;
+                width: 6rem;
+                height: 6rem;
                 object-fit: cover;
                 border-radius: 999rem;
+                padding: 0.2rem;
               }
             }
           }
@@ -1451,8 +1452,22 @@ body:has(> .dialog.visible) {
 
       > .image {
         width: 9rem;
-        height: 9rem;
+        height: 7rem;
         image-rendering: auto;
+        margin-bottom: 1rem;
+        margin-left: 0.1rem;
+
+        &.cat {
+          width: 7.5rem !important;
+          height: 6.5rem !important;
+          image-rendering: auto;
+          margin-bottom: 1rem;
+          margin-left: 0.1rem;
+        }
+      }
+
+      > .cat {
+        margin-top: 0.4rem;
       }
 
       > .dog,

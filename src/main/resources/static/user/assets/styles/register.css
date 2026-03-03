@@ -645,11 +645,11 @@ body:has(> .address-wrapper.visible) > .cover {
           flex-grow: 1;
           flex-shrink: 1; }
         .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .countTime {
-          display: none;
+          opacity: 0;
           align-self: flex-end;
-          color: #565656; }
+          color: red; }
           .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .countTime.visible {
-            display: revert; }
+            opacity: 1; }
         .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber:disabled {
           border-color: #e7e5e4 !important; }
           .register-container > .register-third > .label.emailVerifyLabel > .verifyNumber-wrapper > .emailVerifyNumber:disabled::placeholder {
@@ -1022,10 +1022,11 @@ body:has(> .address-wrapper.visible) > .cover {
                 flex-grow: 1;
                 flex-shrink: 1; }
               .register-container > .register-forth > .pet-list > .pet > .petInformation > .side-wrapper > .image-wrapper > .petImage {
-                width: 5rem;
-                height: 5rem;
+                width: 6rem;
+                height: 6rem;
                 object-fit: cover;
-                border-radius: 999rem; }
+                border-radius: 999rem;
+                padding: 0.2rem; }
           .register-container > .register-forth > .pet-list > .pet > .petInformation > .detail {
             align-items: stretch;
             display: flex;
@@ -1423,8 +1424,18 @@ body:has(> .dialog.visible) .cover {
         background-color: #eaeaea; }
       .dialog > .select-wrapper > .select > .image {
         width: 9rem;
-        height: 9rem;
-        image-rendering: auto; }
+        height: 7rem;
+        image-rendering: auto;
+        margin-bottom: 1rem;
+        margin-left: 0.1rem; }
+        .dialog > .select-wrapper > .select > .image.cat {
+          width: 7.5rem !important;
+          height: 6.5rem !important;
+          image-rendering: auto;
+          margin-bottom: 1rem;
+          margin-left: 0.1rem; }
+      .dialog > .select-wrapper > .select > .cat {
+        margin-top: 0.4rem; }
       .dialog > .select-wrapper > .select > .dog,
       .dialog > .select-wrapper > .select > .cat,
       .dialog > .select-wrapper > .select > .another {
