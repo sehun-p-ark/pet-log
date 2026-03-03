@@ -1,6 +1,7 @@
 package dev.dhkim.petlog.controllers.shop;
 
 import dev.dhkim.petlog.dto.user.SessionUser;
+import dev.dhkim.petlog.enums.shop.CartResult;
 import dev.dhkim.petlog.services.shop.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -106,16 +107,16 @@ public class CartController {
     @PutMapping("/update-option")
     @ResponseBody
     public Map<String, Object> updateCartOption(@RequestBody Map<String, Object> request) {
-        try {
-            Integer cartId = ((Number) request.get("cartId")).intValue();
-            Integer optionId = ((Number) request.get("optionId")).intValue();
+        Integer cartId = ((Number) request.get("cartId")).intValue();
+        Integer optionId = ((Number) request.get("optionId")).intValue();
 
-            cartService.updateCartOption(cartId, optionId);
-            return Map.of("success", true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Map.of("success", false, "message", "옵션 변경에 실패했습니다");
-        }
+        CartResult result = cartService.updateCartOption(cartId, optionId);
+
+        return switch (result) {
+            case SUCCESS -> Map.of("success", true);
+            case DUPLICATE -> Map.of("success", false, "message", "이미 장바구니에 있는 옵션입니다.");
+            case FAIL -> Map.of("success", false, "message", "옵션 변경에 실패했습니다.");
+        };
     }
 
     // 장바구니 수량 변경

@@ -1,7 +1,9 @@
 package dev.dhkim.petlog.services.shop;
 
+import dev.dhkim.petlog.enums.shop.CartResult;
 import dev.dhkim.petlog.mappers.shop.CartMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +51,15 @@ public class CartService {
     }
 
     @Transactional
-    public void updateCartOption(Integer cartId, Integer optionId) {
-        cartMapper.updateCartOption(cartId, optionId);
+    public CartResult updateCartOption(int cartId, int optionId) {
+        try {
+            cartMapper.updateCartOption(cartId, optionId);
+            return CartResult.SUCCESS;
+        } catch (DuplicateKeyException e) {
+            return CartResult.DUPLICATE;
+        } catch (Exception e) {
+            return CartResult.FAIL;
+        }
     }
 
     @Transactional
