@@ -24,7 +24,8 @@ body:has(.modal-cover.visible),
 body:has(.addressDeleteMessage.visible),
 body:has(.deliveryAddressDeleteMessage.visible),
 body:has(.petDeleteMessage.visible),
-body:has(.reservationMessage.visible) {
+body:has(.reservationMessage.visible),
+body:has(.businessReservationMessage.visible) {
   overflow-y: hidden;
 }
 
@@ -563,7 +564,7 @@ body:has(.reservationMessage.visible) {
     margin-bottom: 3rem;
 
     > .point {
-      color: #3BFF3B;
+      color: $global-green-text-color;
     }
   }
 
@@ -586,8 +587,22 @@ body:has(.reservationMessage.visible) {
 
       > .image {
         width: 9rem;
-        height: 9rem;
+        height: 7rem;
         image-rendering: auto;
+        margin-bottom: 1rem;
+        margin-left: 0.1rem;
+
+        &.cat {
+          width: 7.5rem !important;
+          height: 6.5rem !important;
+          image-rendering: auto;
+          margin-bottom: 1rem;
+          margin-left: 0.1rem;
+        }
+      }
+
+      > .cat {
+        margin-top: 0.4rem;
       }
 
       > .dog,
@@ -1342,6 +1357,79 @@ body:has(.reservationMessage.visible) {
   }
 }
 
+.businessReservationMessage {
+  @include flex(column, stertch, flex-start, 1rem);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  min-width: 25rem;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .title {
+    font-size: 1.35rem;
+    font-weight: 500;
+  }
+
+  > .text {
+    font-size: 1rem;
+  }
+
+  > .button-wrapper {
+    @include flex(row, stretch, center, 2rem);
+
+    > .yes {
+      background-color: #e53935;
+      border-radius: 0.35rem;
+      color: #ffffff;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: darken(#e53935, 5%);
+      }
+
+      &:active {
+        background-color: darken(#e53935, 10%);
+      }
+    }
+
+    > .no {
+      background-color: lighten($global-gray-text-color, 55%);
+      color: lighten($global-gray-text-color, 20%);
+      border-radius: 0.35rem;
+      cursor: pointer;
+      height: 2.25rem;
+      margin-top: 1rem;
+      width: 9rem;
+      transition-duration: 250ms;
+      transition-property: background-color;
+
+      &:hover {
+        background-color: #D6D6D6;
+      }
+
+      &:active {
+        background-color: #C8C8C8;
+      }
+    }
+  }
+}
+
 
 body:has(> .dialog.visible) {
   .cover {
@@ -1352,6 +1440,7 @@ body:has(> .dialog.visible) {
 
 body:has(> .petDeleteMessage.visible) > .cover,
 body:has(> .reservationMessage.visible) > .cover,
+body:has(> .businessReservationMessage.visible) > .cover,
 body:has(> .checkMessage.visible) > .cover,
 body:has(> .defaultAddressMessage.visible) > .cover,
 body:has(> .defaultDeliveryMessage.visible) > .cover,
@@ -4434,6 +4523,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           object-fit: cover;
           border-radius: 999rem;
           background-color: #ffffff;
+          padding: 0.2rem;
         }
       }
 
@@ -4667,6 +4757,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
             @include flex(row, stretch, flex-start, 1rem);
 
             > .title {
+              @include flex(column, stretch, center);
               width: 4.5rem;
               font-size: 0.9rem;
               color: #9ca3af;
@@ -4743,7 +4834,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 
   > .petInformation,
   > .reservationInformation,
-  > .storeInformation{
+  > .storeInformation,
+  > .reservationManagement {
     @include flex(column, stretch, flex-start);
     display: none;
     pointer-events: none;
@@ -4793,6 +4885,12 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
         border-radius: 1rem;
         background-color: #ffffff;
         border: 0.0625rem solid #dddddd;
+
+        &:has(.status.canceled) {
+          background-color: #f5f5f5;
+          border-color: #e0e0e0;
+          opacity: 0.6;
+        }
 
         &.add-card {
           @include flex(column, center, center, 0.5rem);
@@ -4846,6 +4944,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                padding: 0.2rem;
+                border-radius: 999rem;
               }
             }
 
@@ -5089,6 +5189,33 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
         }
       }
     }
+
+    > .reservation.empty {
+      @include flex(column, center, center, 0.75rem);
+      height: 100%;
+
+      > .empty-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #000000;
+      }
+
+      > .empty-text {
+        font-size: 0.95rem;
+        color: #565656;
+      }
+
+      > .main-link {
+        margin-top: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        background-color: #89CC96;
+        color: #ffffff;
+        border-radius: 0.35rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+      }
+    }
   }
 }
 
@@ -5311,6 +5438,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           .product-info{
             @include flex(column, flex-start, center, 0.5rem);
             padding-top: 0.5rem;
+            flex: 1;
 
             > a{
               .product-name{
@@ -5797,6 +5925,18 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   }
 }
 
+@media (max-width: 830px) {
+  .review-btn,
+  .my-review-btn {
+    top: 64% !important;
+    right: 0.75rem !important;
+  }
+}
+
+
+
+
+
 
 .paymentDetails {
   display: none;
@@ -5804,7 +5944,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 
 
 
-body:has(> .point-modal.visible) > .cover {
+body:has(> .point-modal.visible) > .cover,
+body:has(> .coupon-modal.visible) > .cover {
   opacity: 1;
   pointer-events: auto;
 }

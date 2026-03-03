@@ -1,9 +1,7 @@
 package dev.dhkim.petlog.mappers.myPage;
 
-import dev.dhkim.petlog.dto.user.AddressDto;
-import dev.dhkim.petlog.dto.user.MyPageReservationDto;
-import dev.dhkim.petlog.dto.user.PetDto;
-import dev.dhkim.petlog.dto.user.StoreDto;
+import dev.dhkim.petlog.dto.user.*;
+import dev.dhkim.petlog.entities.main.ReservationEntity;
 import dev.dhkim.petlog.entities.user.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -45,6 +43,12 @@ public interface MyPageMapper {
 
     // 예약내역 모두 가져오기
     List<MyPageReservationDto> selectAllReservationByUserId(@Param(value = "userId") int userid);
+
+    // 사업자 회원 예약관리
+    List<BusinessReservationDto> selectReservationsByBusinessUserId(@Param("userId") int userId);
+
+    // 사업자 예약취소
+    ReservationEntity selectReservationByIdAndBusinessUserId(@Param("reservationId") int reservationId, @Param("userId") int userId);
 
     // 배송지 제일 처음에 만든거 가져오기
     DeliveryAddressEntity selectOldestDeliveryAddressByUserId(@Param(value = "userId") int userId);

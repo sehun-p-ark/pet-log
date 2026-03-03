@@ -226,7 +226,7 @@ public class UserController {
 
 
 
-    // 카카오로그인
+    // 카카오 로그인
     @RequestMapping(value="/login/kakao", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public String getKakaoLogin() {
         String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize" +
@@ -237,12 +237,23 @@ public class UserController {
     }
 
     @RequestMapping(value="/login/kakao/callback", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public String getKakaoCallback(@RequestParam String code, HttpSession session) {
-        // 1. code로 access token 요청
-        // 2. access token으로 사용자 정보 조회
-        // 3. DB 가입/로그인 처리 후 세션 저장
-        // 예: session.setAttribute("sessionUser", new SessionUser(...));
-        return "redirect:/main"; // 로그인 완료 후 이동
+    public String getKakaoCallback(@RequestParam String code,
+                                   HttpSession session) throws Exception {
+
+        System.out.println("KAKAO_REST_KEY = " + System.getenv("KAKAO_REST_KEY"));
+        System.out.println("KAKAO_CLIENT_SECRET = " + System.getenv("KAKAO_CLIENT_SECRET"));
+
+        UserEntity user = userService.loginOrRegisterByKakao(code);
+        System.out.println("카카오 로그인 user = " + user);
+
+        if (user == null) {
+            return "redirect:/user/login?error=kakao_login";
+        }
+
+        SessionUser sessionUser = new SessionUser(user.getId(), user.getUserType());
+        session.setAttribute("sessionUser", sessionUser);
+
+        return "redirect:/main";
     }
 
 

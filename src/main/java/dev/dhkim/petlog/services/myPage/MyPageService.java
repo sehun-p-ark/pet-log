@@ -2,6 +2,7 @@ package dev.dhkim.petlog.services.myPage;
 
 import ch.qos.logback.core.spi.FilterAttachableImpl;
 import dev.dhkim.petlog.dto.user.*;
+import dev.dhkim.petlog.entities.main.ReservationEntity;
 import dev.dhkim.petlog.entities.shop.PointEntity;
 import dev.dhkim.petlog.entities.user.*;
 import dev.dhkim.petlog.mappers.myPage.MyPageMapper;
@@ -686,6 +687,40 @@ public class MyPageService {
         }
         return Pair.of(MyPageResult.SUCCESS, dbStores);
     }
+
+
+    // 예약정보 관리
+    public Pair<MyPageResult, List<BusinessReservationDto>> getBusinessReservations(int userId) {
+        if (userId < 1) {
+            return Pair.of(MyPageResult.FAILURE, null);
+        }
+        List<BusinessReservationDto> reservations = this.myPageMapper.selectReservationsByBusinessUserId(userId);
+        for (BusinessReservationDto r : reservations) {
+            r.setReserverPhone(PhoneUtil.phoneNumberFormat(r.getReserverPhone()));
+        }
+        return Pair.of(MyPageResult.SUCCESS, reservations);
+    }
+
+
+    // 사업자 예약취소
+    public MyPageResult cancelBusinessReservation(int reservationId, int userId) {
+        if (reservationId < 1 || userId < 1) {
+            return MyPageResult.FAILURE;
+        }
+        ReservationEntity reservation = myPageMapper.selectReservationByIdAndBusinessUserId(reservationId, userId);
+        if (reservation == null) {
+            return MyPageResult.FAILURE;
+        }
+        if (reservation.isCanceled()) {
+            return MyPageResult.FAILURE;
+        }
+        return myPageMapper.updateReservationCancel(reservationId, reservation.getUserId()) > 0
+                ? MyPageResult.SUCCESS
+                : MyPageResult.FAILURE;
+    }
+
+
+
 
 
     // 사업자 회원 정보 가져오기

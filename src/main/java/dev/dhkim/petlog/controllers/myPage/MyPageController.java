@@ -116,7 +116,9 @@ public class MyPageController {
             modelAndView.addObject("currentPeriod", period);
         } else {
             Pair<MyPageResult, AddressEntity> businessAddress = this.myPageService.getBusinessAddress(sessionUser.getUserId());
+            Pair<MyPageResult, List<BusinessReservationDto>> businessReservations = this.myPageService.getBusinessReservations(sessionUser.getUserId());
             modelAndView.addObject("businessAddress", businessAddress.getRight());
+            modelAndView.addObject("businessReservations", businessReservations.getRight());
         }
         modelAndView.addObject("sessionUser", sessionUser);
         modelAndView.addObject("user", user.getRight());
@@ -549,5 +551,23 @@ public class MyPageController {
         MyPageResult result = this.myPageService.patchReservation(reservationId, sessionUser.getUserId());
         response.put("result", result.name());
         return response;
+    }
+
+
+
+
+    // 사업자 예약취소
+    @PostMapping("/reservation/business/cancel")
+    @ResponseBody
+    public Map<String, Object> cancelBusinessReservation(@RequestParam int reservationId,
+                                                         @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        if (sessionUser == null) {
+            return Map.of("result", "FAILURE_SESSION_EXPIRED");
+        }
+        if (!"BUSINESS".equals(sessionUser.getUserType())) {
+            return Map.of("result", "FAILURE");
+        }
+        MyPageResult result = myPageService.cancelBusinessReservation(reservationId, sessionUser.getUserId());
+        return Map.of("result", result.name());
     }
 }

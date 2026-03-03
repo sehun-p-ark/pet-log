@@ -8,6 +8,7 @@ const personalInformation = content.querySelector(':scope > .personalInformation
 const businessInformation = content.querySelector(':scope > .businessInformation');
 const petInformation = content.querySelector(':scope > .petInformation');
 const reservationInformation = content.querySelector(':scope > .reservationInformation');
+const reservationManagement = content.querySelector(':scope > .reservationManagement')
 const storeInformation = content.querySelector(':scope > .storeInformation');
 const paymentDetails = content.querySelector(':scope > .paymentDetails');
 
@@ -17,6 +18,7 @@ const sections = [
     petInformation,
     storeInformation,
     reservationInformation,
+    reservationManagement,
     paymentDetails
 ].filter(section => section !== null);
 
@@ -3768,6 +3770,79 @@ if (personalInformation) {
         xhr.send(formData);
     })
     // endregion
+}
+
+if (businessInformation) {
+    // region 사업자 예약취소
+    const businessReservationMessage = document.getElementById('businessReservationMessage');
+    const businessReservationMessageTitle = document.createElement('span');
+    const businessReservationMessageText = document.createElement('span');
+    const businessReservationYesButton = businessReservationMessage.querySelector(':scope > .button-wrapper > .yes');
+    const businessReservationNoButton = businessReservationMessage.querySelector(':scope > .button-wrapper > .no');
+
+    businessReservationMessageTitle.classList.add('title');
+    businessReservationMessageText.classList.add('text');
+    businessReservationMessageTitle.innerText = '알림';
+    businessReservationMessage.prepend(businessReservationMessageTitle, businessReservationMessageText);
+
+    let cancelBusinessReservationId = null;
+
+    function showBusinessReservationMessage(text) {
+        businessReservationMessage.classList.add('visible');
+        businessReservationMessageText.innerText = text;
+    }
+
+    businessReservationNoButton.addEventListener('click', () => {
+        businessReservationMessage.classList.remove('visible');
+        cancelBusinessReservationId = null;
+    });
+
+    const businessReservationCards = document.querySelectorAll('.reservationManagement .reservation-card');
+    businessReservationCards.forEach(card => {
+        const cancelBtn = card.querySelector('.cancel-btn');
+        if (!cancelBtn) return;
+
+        cancelBtn.addEventListener('click', () => {
+            const reservationId = card.dataset.reservationId;
+            if (!reservationId) return;
+            cancelBusinessReservationId = reservationId;
+            showBusinessReservationMessage('정말로 해당 회원의 예약을 취소하시겠습니까?');
+        });
+    });
+
+    businessReservationYesButton.addEventListener('click', () => {
+        if (!cancelBusinessReservationId) return;
+
+        const xhr = new XMLHttpRequest();
+        const formData = new FormData();
+        formData.append('reservationId', cancelBusinessReservationId);
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            if (xhr.status < 200 || xhr.status >= 400) return;
+
+            const response = JSON.parse(xhr.responseText);
+            switch (response.result) {
+                case 'FAILURE':
+                    showMessage('예약 취소에 실패하였습니다. 다시 시도해주세요.');
+                    break;
+                case 'FAILURE_SESSION_EXPIRED':
+                    showMessage('로그인을 해주세요.', () => {
+                        location.href = '/user/login';
+                    });
+                    break;
+                case 'SUCCESS':
+                    location.href = '/my?menu=' + getCurrentMenuIndex();
+                    break;
+                default:
+                    showMessage('알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
+            }
+            businessReservationMessage.classList.remove('visible');
+            cancelBusinessReservationId = null;
+        };
+        xhr.open('POST', '/my/reservation/business/cancel');
+        xhr.send(formData);
+    });
+// endregion
 }
 
 

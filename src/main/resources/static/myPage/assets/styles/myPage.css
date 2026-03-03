@@ -23,7 +23,8 @@ body:has(.modal-cover.visible),
 body:has(.addressDeleteMessage.visible),
 body:has(.deliveryAddressDeleteMessage.visible),
 body:has(.petDeleteMessage.visible),
-body:has(.reservationMessage.visible) {
+body:has(.reservationMessage.visible),
+body:has(.businessReservationMessage.visible) {
   overflow-y: hidden;
 }
 
@@ -680,7 +681,7 @@ body:has(.reservationMessage.visible) {
   margin-bottom: 3rem;
 }
 .dialog > .title > .point {
-  color: #3BFF3B;
+  color: #38A34C;
 }
 .dialog > .select-wrapper {
   height: 12rem;
@@ -714,8 +715,20 @@ body:has(.reservationMessage.visible) {
 }
 .dialog > .select-wrapper > .select > .image {
   width: 9rem;
-  height: 9rem;
+  height: 7rem;
   image-rendering: auto;
+  margin-bottom: 1rem;
+  margin-left: 0.1rem;
+}
+.dialog > .select-wrapper > .select > .image.cat {
+  width: 7.5rem !important;
+  height: 6.5rem !important;
+  image-rendering: auto;
+  margin-bottom: 1rem;
+  margin-left: 0.1rem;
+}
+.dialog > .select-wrapper > .select > .cat {
+  margin-top: 0.4rem;
 }
 .dialog > .select-wrapper > .select > .dog,
 .dialog > .select-wrapper > .select > .cat,
@@ -1952,6 +1965,95 @@ body:has(.reservationMessage.visible) {
   background-color: #C8C8C8;
 }
 
+.businessReservationMessage {
+  align-items: stertch;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: flex-start;
+}
+.businessReservationMessage > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.businessReservationMessage > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.businessReservationMessage {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  min-width: 25rem;
+}
+.businessReservationMessage.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.businessReservationMessage > .title {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+.businessReservationMessage > .text {
+  font-size: 1rem;
+}
+.businessReservationMessage > .button-wrapper {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  justify-content: center;
+}
+.businessReservationMessage > .button-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.businessReservationMessage > .button-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.businessReservationMessage > .button-wrapper > .yes {
+  background-color: #e53935;
+  border-radius: 0.35rem;
+  color: #ffffff;
+  cursor: pointer;
+  height: 2.25rem;
+  margin-top: 1rem;
+  width: 9rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.businessReservationMessage > .button-wrapper > .yes:hover {
+  background-color: rgb(226.0921052632, 34.8552631579, 30.4078947368);
+}
+.businessReservationMessage > .button-wrapper > .yes:active {
+  background-color: rgb(204.6578947368, 30.3947368421, 26.3421052632);
+}
+.businessReservationMessage > .button-wrapper > .no {
+  background-color: rgb(226.25, 226.25, 226.25);
+  color: #898989;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  height: 2.25rem;
+  margin-top: 1rem;
+  width: 9rem;
+  transition-duration: 250ms;
+  transition-property: background-color;
+}
+.businessReservationMessage > .button-wrapper > .no:hover {
+  background-color: #D6D6D6;
+}
+.businessReservationMessage > .button-wrapper > .no:active {
+  background-color: #C8C8C8;
+}
+
 body:has(> .dialog.visible) .cover {
   opacity: 1;
   pointer-events: auto;
@@ -1959,6 +2061,7 @@ body:has(> .dialog.visible) .cover {
 
 body:has(> .petDeleteMessage.visible) > .cover,
 body:has(> .reservationMessage.visible) > .cover,
+body:has(> .businessReservationMessage.visible) > .cover,
 body:has(> .checkMessage.visible) > .cover,
 body:has(> .defaultAddressMessage.visible) > .cover,
 body:has(> .defaultDeliveryMessage.visible) > .cover,
@@ -6291,6 +6394,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   object-fit: cover;
   border-radius: 999rem;
   background-color: #ffffff;
+  padding: 0.2rem;
 }
 .content > .businessInformation .profile-wrapper .profile-text {
   flex: 1;
@@ -6651,6 +6755,21 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   flex-shrink: 1;
 }
 .content > .storeInformation > .store-grid > .store-card > .store-body > .info-row > .title {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.content > .storeInformation > .store-grid > .store-card > .store-body > .info-row > .title > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.content > .storeInformation > .store-grid > .store-card > .store-body > .info-row > .title > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.content > .storeInformation > .store-grid > .store-card > .store-body > .info-row > .title {
   width: 4.5rem;
   font-size: 0.9rem;
   color: #9ca3af;
@@ -6753,7 +6872,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 }
 .content > .petInformation,
 .content > .reservationInformation,
-.content > .storeInformation {
+.content > .storeInformation,
+.content > .reservationManagement {
   align-items: stretch;
   display: flex;
   flex-direction: column;
@@ -6762,19 +6882,22 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 }
 .content > .petInformation > *,
 .content > .reservationInformation > *,
-.content > .storeInformation > * {
+.content > .storeInformation > *,
+.content > .reservationManagement > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
 .content > .petInformation > .-flex-stretch,
 .content > .reservationInformation > .-flex-stretch,
-.content > .storeInformation > .-flex-stretch {
+.content > .storeInformation > .-flex-stretch,
+.content > .reservationManagement > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
 .content > .petInformation,
 .content > .reservationInformation,
-.content > .storeInformation {
+.content > .storeInformation,
+.content > .reservationManagement {
   display: none;
   pointer-events: none;
   width: 100%;
@@ -6784,7 +6907,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 }
 .content > .petInformation.visible,
 .content > .reservationInformation.visible,
-.content > .storeInformation.visible {
+.content > .storeInformation.visible,
+.content > .reservationManagement.visible {
   display: block;
   pointer-events: auto;
   flex: 1;
@@ -6792,23 +6916,27 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 }
 .content > .petInformation::-webkit-scrollbar,
 .content > .reservationInformation::-webkit-scrollbar,
-.content > .storeInformation::-webkit-scrollbar {
+.content > .storeInformation::-webkit-scrollbar,
+.content > .reservationManagement::-webkit-scrollbar {
   width: 6px;
 }
 .content > .petInformation::-webkit-scrollbar-thumb,
 .content > .reservationInformation::-webkit-scrollbar-thumb,
-.content > .storeInformation::-webkit-scrollbar-thumb {
+.content > .storeInformation::-webkit-scrollbar-thumb,
+.content > .reservationManagement::-webkit-scrollbar-thumb {
   background-color: #d6d6d6;
   border-radius: 999px;
 }
 .content > .petInformation::-webkit-scrollbar-track,
 .content > .reservationInformation::-webkit-scrollbar-track,
-.content > .storeInformation::-webkit-scrollbar-track {
+.content > .storeInformation::-webkit-scrollbar-track,
+.content > .reservationManagement::-webkit-scrollbar-track {
   background-color: transparent;
 }
 .content > .petInformation > .title,
 .content > .reservationInformation > .title,
-.content > .storeInformation > .title {
+.content > .storeInformation > .title,
+.content > .reservationManagement > .title {
   font-size: 1.25rem;
   font-weight: 600;
 }
@@ -6817,7 +6945,9 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .reservationInformation > .pet-grid,
 .content > .reservationInformation > .reservation-grid,
 .content > .storeInformation > .pet-grid,
-.content > .storeInformation > .reservation-grid {
+.content > .storeInformation > .reservation-grid,
+.content > .reservationManagement > .pet-grid,
+.content > .reservationManagement > .reservation-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
@@ -6834,7 +6964,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   align-items: stretch;
   display: flex;
   flex-direction: column;
@@ -6852,7 +6986,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > *,
 .content > .storeInformation > .pet-grid > .reservation-card > *,
 .content > .storeInformation > .reservation-grid > .pet-card > *,
-.content > .storeInformation > .reservation-grid > .reservation-card > * {
+.content > .storeInformation > .reservation-grid > .reservation-card > *,
+.content > .reservationManagement > .pet-grid > .pet-card > *,
+.content > .reservationManagement > .pet-grid > .reservation-card > *,
+.content > .reservationManagement > .reservation-grid > .pet-card > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -6867,7 +7005,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -6882,11 +7024,35 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   padding: 1.8rem;
   border-radius: 1rem;
   background-color: #ffffff;
   border: 0.0625rem solid #dddddd;
+}
+.content > .petInformation > .pet-grid > .pet-card:has(.status.canceled),
+.content > .petInformation > .pet-grid > .reservation-card:has(.status.canceled),
+.content > .petInformation > .reservation-grid > .pet-card:has(.status.canceled),
+.content > .petInformation > .reservation-grid > .reservation-card:has(.status.canceled),
+.content > .reservationInformation > .pet-grid > .pet-card:has(.status.canceled),
+.content > .reservationInformation > .pet-grid > .reservation-card:has(.status.canceled),
+.content > .reservationInformation > .reservation-grid > .pet-card:has(.status.canceled),
+.content > .reservationInformation > .reservation-grid > .reservation-card:has(.status.canceled),
+.content > .storeInformation > .pet-grid > .pet-card:has(.status.canceled),
+.content > .storeInformation > .pet-grid > .reservation-card:has(.status.canceled),
+.content > .storeInformation > .reservation-grid > .pet-card:has(.status.canceled),
+.content > .storeInformation > .reservation-grid > .reservation-card:has(.status.canceled),
+.content > .reservationManagement > .pet-grid > .pet-card:has(.status.canceled),
+.content > .reservationManagement > .pet-grid > .reservation-card:has(.status.canceled),
+.content > .reservationManagement > .reservation-grid > .pet-card:has(.status.canceled),
+.content > .reservationManagement > .reservation-grid > .reservation-card:has(.status.canceled) {
+  background-color: #f5f5f5;
+  border-color: #e0e0e0;
+  opacity: 0.6;
 }
 .content > .petInformation > .pet-grid > .pet-card.add-card,
 .content > .petInformation > .pet-grid > .reservation-card.add-card,
@@ -6899,7 +7065,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -6917,7 +7087,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > *,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > *,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > *,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > * {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > *,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > *,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > *,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -6932,7 +7106,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -6947,7 +7125,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card {
   background-color: #ffffff;
   border: 0.125rem dashed #3c9a4d;
   cursor: pointer;
@@ -6966,7 +7148,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > .plus,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > .plus,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > .plus,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > .plus,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > .plus,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > .plus,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > .plus {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -6984,7 +7170,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > .plus > *,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > .plus > *,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > .plus > *,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus > * {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus > *,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > .plus > *,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > .plus > *,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > .plus > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > .plus > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -6999,7 +7189,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > .plus > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > .plus > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > .plus > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > .plus > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > .plus > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > .plus > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > .plus > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7014,7 +7208,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > .plus,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > .plus,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > .plus,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .plus,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > .plus,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > .plus,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > .plus,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > .plus {
   font-size: 2.5rem;
   font-weight: 300;
   color: #3c9a4d;
@@ -7031,7 +7229,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card > .text,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card > .text,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card > .text,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .text {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card > .text,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card > .text,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card > .text,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card > .text,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card > .text {
   font-size: 0.95rem;
   font-weight: 600;
   color: #3c9a4d;
@@ -7047,7 +7249,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card.add-card:hover,
 .content > .storeInformation > .pet-grid > .reservation-card.add-card:hover,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card:hover,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card:hover {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card:hover,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card:hover,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card:hover,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card:hover,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card:hover {
   background-color: #3c9a4d;
 }
 .content > .petInformation > .pet-grid > .pet-card.add-card:hover > .plus,
@@ -7073,7 +7279,15 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .reservation-grid > .pet-card.add-card:hover > .plus,
 .content > .storeInformation > .reservation-grid > .pet-card.add-card:hover > .text,
 .content > .storeInformation > .reservation-grid > .reservation-card.add-card:hover > .plus,
-.content > .storeInformation > .reservation-grid > .reservation-card.add-card:hover > .text {
+.content > .storeInformation > .reservation-grid > .reservation-card.add-card:hover > .text,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card:hover > .plus,
+.content > .reservationManagement > .pet-grid > .pet-card.add-card:hover > .text,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card:hover > .plus,
+.content > .reservationManagement > .pet-grid > .reservation-card.add-card:hover > .text,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card:hover > .plus,
+.content > .reservationManagement > .reservation-grid > .pet-card.add-card:hover > .text,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card:hover > .plus,
+.content > .reservationManagement > .reservation-grid > .reservation-card.add-card:hover > .text {
   color: #ffffff;
 }
 .content > .petInformation > .pet-grid > .pet-card,
@@ -7087,7 +7301,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   /* 왼쪽 이미지 영역 */
 }
 .content > .petInformation > .pet-grid > .pet-card > .pet-wrapper,
@@ -7101,7 +7319,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper {
   align-items: stretch;
   display: flex;
   flex-direction: row;
@@ -7119,7 +7341,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > *,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > *,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > *,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > * {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > *,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > *,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > *,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -7134,7 +7360,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7149,7 +7379,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image {
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
@@ -7168,10 +7402,16 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image > img,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image > img,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image > img,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image > img {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image > img,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image > img,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image > img,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-left > .pet-image > img,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-left > .pet-image > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  padding: 0.2rem;
+  border-radius: 999rem;
 }
 .content > .petInformation > .pet-grid > .pet-card > .pet-wrapper,
 .content > .petInformation > .pet-grid > .reservation-card > .pet-wrapper,
@@ -7184,7 +7424,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper {
   /* 오른쪽 정보 영역 */
 }
 .content > .petInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right,
@@ -7198,7 +7442,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
@@ -7216,7 +7464,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > *,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > *,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > *,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > * {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > *,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > *,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > *,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -7231,7 +7483,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7246,7 +7502,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7261,7 +7521,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -7279,7 +7543,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > *,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > *,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > *,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > * {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > *,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > *,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > *,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -7294,7 +7562,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7309,7 +7581,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name {
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -7324,7 +7600,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .gender,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .gender,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .gender,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .gender {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .gender,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .gender,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .gender,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-name > .gender,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-name > .gender {
   width: 1rem;
   height: 1rem;
 }
@@ -7339,7 +7619,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-info,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-info,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-info,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-info {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-info,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-wrapper > .pet-right > .pet-info,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-info,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-wrapper > .pet-right > .pet-info,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-wrapper > .pet-right > .pet-info {
   font-size: 0.9rem;
   color: #444444;
 }
@@ -7354,7 +7638,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom {
   align-items: stretch;
   display: flex;
   flex-direction: row;
@@ -7372,7 +7660,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > *,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > *,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > *,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > * {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > *,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > *,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > *,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -7387,7 +7679,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7402,7 +7698,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember {
   align-items: center;
   display: flex;
   flex-direction: row;
@@ -7420,7 +7720,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember > *,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember > *,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember > *,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember > * {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember > *,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember > *,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember > *,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -7435,7 +7739,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7450,7 +7758,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember {
   width: 7rem;
   height: 1.75rem;
   cursor: pointer;
@@ -7470,7 +7782,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember > .text::before,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember > .text::before,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember > .text::before,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember > .text::before {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember > .text::before,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember > .text::before,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember > .text::before,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember > .text::before,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember > .text::before {
   content: "대표지정";
 }
 .content > .petInformation > .pet-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked),
@@ -7484,7 +7800,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked),
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked),
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked),
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked),
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked),
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked),
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked),
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) {
   background-color: #38A34C;
   color: #FFFFFF;
   pointer-events: none;
@@ -7500,7 +7820,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .remember:has(> .checkbox:checked) > .text::before {
   content: "대표동물";
 }
 .content > .petInformation > .pet-grid > .pet-card > .pet-bottom > .modify,
@@ -7526,7 +7850,15 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .modify,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .delete,
 .content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .modify,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .delete {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .delete,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .modify,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .delete,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .modify,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .delete,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .modify,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .delete,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .modify,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .delete {
   font-size: 0.95rem;
   cursor: pointer;
 }
@@ -7541,7 +7873,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .modify,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .modify,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .modify,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .modify {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .modify,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .modify,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .modify,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .modify,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .modify {
   color: #3b82f6;
 }
 .content > .petInformation > .pet-grid > .pet-card > .pet-bottom > .delete,
@@ -7555,7 +7891,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card > .pet-bottom > .delete,
 .content > .storeInformation > .pet-grid > .reservation-card > .pet-bottom > .delete,
 .content > .storeInformation > .reservation-grid > .pet-card > .pet-bottom > .delete,
-.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .delete {
+.content > .storeInformation > .reservation-grid > .reservation-card > .pet-bottom > .delete,
+.content > .reservationManagement > .pet-grid > .pet-card > .pet-bottom > .delete,
+.content > .reservationManagement > .pet-grid > .reservation-card > .pet-bottom > .delete,
+.content > .reservationManagement > .reservation-grid > .pet-card > .pet-bottom > .delete,
+.content > .reservationManagement > .reservation-grid > .reservation-card > .pet-bottom > .delete {
   color: #ef4444;
 }
 .content > .petInformation > .pet-grid > .pet-card,
@@ -7569,7 +7909,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   /* ---------- 헤더 ---------- */
 }
 .content > .petInformation > .pet-grid > .pet-card .card-header,
@@ -7583,7 +7927,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -7600,7 +7948,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header .place-info,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header .place-info,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header .place-info,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header .place-info {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header .place-info,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header .place-info,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header .place-info,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header .place-info,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header .place-info {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -7616,7 +7968,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header .place-info .place,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header .place-info .place,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header .place-info .place,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header .place-info .place {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header .place-info .place,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header .place-info .place,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header .place-info .place,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header .place-info .place,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header .place-info .place {
   font-size: 1.05rem;
   font-weight: 600;
 }
@@ -7631,7 +7987,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header .place-info .category,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header .place-info .category,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header .place-info .category,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header .place-info .category {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header .place-info .category,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header .place-info .category,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header .place-info .category,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header .place-info .category,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header .place-info .category {
   font-size: 0.8rem;
   color: #777;
 }
@@ -7646,7 +8006,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header .status,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header .status,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header .status,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header .status {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header .status,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header .status,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header .status,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header .status,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header .status {
   font-size: 0.8rem;
   font-weight: 600;
   position: absolute;
@@ -7664,7 +8028,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header .status.complete::before,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header .status.complete::before,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header .status.complete::before,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header .status.complete::before {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header .status.complete::before,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header .status.complete::before,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header .status.complete::before,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header .status.complete::before,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header .status.complete::before {
   border-radius: 1rem;
   padding: 0.3rem 0.7rem;
   content: "예약완료";
@@ -7682,7 +8050,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-header .status.canceled::before,
 .content > .storeInformation > .pet-grid > .reservation-card .card-header .status.canceled::before,
 .content > .storeInformation > .reservation-grid > .pet-card .card-header .status.canceled::before,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-header .status.canceled::before {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-header .status.canceled::before,
+.content > .reservationManagement > .pet-grid > .pet-card .card-header .status.canceled::before,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-header .status.canceled::before,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-header .status.canceled::before,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-header .status.canceled::before {
   border-radius: 1rem;
   padding: 0.3rem 0.7rem;
   content: "예약취소";
@@ -7700,7 +8072,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   /* ---------- 날짜 & 시간 ---------- */
 }
 .content > .petInformation > .pet-grid > .pet-card .date-time,
@@ -7714,7 +8090,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .date-time,
 .content > .storeInformation > .pet-grid > .reservation-card .date-time,
 .content > .storeInformation > .reservation-grid > .pet-card .date-time,
-.content > .storeInformation > .reservation-grid > .reservation-card .date-time {
+.content > .storeInformation > .reservation-grid > .reservation-card .date-time,
+.content > .reservationManagement > .pet-grid > .pet-card .date-time,
+.content > .reservationManagement > .pet-grid > .reservation-card .date-time,
+.content > .reservationManagement > .reservation-grid > .pet-card .date-time,
+.content > .reservationManagement > .reservation-grid > .reservation-card .date-time {
   display: flex;
   align-items: center;
   gap: 1.2rem;
@@ -7730,7 +8110,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .date-box,
 .content > .storeInformation > .pet-grid > .reservation-card .date-box,
 .content > .storeInformation > .reservation-grid > .pet-card .date-box,
-.content > .storeInformation > .reservation-grid > .reservation-card .date-box {
+.content > .storeInformation > .reservation-grid > .reservation-card .date-box,
+.content > .reservationManagement > .pet-grid > .pet-card .date-box,
+.content > .reservationManagement > .pet-grid > .reservation-card .date-box,
+.content > .reservationManagement > .reservation-grid > .pet-card .date-box,
+.content > .reservationManagement > .reservation-grid > .reservation-card .date-box {
   width: 4.5rem;
   height: 4.5rem;
   background: #4CAF50;
@@ -7752,7 +8136,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .date-box .day,
 .content > .storeInformation > .pet-grid > .reservation-card .date-box .day,
 .content > .storeInformation > .reservation-grid > .pet-card .date-box .day,
-.content > .storeInformation > .reservation-grid > .reservation-card .date-box .day {
+.content > .storeInformation > .reservation-grid > .reservation-card .date-box .day,
+.content > .reservationManagement > .pet-grid > .pet-card .date-box .day,
+.content > .reservationManagement > .pet-grid > .reservation-card .date-box .day,
+.content > .reservationManagement > .reservation-grid > .pet-card .date-box .day,
+.content > .reservationManagement > .reservation-grid > .reservation-card .date-box .day {
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 1;
@@ -7768,7 +8156,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .date-box .month,
 .content > .storeInformation > .pet-grid > .reservation-card .date-box .month,
 .content > .storeInformation > .reservation-grid > .pet-card .date-box .month,
-.content > .storeInformation > .reservation-grid > .reservation-card .date-box .month {
+.content > .storeInformation > .reservation-grid > .reservation-card .date-box .month,
+.content > .reservationManagement > .pet-grid > .pet-card .date-box .month,
+.content > .reservationManagement > .pet-grid > .reservation-card .date-box .month,
+.content > .reservationManagement > .reservation-grid > .pet-card .date-box .month,
+.content > .reservationManagement > .reservation-grid > .reservation-card .date-box .month {
   font-size: 0.7rem;
   letter-spacing: 0.05rem;
 }
@@ -7783,7 +8175,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .time-info,
 .content > .storeInformation > .pet-grid > .reservation-card .time-info,
 .content > .storeInformation > .reservation-grid > .pet-card .time-info,
-.content > .storeInformation > .reservation-grid > .reservation-card .time-info {
+.content > .storeInformation > .reservation-grid > .reservation-card .time-info,
+.content > .reservationManagement > .pet-grid > .pet-card .time-info,
+.content > .reservationManagement > .pet-grid > .reservation-card .time-info,
+.content > .reservationManagement > .reservation-grid > .pet-card .time-info,
+.content > .reservationManagement > .reservation-grid > .reservation-card .time-info {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -7799,7 +8195,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .time-info .date,
 .content > .storeInformation > .pet-grid > .reservation-card .time-info .date,
 .content > .storeInformation > .reservation-grid > .pet-card .time-info .date,
-.content > .storeInformation > .reservation-grid > .reservation-card .time-info .date {
+.content > .storeInformation > .reservation-grid > .reservation-card .time-info .date,
+.content > .reservationManagement > .pet-grid > .pet-card .time-info .date,
+.content > .reservationManagement > .pet-grid > .reservation-card .time-info .date,
+.content > .reservationManagement > .reservation-grid > .pet-card .time-info .date,
+.content > .reservationManagement > .reservation-grid > .reservation-card .time-info .date {
   font-size: 0.9rem;
   color: #666;
 }
@@ -7814,7 +8214,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .time-info .time,
 .content > .storeInformation > .pet-grid > .reservation-card .time-info .time,
 .content > .storeInformation > .reservation-grid > .pet-card .time-info .time,
-.content > .storeInformation > .reservation-grid > .reservation-card .time-info .time {
+.content > .storeInformation > .reservation-grid > .reservation-card .time-info .time,
+.content > .reservationManagement > .pet-grid > .pet-card .time-info .time,
+.content > .reservationManagement > .pet-grid > .reservation-card .time-info .time,
+.content > .reservationManagement > .reservation-grid > .pet-card .time-info .time,
+.content > .reservationManagement > .reservation-grid > .reservation-card .time-info .time {
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -7829,7 +8233,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   /* ---------- 가게 정보 ---------- */
 }
 .content > .petInformation > .pet-grid > .pet-card .store-info,
@@ -7843,7 +8251,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .store-info,
 .content > .storeInformation > .pet-grid > .reservation-card .store-info,
 .content > .storeInformation > .reservation-grid > .pet-card .store-info,
-.content > .storeInformation > .reservation-grid > .reservation-card .store-info {
+.content > .storeInformation > .reservation-grid > .reservation-card .store-info,
+.content > .reservationManagement > .pet-grid > .pet-card .store-info,
+.content > .reservationManagement > .pet-grid > .reservation-card .store-info,
+.content > .reservationManagement > .reservation-grid > .pet-card .store-info,
+.content > .reservationManagement > .reservation-grid > .reservation-card .store-info {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -7862,7 +8274,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .store-info .row,
 .content > .storeInformation > .pet-grid > .reservation-card .store-info .row,
 .content > .storeInformation > .reservation-grid > .pet-card .store-info .row,
-.content > .storeInformation > .reservation-grid > .reservation-card .store-info .row {
+.content > .storeInformation > .reservation-grid > .reservation-card .store-info .row,
+.content > .reservationManagement > .pet-grid > .pet-card .store-info .row,
+.content > .reservationManagement > .pet-grid > .reservation-card .store-info .row,
+.content > .reservationManagement > .reservation-grid > .pet-card .store-info .row,
+.content > .reservationManagement > .reservation-grid > .reservation-card .store-info .row {
   display: flex;
   gap: 0.8rem;
   font-size: 0.85rem;
@@ -7878,7 +8294,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .store-info .row .label,
 .content > .storeInformation > .pet-grid > .reservation-card .store-info .row .label,
 .content > .storeInformation > .reservation-grid > .pet-card .store-info .row .label,
-.content > .storeInformation > .reservation-grid > .reservation-card .store-info .row .label {
+.content > .storeInformation > .reservation-grid > .reservation-card .store-info .row .label,
+.content > .reservationManagement > .pet-grid > .pet-card .store-info .row .label,
+.content > .reservationManagement > .pet-grid > .reservation-card .store-info .row .label,
+.content > .reservationManagement > .reservation-grid > .pet-card .store-info .row .label,
+.content > .reservationManagement > .reservation-grid > .reservation-card .store-info .row .label {
   width: 4rem;
   color: #999;
   flex-shrink: 0;
@@ -7894,7 +8314,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .store-info .row .value,
 .content > .storeInformation > .pet-grid > .reservation-card .store-info .row .value,
 .content > .storeInformation > .reservation-grid > .pet-card .store-info .row .value,
-.content > .storeInformation > .reservation-grid > .reservation-card .store-info .row .value {
+.content > .storeInformation > .reservation-grid > .reservation-card .store-info .row .value,
+.content > .reservationManagement > .pet-grid > .pet-card .store-info .row .value,
+.content > .reservationManagement > .pet-grid > .reservation-card .store-info .row .value,
+.content > .reservationManagement > .reservation-grid > .pet-card .store-info .row .value,
+.content > .reservationManagement > .reservation-grid > .reservation-card .store-info .row .value {
   color: #444;
   word-break: break-word;
 }
@@ -7909,7 +8333,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   /* ---------- 요청사항 ---------- */
 }
 .content > .petInformation > .pet-grid > .pet-card .request,
@@ -7923,7 +8351,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .request,
 .content > .storeInformation > .pet-grid > .reservation-card .request,
 .content > .storeInformation > .reservation-grid > .pet-card .request,
-.content > .storeInformation > .reservation-grid > .reservation-card .request {
+.content > .storeInformation > .reservation-grid > .reservation-card .request,
+.content > .reservationManagement > .pet-grid > .pet-card .request,
+.content > .reservationManagement > .pet-grid > .reservation-card .request,
+.content > .reservationManagement > .reservation-grid > .pet-card .request,
+.content > .reservationManagement > .reservation-grid > .reservation-card .request {
   align-items: stretch;
   display: flex;
   flex-direction: column;
@@ -7941,7 +8373,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .request > *,
 .content > .storeInformation > .pet-grid > .reservation-card .request > *,
 .content > .storeInformation > .reservation-grid > .pet-card .request > *,
-.content > .storeInformation > .reservation-grid > .reservation-card .request > * {
+.content > .storeInformation > .reservation-grid > .reservation-card .request > *,
+.content > .reservationManagement > .pet-grid > .pet-card .request > *,
+.content > .reservationManagement > .pet-grid > .reservation-card .request > *,
+.content > .reservationManagement > .reservation-grid > .pet-card .request > *,
+.content > .reservationManagement > .reservation-grid > .reservation-card .request > * {
   flex-grow: 0;
   flex-shrink: 0;
 }
@@ -7956,7 +8392,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .request > .-flex-stretch,
 .content > .storeInformation > .pet-grid > .reservation-card .request > .-flex-stretch,
 .content > .storeInformation > .reservation-grid > .pet-card .request > .-flex-stretch,
-.content > .storeInformation > .reservation-grid > .reservation-card .request > .-flex-stretch {
+.content > .storeInformation > .reservation-grid > .reservation-card .request > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .pet-card .request > .-flex-stretch,
+.content > .reservationManagement > .pet-grid > .reservation-card .request > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .pet-card .request > .-flex-stretch,
+.content > .reservationManagement > .reservation-grid > .reservation-card .request > .-flex-stretch {
   flex-grow: 1;
   flex-shrink: 1;
 }
@@ -7971,7 +8411,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .request,
 .content > .storeInformation > .pet-grid > .reservation-card .request,
 .content > .storeInformation > .reservation-grid > .pet-card .request,
-.content > .storeInformation > .reservation-grid > .reservation-card .request {
+.content > .storeInformation > .reservation-grid > .reservation-card .request,
+.content > .reservationManagement > .pet-grid > .pet-card .request,
+.content > .reservationManagement > .pet-grid > .reservation-card .request,
+.content > .reservationManagement > .reservation-grid > .pet-card .request,
+.content > .reservationManagement > .reservation-grid > .reservation-card .request {
   margin-top: 1rem;
 }
 .content > .petInformation > .pet-grid > .pet-card .request .label,
@@ -7985,7 +8429,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .request .label,
 .content > .storeInformation > .pet-grid > .reservation-card .request .label,
 .content > .storeInformation > .reservation-grid > .pet-card .request .label,
-.content > .storeInformation > .reservation-grid > .reservation-card .request .label {
+.content > .storeInformation > .reservation-grid > .reservation-card .request .label,
+.content > .reservationManagement > .pet-grid > .pet-card .request .label,
+.content > .reservationManagement > .pet-grid > .reservation-card .request .label,
+.content > .reservationManagement > .reservation-grid > .pet-card .request .label,
+.content > .reservationManagement > .reservation-grid > .reservation-card .request .label {
   font-size: 0.9rem;
   color: #999;
 }
@@ -8000,7 +8448,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .request .text,
 .content > .storeInformation > .pet-grid > .reservation-card .request .text,
 .content > .storeInformation > .reservation-grid > .pet-card .request .text,
-.content > .storeInformation > .reservation-grid > .reservation-card .request .text {
+.content > .storeInformation > .reservation-grid > .reservation-card .request .text,
+.content > .reservationManagement > .pet-grid > .pet-card .request .text,
+.content > .reservationManagement > .pet-grid > .reservation-card .request .text,
+.content > .reservationManagement > .reservation-grid > .pet-card .request .text,
+.content > .reservationManagement > .reservation-grid > .reservation-card .request .text {
   margin: 0;
   font-size: 1rem;
   overflow: hidden;
@@ -8016,7 +8468,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card,
 .content > .storeInformation > .pet-grid > .reservation-card,
 .content > .storeInformation > .reservation-grid > .pet-card,
-.content > .storeInformation > .reservation-grid > .reservation-card {
+.content > .storeInformation > .reservation-grid > .reservation-card,
+.content > .reservationManagement > .pet-grid > .pet-card,
+.content > .reservationManagement > .pet-grid > .reservation-card,
+.content > .reservationManagement > .reservation-grid > .pet-card,
+.content > .reservationManagement > .reservation-grid > .reservation-card {
   /* ---------- 하단 버튼 ---------- */
 }
 .content > .petInformation > .pet-grid > .pet-card .card-footer,
@@ -8030,7 +8486,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-footer,
 .content > .storeInformation > .pet-grid > .reservation-card .card-footer,
 .content > .storeInformation > .reservation-grid > .pet-card .card-footer,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-footer {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-footer,
+.content > .reservationManagement > .pet-grid > .pet-card .card-footer,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-footer,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-footer,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-footer {
   display: flex;
   justify-content: flex-end;
   margin-top: auto;
@@ -8046,7 +8506,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-footer .cancel-btn,
 .content > .storeInformation > .pet-grid > .reservation-card .card-footer .cancel-btn,
 .content > .storeInformation > .reservation-grid > .pet-card .card-footer .cancel-btn,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-footer .cancel-btn {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-footer .cancel-btn,
+.content > .reservationManagement > .pet-grid > .pet-card .card-footer .cancel-btn,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-footer .cancel-btn,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-footer .cancel-btn,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-footer .cancel-btn {
   padding: 0.4rem 1rem;
   font-size: 0.85rem;
   border-radius: 0.5rem;
@@ -8068,9 +8532,71 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .storeInformation > .pet-grid > .pet-card .card-footer .cancel-btn:hover,
 .content > .storeInformation > .pet-grid > .reservation-card .card-footer .cancel-btn:hover,
 .content > .storeInformation > .reservation-grid > .pet-card .card-footer .cancel-btn:hover,
-.content > .storeInformation > .reservation-grid > .reservation-card .card-footer .cancel-btn:hover {
+.content > .storeInformation > .reservation-grid > .reservation-card .card-footer .cancel-btn:hover,
+.content > .reservationManagement > .pet-grid > .pet-card .card-footer .cancel-btn:hover,
+.content > .reservationManagement > .pet-grid > .reservation-card .card-footer .cancel-btn:hover,
+.content > .reservationManagement > .reservation-grid > .pet-card .card-footer .cancel-btn:hover,
+.content > .reservationManagement > .reservation-grid > .reservation-card .card-footer .cancel-btn:hover {
   background: #ef5350;
   color: #ffffff;
+}
+.content > .petInformation > .reservation.empty,
+.content > .reservationInformation > .reservation.empty,
+.content > .storeInformation > .reservation.empty,
+.content > .reservationManagement > .reservation.empty {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.content > .petInformation > .reservation.empty > *,
+.content > .reservationInformation > .reservation.empty > *,
+.content > .storeInformation > .reservation.empty > *,
+.content > .reservationManagement > .reservation.empty > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.content > .petInformation > .reservation.empty > .-flex-stretch,
+.content > .reservationInformation > .reservation.empty > .-flex-stretch,
+.content > .storeInformation > .reservation.empty > .-flex-stretch,
+.content > .reservationManagement > .reservation.empty > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.content > .petInformation > .reservation.empty,
+.content > .reservationInformation > .reservation.empty,
+.content > .storeInformation > .reservation.empty,
+.content > .reservationManagement > .reservation.empty {
+  height: 100%;
+}
+.content > .petInformation > .reservation.empty > .empty-title,
+.content > .reservationInformation > .reservation.empty > .empty-title,
+.content > .storeInformation > .reservation.empty > .empty-title,
+.content > .reservationManagement > .reservation.empty > .empty-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #000000;
+}
+.content > .petInformation > .reservation.empty > .empty-text,
+.content > .reservationInformation > .reservation.empty > .empty-text,
+.content > .storeInformation > .reservation.empty > .empty-text,
+.content > .reservationManagement > .reservation.empty > .empty-text {
+  font-size: 0.95rem;
+  color: #565656;
+}
+.content > .petInformation > .reservation.empty > .main-link,
+.content > .reservationInformation > .reservation.empty > .main-link,
+.content > .storeInformation > .reservation.empty > .main-link,
+.content > .reservationManagement > .reservation.empty > .main-link {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  background-color: #89CC96;
+  color: #ffffff;
+  border-radius: 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
 }
 
 .myPage-wrapper {
@@ -8380,6 +8906,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 }
 .myPage-wrapper .content > .paymentDetails .order-item-wrapper .order-item .product-info {
   padding-top: 0.5rem;
+  flex: 1;
 }
 .myPage-wrapper .content > .paymentDetails .order-item-wrapper .order-item .product-info > a .product-name {
   font-size: 1rem;
@@ -8972,11 +9499,19 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     grid-template-columns: repeat(1, 1fr) !important;
   }
 }
+@media (max-width: 830px) {
+  .review-btn,
+  .my-review-btn {
+    top: 64% !important;
+    right: 0.75rem !important;
+  }
+}
 .paymentDetails {
   display: none;
 }
 
-body:has(> .point-modal.visible) > .cover {
+body:has(> .point-modal.visible) > .cover,
+body:has(> .coupon-modal.visible) > .cover {
   opacity: 1;
   pointer-events: auto;
 }

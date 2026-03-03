@@ -33,6 +33,8 @@ const steps = { // 회원가입 단계
     4: [$registerForthPersonalStep, $registerForthBusinessStep]
 };
 
+let registerStep = null;
+
 // 회원가입 단계 이동 함수
 function goToStep(stepNumber) {
     if (stepNumber > 1 && !selectedMemberType) {
@@ -40,6 +42,7 @@ function goToStep(stepNumber) {
         stepNumber = 1;
     }
 
+    registerStep = stepNumber;
     // 모든 단계 숨기기
     Object.values(steps).flat().forEach(step => {
         step.classList.add('hidden');
@@ -176,7 +179,8 @@ $registerSecondSteps.forEach(step => {
     const nextButton = step.querySelector(':scope > .button-wrapper > .next');
     const requiredAgreements = step.querySelectorAll(':scope > .agreement-wrapper > .agreement > .agreement-check.required > .checkbox');
 
-    nextButton.addEventListener('click', () => {
+    nextButton.addEventListener('click', (e) => {
+        e.preventDefault()
         const isAllChecked = [...requiredAgreements].every(checkbox => checkbox.checked);
         if (!isAllChecked) {
             showMessage("필수 약관에 모두 동의하여야 합니다.");
@@ -255,7 +259,12 @@ const ThirdPersonalLoginIdInput = $registerThirdPersonalStep.querySelector('.id.
 const ThirdPersonalNameInput = $registerThirdPersonalStep.querySelector('.name.input');
 const ThirdPersonalPasswordInput = $registerThirdPersonalStep.querySelector(':scope > .passwordLabel > .password');
 const ThirdPersonalPasswordCheckInput = $registerThirdPersonalStep.querySelector(':scope > .passwordCheckLabel > .passwordCheck');
-ThirdPersonalNextButton.addEventListener('click', () => {
+const ThirdPersonalPhoneFirstInput = $registerThirdPersonalStep.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .number-wrapper > .firstNumber');
+const ThirdPersonalPhoneMiddleInput = $registerThirdPersonalStep.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .number-wrapper > .first.input');
+const ThirdPersonalPhoneLastInput = $registerThirdPersonalStep.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .number-wrapper > .second.input');
+
+ThirdPersonalNextButton.addEventListener('click', (e) => {
+    e.preventDefault()
     const findEmptyInput = [...ThirdPersonalInputs].find(input => {
         return !input.disabled && !input.classList.contains('detailAddress') && input.value.trim() === '';
     });
@@ -289,6 +298,19 @@ ThirdPersonalNextButton.addEventListener('click', () => {
         showMessage('비밀번호가 서로 일치하지 않습니다. 다시 확인해주세요.');
         return;
     }
+    if (ThirdPersonalPhoneFirstInput.value === '' || ThirdPersonalPhoneMiddleInput.value === '' || ThirdPersonalPhoneLastInput.value === '') {
+        showMessage('전화번호를 입력해주세요.');
+        return;
+    }
+    if (ThirdPersonalPhoneFirstInput.value !== '010') {
+        showMessage('전화번호는 010으로 시작하는 번호만 입력 가능합니다.');
+        return;
+    }
+    if (!/^\d{4}$/.test(ThirdPersonalPhoneMiddleInput.value) ||
+        !/^\d{4}$/.test(ThirdPersonalPhoneLastInput.value)) {
+        showMessage('전화번호를 다시 확인해주세요.');
+        return;
+    }
     const checkVisible = $registerThirdPersonalStep.querySelector('.text.visible');
     if (checkVisible) {
         showMessage('정보를 다시 확인해 주세요.');
@@ -300,9 +322,19 @@ ThirdPersonalNextButton.addEventListener('click', () => {
 /*============회원가입 세번째 단계(사업자)================*/
 const ThirdBusinessNextButton = $registerThirdBusinessStep.querySelector(':scope > .button-wrapper > .next');
 const ThirdBusinessInputs = $registerThirdBusinessStep.querySelectorAll('.input');
+const ThirdBusinessEmailInput = $registerThirdBusinessStep.querySelector('.email.input');
+const ThirdBusinessIdInput = $registerThirdBusinessStep.querySelector('.id.input');
+const ThirdBusinessCompanyName = $registerThirdBusinessStep.querySelector('.companyName');
+const ThirdBusinessRepresentativeName = $registerThirdBusinessStep.querySelector('.representativeName');
+const ThirdBusinessPhoneFirstInput = $registerThirdBusinessStep.querySelector('.firstNumber');
+const ThirdBusinessPhoneMiddleInput = $registerThirdBusinessStep.querySelector('.first.input');
+const ThirdBusinessPhoneLastInput = $registerThirdBusinessStep.querySelector('.second.input');
+const ThirdBusinessBusinessNumber = $registerThirdBusinessStep.querySelector('.businessNumber');
+
 const ThirdBusinessPasswordInput = $registerThirdBusinessStep.querySelector(':scope > .passwordLabel > .password');
 const ThirdBusinessPasswordCheckInput = $registerThirdBusinessStep.querySelector(':scope > .passwordCheckLabel > .passwordCheck');
-ThirdBusinessNextButton.addEventListener('click', () => {
+ThirdBusinessNextButton.addEventListener('click', (e) => {
+    e.preventDefault();
     const findEmptyInput = [...ThirdBusinessInputs].find(input => {
         return !input.disabled && !input.classList.contains('detailAddress') && input.value.trim() === '';
     });
@@ -316,8 +348,51 @@ ThirdBusinessNextButton.addEventListener('click', () => {
         });
         return;
     }
+    if (ThirdBusinessCompanyName.value.length > 150) {
+        showMessage('기업명은 1~150자까지 가능합니다.');
+        return;
+    }
+    if (ThirdBusinessRepresentativeName.value.length < 2 ||
+        ThirdBusinessRepresentativeName.value.length > 20) {
+        showMessage('대표자명은 2~20자까지 가능합니다.')
+        return;
+    }
+    if (ThirdBusinessPhoneFirstInput.value === '' || ThirdBusinessPhoneMiddleInput.value === '' || ThirdBusinessPhoneLastInput.value === '') {
+        showMessage('전화번호를 입력해주세요.');
+        return;
+    }
+    if (ThirdBusinessPhoneFirstInput.value !== '010') {
+        showMessage('전화번호는 010으로 시작하는 번호만 입력 가능합니다.');
+        return;
+    }
+    if (!/^\d{4}$/.test(ThirdBusinessPhoneMiddleInput.value) ||
+        !/^\d{4}$/.test(ThirdBusinessPhoneLastInput.value)) {
+        showMessage('전화번호를 다시 확인해주세요.');
+        return;
+    }
+    if (ThirdBusinessBusinessNumber.value === '') {
+        showMessage('사업자등록번호를 입력해주세요.');
+        return;
+    }
+    if (!/^\d{10}$/.test(ThirdBusinessBusinessNumber.value)) {
+        showMessage('사업자등록번호는 숫자 10자리로 이루어져야 합니다.');
+        return;
+    }
+    if (ThirdBusinessEmailInput.value === '') {
+        showMessage('이메일을 입력해주세요.');
+        return;
+    }
     if (!isEmailVerified) {
         showMessage('이메일 인증을 완료해주세요.');
+        return;
+    }
+    if (ThirdBusinessIdInput.value === '') {
+        showMessage('아이디를 입력해주세요.');
+        return;
+    }
+    if (ThirdBusinessIdInput.value.length < 4 ||
+        ThirdBusinessIdInput.value.length > 20) {
+        showMessage('아이디는 4~20자까지 입력할 수 있습니다.');
         return;
     }
     if (ThirdBusinessPasswordInput.value !== ThirdBusinessPasswordCheckInput.value) {
@@ -379,10 +454,6 @@ $registerForthSteps.forEach(step => {
     previousButton.addEventListener('click', () => {
         goToStep(3);
     });
-});
-
-$registerForthSteps.forEach(step => {
-    const completeButton = step.querySelector(':scope > .button-wrapper > .complete');
 });
 
 /*
@@ -1526,7 +1597,10 @@ function loadPetDialog(petData) {
 
 $registerContainer.addEventListener('submit', async (e) => {
     e.preventDefault();
-
+    if (registerStep !== 4) {
+        e.preventDefault();
+        return;
+    }
     let phone;
     let store;
     let storePhone;
@@ -1536,19 +1610,65 @@ $registerContainer.addEventListener('submit', async (e) => {
     if (selectedMemberType === 'BUSINESS') {
         phone = $registerThirdBusinessStep.querySelector('.firstNumber').value + $registerThirdBusinessStep.querySelector('.contactNumber.first').value + $registerThirdBusinessStep.querySelector('.contactNumber.second').value;
 
-        storePhone = $registerForthBusinessStep.querySelector('.telFirst').value +
-            $registerForthBusinessStep.querySelector('.telMiddle').value + $registerForthBusinessStep.querySelector('.telLast').value;
+        const telFirst = $registerForthBusinessStep.querySelector('.telFirst').value.trim();
+        const telMiddle = $registerForthBusinessStep.querySelector('.telMiddle').value.trim();
+        const telLast = $registerForthBusinessStep.querySelector('.telLast').value.trim();
+        storePhone = telFirst + telMiddle + telLast;
 
         const storeName = $registerForthBusinessStep.querySelector('.storeName.input').value.trim();
-        if (storeName !== '') {
+        const postalNumber = $registerForthBusinessStep.querySelector('.postalNumber').value.trim();
+        const primaryAddress = $registerForthBusinessStep.querySelector('.primaryAddress').value.trim();
+        const detailAddress = $registerForthBusinessStep.querySelector('.detailAddress');
+
+        const hasAnyInput = storeName || telFirst || telMiddle || telLast || postalNumber || primaryAddress;
+
+        if (hasAnyInput) {
+            if (storeName === '') {
+                showMessage('가게명을 입력해주세요.');
+                return;
+            }
+            if (storeName.length > 100) {
+                showMessage('가게명은 최대 100자까지 가능합니다.');
+                return;
+            }
+            if (telFirst === '' || telMiddle === '' || telLast === '') {
+                showMessage('가게 전화번호를 입력해주세요.');
+                return;
+            }
+            const validPhone = /^(02-\d{3,4}-\d{4}|0[3-9]\d-\d{3,4}-\d{4}|010-\d{4}-\d{4})$/;
+            if (!validPhone.test(`${telFirst}-${telMiddle}-${telLast}`)) {
+                showMessage('올바른 가게 전화번호를 입력해주세요.');
+                return;
+            }
+            if (postalNumber === '' || primaryAddress === '') {
+                showMessage('가게 주소를 입력해주세요.');
+                return;
+            }
+            if (postalNumber.length !== 5) {
+                showMessage('우편번호를 다시 확인해주세요.');
+                return;
+            }
+            if (primaryAddress.length > 150) {
+                showMessage('기본주소는 최대 150자까지 가능합니다.');
+                return;
+            }
+            if (detailAddress.value.length > 100) {
+                showMessage('상세주소는 최대 100자까지 가능합니다.');
+                return;
+            }
+            if ($registerForthBusinessStep.querySelector('.category').value === '') {
+                showMessage('카테고리를 선택해주세요.');
+                return;
+            }
+
             store = {
                 storeName: storeName,
                 storePhone: storePhone,
                 category: $registerForthBusinessStep.querySelector('.category').value,
-                postalCode: $registerForthBusinessStep.querySelector('.postalNumber').value,
-                addressPrimary: $registerForthBusinessStep.querySelector('.primaryAddress').value,
+                postalCode: postalNumber,
+                addressPrimary: primaryAddress,
                 addressSecondary: $registerForthBusinessStep.querySelector('.detailAddress').value || null
-            }
+            };
         } else {
             store = null;
         }
@@ -1637,6 +1757,7 @@ $registerContainer.addEventListener('submit', async (e) => {
 
         const data = await res.json();
         if (data.result === 'SUCCESS') {
+            e.target.querySelector('button[type="submit"]').setAttribute('disabled', '');
             showMessage('가입을 환영합니다.', () => {
                 location.href = '/user/login';
             });
@@ -1744,6 +1865,7 @@ $registerThirdSteps.forEach(step => {
                     showMessage('인증번호가 일치하지 않습니다.');
                     break;
                 case 'FAILURE_EXPIRED':
+                    stopTimer();
                     showMessage('인증번호가 만료되었습니다. 다시 시도해 주세요.');
                     emailInput.removeAttribute('disabled');
                     sendButton.removeAttribute('disabled');
@@ -1752,6 +1874,7 @@ $registerThirdSteps.forEach(step => {
                     timerText.classList.remove('visible');
                     break;
                 case 'SUCCESS':
+                    stopTimer();
                     emailCodeInput.setAttribute('disabled', '');
                     verifyButton.setAttribute('disabled', '');
                     timerText.classList.remove('visible');
@@ -1955,19 +2078,34 @@ function formatMMSS(totalSecond) {
     const seconds = String(totalSecond % 60).padStart(2, '0');
     return `${minutes}:${seconds}`;
 }
+
+let currentTimerId = null; // 전역으로 관리
+
 function startTimer(seconds, timerText) {
+    // 기존 타이머 있으면 먼저 제거
+    if (currentTimerId) {
+        clearInterval(currentTimerId);
+        currentTimerId = null;
+    }
+
     let remainSeconds = seconds;
     timerText.textContent = formatMMSS(remainSeconds);
 
-    const timerId = setInterval(() => {
+    currentTimerId = setInterval(() => {
         remainSeconds--;
-
         if (remainSeconds <= 0) {
-            clearInterval(timerId);
+            clearInterval(currentTimerId);
+            currentTimerId = null;
             timerText.textContent = "00:00";
             return;
         }
-
         timerText.textContent = formatMMSS(remainSeconds);
     }, 1000);
+}
+
+function stopTimer() {
+    if (currentTimerId) {
+        clearInterval(currentTimerId);
+        currentTimerId = null;
+    }
 }

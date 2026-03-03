@@ -563,4 +563,30 @@
         </choose>
         ORDER BY o.created_at DESC
     </select>
+    <select id="selectReservationsByBusinessUserId" resultType="dev.dhkim.petlog.dto.user.BusinessReservationDto">
+        SELECT
+            r.reservation_id,
+            s.store_id,
+            s.store_name,
+            s.category,
+            r.canceled,
+            r.reservation_date,
+            r.reservation_time,
+            pu.name           AS reserverName,
+            u.phone           AS reserverPhone,
+            r.request_text
+        FROM `petlog`.`reservation` AS r
+                 JOIN `petlog`.`store` s ON r.store_id = s.store_id
+                 JOIN `petlog`.`users` u ON r.user_id = u.id
+                 JOIN `petlog`.`personal_user` pu ON r.user_id = pu.user_id
+        WHERE s.user_id = #{userId}
+        ORDER BY r.reservation_date DESC, r.reservation_time DESC
+    </select>
+    <select id="selectReservationByIdAndBusinessUserId" resultType="dev.dhkim.petlog.entities.main.ReservationEntity">
+        SELECT r.*
+        FROM `petlog`.`reservation` r
+                 JOIN `petlog`.`store` s ON r.store_id = s.store_id
+        WHERE r.reservation_id = #{reservationId}
+          AND s.user_id = #{userId}
+    </select>
 </mapper>
