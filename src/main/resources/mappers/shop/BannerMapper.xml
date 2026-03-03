@@ -5,7 +5,7 @@
         SELECT
             id,
             image_url AS imageUrl,
-            target_id AS targetId,
+            category_id AS categoryId,
             target_type AS targetType,
             brand_name AS brandName,
             sort_order AS sortOrder,

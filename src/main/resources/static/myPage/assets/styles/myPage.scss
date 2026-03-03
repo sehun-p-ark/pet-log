@@ -473,7 +473,7 @@ body:has(.reservationMessage.visible) {
 
     > .menu {
       position: relative;
-      padding: 1rem 1.5rem;
+      padding: 1rem;
       cursor: pointer;
       font-size: 0.95rem;
       overflow: hidden;
@@ -5540,6 +5540,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 
             .product-info {
               @include flex(column, flex-start, center, 0.5rem);
+              flex: 1;
 
               > a .product-brand {
                 font-size: 0.9rem;

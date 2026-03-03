@@ -157,7 +157,7 @@
         #main > .brand-recommend > .item-wrapper > .item > .image-wrapper {
           overflow: hidden;
           border: 0.0625rem solid #ededed;
-          border-radius: 0.2rem; }
+          border-radius: 0.4rem; }
           #main > .brand-recommend > .item-wrapper > .item > .image-wrapper > .image {
             width: 100%;
             aspect-ratio: 1;
@@ -165,9 +165,12 @@
             background-color: #89CC96;
             transition: transform 0.3s ease;
             transform-origin: center center;
-            display: block; }
+            display: block;
+            cursor: pointer; }
             #main > .brand-recommend > .item-wrapper > .item > .image-wrapper > .image:hover {
               transform: scale(1.05); }
+        #main > .brand-recommend > .item-wrapper > .item > .content {
+          font-size: 1rem; }
   #main > .new-product,
   #main > .best-product {
     align-items: flex-start;

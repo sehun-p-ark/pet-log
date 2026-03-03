@@ -1,17 +1,16 @@
 package dev.dhkim.petlog.controllers.shop;
 
 import dev.dhkim.petlog.dto.user.SessionUser;
-import dev.dhkim.petlog.entities.shop.ProductEntity;
-import dev.dhkim.petlog.entities.shop.ProductDetailImageEntity;
-import dev.dhkim.petlog.entities.shop.OptionEntity;
-import dev.dhkim.petlog.entities.shop.SubCategoryEntity;
+import dev.dhkim.petlog.entities.shop.*;
 import dev.dhkim.petlog.mappers.shop.ProductMapper;
 import dev.dhkim.petlog.mappers.shop.SubCategoryMapper;
+import dev.dhkim.petlog.services.shop.AdvertisementService;
 import dev.dhkim.petlog.services.shop.ProductService;
 import dev.dhkim.petlog.services.shop.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,15 +27,26 @@ public class ShopController {
     private final ProductMapper productMapper;
     private final ReviewService reviewService;
     private final SubCategoryMapper subCategoryMapper;
+    private final AdvertisementService advertisementService;
 
     @RequestMapping(value = "main", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getShop(ModelAndView modelAndView){
+        modelAndView.addObject("advertisements", advertisementService.getAdvertisements());
         modelAndView.setViewName("shop/main");
         return modelAndView;
     }
 
     @RequestMapping(value = "brand", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
-    public ModelAndView getBrand(ModelAndView modelAndView){
+    public ModelAndView getBrand(
+            @RequestParam(required = false) String brand,
+            @RequestParam(defaultValue = "0") int page,
+            ModelAndView modelAndView) {
+
+        int size = 20;
+        List<ProductEntity> products = productService.getProducts(null, null, null, null, page, size, brand);
+
+        modelAndView.addObject("products", products);
+        modelAndView.addObject("brand", brand);
         modelAndView.setViewName("shop/brand");
         return modelAndView;
     }

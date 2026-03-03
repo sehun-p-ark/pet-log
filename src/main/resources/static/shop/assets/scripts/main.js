@@ -35,7 +35,7 @@ if ($banner) {
             const $item = document.createElement('li');
             $item.className = 'item';
             $item.setAttribute('data-target-type', banner.targetType);
-            $item.setAttribute('data-target-id', banner.targetId || '');
+            $item.setAttribute('data-target-id', banner.categoryId || '');
             $item.setAttribute('data-brand-name', banner.brandName || '');
             $item.innerHTML = '<img class="image" src="' + banner.imageUrl + '" alt="배너">';
 
@@ -50,10 +50,10 @@ if ($banner) {
 
     // 배너 클릭 처리
     function handleBannerClick(banner) {
-        if (banner.targetType === 'category' && banner.targetId) {
-            location.href = '/shop/list?categoryId=' + banner.targetId;
+        if (banner.targetType === 'category' && banner.categoryId) {
+            location.href = '/shop/list?categoryId=' + banner.categoryId;
         } else if (banner.targetType === 'brand' && banner.brandName) {
-            location.href = '/shop/list?brand=' + encodeURIComponent(banner.brandName);
+            location.href = '/shop/brand?brand=' + encodeURIComponent(banner.brandName);
         } else if (banner.targetType === 'sale') {
             location.href = '/shop/list?sort=sale';
         } else if (banner.targetType === 'new') {
@@ -201,6 +201,16 @@ function renderProducts(selector, products) {
 document.addEventListener('DOMContentLoaded', () => {
     loadNewProducts();
     loadBestProducts();
+
+    // 브랜드 추천
+    document.querySelectorAll('.brand-recommend .item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            const brandName = this.dataset.brandName;
+            if (brandName) {
+                location.href = '/shop/brand?brand=' + encodeURIComponent(brandName);
+            }
+        });
+    });
 
     // NEW 카테고리 필터링
     const newCategoryRadios = document.querySelectorAll('input[name="new-category"]');

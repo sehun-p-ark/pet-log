@@ -30,41 +30,13 @@
     <div class="brand-recommend">
         <div class="caption">유저들이 픽한 브랜드!</div>
         <div class="item-wrapper">
-            <div class="item">
+            <div class="item" th:each="ad : ${advertisements}"
+                 th:data-brand-name="${ad.brandName}"
+                 style="cursor: pointer;">
                 <div class="image-wrapper">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
+                    <img class="image" th:src="${ad.imageUrl}" th:alt="${ad.brandName}">
                 </div>
-                <div class="content">강아지 유모차 맛집 올리!</div>
-            </div>
-            <div class="item">
-                <div class="image-wrapper">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
-                </div>
-                <div class="content">강아지 유모차 맛집 올리!</div>
-            </div>
-            <div class="item">
-                <div class="image-wrapper">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
-                </div>
-                <div class="content">강아지 유모차 맛집 올리!</div>
-            </div>
-            <div class="item">
-                <div class="image-wrapper">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
-                </div>
-                <div class="content">강아지 유모차 맛집 올리!</div>
-            </div>
-            <div class="item">
-                <div class="image-wrapper">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
-                </div>
-                <div class="content">강아지 유모차 맛집 올리!</div>
-            </div>
-            <div class="item">
-                <div class="image-wrapper">
-                    <img class="image" src="/shop/assets/images/product.png" alt="">
-                </div>
-                <div class="content">강아지 유모차 맛집 올리!</div>
+                <div class="content" th:text="${ad.content}"></div>
             </div>
         </div>
     </div>

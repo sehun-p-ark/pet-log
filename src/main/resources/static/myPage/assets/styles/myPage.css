@@ -477,7 +477,7 @@ body:has(.reservationMessage.visible) {
     margin: 0; }
     .sidebar > .menu-list > .menu {
       position: relative;
-      padding: 1rem 1.5rem;
+      padding: 1rem;
       cursor: pointer;
       font-size: 0.95rem;
       overflow: hidden;
@@ -6867,7 +6867,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
               display: flex;
               flex-direction: column;
               gap: 0.5rem;
-              justify-content: center; }
+              justify-content: center;
+              flex: 1; }
               .myPage-wrapper .content .productHeartDetails .heart-list .heart-item-wrapper .heart-item .product-info > * {
                 flex-grow: 0;
                 flex-shrink: 0; }

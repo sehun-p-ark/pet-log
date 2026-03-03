@@ -18,8 +18,8 @@ public class BannerTargetEntity {
     @Column(name = "target_type", nullable = false, length = 20)
     private String targetType;
 
-    @Column(name = "target_id", nullable = false)
-    private Integer targetId;
+    @Column(name = "category_id")
+    private Integer categoryId;
 
     @Column(name = "display_type", nullable = false, length = 10)
     private String displayType;
