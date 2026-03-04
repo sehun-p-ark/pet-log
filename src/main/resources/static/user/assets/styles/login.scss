@@ -608,8 +608,54 @@ body:has(> .register-message.visible) > .cover {
       display: none;
     }
 
+
     > .login-form {
       width: 100vw;
     }
+
+    // ✅ 이 부분 추가
+    > .searchId.visible ~ .login-form,
+    > .searchPassword.visible ~ .login-form {
+      display: none; // opacity: 0 대신 display:none으로 완전히 제거
+    }
+
+    > .searchId,
+    > .searchPassword {
+      width: 100%; // 찾기 폼이 전체 너비 차지
+    }
   }
 }
+
+// 아이디찾기
+@media (max-width: 500px) {
+  .main {
+    > .searchId {
+      > .emailLabel {
+        > .email-wrapper {
+          flex-direction: column;
+        }
+      }
+      > .emailVerifyLabel {
+        > .emailVerify-wrapper {
+          flex-direction: column;
+        }
+      }
+    }
+
+    > .searchPassword {
+      > .verifyForSearchPassword-wrapper {
+        > .emailLabel {
+          > .email-wrapper {
+            flex-direction: column;
+          }
+        }
+        > .emailVerifyLabel {
+          > .emailVerify-wrapper {
+            flex-direction: column;
+          }
+        }
+      }
+    }
+  }
+}
+

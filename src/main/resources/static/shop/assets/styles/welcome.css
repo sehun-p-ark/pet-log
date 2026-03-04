@@ -1,5 +1,6 @@
 body {
-  background: #EAF3F8; }
+  background: #EAF3F8;
+}
 
 .coupon-event {
   align-items: center;
@@ -7,120 +8,151 @@ body {
   flex-direction: column;
   gap: 0;
   justify-content: center;
+}
+.coupon-event > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.coupon-event > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.coupon-event {
   text-align: center;
   max-height: 100%;
   margin-top: 7rem;
   padding: 5rem 0;
   background-image: url("../images/coupon-back.png");
-  padding-top: 5rem; }
-  .coupon-event > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .coupon-event > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
+  padding-top: 5rem;
+}
 
 .event-section {
   align-items: center;
   display: flex;
   flex-direction: column;
   gap: 0;
-  justify-content: center; }
-  .event-section > * {
-    flex-grow: 0;
-    flex-shrink: 0; }
-  .event-section > .-flex-stretch {
-    flex-grow: 1;
-    flex-shrink: 1; }
-  .event-section .event-wrapper {
-    background-color: #EAF3F8;
-    padding: 1rem 3rem 0 3rem; }
-  .event-section .event-title {
-    font-size: 1rem;
-    letter-spacing: 0.0625rem;
-    margin-bottom: 1.75rem;
-    color: #5A6B8C; }
-  .event-section .event-main {
-    font-size: 4rem;
-    font-weight: 700;
-    color: #1F2A6D;
-    margin: 0;
-    line-height: 4.5rem; }
-    .event-section .event-main > span {
-      font-size: 4.375rem;
-      color: #3C82D9; }
-  .event-section .event-desc {
-    margin: 1.75rem 0 4.25rem;
-    color: #5A6B8C; }
-  .event-section .coupon-wrapper {
-    position: relative; }
-    .event-section .coupon-wrapper > .image {
-      position: absolute;
-      top: -4.5rem;
-      left: 0;
-      width: 8rem;
-      height: 8rem;
-      z-index: 2; }
-      .event-section .coupon-wrapper > .image.dog {
-        left: 23rem;
-        top: -4.25rem;
-        transform: rotate(15deg); }
-  .event-section .coupon-card {
-    position: relative;
-    width: 30rem;
-    padding: 1rem;
-    margin: 0 auto 2.5rem;
-    display: flex;
-    border-radius: 1rem;
-    background: linear-gradient(135deg, #6C8EF5, #9C7BEF);
-    color: white;
-    z-index: 3; }
-    .event-section .coupon-card > .coupon-left {
-      align-items: center;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      justify-content: center;
-      width: 7rem;
-      writing-mode: vertical-rl;
-      border-right: 0.125rem dashed rgba(255, 255, 255, 0.6);
-      font-size: 0.95rem; }
-      .event-section .coupon-card > .coupon-left > * {
-        flex-grow: 0;
-        flex-shrink: 0; }
-      .event-section .coupon-card > .coupon-left > .-flex-stretch {
-        flex-grow: 1;
-        flex-shrink: 1; }
-    .event-section .coupon-card > .coupon-right {
-      flex: 1;
-      padding: 1.75rem; }
-      .event-section .coupon-card > .coupon-right > .discount {
-        font-size: 3rem;
-        font-weight: 700; }
-  .event-section .download-btn {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    gap: 0.375rem;
-    justify-content: flex-start;
-    background: #222;
-    color: white;
-    padding: 1rem 2.5rem;
-    border: none;
-    font-size: 1rem;
-    cursor: pointer;
-    border-radius: 0.5rem; }
-    .event-section .download-btn > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .event-section .download-btn > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .event-section .download-btn > .icon {
-      width: 1.25rem;
-      height: 1.25rem;
-      fill: #ffffff; }
-  .event-section .download-btn:hover {
-    background: #000; }
+  justify-content: center;
+}
+.event-section > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.event-section > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.event-section .event-wrapper {
+  background-color: #EAF3F8;
+  padding: 1rem 3rem 0 3rem;
+}
+.event-section .event-title {
+  font-size: 1rem;
+  letter-spacing: 0.0625rem;
+  margin-bottom: 1.75rem;
+  color: #5A6B8C;
+}
+.event-section .event-main {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #1F2A6D;
+  margin: 0;
+  line-height: 4.5rem;
+}
+.event-section .event-main > span {
+  font-size: 4.375rem;
+  color: #3C82D9;
+}
+.event-section .event-desc {
+  margin: 1.75rem 0 4.25rem;
+  color: #5A6B8C;
+}
+.event-section .coupon-wrapper {
+  position: relative;
+}
+.event-section .coupon-wrapper > .image {
+  position: absolute;
+  top: -4.5rem;
+  left: 0;
+  width: 8rem;
+  height: 8rem;
+  z-index: 2;
+}
+.event-section .coupon-wrapper > .image.dog {
+  left: 23rem;
+  top: -4.25rem;
+  transform: rotate(15deg);
+}
+.event-section .coupon-card {
+  position: relative;
+  width: 30rem;
+  padding: 1rem;
+  margin: 0 auto 2.5rem;
+  display: flex;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #6C8EF5, #9C7BEF);
+  color: white;
+  z-index: 3;
+}
+.event-section .coupon-card > .coupon-left {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.event-section .coupon-card > .coupon-left > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.event-section .coupon-card > .coupon-left > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.event-section .coupon-card > .coupon-left {
+  width: 7rem;
+  writing-mode: vertical-rl;
+  border-right: 0.125rem dashed rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+}
+.event-section .coupon-card > .coupon-right {
+  flex: 1;
+  padding: 1.75rem;
+}
+.event-section .coupon-card > .coupon-right > .discount {
+  font-size: 3rem;
+  font-weight: 700;
+}
+.event-section .download-btn {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.375rem;
+  justify-content: flex-start;
+}
+.event-section .download-btn > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.event-section .download-btn > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.event-section .download-btn {
+  background: #222;
+  color: white;
+  padding: 1rem 2.5rem;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+}
+.event-section .download-btn > .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: #ffffff;
+}
+.event-section .download-btn:hover {
+  background: #000;
+}
 
 /*# sourceMappingURL=welcome.css.map */

@@ -2251,4 +2251,41 @@ body:has(> .dialog.visible) {
 }
 
 
+@media (max-width: 420px) {
+  .register-container {
+    > .register-second {
+      padding: 2rem 1.25rem !important;
+
+      > .agreement-wrapper {
+        > .agreement-check {
+          align-items: flex-start !important;
+          flex: 1;
+          min-width: 0;
+
+          .circle {
+            flex-shrink: 0;
+            margin-top: 0.15rem;
+          }
+
+          .text {
+            word-break: keep-all;
+            flex: 1;
+            line-height: 1.5;
+            text-align: left;
+          }
+        }
+      }
+      .button-wrapper {
+        flex-wrap: wrap;
+        margin-top: 2rem;
+
+        .cancel { order: 3; flex: 1; }
+        .previous { flex: 1; }
+        .next { flex: 1; }
+      }
+    }
+  }
+}
+
+
 

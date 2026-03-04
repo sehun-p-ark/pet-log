@@ -2379,5 +2379,30 @@ body:has(> .dialog.visible) .cover {
 @media screen and (max-height: 38.125rem) {
   .register-container {
     overflow: hidden auto; } }
+@media (max-width: 420px) {
+  .register-container > .register-second {
+    padding: 2rem 1.25rem !important; }
+    .register-container > .register-second > .agreement-wrapper > .agreement-check {
+      align-items: flex-start !important;
+      flex: 1;
+      min-width: 0; }
+      .register-container > .register-second > .agreement-wrapper > .agreement-check .circle {
+        flex-shrink: 0;
+        margin-top: 0.15rem; }
+      .register-container > .register-second > .agreement-wrapper > .agreement-check .text {
+        word-break: keep-all;
+        flex: 1;
+        line-height: 1.5;
+        text-align: left; }
+    .register-container > .register-second .button-wrapper {
+      flex-wrap: wrap;
+      margin-top: 2rem; }
+      .register-container > .register-second .button-wrapper .cancel {
+        order: 3;
+        flex: 1; }
+      .register-container > .register-second .button-wrapper .previous {
+        flex: 1; }
+      .register-container > .register-second .button-wrapper .next {
+        flex: 1; } }
 
 /*# sourceMappingURL=register.css.map */

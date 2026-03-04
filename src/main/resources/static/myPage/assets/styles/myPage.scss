@@ -6100,11 +6100,13 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 
 @media (max-width: 830px) {
   .review-btn,
-  .my-review-btn {
+  .my-review-btn,
+  .heart-cancel-btn {
     top: 64% !important;
     right: 0.75rem !important;
   }
 }
+
 
 
 

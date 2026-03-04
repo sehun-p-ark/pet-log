@@ -7737,7 +7737,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     grid-template-columns: repeat(1, 1fr) !important; } }
 @media (max-width: 830px) {
   .review-btn,
-  .my-review-btn {
+  .my-review-btn,
+  .heart-cancel-btn {
     top: 64% !important;
     right: 0.75rem !important; } }
 .paymentDetails {

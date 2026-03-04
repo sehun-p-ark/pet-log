@@ -355,6 +355,10 @@
         }
         // --- 스크롤바 커스텀 끝 ---
 
+        > .friend-tab-content {
+          height: 100%;
+        }
+
 
         .store-panel {
           position: relative; // 여기 추가!
@@ -453,6 +457,7 @@
 
         .friend-list {
             display: block;
+          height: 45rem;
 
           .empty {
             padding: 3rem 1rem;
@@ -460,6 +465,7 @@
             font-size: 1.1rem;
             color: #999;
             font-weight: 500;
+            height: 100%;
 
             display: flex;
             justify-content: center;
