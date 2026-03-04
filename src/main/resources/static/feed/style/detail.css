@@ -2,14 +2,9 @@
   display: grid;
   grid-template-columns: 1fr 35%;
   gap: 2rem;
-<<<<<<< HEAD
   padding: 5rem 5rem 2rem 5rem;
-  align-items: start; }
-=======
-  padding: 5rem 5rem 0 5rem;
   align-items: start;
 }
->>>>>>> origin/ms
 
 .grid-area {
   width: 100%;
@@ -602,14 +597,11 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .detail-area {
-<<<<<<< HEAD
-    min-width: 340px; } }
-.footer {
-  padding-top: 2rem; }
-=======
     min-width: 340px;
   }
 }
->>>>>>> origin/ms
+.footer {
+  padding-top: 2rem;
+}
 
 /*# sourceMappingURL=detail.css.map */

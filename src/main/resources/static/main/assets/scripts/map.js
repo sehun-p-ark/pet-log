@@ -158,6 +158,42 @@ function normalizePlaceData(place, category) {
     return null;
 }
 
+// ================== 현위치 버튼 ==================
+// initMap() 함수 안에 추가하거나, DOMContentLoaded 이벤트에 추가
+
+function bindCurrentLocationBtn() {
+    const btn = document.querySelector('.map .button');  // "현위치" 버튼
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+        if (!navigator.geolocation) {
+            alert('위치 서비스를 지원하지 않는 브라우저입니다.');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            pos => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                const latlng = new kakao.maps.LatLng(lat, lng);
+
+                // 지도 중심을 현재 위치로 이동
+                map.setCenter(latlng);
+                map.setLevel(4); // 줌 레벨도 초기값으로 리셋 (선택)
+
+                // currentLat/Lng 전역 변수도 동기화
+                currentLat = lat;
+                currentLng = lng;
+            },
+            err => {
+                console.error('현위치 가져오기 실패:', err);
+                alert('현재 위치를 가져올 수 없습니다. 위치 권한을 확인해주세요.');
+            },
+            { enableHighAccuracy: true, timeout: 5000 }
+        );
+    });
+}
+
 /* ================= 지도 초기화 ================= */
 
 function initMap() {
@@ -172,6 +208,7 @@ function initMap() {
 
     getCurrentLocation();
     bindSearch();
+    bindCurrentLocationBtn(); // ← 여기에 추가
 
     kakao.maps.event.addListener(map, 'center_changed', () => {
         const center = map.getCenter();
