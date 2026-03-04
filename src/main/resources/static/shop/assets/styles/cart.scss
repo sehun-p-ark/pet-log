@@ -376,7 +376,9 @@
 }
 
 .product-footer-wrapper {
+  margin-top: auto;
+
   @media (max-width: 800px) {
-    padding-bottom: 6rem;
+    display: none;
   }
 }

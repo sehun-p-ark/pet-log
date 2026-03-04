@@ -686,6 +686,7 @@ body:has(.message.visible) .modal-cover {
     height: auto;
     min-height: auto;
     width: 100%;
+    margin-bottom: 6rem;
 
 
     > .summary-wrapper{
@@ -1135,7 +1136,9 @@ body:has(.message.visible) .modal-cover {
 }
 
 .product-footer-wrapper {
+  margin-top: auto;
+
   @media (max-width: 930px) {
-    padding-bottom: 6rem;
+    display: none;
   }
 }
