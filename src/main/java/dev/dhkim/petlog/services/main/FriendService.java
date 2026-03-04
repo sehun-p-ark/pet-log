@@ -46,7 +46,7 @@ public class FriendService {
             }
         }
 
-        double radiusKm = 1.5;
+        double radiusKm = 2;
         System.out.println("3. 검색 반경: " + radiusKm + "km");
 
         // 4. API 좌표 갱신 (오래 걸릴 수 있으므로 로그 출력)

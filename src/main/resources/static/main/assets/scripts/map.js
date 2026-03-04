@@ -170,7 +170,36 @@ function initMap() {
 
     getCurrentLocation();
     bindSearch();
-    /*bindStoreListClick();*/
+// ✅ 주석 제거하고 아래로 교체
+    window.addEventListener('resize', () => {
+        if (map) map.relayout();
+    });
+
+    window.addEventListener('pageshow', () => {
+        if (map) {
+            setTimeout(() => {
+                map.relayout();
+                if (currentLat && currentLng) {
+                    map.setCenter(new kakao.maps.LatLng(currentLat, currentLng));
+                }
+            }, 300);  // 100 → 300ms로 여유있게
+        }
+    });
+
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && map) {
+            setTimeout(() => map.relayout(), 300);
+        }
+    });
+
+
+    // 화면 리사이즈 시에도 relayout
+    window.addEventListener('resize', () => {
+        if (map) {
+            map.relayout();
+        }
+    });
+
 
     kakao.maps.event.addListener(map, 'click', e => {
 
@@ -219,6 +248,11 @@ function createMarker({position, name, address, category}) {
         </div>`,
         removable: true
     });
+
+    if (category && categoryMarkers[category]) {
+        categoryMarkers[category].push(marker);
+    }
+
 
     kakao.maps.event.addListener(marker, 'click', () => {
         if (currentInfo) currentInfo.close();
@@ -475,7 +509,17 @@ function renderPlaces(list, category) {
                 data.lat,
                 data.lng
             );
-            if (distanceKm > 3) return;
+            const radiusMap = {
+                hospital: 3,
+                salon: 3,
+                cafe: 3,
+                school: 3,
+                park: 3,
+                camp: 15,
+            };
+            const maxDistance = radiusMap[category] ?? 3;
+
+            if (distanceKm > maxDistance) return;
         }
 
         const position = new kakao.maps.LatLng(data.lat, data.lng);
@@ -562,11 +606,15 @@ function selectPlace(place) {
 
 
 /* ================= 유틸 ================= */
-
 function clearCategory(category) {
-    categoryMarkers[category].forEach(m => m.setMap(null));
+    categoryMarkers[category].forEach(m => {
+        m.setMap(null); // ✅ 추가
+    });
     categoryMarkers[category] = [];
-    if (currentInfo) currentInfo.close();
+    if (currentInfo) {
+        currentInfo.close();
+        currentInfo = null; // ✅ 추가
+    }
 }
 
 function clearAllCategories() {
@@ -691,7 +739,7 @@ function renderPlaceDetail(place) {
   ${place.tel ? `<p><strong>전화</strong><br>${place.tel}</p>` : ''}
   ${place.status ? `<p><strong>영업 상태</strong><br>${place.status}</p>` : ''}
   <p><strong>영업 시간</strong><br>평일 09:00 - 18:00</p> 
-  ${place.category !== 'search' ? `<button class="reserve-btn" data-store-id="${place.storeId}">예약하기</button>` : ''}
+  ${place.category !== 'search' && place.category !== 'park' && place.category !== 'camp' ? `<button class="reserve-btn" data-store-id="${place.storeId}">예약하기</button>` : ''}
 `;
 }
 //주변 친구 불러오기 함수
@@ -1017,34 +1065,4 @@ function renderFriendList(friends) {
         listEl.appendChild(li);
     });
 }
-/*
-window.addEventListener('DOMContentLoaded', () => {
 
-    const overlay = document.getElementById('messageOverlay');
-    if (!overlay) {
-        console.error("messageOverlay 없음");
-        return;
-    }
-
-    const messageText = overlay.querySelector('.text');
-    const messageButton = overlay.querySelector('.button');
-
-    let onMessageClose = null;
-
-    // 전역 등록
-    window.showMessage = function (text, callback = null) {
-        messageText.innerText = text;
-        overlay.classList.add('visible');
-        onMessageClose = callback;
-    };
-
-    messageButton.addEventListener('click', () => {
-        overlay.classList.remove('visible');
-
-        if (onMessageClose) {
-            onMessageClose();
-            onMessageClose = null;
-        }
-    });
-
-});*/
