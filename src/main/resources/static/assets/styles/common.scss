@@ -84,10 +84,8 @@ ol, ul {
       font-weight: 600;
       cursor: pointer;
       color: $global-white-text-color;
-      transition: color,transform 0.2s ease, opacity 0.2s ease;
 
       &:hover {
-        transform: translateY(-0.2rem);
         opacity: 0.9;
         color: #ffdd00;
       }
@@ -104,11 +102,9 @@ ol, ul {
         font-weight: 600;
         padding: 0.5rem;
         position: relative;
-        transition: color 0.2s ease, transform 0.2s ease;
         text-decoration: none;
 
         &:hover {
-          transform: translateY(-0.2rem);
           opacity: 0.9;
           color: #ffdd00;
         }
@@ -163,6 +159,7 @@ ol, ul {
       left: 0.3125rem;
       width: 2rem;
       height: 2rem;
+      cursor: pointer;
     }
 
     > .nav-caption {
@@ -172,14 +169,6 @@ ol, ul {
       font-size: 1.75rem;
       font-weight: 400;
       text-align: center;
-
-      &::before,
-      &::after {
-        content: "";
-        flex: 1;
-        height: 1px;
-        background-color: white;
-      }
     }
 
     > .nav-category,
