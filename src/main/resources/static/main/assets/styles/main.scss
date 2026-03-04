@@ -180,6 +180,26 @@
         border-radius: 1.2rem 1.2rem 0 0;
         padding: 0;
 
+        // --- 스크롤바 커스텀 시작 ---
+        &::-webkit-scrollbar {
+          width: 0.5rem; // 8px: 적당히 슬림한 두께
+        }
+
+        &::-webkit-scrollbar-track {
+          background: transparent; // 트랙을 투명하게 해서 리스트 배경색(#f9fafb)이 보이게 함
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($global-border-green-color, 0.3); // 보더 컬러를 30% 투명하게
+          border-radius: 1rem;
+          background-clip: padding-box;
+          border: 0.125rem solid transparent; // 2px 투명 보더로 막대를 더 얇게 연출
+
+          &:hover {
+            background-color: $global-border-green-color; // 마우스 올리면 선명한 초록색
+          }
+        }
+
         .close-btn {
           position: absolute;
           top: 0.9rem;
@@ -457,7 +477,7 @@
 
         .friend-list {
             display: block;
-          height: 45rem;
+          flex: 1;
 
           .empty {
             padding: 3rem 1rem;
