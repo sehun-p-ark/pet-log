@@ -131,6 +131,7 @@ public class MyPageController {
         modelAndView.addObject("primaryPet", primaryPet.getRight());
         modelAndView.addObject("pets", readPets);
         modelAndView.addObject("stores", stores.getRight());
+        modelAndView.addObject("today", LocalDate.now());
         return modelAndView;
     }
 

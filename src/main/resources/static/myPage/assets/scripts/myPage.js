@@ -1702,9 +1702,6 @@ if (businessInformation) {
         modifyStoreButton.addEventListener('click', () => {
             const modifyStorePhone = modifyStoreLocalNumber.value + modifyStoreMiddleNumber.value + modifyStoreLastNumber.value;
 
-            console.log(modifyStoreAddressCategory.value)
-
-
             if (modifyStoreNameInput.value === '') {
                 showMessage('가게명을 입력해주세요.');
                 return;

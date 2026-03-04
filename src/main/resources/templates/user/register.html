@@ -524,16 +524,25 @@
         </label>
         <label class="passwordLabel label">
             <span class="caption ">비밀번호</span>
-            <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="password input" placeholder="사용하실 비밀번호를 입력해 주세요." type="password">
+            <span class="password-wrapper">
+                <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="password input" placeholder="사용하실 비밀번호를 입력해 주세요." type="password">
+                <span class="text">비밀번호는 6~50자까지 가능합니다.</span>
+            </span>
         </label>
         <label class="passwordCheckLabel label">
             <span class="caption ">비밀번호 확인</span>
-            <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="passwordCheck input" placeholder="비밀번호를 다시 입력해 주세요." type="password">
+            <span class="passwordCheck-wrapper">
+                <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="passwordCheck input" placeholder="비밀번호를 다시 입력해 주세요." type="password">
+                <span class="text">비밀번호가 일치하지 않습니다.</span>
+            </span>
         </label>
         <span class="semiTitle">회원 정보</span>
         <label class="nameLabel label">
             <span class="caption">이름</span>
-            <input autocomplete="off" maxlength="20" minlength="2" spellcheck="false" class="name input" placeholder="이름(실명)을 입력해 주세요." type="text">
+            <span class="name-wrapper">
+                <input autocomplete="off" maxlength="20" minlength="2" spellcheck="false" class="name input" placeholder="이름(실명)을 입력해 주세요." type="text">
+                <span class="text">이름은 2자 이상이여야 합니다.</span>
+            </span>
         </label>
         <label class="contactNumberLabel label">
             <span class="caption">전화번호</span>
@@ -554,7 +563,7 @@
             <span class="caption">닉네임</span>
             <span class="nickname-wrapper">
                 <input autocomplete="off" maxlength="20" minlength="2" spellcheck="false" class="nickname input" id="nickname" placeholder="닉네임을 입력해 주세요." type="text">
-                <span class="text">사용할 수 없는 닉네임 입니다.</span>
+                <span class="text">이미 사용중인 닉네임 입니다.</span>
             </span>
 
         </label>
@@ -587,7 +596,10 @@
         </label>
         <label class="representativeNameLabel label">
             <span class="caption">대표자명</span>
-            <input maxlength="20" minlength="2" spellcheck="false" class="representativeName input" id="representativeName" placeholder="대표자명을 입력해 주세요." type="text">
+            <span class="representativeName-wrapper">
+                <input maxlength="20" minlength="2" spellcheck="false" class="representativeName input" id="representativeName" placeholder="대표자명을 입력해 주세요." type="text">
+                <span class="text">대표자명은 2자 이상이여야 합니다.</span>
+            </span>
         </label>
         <label class="contactNumberLabel label">
             <span class="caption">대표자 전화번호</span>
@@ -647,11 +659,17 @@
         </label>
         <label class="passwordLabel label">
             <span class="caption ">비밀번호</span>
-            <input class="password input" autocomplete="off" maxlength="50" minlength="6" spellcheck="false" placeholder="비밀번호를 입력해 주세요." type="password">
+            <span class="password-wrapper">
+                <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="password input" placeholder="사용하실 비밀번호를 입력해 주세요." type="password">
+                <span class="text">비밀번호는 6~50자까지 가능합니다.</span>
+            </span>
         </label>
         <label class="passwordCheckLabel label">
             <span class="caption ">비밀번호 확인</span>
-            <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="passwordCheck input" placeholder="비밀번호를 다시 입력해 주세요." type="password">
+            <span class="passwordCheck-wrapper">
+                <input autocomplete="off" maxlength="50" minlength="6" spellcheck="false" class="passwordCheck input" placeholder="비밀번호를 다시 입력해 주세요." type="password">
+                <span class="text">비밀번호가 일치하지 않습니다.</span>
+            </span>
         </label>
         <div class="button-wrapper">
             <button type="button" class="cancel">취소</button>
