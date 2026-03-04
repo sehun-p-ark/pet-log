@@ -869,6 +869,28 @@ body:has(> .register-message.visible) > .cover {
   .main > .login-form {
     width: 100vw;
   }
+  .main > .searchId.visible ~ .login-form,
+  .main > .searchPassword.visible ~ .login-form {
+    display: none;
+  }
+  .main > .searchId,
+  .main > .searchPassword {
+    width: 100%;
+  }
+}
+@media (max-width: 500px) {
+  .main > .searchId > .emailLabel > .email-wrapper {
+    flex-direction: column;
+  }
+  .main > .searchId > .emailVerifyLabel > .emailVerify-wrapper {
+    flex-direction: column;
+  }
+  .main > .searchPassword > .verifyForSearchPassword-wrapper > .emailLabel > .email-wrapper {
+    flex-direction: column;
+  }
+  .main > .searchPassword > .verifyForSearchPassword-wrapper > .emailVerifyLabel > .emailVerify-wrapper {
+    flex-direction: column;
+  }
 }
 
 /*# sourceMappingURL=login.css.map */
