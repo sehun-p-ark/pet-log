@@ -193,9 +193,7 @@
         bottom: 0;
         width: 100%;
         height: auto;
-        max-height: 55%;
         background: linear-gradient(160deg, #ffffff 0%, #f0f7f2 100%);
-        border-top: 2px solid #4caf78;
         box-shadow: 0 -0.75rem 2rem rgba(0, 0, 0, 0.12);
         z-index: 10;
         overflow-y: auto;
@@ -261,7 +259,6 @@
           position: relative;
           display: flex;
           justify-content: center;
-          background: linear-gradient(135deg, #a8d5b5 0%, #7bbf95 100%);
           padding-top: 1rem;
           margin-bottom: 2.5rem;
 
@@ -274,6 +271,8 @@
             box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
             position: absolute;
             bottom: -2.2rem;
+            background-color: #ffffff;
+            padding: 0.2rem;
           }
         }
 
@@ -319,9 +318,7 @@
           bottom: 0;
           width: 100%;
           height: auto;
-          max-height: 70%;
           background: #fff;
-          border-top: 2px solid #4caf78;
           box-shadow: 0 -0.75rem 2rem rgba(0, 0, 0, 0.12);
           z-index: 10;
           overflow-y: auto;
@@ -655,6 +652,9 @@
                 height: 100%;
                 object-fit: cover;
                 border-radius: 50%;
+                padding: 0.2rem;
+                border: 0.0625rem solid $global-border-color;
+                background-color: #ffffff;
               }
             }
 
