@@ -2,8 +2,10 @@ package dev.dhkim.petlog.dto.main;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class FriendListDto {
     // 1. personel_user 테이블

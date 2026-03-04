@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dev.dhkim.petlog.mappers.main.AddressMapper">
+    <select id="findDefaultByUserId" resultType="dev.dhkim.petlog.entities.user.AddressEntity" parameterType="int">
+        SELECT address_id        AS addressId,
+               user_id           AS userId,
+               address_type      AS addressType,
+               postal_code       AS postalCode,
+               address_primary   AS addressPrimary,
+               address_secondary AS addressSecondary,
+               lat               AS lat,
+               lng               AS lng
+        FROM `petlog`.`address`
+        WHERE user_id = #{userId}
+        LIMIT 1
+    </select>
+    <update id="updateAddressLatLng">
+        UPDATE `petlog`.address
+        SET lat = #{lat}, lng = #{lng}
+        WHERE address_id = #{addressId}
+    </update>
+
+    <update id="updateAddress" parameterType="dev.dhkim.petlog.entities.user.AddressEntity">
+        UPDATE `petlog`.address
+        SET
+            address_primary = #{addressPrimary},
+            address_secondary = #{addressSecondary},
+            lat = #{lat},
+            lng = #{lng},
+            postal_code = #{postalCode}
+        WHERE address_id = #{addressId}
+    </update>
+    <!-- 주소 추가하면 기존 대표주소 전체 해제 -->
+    <update id="updateAllDefaultFalse">
+        UPDATE `petlog`.address
+        SET is_default = false
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 선택한 주소를 대표주소로 설정 -->
+    <update id="updateDefaultByAddressId">
+        UPDATE `petlog`.address
+        SET is_default = true
+        WHERE address_id = #{addressId}
+    </update>
+
+    <insert id="insertAddress" parameterType="dev.dhkim.petlog.entities.user.AddressEntity">
+        INSERT INTO `petlog`.`address`(
+            user_id, address_type, postal_code, address_primary, address_secondary, lat, lng, created_at
+        )
+        VALUES(
+                  #{userId}, #{addressType}, #{postalCode}, #{addressPrimary}, #{addressSecondary}, #{lat}, #{lng}, NOW()
+              )
+    </insert>
+
+    <select id="selectAllOtherUsersMapAddresses"
+            resultType="dev.dhkim.petlog.entities.user.AddressEntity">
+
+        SELECT
+            address_id AS addressId,
+            user_id AS userId,
+            address_type AS addressType,
+            postal_code AS postalCode,
+            address_primary AS addressPrimary,
+            address_secondary AS addressSecondary,
+            lat AS lat,
+            lng AS lng
+        FROM `petlog`.`address`
+        WHERE user_id != #{excludeUserId}
+          AND address_type = 'map'
+
+    </select>
+</mapper>

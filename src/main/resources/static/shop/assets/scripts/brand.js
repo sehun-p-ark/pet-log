@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (!currentBrand) return;
 
+    const brandNameEl = document.querySelector('.brand-info .name');
+    if (brandNameEl) brandNameEl.textContent = currentBrand;
+
     loadBestProducts(currentBrand).then(() => {
         return loadAllProducts();
     });

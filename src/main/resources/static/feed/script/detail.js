@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const comment = deleteBtn.closest('.comment');
             const commentId = comment.dataset.id;
 
-            if (!showConfirm('댓글을 삭제하시겠습니까?')) return;
+            if (!(await showConfirm('댓글을 삭제하시겠습니까?'))) return;
 
             try {
                 const res = await fetch(`/api/feed/${feedId}/comments/${commentId}`, {

@@ -164,24 +164,16 @@
             <!-- 요청 사항 -->
             <div class="form-group">
                 <label>요청 사항</label>
-                <textarea rows="3" placeholder="요청 사항을 입력하세요" id="reserveRequest"></textarea>
+                <input placeholder="요청 사항을 입력하세요" id="reserveRequest">
             </div>
-
             <div class="form-group">
                 <label>결제 방법</label>
-
-                <div class="payment-method">
-                    <input
-                            type="radio"
-                            id="payOffline"
-                            name="payment"
-                            checked
-                            disabled
-                    />
-                    <label for="payOffline">
+                <div class="payment-info">
+                    <span class="payment-icon">💳</span>
+                    <div>
                         <strong>만나서 결제</strong>
-                        <span>현장에서 결제해주세요</span>
-                    </label>
+                        <p>예약 후 현장에서 결제해주세요</p>
+                    </div>
                 </div>
             </div>
         </div>

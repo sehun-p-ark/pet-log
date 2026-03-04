@@ -15,4 +15,6 @@ public class AddressDto {
     private String addressPrimary;
     private String addressSecondary;
     private boolean isDefault;
+    private Double lat;
+    private Double lng;
 }

@@ -4,31 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="dev.dhkim.petlog.mappers.main.FriendMapper">
-    <update id="updateAddressLatLng">
-        UPDATE `petlog`.address
-        SET lat = #{lat}, lng = #{lng}
-        WHERE address_id = #{addressId}
-    </update>
-
-    <update id="updateAddress" parameterType="dev.dhkim.petlog.entities.user.AddressEntity">
-        UPDATE `petlog`.address
-        SET
-            address_primary = #{addressPrimary},
-            address_secondary = #{addressSecondary},
-            lat = #{lat},
-            lng = #{lng},
-            postal_code = #{postalCode}
-        WHERE address_id = #{addressId}
-    </update>
-
-    <insert id="insertAddress" parameterType="dev.dhkim.petlog.entities.user.AddressEntity">
-        INSERT INTO `petlog`.`address`(
-            user_id, address_type, postal_code, address_primary, address_secondary, lat, lng, created_at
-        )
-        VALUES(
-                  #{userId}, #{addressType}, #{postalCode}, #{addressPrimary}, #{addressSecondary}, #{lat}, #{lng}, NOW()
-              )
-    </insert>
     <select id="selectFriendsByUserId" parameterType="int" resultType="dev.dhkim.petlog.dto.user.PetDto">
         SELECT name,
                species,
@@ -42,19 +17,7 @@
         WHERE user_id = #{userId}
     </select>
 
-    <select id="findDefaultByUserId" resultType="dev.dhkim.petlog.entities.user.AddressEntity" parameterType="int">
-        SELECT address_id        AS addressId,
-               user_id           AS userId,
-               address_type      AS addressType,
-               postal_code       AS postalCode,
-               address_primary   AS addressPrimary,
-               address_secondary AS addressSecondary,
-               lat               AS lat,
-               lng               AS lng
-        FROM `petlog`.`address`
-        WHERE user_id = #{userId}
-        LIMIT 1
-    </select>
+
 
     <select id="selectNearbyFriends"
             resultType="dev.dhkim.petlog.dto.user.PetDto">
@@ -111,23 +74,7 @@
         ORDER BY distanceKm ASC
 
     </select>
-    <select id="selectAllOtherUsersMapAddresses"
-            resultType="dev.dhkim.petlog.entities.user.AddressEntity">
 
-        SELECT
-            address_id AS addressId,
-            user_id AS userId,
-            address_type AS addressType,
-            postal_code AS postalCode,
-            address_primary AS addressPrimary,
-            address_secondary AS addressSecondary,
-            lat AS lat,
-            lng AS lng
-        FROM `petlog`.`address`
-        WHERE user_id != #{excludeUserId}
-          AND address_type = 'map'
-
-    </select>
     <select id="selectNearbyUsers" resultType="dev.dhkim.petlog.dto.main.FriendListDto">
         SELECT
         u.user_id AS userId,

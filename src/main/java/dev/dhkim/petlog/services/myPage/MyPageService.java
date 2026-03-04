@@ -5,10 +5,12 @@ import dev.dhkim.petlog.dto.user.*;
 import dev.dhkim.petlog.entities.main.ReservationEntity;
 import dev.dhkim.petlog.entities.shop.PointEntity;
 import dev.dhkim.petlog.entities.user.*;
+import dev.dhkim.petlog.mappers.main.AddressMapper;
 import dev.dhkim.petlog.mappers.myPage.MyPageMapper;
 import dev.dhkim.petlog.mappers.shop.PointMapper;
 import dev.dhkim.petlog.mappers.user.UserMapper;
 import dev.dhkim.petlog.results.MyPageResult;
+import dev.dhkim.petlog.services.main.KakaoGeoCodingService;
 import dev.dhkim.petlog.utils.PhoneUtil;
 import dev.dhkim.petlog.validators.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +38,8 @@ public class MyPageService {
     private final MyPageMapper myPageMapper;
     private final UserMapper userMapper;
     private final PointMapper pointMapper;
+    private final KakaoGeoCodingService kakaoGeoCodingService;
+    private final AddressMapper addressMapper;
 
     public boolean verifyPassword(int userId, String password) {
         if (userId < 1 ||
@@ -313,24 +317,36 @@ public class MyPageService {
         return Pair.of(MyPageResult.SUCCESS, dbDefaultAddress);
     }
 
-    // 대표주소로 변경
+    // 대표주소로 변경 (주소 해제 후 다시 설정할때 실패할 경우 대비해 transactional 넣어줌)
+    @Transactional
     public MyPageResult changeDefaultAddress(int addressId, int userId) {
         if (addressId < 1 ||
                 userId < 1) {
             return MyPageResult.FAILURE;
         }
         AddressEntity dbAddress = this.myPageMapper.selectPersonalAddressByAddressId(addressId);
-
         if (dbAddress == null || dbAddress.getUserId() != userId) {
             return MyPageResult.FAILURE;
         }
 
         this.myPageMapper.updateAllDefaultAddressFalse(userId);
+
+        //추가 주소 위도 경도 업데이트->카카로api 로
+        if (dbAddress.getLat() == null || dbAddress.getLat() == 0.0) {
+            String query = dbAddress.getAddressPrimary();
+            if (dbAddress.getAddressSecondary() != null && !dbAddress.getAddressSecondary().isBlank()) {
+                query += " " + dbAddress.getAddressSecondary();
+            }
+            double[] latLng = kakaoGeoCodingService.getLatLng(query);
+            this.addressMapper.updateAddressLatLng(addressId, latLng[0], latLng[1]);
+        }
         return this.myPageMapper.updateDefaultAddress(addressId) > 0
                 ? MyPageResult.SUCCESS
                 : MyPageResult.FAILURE;
 
     }
+
+
 
     // 기본주소 추가 등록
     public MyPageResult postAddress(AddressDto addressDto, int userId) {
@@ -342,11 +358,22 @@ public class MyPageService {
         if (dbPersonalAddresses.size() >= 5) {
             return MyPageResult.FAILURE;
         }
+
+        // 카카오 API로 위도/경도 변환 후 저장
+        String query = addressDto.getAddressPrimary();
+        if (addressDto.getAddressSecondary() != null && !addressDto.getAddressSecondary().isBlank()) {
+            query += " " + addressDto.getAddressSecondary();
+        }
+        double[] latLng = kakaoGeoCodingService.getLatLng(query);
+        addressDto.setLat(latLng[0]);
+        addressDto.setLng(latLng[1]);
         addressDto.setDefault(false);
         return this.myPageMapper.insertPersonalAddress(addressDto, userId) > 0
                 ? MyPageResult.SUCCESS
                 : MyPageResult.FAILURE;
     }
+
+
 
     // 기본주소 수정
     public MyPageResult patchAddress(int addressId, AddressDto address, int userId) {
