@@ -2,7 +2,7 @@
 .main {
   margin-top: 5rem; }
 
-.cover {
+.loginCover {
   content: "";
   position: fixed;
   top: 0;
@@ -10,10 +10,10 @@
   width: 100%;
   height: 100%;
   background-color: #212121a0;
-  z-index: 10;
+  z-index: 100;
   opacity: 0;
   pointer-events: none; }
-  .cover.visible {
+  .loginCover.visible {
     opacity: 1;
     pointer-events: auto; }
 
@@ -30,7 +30,7 @@
   left: 0;
   background-color: #212121a0;
   opacity: 0;
-  z-index: 29;
+  z-index: 100;
   pointer-events: none;
   transition-duration: 175ms;
   transition-property: opacity; }
@@ -109,6 +109,52 @@ body:has(> .register-message.visible) > .cover {
     height: 2.25rem;
     margin-top: 1rem; }
 
+.dialog {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.75rem;
+  width: 17rem;
+  height: 12rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  padding: 3rem 3rem 2rem 3rem;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none; }
+  .dialog > * {
+    flex-grow: 0;
+    flex-shrink: 0; }
+  .dialog > .-flex-stretch {
+    flex-grow: 1;
+    flex-shrink: 1; }
+  .dialog.visible {
+    opacity: 1;
+    pointer-events: auto; }
+  .dialog > .text {
+    text-align: center; }
+    .dialog > .text > .id {
+      color: #38A34C; }
+  .dialog > .button {
+    height: 2rem;
+    border-radius: 0.35rem;
+    background-color: #89CC96;
+    color: #ffffff;
+    cursor: pointer;
+    transition-duration: 250ms;
+    transition-property: background-color; }
+    .dialog > .button:hover {
+      background-color: #78C38A; }
+    .dialog > .button:active {
+      background-color: #66B879; }
+
 .main {
   width: 70rem;
   height: 40rem;
@@ -119,51 +165,6 @@ body:has(> .register-message.visible) > .cover {
   overflow: hidden;
   position: relative;
   margin-top: 12.5rem; }
-  .main > .dialog {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    justify-content: center;
-    background-color: #ffffff;
-    border: 0.0625rem solid #e7e5e4;
-    border-radius: 0.75rem;
-    width: 17rem;
-    height: 12rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 11;
-    padding: 3rem 3rem 2rem 3rem;
-    line-height: 1.4;
-    opacity: 0;
-    pointer-events: none; }
-    .main > .dialog > * {
-      flex-grow: 0;
-      flex-shrink: 0; }
-    .main > .dialog > .-flex-stretch {
-      flex-grow: 1;
-      flex-shrink: 1; }
-    .main > .dialog.visible {
-      opacity: 1;
-      pointer-events: auto; }
-    .main > .dialog > .text {
-      text-align: center; }
-      .main > .dialog > .text > .id {
-        color: #38A34C; }
-    .main > .dialog > .button {
-      height: 2rem;
-      border-radius: 0.35rem;
-      background-color: #89CC96;
-      color: #ffffff;
-      cursor: pointer;
-      transition-duration: 250ms;
-      transition-property: background-color; }
-      .main > .dialog > .button:hover {
-        background-color: #78C38A; }
-      .main > .dialog > .button:active {
-        background-color: #66B879; }
   .main:has(> .searchId.visible) > .searchPassword {
     opacity: 0; }
   .main:has(> .searchPassword.visible) > .searchId {
@@ -404,6 +405,98 @@ body:has(> .register-message.visible) > .cover {
         .main > .searchPassword > .label > .wrapper > .-flex-stretch {
           flex-grow: 1;
           flex-shrink: 1; }
+        .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper,
+        .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper,
+        .main > .searchId > .label > .wrapper > .input-wrapper,
+        .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper,
+        .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper,
+        .main > .searchPassword > .label > .wrapper > .input-wrapper {
+          align-items: stretch;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          justify-content: flex-start;
+          flex: 1; }
+          .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > *,
+          .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > *,
+          .main > .searchId > .label > .wrapper > .input-wrapper > *,
+          .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > *,
+          .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > *,
+          .main > .searchPassword > .label > .wrapper > .input-wrapper > * {
+            flex-grow: 0;
+            flex-shrink: 0; }
+          .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .-flex-stretch,
+          .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .-flex-stretch,
+          .main > .searchId > .label > .wrapper > .input-wrapper > .-flex-stretch,
+          .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .-flex-stretch,
+          .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .-flex-stretch,
+          .main > .searchPassword > .label > .wrapper > .input-wrapper > .-flex-stretch {
+            flex-grow: 1;
+            flex-shrink: 1; }
+          .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input,
+          .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input,
+          .main > .searchId > .label > .wrapper > .input-wrapper > .input,
+          .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input,
+          .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input,
+          .main > .searchPassword > .label > .wrapper > .input-wrapper > .input {
+            border: 0.0625rem solid #e7e5e4;
+            height: 2.5rem;
+            border-radius: 0.35rem;
+            padding-left: 0.75rem;
+            transition-duration: 250ms;
+            transition-property: border-color; }
+            .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled,
+            .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled,
+            .main > .searchId > .label > .wrapper > .input-wrapper > .input:disabled,
+            .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled,
+            .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled,
+            .main > .searchPassword > .label > .wrapper > .input-wrapper > .input:disabled {
+              border-color: #e7e5e4 !important;
+              background-color: #e2e2e2; }
+              .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled::placeholder,
+              .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled::placeholder,
+              .main > .searchId > .label > .wrapper > .input-wrapper > .input:disabled::placeholder,
+              .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled::placeholder,
+              .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:disabled::placeholder,
+              .main > .searchPassword > .label > .wrapper > .input-wrapper > .input:disabled::placeholder {
+                color: #898989; }
+            .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:hover,
+            .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:hover,
+            .main > .searchId > .label > .wrapper > .input-wrapper > .input:hover,
+            .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:hover,
+            .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:hover,
+            .main > .searchPassword > .label > .wrapper > .input-wrapper > .input:hover {
+              border-color: #dbd8d7; }
+            .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:active,
+            .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:active,
+            .main > .searchId > .label > .wrapper > .input-wrapper > .input:active,
+            .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:active,
+            .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:active,
+            .main > .searchPassword > .label > .wrapper > .input-wrapper > .input:active {
+              border-color: #cfcbc9; }
+            .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:focus-within,
+            .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:focus-within,
+            .main > .searchId > .label > .wrapper > .input-wrapper > .input:focus-within,
+            .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .input:focus-within,
+            .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .input:focus-within,
+            .main > .searchPassword > .label > .wrapper > .input-wrapper > .input:focus-within {
+              border-color: #cfcbc9; }
+          .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .countTime,
+          .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .countTime,
+          .main > .searchId > .label > .wrapper > .input-wrapper > .countTime,
+          .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .countTime,
+          .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .countTime,
+          .main > .searchPassword > .label > .wrapper > .input-wrapper > .countTime {
+            opacity: 0;
+            align-self: flex-end;
+            color: red; }
+            .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .countTime.visible,
+            .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .countTime.visible,
+            .main > .searchId > .label > .wrapper > .input-wrapper > .countTime.visible,
+            .main > .searchPassword > .verifyForSearchPassword-wrapper > .label > .wrapper > .input-wrapper > .countTime.visible,
+            .main > .searchPassword > .changePassword-wrapper > .label > .wrapper > .input-wrapper > .countTime.visible,
+            .main > .searchPassword > .label > .wrapper > .input-wrapper > .countTime.visible {
+              opacity: 1; }
         .main > .searchId > .verifyForSearchPassword-wrapper > .label > .wrapper > .input,
         .main > .searchId > .changePassword-wrapper > .label > .wrapper > .input,
         .main > .searchId > .label > .wrapper > .input,

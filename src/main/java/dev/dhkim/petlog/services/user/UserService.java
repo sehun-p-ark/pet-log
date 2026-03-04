@@ -59,15 +59,18 @@ UserService {
     @Transactional
     public RegisterResult register(RegisterDto dto, List<MultipartFile> petImages) {
         if (!UserValidator.validateCommon(dto)) {
+            System.out.println("FAIL: validateCommon");
             return RegisterResult.FAILURE;
         }
         if (dto.getUserType().equals(PERSONAL)) {
             if (!UserValidator.validatePersonal(dto)) {
+                System.out.println("FAIL: validatePersonal");
                 return RegisterResult.FAILURE;
             }
             if (dto.getPets() != null && !dto.getPets().isEmpty()) {
                 for (PetDto pet : dto.getPets()) {
                     if (!UserValidator.validatePet(pet)) {
+                        System.out.println("FAIL: validatePet - " + pet);
                         return RegisterResult.FAILURE;
                     }
                 }
@@ -75,20 +78,25 @@ UserService {
         }
         if (dto.getUserType().equals(BUSINESS)) {
             if (!UserValidator.validateBusiness(dto)) {
+                System.out.println("FAIL: validateBusiness");
                 return RegisterResult.FAILURE;
             }
             if (dto.getStore() != null && !UserValidator.validateStore(dto.getStore())) {
+                System.out.println("FAIL: validateStore");
                 return RegisterResult.FAILURE;
             }
         }
         if (!UserValidator.validateAddress(dto.getAddress())) {
+            System.out.println("FAIL: validateAddress");
             return RegisterResult.FAILURE;
         }
         if (dto.getTermsIds() == null) {
+            System.out.println("FAIL: termsIds null");
             return RegisterResult.FAILURE;
         }
         EmailVerificationEntity dbEmail = emailVerificationMapper.selectByEmail(dto.getEmail());
         if (dbEmail == null) {
+            System.out.println("FAIL: dbEmail null - email: " + dto.getEmail());
             return RegisterResult.FAILURE;
         }
 
@@ -459,10 +467,6 @@ UserService {
         UserEntity dbUser = this.userMapper.selectByLoginIdAndEmail(loginId, email);
         if (dbUser == null) {
             return FindPasswordResult.FAILURE;
-        }
-
-        if (BCrypt.checkpw(password, dbUser.getPassword())) {
-            return FindPasswordResult.FAILURE_IS_USED;
         }
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); // BCrypt 암호화(해싱)를 위한 객체

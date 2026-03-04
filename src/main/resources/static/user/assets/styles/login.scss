@@ -4,7 +4,7 @@
   margin-top: 5rem;
 }
 
-.cover {
+.loginCover {
   content: "";
   position: fixed;
   top: 0;
@@ -12,7 +12,7 @@
   width: 100%;
   height: 100%;
   background-color: #212121a0;
-  z-index: 10;
+  z-index: 100;
   opacity: 0;
   pointer-events: none;
 
@@ -31,7 +31,7 @@
   left: 0;
   background-color: #212121a0;
   opacity: 0;
-  z-index: 29;
+  z-index: 100;
   pointer-events: none;
   transition-duration: 175ms;
   transition-property: opacity;
@@ -116,6 +116,55 @@ body:has(> .register-message.visible) > .cover {
   }
 }
 
+.dialog {
+  @include flex(column, stretch, center);
+  background-color: #ffffff;
+  border: 0.0625rem solid #e7e5e4;
+  border-radius: 0.75rem;
+  width: 17rem;
+  height: 12rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 101;
+  padding: 3rem 3rem 2rem 3rem;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+
+  &.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  > .text {
+    text-align: center;
+
+    > .id {
+      color: #38A34C;
+    }
+  }
+
+  > .button {
+    height: 2rem;
+    border-radius: 0.35rem;
+    background-color: $global-green-background-color;
+    color: #ffffff;
+    cursor: pointer;
+    transition-duration: 250ms;
+    transition-property: background-color;
+
+    &:hover {
+      background-color: #78C38A;
+    }
+
+    &:active {
+      background-color: #66B879;
+    }
+  }
+}
+
 .main {
   width: 70rem;
   height: 40rem;
@@ -127,54 +176,7 @@ body:has(> .register-message.visible) > .cover {
   position: relative;
   margin-top: 12.5rem;
 
-  > .dialog {
-    @include flex(column, stretch, center);
-    background-color: #ffffff;
-    border: 0.0625rem solid #e7e5e4;
-    border-radius: 0.75rem;
-    width: 17rem;
-    height: 12rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 11;
-    padding: 3rem 3rem 2rem 3rem;
-    line-height: 1.4;
-    opacity: 0;
-    pointer-events: none;
 
-    &.visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    > .text {
-      text-align: center;
-
-      > .id {
-        color: #38A34C;
-      }
-    }
-
-    > .button {
-      height: 2rem;
-      border-radius: 0.35rem;
-      background-color: $global-green-background-color;
-      color: #ffffff;
-      cursor: pointer;
-      transition-duration: 250ms;
-      transition-property: background-color;
-
-      &:hover {
-        background-color: #78C38A;
-      }
-
-      &:active {
-        background-color: #66B879;
-      }
-    }
-  }
 
   &:has(> .searchId.visible) > .searchPassword {
     opacity: 0;
@@ -319,6 +321,50 @@ body:has(> .register-message.visible) > .cover {
 
       > .wrapper {
         @include flex(row, stretch, flex-start, 0.5rem);
+
+        > .input-wrapper {
+          @include flex(column, stretch, flex-start, 0.25rem);
+          flex: 1;
+
+          > .input {
+            border: 0.0625rem solid #e7e5e4;
+            height: 2.5rem;
+            border-radius: 0.35rem;
+            padding-left: 0.75rem;
+            transition-duration: 250ms;
+            transition-property: border-color;
+
+            &:disabled {
+              border-color: $global-border-color !important;
+              background-color: lighten($global-gray-text-color, 55%);
+
+              &::placeholder {
+                color: lighten($global-gray-text-color, 20%);
+              }
+            }
+
+            &:hover {
+              border-color: darken(#e7e5e4, 5%);
+            }
+
+            &:active {
+              border-color: darken(#e7e5e4, 10%);
+            }
+
+            &:focus-within {
+              border-color: darken(#e7e5e4, 10%);
+            }
+          }
+
+          > .countTime {
+            opacity: 0;
+            align-self: flex-end;
+            color: red;
+            &.visible{
+              opacity: 1;
+            }
+          }
+        }
 
         > .input {
           border: 0.0625rem solid #e7e5e4;

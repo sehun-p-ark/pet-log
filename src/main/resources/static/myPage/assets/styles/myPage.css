@@ -4753,6 +4753,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
             height: 5rem;
             object-fit: cover;
             border-radius: 999rem;
+            padding: 0.2rem;
             background-color: #ffffff; }
         .content > .personalInformation .profile-wrapper .left-wrapper .profile-text {
           flex: 1;
@@ -5506,8 +5507,18 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     .content > .reservationManagement > .reservation-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      gap: 1.5rem;
       /* ---------------- 일반 펫 카드 ---------------- */ }
+      .content > .petInformation > .pet-grid > .reservation-card,
+      .content > .petInformation > .reservation-grid > .reservation-card,
+      .content > .reservationInformation > .pet-grid > .reservation-card,
+      .content > .reservationInformation > .reservation-grid > .reservation-card,
+      .content > .storeInformation > .pet-grid > .reservation-card,
+      .content > .storeInformation > .reservation-grid > .reservation-card,
+      .content > .reservationManagement > .pet-grid > .reservation-card,
+      .content > .reservationManagement > .reservation-grid > .reservation-card {
+        width: 100%;
+        min-width: 0; }
       .content > .petInformation > .pet-grid > .pet-card,
       .content > .petInformation > .pet-grid > .reservation-card,
       .content > .petInformation > .reservation-grid > .pet-card,
@@ -5594,6 +5605,61 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           background-color: #f5f5f5;
           border-color: #e0e0e0;
           opacity: 0.6; }
+        .content > .petInformation > .pet-grid > .pet-card.past,
+        .content > .petInformation > .pet-grid > .reservation-card.past,
+        .content > .petInformation > .reservation-grid > .pet-card.past,
+        .content > .petInformation > .reservation-grid > .reservation-card.past,
+        .content > .reservationInformation > .pet-grid > .pet-card.past,
+        .content > .reservationInformation > .pet-grid > .reservation-card.past,
+        .content > .reservationInformation > .reservation-grid > .pet-card.past,
+        .content > .reservationInformation > .reservation-grid > .reservation-card.past,
+        .content > .storeInformation > .pet-grid > .pet-card.past,
+        .content > .storeInformation > .pet-grid > .reservation-card.past,
+        .content > .storeInformation > .reservation-grid > .pet-card.past,
+        .content > .storeInformation > .reservation-grid > .reservation-card.past,
+        .content > .reservationManagement > .pet-grid > .pet-card.past,
+        .content > .reservationManagement > .pet-grid > .reservation-card.past,
+        .content > .reservationManagement > .reservation-grid > .pet-card.past,
+        .content > .reservationManagement > .reservation-grid > .reservation-card.past {
+          background-color: #f5f5f5;
+          border-color: #e0e0e0;
+          opacity: 0.6;
+          pointer-events: none; }
+          .content > .petInformation > .pet-grid > .pet-card.past .status.complete::before,
+          .content > .petInformation > .pet-grid > .reservation-card.past .status.complete::before,
+          .content > .petInformation > .reservation-grid > .pet-card.past .status.complete::before,
+          .content > .petInformation > .reservation-grid > .reservation-card.past .status.complete::before,
+          .content > .reservationInformation > .pet-grid > .pet-card.past .status.complete::before,
+          .content > .reservationInformation > .pet-grid > .reservation-card.past .status.complete::before,
+          .content > .reservationInformation > .reservation-grid > .pet-card.past .status.complete::before,
+          .content > .reservationInformation > .reservation-grid > .reservation-card.past .status.complete::before,
+          .content > .storeInformation > .pet-grid > .pet-card.past .status.complete::before,
+          .content > .storeInformation > .pet-grid > .reservation-card.past .status.complete::before,
+          .content > .storeInformation > .reservation-grid > .pet-card.past .status.complete::before,
+          .content > .storeInformation > .reservation-grid > .reservation-card.past .status.complete::before,
+          .content > .reservationManagement > .pet-grid > .pet-card.past .status.complete::before,
+          .content > .reservationManagement > .pet-grid > .reservation-card.past .status.complete::before,
+          .content > .reservationManagement > .reservation-grid > .pet-card.past .status.complete::before,
+          .content > .reservationManagement > .reservation-grid > .reservation-card.past .status.complete::before {
+            content: '방문완료' !important;
+            color: #757575; }
+          .content > .petInformation > .pet-grid > .pet-card.past .cancel-btn,
+          .content > .petInformation > .pet-grid > .reservation-card.past .cancel-btn,
+          .content > .petInformation > .reservation-grid > .pet-card.past .cancel-btn,
+          .content > .petInformation > .reservation-grid > .reservation-card.past .cancel-btn,
+          .content > .reservationInformation > .pet-grid > .pet-card.past .cancel-btn,
+          .content > .reservationInformation > .pet-grid > .reservation-card.past .cancel-btn,
+          .content > .reservationInformation > .reservation-grid > .pet-card.past .cancel-btn,
+          .content > .reservationInformation > .reservation-grid > .reservation-card.past .cancel-btn,
+          .content > .storeInformation > .pet-grid > .pet-card.past .cancel-btn,
+          .content > .storeInformation > .pet-grid > .reservation-card.past .cancel-btn,
+          .content > .storeInformation > .reservation-grid > .pet-card.past .cancel-btn,
+          .content > .storeInformation > .reservation-grid > .reservation-card.past .cancel-btn,
+          .content > .reservationManagement > .pet-grid > .pet-card.past .cancel-btn,
+          .content > .reservationManagement > .pet-grid > .reservation-card.past .cancel-btn,
+          .content > .reservationManagement > .reservation-grid > .pet-card.past .cancel-btn,
+          .content > .reservationManagement > .reservation-grid > .reservation-card.past .cancel-btn {
+            opacity: 0; }
         .content > .petInformation > .pet-grid > .pet-card.add-card,
         .content > .petInformation > .pet-grid > .reservation-card.add-card,
         .content > .petInformation > .reservation-grid > .pet-card.add-card,
@@ -6657,7 +6723,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           flex-direction: column;
           gap: 0.25rem;
           justify-content: flex-start;
-          margin-top: 1rem; }
+          margin-top: 0.35rem;
+          width: 100%; }
           .content > .petInformation > .pet-grid > .pet-card .request > *,
           .content > .petInformation > .pet-grid > .reservation-card .request > *,
           .content > .petInformation > .reservation-grid > .pet-card .request > *,
@@ -6730,7 +6797,66 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
           .content > .reservationManagement > .reservation-grid > .reservation-card .request .text {
             margin: 0;
             font-size: 1rem;
-            overflow: hidden; }
+            line-height: 1.1;
+            width: 100%;
+            max-height: 3.5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal; }
+            .content > .petInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .petInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .petInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .petInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .reservationInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .reservationInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .reservationInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .reservationInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .storeInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .storeInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .storeInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .storeInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .reservationManagement > .pet-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .reservationManagement > .pet-grid > .reservation-card .request .text::-webkit-scrollbar,
+            .content > .reservationManagement > .reservation-grid > .pet-card .request .text::-webkit-scrollbar,
+            .content > .reservationManagement > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar {
+              width: 6px; }
+            .content > .petInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .petInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .petInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .petInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .storeInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .storeInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .storeInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .storeInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationManagement > .pet-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationManagement > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationManagement > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-thumb,
+            .content > .reservationManagement > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-thumb {
+              background-color: #d6d6d6;
+              border-radius: 999px; }
+            .content > .petInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .petInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .petInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .petInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .storeInformation > .pet-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .storeInformation > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .storeInformation > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .storeInformation > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationManagement > .pet-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationManagement > .pet-grid > .reservation-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationManagement > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-track,
+            .content > .reservationManagement > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-track {
+              background-color: transparent; }
         .content > .petInformation > .pet-grid > .pet-card .card-footer,
         .content > .petInformation > .pet-grid > .reservation-card .card-footer,
         .content > .petInformation > .reservation-grid > .pet-card .card-footer,

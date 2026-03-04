@@ -257,8 +257,8 @@ const ThirdPersonalNextButton = $registerThirdPersonalStep.querySelector(':scope
 const ThirdPersonalInputs = $registerThirdPersonalStep.querySelectorAll('.input');
 const ThirdPersonalLoginIdInput = $registerThirdPersonalStep.querySelector('.id.input');
 const ThirdPersonalNameInput = $registerThirdPersonalStep.querySelector('.name.input');
-const ThirdPersonalPasswordInput = $registerThirdPersonalStep.querySelector(':scope > .passwordLabel > .password');
-const ThirdPersonalPasswordCheckInput = $registerThirdPersonalStep.querySelector(':scope > .passwordCheckLabel > .passwordCheck');
+const ThirdPersonalPasswordInput = $registerThirdPersonalStep.querySelector('.password');
+const ThirdPersonalPasswordCheckInput = $registerThirdPersonalStep.querySelector('.passwordCheck');
 const ThirdPersonalPhoneFirstInput = $registerThirdPersonalStep.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .number-wrapper > .firstNumber');
 const ThirdPersonalPhoneMiddleInput = $registerThirdPersonalStep.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .number-wrapper > .first.input');
 const ThirdPersonalPhoneLastInput = $registerThirdPersonalStep.querySelector(':scope > .contactNumberLabel > .phone-wrapper > .number-wrapper > .second.input');
@@ -331,8 +331,8 @@ const ThirdBusinessPhoneMiddleInput = $registerThirdBusinessStep.querySelector('
 const ThirdBusinessPhoneLastInput = $registerThirdBusinessStep.querySelector('.second.input');
 const ThirdBusinessBusinessNumber = $registerThirdBusinessStep.querySelector('.businessNumber');
 
-const ThirdBusinessPasswordInput = $registerThirdBusinessStep.querySelector(':scope > .passwordLabel > .password');
-const ThirdBusinessPasswordCheckInput = $registerThirdBusinessStep.querySelector(':scope > .passwordCheckLabel > .passwordCheck');
+const ThirdBusinessPasswordInput = $registerThirdBusinessStep.querySelector('.password');
+const ThirdBusinessPasswordCheckInput = $registerThirdBusinessStep.querySelector('.passwordCheck');
 ThirdBusinessNextButton.addEventListener('click', (e) => {
     e.preventDefault();
     const findEmptyInput = [...ThirdBusinessInputs].find(input => {
@@ -1807,7 +1807,7 @@ $registerThirdSteps.forEach(step => {
             const response = JSON.parse(xhr.responseText);
             switch (response.result) {
                 case 'FAILURE':
-                    showMessage('전송 실패! 이메일을 다시 입력해주세요.');
+                    showMessage('이메일 형식이 맞지 않거나 올바른 이메일이 아닙니다. 다시 입력해주세요.');
                     emailInput.focus();
                     emailInput.select();
                     break;
@@ -1932,6 +1932,151 @@ $registerThirdSteps.forEach(step => {
     });
     // endregion
 
+    // region 비밀번호 검증
+    const passwordInput = step.querySelector(':scope > .passwordLabel > .password-wrapper > .password');
+
+    let passwordTimeout;
+    const passwordMessage = step.querySelector(':scope > .passwordLabel > .password-wrapper > .text');
+    passwordInput.addEventListener('input', () => {
+        clearTimeout(passwordTimeout);
+        if (passwordInput.value === '') {
+            passwordMessage.classList.remove('visible');
+            passwordCheckMessage.classList.remove('visible');
+            return;
+        }
+        passwordTimeout = setTimeout(() => {
+            if (passwordInput.value.length < 6) {
+                passwordMessage.classList.add('visible');
+            } else {
+                passwordMessage.classList.remove('visible');
+            }
+
+            if (passwordCheckInput.value === '') {
+                return;
+            }
+            if (passwordCheckInput.value === passwordInput.value) {
+                passwordCheckMessage.classList.remove('visible');
+            } else {
+                passwordCheckMessage.classList.add('visible');
+            }
+        }, 500);
+
+
+
+    });
+    // endregion
+
+    // region 비밀번호 재입력 검증
+    const passwordCheckInput = step.querySelector(':scope > .passwordCheckLabel > .passwordCheck-wrapper > .passwordCheck');
+
+    let passwordCheckTimeout;
+    const passwordCheckMessage = step.querySelector(':scope > .passwordCheckLabel > .passwordCheck-wrapper > .text');
+    passwordCheckInput.addEventListener('input', () => {
+        clearTimeout(passwordCheckTimeout);
+        if (passwordCheckInput.value === '') {
+            passwordCheckMessage.classList.remove('visible');
+            return;
+        }
+        passwordCheckTimeout = setTimeout(() => {
+            if (passwordCheckInput.value !== passwordInput.value) {
+                passwordCheckMessage.classList.add('visible');
+            } else {
+                passwordCheckMessage.classList.remove('visible');
+            }
+        }, 500);
+    });
+    // endregion
+
+
+
+    if (step.classList.contains('personal')) {
+        // region 이름 검증
+        const nameInput = step.querySelector(':scope > .nameLabel > .name-wrapper > .name');
+
+        let nameTimeout;
+        const nameMessage = step.querySelector(':scope > .nameLabel > .name-wrapper > .text');
+        nameInput.addEventListener('input', () => {
+            clearTimeout(nameTimeout);
+            if (nameInput.value === '') {
+                nameMessage.classList.remove('visible');
+                return;
+            }
+            nameTimeout = setTimeout(() => {
+                if (nameInput.value.length < 2) {
+                    nameMessage.classList.add('visible');
+                } else {
+                    nameMessage.classList.remove('visible');
+                }
+            }, 500);
+        });
+        // endregion
+
+        // region 닉네임 검증
+        const nicknameInput = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname-wrapper > .nickname');
+        const nicknameMessage = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname-wrapper > .text');
+
+        let nicknameTimeout;
+        nicknameInput.addEventListener('input', () => {
+            clearTimeout(nicknameTimeout);
+            if (nicknameInput.value === '') {
+                nicknameMessage.classList.remove('visible');
+                return;
+            }
+            nicknameTimeout = setTimeout(() => {
+                const xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = () => {
+                    if(xhr.readyState !== XMLHttpRequest.DONE){
+                        return;
+                    }
+                    if(xhr.status < 200 || xhr.status >= 400){
+
+                        return;
+                    }
+                    const response = JSON.parse(xhr.responseText);
+                    switch (response.result) {
+                        case 'FAILURE':
+                            nicknameMessage.classList.add('visible');
+                            break;
+                        case 'SUCCESS':
+                            nicknameMessage.classList.remove('visible');
+                            break;
+                        default:
+                    }
+                };
+                const url = new URL(origin);
+                url.pathname = '/user/nickname';
+                url.searchParams.set('nickname', nicknameInput.value);
+                xhr.open('GET', url);
+                xhr.send();
+            }, 500);
+        });
+// endregion
+    }
+
+    if (step.classList.contains('business')) {
+        // region 대표자명 검증
+        const representativeNameInput = step.querySelector(':scope > .representativeNameLabel > .representativeName-wrapper > .representativeName');
+
+        let representativeNameTimeout;
+        const representativeNameMessage = step.querySelector(':scope > .representativeNameLabel > .representativeName-wrapper > .text');
+        representativeNameInput.addEventListener('input', () => {
+            clearTimeout(representativeNameTimeout);
+            if (representativeNameInput.value === '') {
+                representativeNameMessage.classList.remove('visible');
+                return;
+            }
+            representativeNameTimeout = setTimeout(() => {
+                if (representativeNameInput.value.length < 2) {
+                    representativeNameMessage.classList.add('visible');
+                } else {
+                    representativeNameMessage.classList.remove('visible');
+                }
+            }, 500);
+        });
+        // endregion
+    }
+
+
     // region 전화번호 검증
     const firstNumber = step.querySelector('.firstNumber');
     const middleNumber = step.querySelector('.contactNumber.first');
@@ -1940,15 +2085,20 @@ $registerThirdSteps.forEach(step => {
 
     let phoneTimeout;
     const checkPhone = () => {
-        clearTimeout(phoneTimeout);
-        if (middleNumber.value.length !== 4 || lastNumber.value.length !== 4) {
-            phoneMessage.classList.remove('visible');
-            return;
-        }
+        clearTimeout(phoneTimeout)
 
         const phone = `${firstNumber.value}${middleNumber.value}${lastNumber.value}`;
 
         phoneTimeout = setTimeout(() => {
+            if (middleNumber.value === '' && lastNumber.value === '') {
+                phoneMessage.classList.remove('visible');
+                return;
+            }
+
+            if (middleNumber.value.length !== 4 || lastNumber.value.length !== 4) {
+                phoneMessage.classList.add('visible');
+                return;
+            }
             const xhr = new XMLHttpRequest();
             xhr.onreadystatechange = () => {
                 if(xhr.readyState !== XMLHttpRequest.DONE){
@@ -1985,46 +2135,7 @@ $registerThirdSteps.forEach(step => {
 
 
 
-// region 닉네임 검증
-const nicknameInput = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname-wrapper > .nickname');
-const nicknameMessage = $registerThirdPersonalStep.querySelector(':scope > .nicknameLabel > .nickname-wrapper > .text');
 
-let nicknameTimeout;
-nicknameInput.addEventListener('input', () => {
-    clearTimeout(nicknameTimeout);
-    if (nicknameInput.value === '') {
-        nicknameMessage.classList.remove('visible');
-        return;
-    }
-    nicknameTimeout = setTimeout(() => {
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
-            if(xhr.readyState !== XMLHttpRequest.DONE){
-                return;
-            }
-            if(xhr.status < 200 || xhr.status >= 400){
-
-                return;
-            }
-            const response = JSON.parse(xhr.responseText);
-            switch (response.result) {
-                case 'FAILURE':
-                    nicknameMessage.classList.add('visible');
-                    break;
-                case 'SUCCESS':
-                    nicknameMessage.classList.remove('visible');
-                    break;
-                default:
-            }
-        };
-        const url = new URL(origin);
-        url.pathname = '/user/nickname';
-        url.searchParams.set('nickname', nicknameInput.value);
-        xhr.open('GET', url);
-        xhr.send();
-    }, 500);
-});
-// endregion
 
 
 const businessIdInput = $registerThirdBusinessStep.querySelector(':scope > .businessId > .businessId-wrapper > .businessId');

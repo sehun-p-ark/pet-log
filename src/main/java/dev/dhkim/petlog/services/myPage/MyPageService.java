@@ -665,6 +665,7 @@ public class MyPageService {
 
     // 가게 수정
     public MyPageResult modifyStore(int storeId, StoreDto store, int userId) {
+        System.out.println(store);
         if (storeId < 1 ||
                 !UserValidator.validateStoreForRegistration(store) ||
                 userId < 1) {

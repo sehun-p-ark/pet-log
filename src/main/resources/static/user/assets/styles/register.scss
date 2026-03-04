@@ -45,7 +45,7 @@ body:has(> .address-wrapper.visible) > .cover {
   border-radius: 0.35rem;
   opacity: 0;
   pointer-events: none;
-  z-index: 30;
+  z-index: 91;
 
   &.visible {
     opacity: 1;
@@ -700,8 +700,12 @@ body:has(> .address-wrapper.visible) > .cover {
         font-weight: 500;
       }
 
-      > .id-wrapper {
-        @include flex(column, stretch, flex-start, 0.25rem);
+      > .id-wrapper,
+      > .password-wrapper,
+      > .passwordCheck-wrapper,
+      > .name-wrapper,
+      > .representativeName-wrapper {
+        @include flex(column, stretch, flex-start);
         margin-top: 1.5rem;
         flex-grow: 1;
 
@@ -720,8 +724,9 @@ body:has(> .address-wrapper.visible) > .cover {
         }
       }
 
+
       > .phone-wrapper {
-        @include flex(column, stretch, flex-start, 0.25rem);
+        @include flex(column, stretch, flex-start);
         margin-top: 1.5rem;
         flex-grow: 1;
 
@@ -758,7 +763,7 @@ body:has(> .address-wrapper.visible) > .cover {
       }
 
       > .nickname-wrapper {
-        @include flex(column, stretch, flex-start, 0.25rem);
+        @include flex(column, stretch, flex-start);
         margin-top: 1.5rem;
         flex-grow: 1;
 
@@ -778,7 +783,7 @@ body:has(> .address-wrapper.visible) > .cover {
       }
 
       > .businessId-wrapper {
-        @include flex(column, stretch, flex-start, 0.25rem);
+        @include flex(column, stretch, flex-start);
         margin-top: 1.5rem;
         flex-grow: 1;
 
@@ -799,8 +804,12 @@ body:has(> .address-wrapper.visible) > .cover {
 
       > .input,
       > .id-wrapper > .input,
+      > .password-wrapper > .input,
+      > .name-wrapper > .input,
+      > .passwordCheck-wrapper > .input,
       > .phone-wrapper > .number-wrapper > .input,
       > .nickname-wrapper > .input,
+      > .representativeName-wrapper > .input,
       > .businessId-wrapper > .input,
       > .verifyNumber-wrapper > .input {
         border-bottom: 0.1rem solid #E7E5E4;
@@ -1307,8 +1316,8 @@ body:has(> .dialog.visible) {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #212121a0;
-  z-index: 29;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 91;
   opacity: 0;
   pointer-events: none;
 }
@@ -1377,7 +1386,7 @@ body:has(> .dialog.visible) {
   padding: 4rem 2rem 2rem 2rem;
   position: fixed;
   transform: translate(-50%, -50%);
-  z-index: 30;
+  z-index: 92;
   opacity: 0;
   pointer-events: none;
   overflow: hidden;

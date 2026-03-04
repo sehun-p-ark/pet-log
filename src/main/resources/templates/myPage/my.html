@@ -1256,7 +1256,11 @@
         </div>
         <div class="reservationInformation" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
             <ul class="reservation-grid">
-                <li class="reservation-card" th:each="reservation : ${reservations}" th:if="${reservation != null}" th:attr="data-reservation-id = ${reservation.getReservationId()}">
+                <li class="reservation-card"
+                    th:each="reservation : ${reservations}"
+                    th:if="${reservation != null}"
+                    th:attr="data-reservation-id = ${reservation.getReservationId()}"
+                    th:classappend="${reservation.getReservationDate().isBefore(today) and !reservation.canceled} ? ' past' : ''">
                     <div class="card-header">
                         <div class="place-info">
                             <span class="place" th:text="${reservation.getStoreName()}">강남 동물병원</span>
@@ -1310,7 +1314,9 @@
         </div>
         <div class="reservationManagement" th:if="${sessionUser.getUserType() == 'BUSINESS'}">
             <ul class="reservation-grid">
-                <li class="reservation-card" th:each="businessReservation : ${businessReservations}" th:if="${businessReservation != null}" th:attr="data-reservation-id=${businessReservation.getReservationId()}">
+                <li class="reservation-card"
+                    th:each="businessReservation : ${businessReservations}"
+                    th:if="${businessReservation != null}" th:attr="data-reservation-id=${businessReservation.getReservationId()}" th:classappend="${businessReservation.getReservationDate().isBefore(today) and !businessReservation.canceled} ? ' past' : ''">>
                     <div class="card-header">
                         <div class="place-info">
                             <span class="place" th:text="${businessReservation.getStoreName()}">동대구 동물병원</span>

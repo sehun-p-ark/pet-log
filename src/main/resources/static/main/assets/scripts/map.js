@@ -794,10 +794,24 @@ function renderStoreList(places) {
 
     const listEl = document.querySelector('.store-list');
     const countEl = document.querySelector('.result-count');
+    const emptyEl = document.getElementById('storeEmpty');
+    const storeListHeader = document.getElementById('listHeader');
+    const listView = document.getElementById('placeListView');
     if (!listEl) return;
 
     if (countEl) {
         countEl.textContent = `총 ${places.length}개`;
+    }
+
+    // ✅ 추가: 결과 없으면 empty 표시, 있으면 리스트 표시
+    if (places.length === 0) {
+        emptyEl?.classList.remove('hidden');
+        storeListHeader?.classList.add('hidden');
+        listView?.classList.add('hidden');
+    } else {
+        emptyEl?.classList.add('hidden');
+        storeListHeader?.classList.remove('hidden');
+        listView?.classList.remove('hidden');
     }
 
     listEl.innerHTML = '';

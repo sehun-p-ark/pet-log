@@ -1,7 +1,7 @@
 /** @type {HTMLFormElement} */
 const $main = document.getElementById('main');
 const $loginForm = document.getElementById('login-form');
-const $cover = document.querySelector('.cover');
+const $cover = document.querySelector('.loginCover');
 
 /* ================= 공통 ================= */
 
@@ -27,9 +27,11 @@ registerMessage.prepend($title, $text);
 function showMessage(text) {
     registerMessage.classList.add('visible');
     $text.innerText = text;
+    openCover();
 }
 warningButton.addEventListener('click', () => {
     registerMessage.classList.remove('visible');
+    closeCover()
 });
 
 
@@ -44,7 +46,7 @@ const $searchIdForm = $main.querySelector(':scope > .searchId');
 const $searchIdEmailSendButton = $searchIdForm.querySelector('.emailSendButton');
 const $searchIdEmailVerifyButton = $searchIdForm.querySelector('.emailVerifyButton');
 const $searchIdCancelButton = $searchIdForm.querySelector('.title .cancel');
-const $idSearchResult = $main.querySelector('.dialogLoginSearchResult');
+const $idSearchResult = document.querySelector('.dialogLoginSearchResult');
 const $idSearchResultButton = $idSearchResult.querySelector('.button');
 
 // 로그인 아이디 찾기 눌렀을 때
@@ -58,6 +60,7 @@ $idSearchButton.addEventListener('click', () => {
 const $searchIdNameInput = $searchIdForm.querySelector(':scope > .nameLabel > .name');
 const $searchIdEmailInput = $searchIdForm.querySelector(':scope > .emailLabel > .email-wrapper > .email');
 $searchIdEmailSendButton.addEventListener('click', () => {
+    const timerText = $searchIdForm.querySelector('.countTime');
     if ($searchIdNameInput.value === '') {
         showMessage("이름을 입력해주세요.");
         return;
@@ -93,6 +96,8 @@ $searchIdEmailSendButton.addEventListener('click', () => {
                 $searchIdEmailSendButton.setAttribute('disabled', '');
                 $searchIdEmailVerifyInput.removeAttribute('disabled');
                 $searchIdEmailVerifyButton.removeAttribute('disabled');
+                timerText.classList.add('visible');
+                startTimer(300, timerText); // 5분
                 break;
             default:
         }
@@ -101,11 +106,12 @@ $searchIdEmailSendButton.addEventListener('click', () => {
     xhr.send(formData);
 });
 
-const $searchIdEmailVerifyInput = $searchIdForm.querySelector(':scope > .emailVerifyLabel > .emailVerify-wrapper > .emailVerify');
+const $searchIdEmailVerifyInput = $searchIdForm.querySelector(':scope > .emailVerifyLabel > .emailVerify-wrapper > .input-wrapper >  .emailVerify');
 const nameResult = $idSearchResult.querySelector('.nameResult');
 const idResult = $idSearchResult.querySelector('.id');
 // 아이디 찾기에서 인증번호 확인버튼 눌렀을 때
 $searchIdEmailVerifyButton.addEventListener('click', () => {
+    const timerText = $searchIdForm.querySelector('.countTime');
     if ($searchIdEmailVerifyInput.value === '') {
         showMessage("인증번호를 입력해주세요.");
         return
@@ -130,6 +136,8 @@ $searchIdEmailVerifyButton.addEventListener('click', () => {
                 showMessage('인증번호가 맞지 않습니다. 다시 입력해주세요.');
                 break;
             case 'SUCCESS':
+                stopTimer();
+                timerText.classList.remove('visible');
                 nameResult.innerText = `${response.name} 회원님의 아이디는`;
                 idResult.innerText = `${response.loginId}`
                 $searchIdEmailVerifyInput.setAttribute('disabled', '');
@@ -187,7 +195,7 @@ const $emailVerifyNumberInput = $searchPasswordForm.querySelector('.emailVerify.
 const $changePasswordLabel = $searchPasswordForm.querySelector('.changePassword-wrapper');
 const $searchPasswordCancelButton = $searchPasswordForm.querySelector('.title .cancel');
 
-const $passwordChangeResult = $main.querySelector('.dialogPasswordChangeResult');
+const $passwordChangeResult = document.querySelector('.dialogPasswordChangeResult');
 const $passwordChangeResultButton = $passwordChangeResult.querySelector('.button');
 
 // 로그인 비밀번호 찾기 눌렀을 때
@@ -204,6 +212,7 @@ $searchPasswordCancelButton.addEventListener('click', () => {
 const $searchPasswordIdInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .idLabel > .id');
 const $searchPasswordEmailInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .emailLabel > .email-wrapper > .email');
 $searchPasswordEmailSendButton.addEventListener('click', () => {
+    const timerText = $searchPasswordForm.querySelector('.countTime');
     if ($searchPasswordIdInput.value === '') {
         showMessage("아이디를 입력해주세요.");
         return;
@@ -239,6 +248,8 @@ $searchPasswordEmailSendButton.addEventListener('click', () => {
                 $searchPasswordEmailSendButton.setAttribute('disabled', '');
                 $emailVerifyNumberInput.removeAttribute('disabled');
                 $searchPasswordEmailVerifyButton.removeAttribute('disabled');
+                timerText.classList.add('visible');
+                startTimer(300, timerText); // 5분
                 break;
             default:
         }
@@ -249,8 +260,9 @@ $searchPasswordEmailSendButton.addEventListener('click', () => {
 // endregion
 
 // region 비밀번호 찾기에서 인증번호 확인버튼을 눌렀을 때
-const $searchPasswordEmailVerifyInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .emailVerifyLabel > .emailVerify-wrapper > .emailVerify');
+const $searchPasswordEmailVerifyInput = $searchPasswordForm.querySelector(':scope > .verifyForSearchPassword-wrapper > .emailVerifyLabel > .emailVerify-wrapper > .input-wrapper > .emailVerify');
 $searchPasswordEmailVerifyButton.addEventListener('click', () => {
+    const timerText = $searchPasswordForm.querySelector('.countTime');
     if ($searchPasswordEmailVerifyInput.value === '') {
         showMessage("인증번호를 입력해주세요.");
         return;
@@ -274,11 +286,13 @@ $searchPasswordEmailVerifyButton.addEventListener('click', () => {
                 showMessage('인증번호가 맞지 않습니다.. 다시 입력해주세요.');
                 break;
             case 'SUCCESS':
+                stopTimer();
                 $searchPasswordEmailVerifyInput.setAttribute('disabled', '');
                 $searchPasswordEmailVerifyButton.setAttribute('disabled', '');
                 $searchPasswordChangePasswordInput.removeAttribute('disabled');
                 $searchPasswordChangePasswordCheckInput.removeAttribute('disabled');
                 $changePasswordLabel.classList.add('visible');
+                timerText.classList.remove('visible');
                 break;
             default:
         }
@@ -295,6 +309,10 @@ const $searchPasswordChangePasswordCheckInput = $searchPasswordForm.querySelecto
 $changePasswordButton.addEventListener('click', () => {
     if ($searchPasswordChangePasswordInput.value === '') {
         showMessage("새로운 비밀번호를 입력해주세요.");
+        return;
+    }
+    if ($searchPasswordChangePasswordInput.value.length < 6) {
+        showMessage('비밀번호는 최소 6자 이상이여야 합니다.');
         return;
     }
     if ($searchPasswordChangePasswordCheckInput.value === '') {
@@ -484,3 +502,45 @@ loginButton.addEventListener('click', (e) => {
 
 
 // endregion
+
+
+
+
+
+// 인증 시간 함수
+function formatMMSS(totalSecond) {
+    const minutes = String(Math.floor(totalSecond / 60)).padStart(2, '0');
+    const seconds = String(totalSecond % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+}
+
+let currentTimerId = null; // 전역으로 관리
+
+function startTimer(seconds, timerText) {
+    // 기존 타이머 있으면 먼저 제거
+    if (currentTimerId) {
+        clearInterval(currentTimerId);
+        currentTimerId = null;
+    }
+
+    let remainSeconds = seconds;
+    timerText.textContent = formatMMSS(remainSeconds);
+
+    currentTimerId = setInterval(() => {
+        remainSeconds--;
+        if (remainSeconds <= 0) {
+            clearInterval(currentTimerId);
+            currentTimerId = null;
+            timerText.textContent = "00:00";
+            return;
+        }
+        timerText.textContent = formatMMSS(remainSeconds);
+    }, 1000);
+}
+
+function stopTimer() {
+    if (currentTimerId) {
+        clearInterval(currentTimerId);
+        currentTimerId = null;
+    }
+}

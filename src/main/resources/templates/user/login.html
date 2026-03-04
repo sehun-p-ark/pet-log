@@ -13,7 +13,7 @@
 </head>
 <body>
 <th:block th:replace="~{/fragments/common.html :: topNavigator}"></th:block>
-<div class="cover"></div>
+<div class="loginCover"></div>
 <div class="loading" id="loading">
     <div class="icon"></div>
     <div class="message"></div>
@@ -21,18 +21,19 @@
 <div class="register-message" id="register-message">
     <button type="button" class="button">확인</button>
 </div>
-<div class="main" id="main">
-    <div class="dialogLoginSearchResult dialog">
-        <span class="text nameResult"></span>
-        <span class="text -flex-stretch">
+<div class="dialogLoginSearchResult dialog">
+    <span class="text nameResult"></span>
+    <span class="text -flex-stretch">
             '<span class="id"></span>' 입니다.</span>
-        <button class="button" type="button">확인</button>
-    </div>
-    <div class="dialogPasswordChangeResult dialog">
-        <span class="text">비밀번호를</span>
-        <span class="text -flex-stretch">성공적으로 변경하였습니다.</span>
-        <button class="button" type="button">확인</button>
-    </div>
+    <button class="button" type="button">확인</button>
+</div>
+<div class="dialogPasswordChangeResult dialog">
+    <span class="text">비밀번호를</span>
+    <span class="text -flex-stretch">성공적으로 변경하였습니다.</span>
+    <button class="button" type="button">확인</button>
+</div>
+<div class="main" id="main">
+
     <div class="searchId">
         <span class="title">
             <span class="text">아이디 찾기</span>
@@ -54,7 +55,10 @@
         <label class="emailVerifyLabel label">
             <span class="text">인증번호</span>
             <span class="emailVerify-wrapper wrapper">
-                <input disabled class="emailVerify input" placeholder="인증번호를 입력해주세요." type="text">
+                <span class="input-wrapper">
+                    <input disabled class="emailVerify input" placeholder="인증번호를 입력해주세요." type="text">
+                    <span class="countTime">00:00</span>
+                </span>
                 <button disabled class="emailVerifyButton button" type="button">인증번호 확인</button>
             </span>
         </label>
@@ -81,7 +85,10 @@
             <label class="emailVerifyLabel label -flex-stretch">
                 <span class="text">인증번호</span>
                 <span class="emailVerify-wrapper wrapper">
-                    <input disabled class="emailVerify input" placeholder="인증번호를 입력해주세요." type="text">
+                    <span class="input-wrapper">
+                        <input disabled class="emailVerify input" placeholder="인증번호를 입력해주세요." type="text">
+                        <span class="countTime">00:00</span>
+                    </span>
                     <button disabled class="emailVerifyButton button" type="button">인증번호 확인</button>
                 </span>
             </label>

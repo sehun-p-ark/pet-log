@@ -466,6 +466,9 @@
         .store-panel {
           position: relative; // 여기 추가!
           max-width: 45rem;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
 
           .list-header {
             display: flex;
@@ -473,6 +476,14 @@
             align-items: center;
             padding: 0.5rem 1rem;
             margin-bottom: 0.5rem;
+
+            &.hidden {
+              display: none !important;
+            }
+          }
+
+          #listHeader.hidden {
+            display: none !important;
           }
 
           .result-count {
@@ -523,6 +534,17 @@
             }
           }
 
+          .empty {
+            @include flex(column, center, center);
+            flex: 1;
+            color: #565656;
+            font-size: 1rem;
+
+            &.hidden {
+              display: none;
+            }
+          }
+
 
 
         }
@@ -559,8 +581,9 @@
         }
 
         .friend-list {
-            display: block;
+          display: block;
           flex: 1;
+          height: 100%;
 
           .empty {
             padding: 3rem 1rem;

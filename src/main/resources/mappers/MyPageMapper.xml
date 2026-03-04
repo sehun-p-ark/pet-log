@@ -110,6 +110,7 @@
             `postal_code`       = #{store.postalCode},
             `address_primary`   = #{store.addressPrimary},
             `address_secondary` = #{store.addressSecondary},
+            `category`          = #{store.category},
             `updated_at`        = NOW()
         WHERE `user_id` = #{userId}
           AND `store_id` = #{storeId}
