@@ -271,10 +271,11 @@ ol, ul {
         > .item {
           font-size: 1.2rem;
           color: $global-gray-right-text-color;
-          font-weight: 600;
+          font-weight: 500;
           position: relative;
           padding: 0 1rem;
           cursor: pointer;
+          font-family: 'GMarketSans';
 
           @media (max-width: 700px) {
             font-size: 1rem;
@@ -323,10 +324,11 @@ ol, ul {
           > .item {
             font-size: 1.2rem;
             color: $global-gray-right-text-color;
-            font-weight: 600;
+            font-weight: 500;
             position: relative;
             padding: 0 1rem 0.5rem 1rem;
             cursor: pointer;
+            font-family: 'GMarketSans';
 
             @media (max-width: 700px) {
               font-size: 1rem;
@@ -388,8 +390,9 @@ ol, ul {
               > .item{
                 font-size: 1rem;
                 color: $global-gray-right-text-color;
-                font-weight: 600;
+                font-weight: 500;
                 cursor: pointer;
+                font-family: 'GMarketSans';
                 margin: 0 1rem;
                 position: relative;
 

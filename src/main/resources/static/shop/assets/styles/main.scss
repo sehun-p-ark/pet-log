@@ -103,6 +103,7 @@
     > .caption{
       font-size: 1.3rem;
       font-weight: 700;
+      font-family: 'GMarketSans';
       color: $global-gray-text-color;
 
       @media (max-width: 700px){
@@ -145,9 +146,10 @@
         }
 
         > .content {
-          font-size: 1rem;
+          font-size: 0.9rem;
           color: $global-gray-text-color;
           line-height: 1.3;
+          font-family: 'GMarketSans';
           margin-bottom: 0.5em;
         }
       }
@@ -161,13 +163,14 @@
     margin: 2rem 0;
 
     > .category-wrapper{
-      @include flex(row, center, center, 1rem);
+      @include flex(row, center, center, 0.5rem);
       width: 100%;
 
       > .caption {
         font-size: 1.3rem;
         font-weight: 700;
         color: $global-gray-text-color;
+        font-family: 'GMarketSans';
 
         @media (max-width: 700px){
           font-size: 1.1rem;
@@ -182,7 +185,8 @@
           font-size: 0.9rem;
           font-weight: 500;
           background-color: $global-color-disabled;
-          padding: 0.3rem 0.8rem;
+          padding: 0.5rem 0.8rem 0.3rem 0.8rem;
+          font-family: 'GMarketSans';
           border-radius: 999rem;
           cursor: pointer;
 

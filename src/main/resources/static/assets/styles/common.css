@@ -496,10 +496,11 @@ ol, ul {
       #category > .menu > .main > .list > .item {
         font-size: 1.2rem;
         color: #7A7A7A;
-        font-weight: 600;
+        font-weight: 500;
         position: relative;
         padding: 0 1rem;
         cursor: pointer;
+        font-family: 'GMarketSans';
         /*          &::after {
                     content: "";
                     position: absolute;
@@ -533,10 +534,11 @@ ol, ul {
         #category > .menu > .main > .list > .menu-item-wrapper > .item {
           font-size: 1.2rem;
           color: #7A7A7A;
-          font-weight: 600;
+          font-weight: 500;
           position: relative;
           padding: 0 1rem 0.5rem 1rem;
           cursor: pointer;
+          font-family: 'GMarketSans';
           /*            &::after {
                         content: "";
                         position: absolute;
@@ -602,8 +604,9 @@ ol, ul {
             #category > .menu > .main > .list > .menu-item-wrapper > .submenu > .list > .item {
               font-size: 1rem;
               color: #7A7A7A;
-              font-weight: 600;
+              font-weight: 500;
               cursor: pointer;
+              font-family: 'GMarketSans';
               margin: 0 1rem;
               position: relative; }
               #category > .menu > .main > .list > .menu-item-wrapper > .submenu > .list > .item > input[type="radio"] {

@@ -25,6 +25,7 @@
       > .name {
         font-size: 1.3rem;
         font-weight: 700;
+        font-family: 'GMarketSans';
         color: $global-gray-text-color;
         border-top: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
         border-bottom: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
@@ -38,8 +39,9 @@
       width: 100%;
 
       > .caption {
+        font-family: 'GMarketSans';
         font-size: 1.3rem;
-        font-weight: 700;
+        font-weight: 500;
         color: $global-gray-text-color;
       }
 
@@ -133,13 +135,16 @@
 
           > .text {
             font-size: 1.3rem;
-            font-weight: 700;
+            font-weight: 500;
             color: $global-gray-text-color;
+            font-family: 'GMarketSans';
           }
 
           > .count {
             font-size: 0.9rem;
             color: lighten($global-gray-right-text-color, 10%);
+            font-family: 'GMarketSans';
+            font-weight: 300;
           }
         }
 
