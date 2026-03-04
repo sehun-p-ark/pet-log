@@ -91,22 +91,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!targetUserId) return;
 
         const currentlyFollowing = btn.classList.contains('following');
-
         try {
-            const res = await fetch(`/api/follow/toggle?targetUserId=${targetUserId}`, {
+            const res = await fetch(`/api/feed/follow/${targetUserId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             });
             const result = await res.json();
-
-            if (result === true) {
-                btn.classList.add('following');
-                btn.classList.remove('follow');
-                btn.textContent = '팔로잉';
-            } else if (result === false) {
-                btn.classList.remove('following');
-                btn.classList.add('follow');
-                btn.textContent = '팔로우';
+            if (result.result === 'SUCCESS') {
+                if (result.following === true) {
+                    btn.classList.add('following');
+                    btn.classList.remove('follow');
+                    btn.textContent = '팔로잉';
+                } else if (result.following === false) {
+                    btn.classList.remove('following');
+                    btn.classList.add('follow');
+                    btn.textContent = '팔로우';
+                }
             }
         } catch (err) {
             console.error('팔로우 토글 실패', err);
@@ -123,14 +123,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ==================== 친구 클릭 ====================
+// ==================== 친구 클릭 ====================
     if (friendContent && container) {
         const friendList = friendContent.querySelector('.friend-list');
+       if (!friendList) {
+            return;
+        }
 
         friendList.addEventListener('click', (e) => {
             const item = e.target.closest('.item-wrapper');
             if (!item || e.target.closest('.button')) return;
 
+            // petId 대신 userId를 기준으로 열고 닫기 체크 (DTO에 맞춤)
             const userId = item.dataset.userId;
 
             if (container.style.display === "block" && container.dataset.openId === userId) {
@@ -140,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            // 펫 이름을 가져옴 (data-pet-name)
             const petName = item.dataset.petName || '이름 없음';
             const species = item.querySelector('.species')?.textContent || '종 없음';
             const image = item.querySelector('img')?.src || '';
@@ -147,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const gender = item.dataset.gender || '';
             const introduction = item.dataset.introduction || '';
 
+            // 나이 계산 함수
             const calculateAge = (birth) => {
                 if (!birth) return '0';
                 const b = new Date(birth);
@@ -183,4 +189,5 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     }
+
 });

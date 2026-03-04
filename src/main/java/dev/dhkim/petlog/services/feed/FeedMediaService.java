@@ -70,8 +70,8 @@ public class FeedMediaService {
             ProcessBuilder builder = new ProcessBuilder(
                     "ffmpeg",
                     "-y", // ✅ 같은 이름 있으면 덮어쓰기
-                    "-i", videoFile.getAbsolutePath(),
                     "-ss", "00:00:01",
+                    "-i", videoFile.getAbsolutePath(),
                     "-vframes", "1",
                     thumbnailFile.getAbsolutePath()
             );

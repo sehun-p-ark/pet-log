@@ -3,6 +3,7 @@ package dev.dhkim.petlog.services.main;
 import dev.dhkim.petlog.dto.main.FriendListDto;
 import dev.dhkim.petlog.dto.user.PetDto;
 import dev.dhkim.petlog.entities.user.AddressEntity;
+import dev.dhkim.petlog.mappers.main.FollowMapper;
 import dev.dhkim.petlog.mappers.main.AddressMapper;
 import dev.dhkim.petlog.mappers.main.FriendMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class FriendService {
     private final FriendMapper friendMapper;
     private final AddressMapper addressMapper;
     private final KakaoGeoCodingService kakaoGeoCodingService;
+    private final FollowMapper followMapper;
 
     //** 내 펫 리스트(친구인 사람만 팔로우 ?) 조회 *//*
     public List<PetDto> getFriendPets(Integer userId) {
@@ -65,6 +67,10 @@ public class FriendService {
         } else {
             System.out.println("🎉 [RESULT] 조회 성공! 데이터 수: " + result.size() + "건");
             result.forEach(f -> System.out.println("   - 이름: " + f.getNickname() + ", 거리: " + f.getDistance() + "km"));
+            result.forEach(f -> {
+               boolean isFollowing = followMapper.existsFollow(userId, f.getUserId()) > 0;
+               f.setFollowing(isFollowing);
+            });
         }
         System.out.println("==== [DEBUG] 주변 친구 찾기 종료 ====");
 
