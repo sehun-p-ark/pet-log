@@ -21,7 +21,9 @@
     height: 7rem;
     border-radius: 999rem;
     overflow: hidden;
-    border: 4px solid darken($global-border-color, 50%);
+    border: 1px solid darken($global-gray-background-color, 20%);
+    background-color: white;
+    padding: 0.2rem;
 
     img {
         width: 100%;

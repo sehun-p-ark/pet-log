@@ -47,6 +47,7 @@ public class FeedPageController {
             return "redirect:/feed/explore";
         }
         model.addAttribute("feed", feed);
+        model.addAttribute("loginUserId", userId);
         return "/feed/detail";
     }
 

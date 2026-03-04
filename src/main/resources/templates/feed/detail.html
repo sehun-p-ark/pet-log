@@ -134,7 +134,7 @@
                                           th:text="${comment.timeAgo}">
                                     </span>
                                     <button class="comment-delete-btn"
-                                            th:if="${comment.userId == session.userId}">삭제</button>
+                                            th:if="${comment.userId == loginUserId}">삭제</button>
                                 </div>
                                 <p class="comment-text" th:text="${comment.content}">너무 귀여워요 ㅠㅠ</p>
                                 <button class="reply-btn"
@@ -157,7 +157,7 @@
                                                 <span class="comment-time"
                                                       th:text="${reply.timeAgo}"></span>
                                                 <button class="comment-delete-btn"
-                                                        th:if="${comment.userId == session.userId}">삭제</button>
+                                                        th:if="${reply.userId == loginUserId}">삭제</button>
                                             </div>
                                             <p class="comment-text" th:text="${reply.content}">대댓글 내용</p>
                                         </div>

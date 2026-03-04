@@ -1,0 +1,113 @@
+@import "../../../assets/styles/def";
+
+body {
+    background: #EAF3F8;
+}
+
+.coupon-event {
+    @include flex(column, center, center);
+    text-align: center;
+    max-height: 100%;
+    margin-top: 7rem;
+    padding: 5rem 0;
+    background-image: url('../images/coupon-back.png');
+}
+
+.event-wrapper {
+    background-color: #EAF3F8;
+    padding: 1rem 3rem 0 3rem;
+}
+
+.event-title {
+    font-size: 1rem;
+    letter-spacing: 0.0625rem;
+    margin-bottom: 1.75rem;
+    color: #5A6B8C;
+
+}
+
+.event-main {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #1F2A6D;
+    margin: 0;
+    line-height: 4.5rem;
+
+    > span {
+        font-size: 4.375rem;
+        color: #3C82D9;
+    }
+}
+
+.event-desc {
+    margin: 1.75rem 0 4.25rem;
+    color: #5A6B8C;
+}
+
+.coupon-wrapper {
+    position: relative;
+
+    >.image {
+        position: absolute;
+        top: -4.5rem;
+        left: 0;
+        width: 8rem;
+        height: 8rem;
+        z-index: 2;
+        &.dog {
+            left: 23rem;
+            top: -4.25rem;
+            transform: rotate(15deg);
+        }
+    }
+}
+
+.coupon-card {
+    position: relative;
+    width: 30rem;
+    padding: 1rem;
+    margin: 0 auto 2.5rem;
+    display: flex;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #6C8EF5, #9C7BEF);
+    color: white;
+    z-index: 3;
+
+    > .coupon-left {
+        @include flex(column, center, center);
+        width: 7rem;
+        writing-mode: vertical-rl;
+        border-right: 0.125rem dashed rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+    }
+
+    > .coupon-right {
+        flex: 1;
+        padding: 1.75rem;
+
+        > .discount {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+    }
+}
+
+.download-btn {
+    @include flex(row, center, flex-start, 0.375rem);
+    background: #222;
+    color: white;
+    padding: 1rem 2.5rem;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    > .icon {
+        width: 1.25rem;
+        height: 1.25rem;
+        fill: #ffffff;
+    }
+}
+
+.download-btn:hover {
+    background: #000;
+}

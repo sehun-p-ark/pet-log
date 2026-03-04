@@ -5312,11 +5312,15 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
             @include flex(column, flex-start, center, 0.5rem);
             padding-top: 0.5rem;
 
-            > a{
-              .product-name{
+            > a .product-brand {
+              font-size: 0.9rem;
+              padding-bottom: 0.3rem;
+              color: lighten($global-gray-text-color, 20%);
+            }
+
+            > a .product-name{
                 font-size: 1rem;
                 font-weight: 600;
-              }
             }
 
             .product-option{
@@ -5403,6 +5407,175 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
             border-radius: 0.25rem;
             padding: 0.7rem 1.2rem;
             color: darken($global-gray-text-color, 20%);
+          }
+        }
+      }
+    }
+
+    .productHeartDetails {
+      display: none;
+      pointer-events: none;
+      width: 100%;
+      min-height: 0;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #d6d6d6;
+        border-radius: 999px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+
+      &.visible {
+        @include flex(column, flex-start, flex-start, 0.5rem);
+        pointer-events: auto;
+        flex: 1;
+        min-height: 0;
+        padding: 2rem 3rem;
+      }
+
+      .heart-list {
+        @include flex(column, flex-start, center, 1rem);
+        width: 100%;
+
+        &.empty {
+          flex: 1;
+          min-height: 0;
+          justify-content: center;
+          align-self: stretch;
+        }
+
+        .empty-hearts {
+          width: 100%;
+          flex: 1;
+          text-align: center;
+          color: $global-gray-text-color;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+
+          .empty-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $global-black-text-color;
+          }
+
+          .empty-sub {
+            font-size: 0.95rem;
+            color: $global-gray-text-color;
+          }
+
+          .empty-shop-link {
+            margin-top: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            background-color: $global-green-background-color;
+            color: #ffffff;
+            border-radius: 0.35rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+
+            &:hover {
+              background-color: darken($global-green-background-color, 5%);
+            }
+          }
+        }
+
+        .heart-date {
+          @include flex(row, flex-start, center, 0.5rem);
+
+          .all-count {
+            font-size: 1.1rem;
+            font-weight: 500;
+          }
+        }
+
+        .heart-item-wrapper {
+          border: 0.0625rem solid lighten($global-gray-right-text-color, 40%);
+          border-radius: 0.25rem;
+          width: 100%;
+
+          .heart-item {
+            @include flex(row, flex-start, flex-start, 1rem);
+            padding: 1rem;
+            width: 100%;
+            position: relative;
+
+            &::after {
+              content: "";
+              position: absolute;
+              bottom: 0;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 95%;
+              height: 0.0625rem;
+              background-color: lighten($global-gray-right-text-color, 45%);
+            }
+
+            &:last-child::after {
+              display: none;
+            }
+
+            .img-wrapper {
+              width: 7rem;
+              overflow: hidden;
+              flex-shrink: 0;
+
+              > a > img {
+                border: 0.0625rem solid lighten($global-gray-text-color, 50%);
+                border-radius: 0.35rem;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+
+            .product-info {
+              @include flex(column, flex-start, center, 0.5rem);
+
+              > a .product-brand {
+                font-size: 0.9rem;
+                padding-bottom: 0.3rem;
+                color: lighten($global-gray-text-color, 20%);
+              }
+
+              > a .product-name {
+                font-size: 1rem;
+                font-weight: 600;
+              }
+
+              .product-price {
+                @include flex(row, flex-start, center, 0.5rem);
+
+                .discount-price {
+                  font-size: 1rem;
+                  font-weight: 500;
+                  color: lighten($global-gray-text-color, 10%);
+                }
+
+                .prime-cost {
+                  font-size: 1rem;
+                  color: lighten($global-gray-text-color, 30%);
+                  text-decoration: line-through;
+                }
+              }
+            }
+
+            .heart-cancel-btn {
+              width: 2rem;
+              position: absolute;
+              top: 38%;
+              right: 3%;
+              cursor: pointer;
+            }
           }
         }
       }
@@ -5796,12 +5969,6 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
     grid-template-columns: repeat(1, 1fr) !important;
   }
 }
-
-
-.paymentDetails {
-  display: none;
-}
-
 
 
 body:has(> .point-modal.visible) > .cover {

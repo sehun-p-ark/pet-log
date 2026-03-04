@@ -4,7 +4,6 @@ import dev.dhkim.petlog.dto.user.SessionUser;
 import dev.dhkim.petlog.entities.shop.ProductEntity;
 import dev.dhkim.petlog.entities.shop.ProductDetailImageEntity;
 import dev.dhkim.petlog.entities.shop.OptionEntity;
-import dev.dhkim.petlog.entities.shop.SubCategoryEntity;
 import dev.dhkim.petlog.mappers.shop.ProductMapper;
 import dev.dhkim.petlog.mappers.shop.SubCategoryMapper;
 import dev.dhkim.petlog.services.shop.ProductService;
@@ -109,6 +108,14 @@ public class ShopController {
         modelAndView.addObject("maxRatingCount", maxRatingCount);
         modelAndView.addObject("bestRating", bestRating);
         modelAndView.setViewName("shop/product");
+
+        return modelAndView;
+    }
+
+    // 신규 쿠폰 발급 페이지
+    @RequestMapping(value = "welcome", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+    public ModelAndView getWelcome (ModelAndView modelAndView) {
+        modelAndView.setViewName("shop/welcome");
 
         return modelAndView;
     }

@@ -39,7 +39,7 @@ public class ReviewService {
                 .max()
                 .orElse(0);
 
-        boolean canWriteReview = userId != null && reviewMapper.checkCanWriteReview(userId, productId, null);
+        boolean canWriteReview = userId != null && reviewMapper.checkCanWriteReviewByProduct(userId, productId);
 
         return Map.of(
                 "reviews", reviews,
@@ -95,5 +95,9 @@ public class ReviewService {
     // 리뷰 체크
     public boolean checkCanWriteReview(Integer userId, Integer productId, Integer orderItemId) {
         return reviewMapper.checkCanWriteReview(userId, productId, orderItemId);
+    }
+
+    public boolean checkCanWriteReviewByProduct(Integer userId, Integer productId) {
+        return reviewMapper.checkCanWriteReviewByProduct(userId, productId);
     }
 }

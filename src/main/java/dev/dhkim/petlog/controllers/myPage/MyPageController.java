@@ -3,7 +3,9 @@ package dev.dhkim.petlog.controllers.myPage;
 import dev.dhkim.petlog.dto.user.*;
 import dev.dhkim.petlog.entities.shop.PointEntity;
 import dev.dhkim.petlog.entities.user.*;
+import dev.dhkim.petlog.mappers.myPage.MyPageMapper;
 import dev.dhkim.petlog.mappers.shop.CouponMapper;
+import dev.dhkim.petlog.mappers.shop.HeartMapper;
 import dev.dhkim.petlog.mappers.shop.ReviewMapper;
 import dev.dhkim.petlog.results.MyPageResult;
 import dev.dhkim.petlog.services.myPage.MyPageService;
@@ -31,7 +33,7 @@ public class MyPageController {
     private final MyPageService myPageService;
     private final ReviewMapper reviewMapper;
     private final CouponMapper couponMapper;
-
+    private final HeartMapper heartMapper;
 
     @RequestMapping(value = "", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
     public ModelAndView getMyPage(ModelAndView modelAndView,
@@ -118,6 +120,8 @@ public class MyPageController {
             Pair<MyPageResult, AddressEntity> businessAddress = this.myPageService.getBusinessAddress(sessionUser.getUserId());
             modelAndView.addObject("businessAddress", businessAddress.getRight());
         }
+        List<Map<String, Object>> hearts = myPageService.getHearts(sessionUser.getUserId());
+        modelAndView.addObject("hearts", hearts);
         modelAndView.addObject("sessionUser", sessionUser);
         modelAndView.addObject("user", user.getRight());
         modelAndView.addObject("personalUser", personalUser.getRight());
@@ -548,6 +552,35 @@ public class MyPageController {
         }
         MyPageResult result = this.myPageService.patchReservation(reservationId, sessionUser.getUserId());
         response.put("result", result.name());
+        return response;
+    }
+
+    // 찜 취소
+    @RequestMapping(value = "/heart/delete", method = POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> deleteHeart(@RequestParam(value = "productId") int productId,
+                                           @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("result", MyPageResult.FAILURE_SESSION_EXPIRED);
+            return response;
+        }
+        MyPageResult result = this.myPageService.deleteHeart(productId, sessionUser.getUserId());
+        response.put("result", result.name());
+        return response;
+    }
+
+    @GetMapping("/heart/check")
+    @ResponseBody
+    public Map<String, Object> checkHeart(@RequestParam int productId,
+                                          @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser) {
+        Map<String, Object> response = new HashMap<>();
+        if (sessionUser == null) {
+            response.put("isHearted", false);
+            return response;
+        }
+        Integer heartId = heartMapper.checkHeart(sessionUser.getUserId(), productId);
+        response.put("isHearted", heartId != null);
         return response;
     }
 }

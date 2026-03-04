@@ -742,4 +742,19 @@ public class MyPageService {
         }
         return MyPageResult.SUCCESS;
     }
+
+    // 찜목록
+    public List<Map<String, Object>> getHearts(int userId) {
+        return myPageMapper.selectHeartsByUserId(userId);
+    }
+
+    //찜삭제
+    public MyPageResult deleteHeart(int productId, int userId) {
+        try {
+            myPageMapper.deleteHeart(userId, productId);
+            return MyPageResult.SUCCESS;
+        } catch (Exception e) {
+            return MyPageResult.FAILURE;
+        }
+    }
 }

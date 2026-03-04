@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if ($edit) {
         $edit.addEventListener('click', () => {
             // 수정 페이지로
-            alert('수정 페이지로 링크 걸어주기')
+            window.location.href = "http://localhost:8080/my?menu=0";
         });
     }
 

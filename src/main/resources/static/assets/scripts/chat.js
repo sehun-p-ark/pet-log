@@ -1,4 +1,5 @@
 let friendCache = []; // 친구 리스트 (정렬에 따라 받을 예정)
+let roomsCache = []; // 채팅방 리스트 (껌색에 따라 받을 예정)
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -392,44 +393,47 @@ async function loadChatRooms() {
         if (data.result !== "SUCCESS") {
             return;
         }
+        renderChatRooms(data);
 
-        const chatList = document.querySelector(".chat-list");
-        chatList.innerHTML = "";
+    } catch (e) {
+        console.error("채팅방 목록 불러오기 실패:", e);
+    }
+}
 
-        if (!data.rooms || data.rooms.length === 0) {
-            chatList.innerHTML =
-                "<li class='empty'>채팅방이 없습니다.</li>";
-            return;
-        }
+function renderChatRooms(list){
+    const chatList = document.querySelector(".chat-list");
+    chatList.innerHTML = "";
 
-        data.rooms.forEach(room => {
+    if (!data.rooms || data.rooms.length === 0) {
+        chatList.innerHTML =
+            "<li class='empty'>채팅방이 없습니다.</li>";
+        return;
+    }
 
-            const li = document.createElement("li");
-            li.className = "item";
-            li.dataset.roomId = room.roomId;
+    data.rooms.forEach(room => {
 
-            li.innerHTML = `
+        const li = document.createElement("li");
+        li.className = "item";
+        li.dataset.roomId = room.roomId;
+
+        li.innerHTML = `
                 <img src="/feed/images/explore/user.png">
                 <div class="text">
                     <span class="room-name">${room.nickname}</span>
                     <span class="room-content">${room.lastMessage ?? ""}</span>
                 </div>
             
-                ${room.unReadCount > 0 
-                    ? `<span class="unread-badge">${room.unReadCount}</span>`
-                    : ""}
+                ${room.unReadCount > 0
+            ? `<span class="unread-badge">${room.unReadCount}</span>`
+            : ""}
             
                 <span class="date">
                     ${formatDate(room.lastMessageAt)}
                 </span>
             `;
 
-            chatList.appendChild(li);
-        });
-
-    } catch (e) {
-        console.error("채팅방 목록 불러오기 실패:", e);
-    }
+        chatList.appendChild(li);
+    });
 }
 
 // 채팅 내역 가져오기

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const commentInput = commentForm.querySelector('.comment-input');
     const writeCommentBtn = commentForm.querySelector('.btn');
     const commentSection = detailArea.querySelector('.comments');
+    const commentCount = actionBox.querySelector('.count.comment');
 
     if ($moreWrap) {
         const $moreBtn = document.querySelector('.feed-more-btn');
@@ -177,6 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             // 댓글 등록하기
             addCommentToUI(data.comment);
+            commentCount.textContent = parseInt(commentCount.textContent) + 1;
             // 입력창 비워주기
             commentInput.value = '';
         } catch (error) {
@@ -265,7 +267,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const comment = deleteBtn.closest('.comment');
             const commentId = comment.dataset.id;
 
-            if (!confirm('댓글을 삭제하시겠습니까?')) return;
+            if (!showConfirm('댓글을 삭제하시겠습니까?')) return;
 
             try {
                 const res = await fetch(`/api/feed/${feedId}/comments/${commentId}`, {
@@ -285,9 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 comment.remove();
-
-                const commentCountEl = document.querySelector('.count.comment');
-                commentCountEl.textContent = parseInt(commentCountEl.textContent) - 1;
+                commentCount.textContent = parseInt(commentCount.textContent) - 1;
 
             } catch (err) {
                 console.error(err);
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function addCommentToUI(comment) {
         const article = document.createElement('article');
         article.className = 'comment';
-        article.dataset.id = comment.id;
+        article.dataset.id = comment.commentId;
 
         article.innerHTML = `
         <img class="avatar sm"

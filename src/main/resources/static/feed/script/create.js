@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!file) return;
 
         if (!file.type.startsWith('image') && !file.type.startsWith('video')) {
-            alert('이미지 또는 동영상만 업로드 가능합니다.');
+            showMessage('이미지 또는 동영상만 업로드 가능합니다.');
             e.target.value = '';
             return;
         }
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (xhr.readyState !== XMLHttpRequest.DONE) return;
 
             if (xhr.status < 200 || xhr.status >= 400) {
-                alert("오류가 발생했습니다.");
+                showMessage("오류가 발생했습니다.");
                 return;
             }
 
@@ -184,13 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             switch (response.result) {
                 case "LOGIN_REQUIRED":
-                    alert("로그인이 필요합니다.");
+                    showMessage("로그인이 필요합니다.");
                     break;
                 case "SUCCESS":
                     window.location.href = "/feed/explore";
                     break;
                 default:
-                    alert("알 수 없는 오류가 발생했습니다.");
+                    showMessage("알 수 없는 오류가 발생했습니다.");
             }
         };
 

@@ -160,6 +160,7 @@
             img {
                 width: 3rem;
                 height: 3rem;
+                border: 1px solid darken($global-gray-background-color, 20%);
                 border-radius: 1rem;
                 object-fit: cover;
             }

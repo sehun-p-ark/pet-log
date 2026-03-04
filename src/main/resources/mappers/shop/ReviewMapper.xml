@@ -79,6 +79,18 @@
         )
     </select>
 
+    <select id="checkCanWriteReviewByProduct" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM petlog.order_item oi
+                 JOIN petlog.`order` o ON oi.order_id = o.id
+        WHERE o.user_id = #{userId}
+          AND oi.product_id = #{productId}
+          AND NOT EXISTS (
+            SELECT 1 FROM petlog.review r
+            WHERE r.order_item_id = oi.id
+        )
+    </select>
+
     <!--리뷰 수정-->
     <update id="updateReview">
         UPDATE petlog.review

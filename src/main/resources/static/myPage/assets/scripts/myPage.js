@@ -10,6 +10,7 @@ const petInformation = content.querySelector(':scope > .petInformation');
 const reservationInformation = content.querySelector(':scope > .reservationInformation');
 const storeInformation = content.querySelector(':scope > .storeInformation');
 const paymentDetails = content.querySelector(':scope > .paymentDetails');
+const productHeartDetails = content.querySelector(':scope > .productHeartDetails');
 
 const sections = [
     personalInformation,
@@ -17,7 +18,8 @@ const sections = [
     petInformation,
     storeInformation,
     reservationInformation,
-    paymentDetails
+    paymentDetails,
+    productHeartDetails
 ].filter(section => section !== null);
 
 // 메뉴 클릭 시
@@ -3770,19 +3772,41 @@ if (personalInformation) {
     // endregion
 }
 
+// 찜 취소
+if (productHeartDetails) {
+    productHeartDetails.addEventListener('click', (e) => {
+        const cancelBtn = e.target.closest('.heart-cancel-btn');
+        if (!cancelBtn) return;
 
+        const productId = cancelBtn.dataset.productId;
 
+        const formData = new FormData();
+        formData.append('productId', productId);
 
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState !== XMLHttpRequest.DONE) return;
+            if (xhr.status < 200 || xhr.status >= 400) return;
 
+            const response = JSON.parse(xhr.responseText);
+            if (response.result === 'SUCCESS') {
+                location.reload();
+            } else if (response.result === 'FAILURE_SESSION_EXPIRED') {
+                showMessage('로그인을 해주세요.', () => {
+                    location.href = '/user/login';
+                });
+            }
+        };
+        xhr.open('POST', '/my/heart/delete');
+        xhr.send(formData);
+    });
+}
 
-
-
-
-
-
-
-
-
-
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted || sessionStorage.getItem('heartChanged') === 'true') {
+        sessionStorage.removeItem('heartChanged');
+        window.location.reload();
+    }
+});
 
 

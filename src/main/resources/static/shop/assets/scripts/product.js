@@ -168,6 +168,7 @@ if (infoTab && reviewTab && detail && review) {
                 .then(data => {
                     renderReviews(data.reviews);
                     renderRatingSummary(data);
+                    renderCanWriteReview(data.canWriteReview);
                 });
         }
     });
@@ -806,3 +807,23 @@ if (reviewWriteBtn) {
         window.location.href = '/my?menu=3';
     });
 }
+
+
+// 뒤로가기 시 찜 상태 재확인
+window.addEventListener('pageshow', function(e) {
+    const productId = getProductIdFromUrl();
+    fetch(`/my/heart/check?productId=${productId}&_=${Date.now()}`, {
+        cache: 'no-store'
+    })
+        .then(res => res.json())
+        .then(data => {
+            const heartBtns = document.querySelectorAll('.image.bookmark');
+            heartBtns.forEach(btn => {
+                if (data.isHearted) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        });
+});

@@ -971,7 +971,10 @@
                 <span>예약 조회</span>
             </li>
             <li class="menu" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
-                <span>쇼핑 내역</span>
+                <span>주문 내역</span>
+            </li>
+            <li class="menu" th:if="${sessionUser.getUserType() == 'PERSONAL'}">
+                <span>찜 목록</span>
             </li>
         </ul>
     </div>
@@ -1335,6 +1338,7 @@
                                     </div>
                                     <div class="product-info">
                                         <a th:href="@{/shop/product/{id}(id=${item['productId']})}">
+                                            <div class="product-brand" th:if="${item['productBrand'] != null}" th:text="${item['productBrand']}"></div>  <!-- 추가 -->
                                             <div class="product-name" th:text="${item['productName']}"></div>
                                         </a>
                                         <div class="product-option" th:if="${item['optionName'] != null}" th:text="${item['optionName']}"></div>
@@ -1357,6 +1361,48 @@
                             </div>
                         </th:block>
                     </th:block>
+                </div>
+            </th:block>
+        </div>
+        <div class="productHeartDetails">
+            <th:block th:if="${hearts == null or hearts.isEmpty()}">
+                <div class="heart-list empty">
+                    <div class="empty-hearts">
+                        <span class="empty-title">아직 찜한 상품이 없어요.</span>
+                        <span class="empty-sub">우리 아이를 위한 선물을 찾아보세요 🐾</span>
+                        <a href="/shop" class="empty-shop-link">쇼핑몰 바로가기</a>
+                    </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${hearts != null and !hearts.isEmpty()}">
+                <div class="heart-list">
+                    <div class="heart-date">
+                        <span class="all-count" th:text="'찜 ' + ${hearts.size()} + '건'"></span>
+                    </div>
+                    <div class="heart-item-wrapper">
+                        <div class="heart-item" th:each="heart : ${hearts}">
+                            <div class="img-wrapper">
+                                <a th:href="@{/shop/product/{id}(id=${heart['productId']})}">
+                                    <img th:src="${heart['productImageUrl']}" alt="상품이미지">
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <a th:href="@{/shop/product/{id}(id=${heart['productId']})}">
+                                    <div class="product-brand" th:text="${heart['productBrand']}"></div>
+                                    <div class="product-name" th:text="${heart['productName']}"></div>
+                                </a>
+                                <div class="product-price">
+                                    <span class="discount-price" th:text="${#numbers.formatInteger(heart['discountPrice'], 0, 'COMMA')} + '원'"></span>
+                                    <span class="prime-cost" th:text="${#numbers.formatInteger(heart['originalPrice'], 0, 'COMMA')} + '원'"></span>
+                                </div>
+                            </div>
+                            <img class="heart-cancel-btn"
+                                 src="/myPage/assets/images/my-heart-active.png"
+                                 alt=""
+                                 th:data-product-id="${heart['productId']}">
+                        </div>
+                    </div>
                 </div>
             </th:block>
         </div>

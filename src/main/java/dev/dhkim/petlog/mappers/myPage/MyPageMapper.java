@@ -172,4 +172,9 @@ public interface MyPageMapper {
     int updateReservationCancel(@Param(value = "reservationId") int reservationId,
                                 @Param(value = "userId") int userId);
 
+    // 찜목록
+    List<Map<String, Object>> selectHeartsByUserId(int userId);
+
+    // 찜삭제
+    void deleteHeart(@Param("userId") int userId, @Param("productId") int productId);
 }

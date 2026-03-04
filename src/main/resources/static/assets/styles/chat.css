@@ -178,6 +178,7 @@
 .chat-list-modal .chat-list .item img {
   width: 3rem;
   height: 3rem;
+  border: 1px solid #c6c6c6;
   border-radius: 1rem;
   object-fit: cover;
 }

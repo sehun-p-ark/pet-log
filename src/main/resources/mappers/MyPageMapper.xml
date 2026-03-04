@@ -508,6 +508,7 @@
         oi.price,
         p.price        AS originalPrice,
         p.name         AS productName,
+        p.brand        AS productBrand,
         pi.image_url   AS productImageUrl,
         opt.option_name AS optionName,
         o.id           AS orderId,
@@ -563,4 +564,28 @@
         </choose>
         ORDER BY o.created_at DESC
     </select>
+
+    <!--찜목록-->
+    <select id="selectHeartsByUserId" resultType="map">
+        SELECT h.id          AS heartId,
+               h.created_at  AS createdAt,
+               p.id          AS productId,
+               p.name        AS productName,
+               p.brand         AS productBrand,
+               p.price       AS originalPrice,
+               p.discount_rate AS discountRate,
+               FLOOR(p.price * (1 - p.discount_rate / 100)) AS discountPrice,
+               pi.image_url  AS productImageUrl
+        FROM petlog.heart h
+                 JOIN petlog.product p ON h.product_id = p.id
+                 LEFT JOIN petlog.product_image pi ON pi.product_id = p.id AND pi.is_thumbnail = true
+        WHERE h.user_id = #{userId}
+        ORDER BY h.created_at DESC
+    </select>
+
+    <!--찜삭제-->
+    <delete id="deleteHeart">
+        DELETE FROM petlog.heart
+        WHERE user_id = #{userId} AND product_id = #{productId}
+    </delete>
 </mapper>

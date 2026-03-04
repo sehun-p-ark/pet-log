@@ -42,6 +42,11 @@ public interface ReviewMapper {
 
     void insertReviewImage(@Param("reviewId") Integer reviewId, @Param("imageUrl") String imageUrl, @Param("sortOrder") Integer sortOrder);
 
+    boolean checkCanWriteReviewByProduct(
+            @Param("userId") Integer userId,
+            @Param("productId") Integer productId
+    );
+
     boolean checkCanWriteReview(
             @Param("userId") Integer userId,
             @Param("productId") Integer productId,

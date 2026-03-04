@@ -347,13 +347,15 @@ function toggleHeart(productId, heartElement) {
                 }
             });
 
+            sessionStorage.setItem('heartChanged', 'true');
+
             if (result.isHearted) {
-                showToast('즐겨찾기가 완료 되었습니다.');
+                showToast('즐겨찾기가 완료 되었습니다.', '찜 목록 바로가기', '/my?menu=4');
             } else {
-                showToast('즐겨찾기가 취소되었습니다.');
+                showToast('즐겨찾기가 취소되었습니다.', '찜 목록 바로가기', '/my?menu=4');
             }
         } else {
-            showToast(result.message);
+            showToast(result.message, '로그인하기', '/user/login');
         }
     };
 

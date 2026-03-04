@@ -45,6 +45,8 @@ function goToStep(stepNumber) {
         step.classList.add('hidden');
     });
 
+    currentStep = stepNumber;
+
     // 현재 단계에 따른 이동
     if (stepNumber === 1) {
         $registerFirstStep.classList.remove('hidden');
@@ -1526,6 +1528,11 @@ function loadPetDialog(petData) {
 
 $registerContainer.addEventListener('submit', async (e) => {
     e.preventDefault();
+    console.log("클릭됨");
+    if (currentStep !== 4) {
+        e.preventDefault();
+        return;
+    }
 
     let phone;
     let store;
@@ -1946,10 +1953,7 @@ businessIdInput.addEventListener('input', () => {
 
 
 
-
-
-
-// 인증 시간 함수
+// 이메일 인증 시간 함수
 function formatMMSS(totalSecond) {
     const minutes = String(Math.floor(totalSecond / 60)).padStart(2, '0');
     const seconds = String(totalSecond % 60).padStart(2, '0');
