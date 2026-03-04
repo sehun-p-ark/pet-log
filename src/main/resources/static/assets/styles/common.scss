@@ -582,3 +582,9 @@ body:has(.message.visible) .cover {
     }
   }
 }
+
+> .footer{
+  @include flex(column, flex-start, flex-start, 1rem);
+  background-color: $global-gray-background-color;
+  padding: 1rem;
+}
