@@ -76,7 +76,7 @@
                 <a th:if="${!isSigned or session.sessionUser.userType == 'PERSONAL'}"
                    th:href="@{/shop/main}" class="item">쇼핑</a>
             </div>
-            <span class="nav-caption"> USER </span>
+            <span class="nav-caption user"> USER </span>
             <div class="nav-user">
                 <a th:if="${isSigned and session.sessionUser.userType == 'PERSONAL'}" th:href="@{/shop/cart}" class="item">장바구니</a>
                 <a th:if="${isSigned}" th:href="@{/my}" class="item">마이페이지</a>

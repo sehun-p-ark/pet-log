@@ -202,6 +202,26 @@ textarea[data-object="input"] {
       flex-grow: 1;
       flex-shrink: 1; }
 
+@font-face {
+  font-family: 'GMarketSans';
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff") format("woff");
+  font-weight: 300;
+  font-display: swap; }
+@font-face {
+  font-family: 'AvieSehyun';
+  src: url("https://gcore.jsdelivr.net/gh/projectnoonnu/noonfonts_five@.2.0/UhBeeSe_hyun.woff") format("woff");
+  font-weight: normal;
+  font-display: swap; }
+@font-face {
+  font-family: 'GMarketSans';
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff") format("woff");
+  font-weight: 500;
+  font-display: swap; }
+@font-face {
+  font-family: 'GMarketSans';
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff") format("woff");
+  font-weight: 700;
+  font-display: swap; }
 * {
   box-sizing: border-box; }
 
@@ -291,9 +311,10 @@ ol, ul {
       flex-direction: row;
       gap: 0;
       justify-content: center;
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 600;
       cursor: pointer;
+      font-family: 'AvieSehyun';
       color: #FFFFFF; }
       #topNavigator > .nav-wrapper > .logo > * {
         flex-grow: 0;
@@ -324,10 +345,11 @@ ol, ul {
         font-size: 1.375rem;
         color: #FFFFFF;
         cursor: pointer;
-        font-weight: 600;
         padding: 0.5rem;
         position: relative;
-        text-decoration: none; }
+        text-decoration: none;
+        font-family: "GMarketSans";
+        font-weight: 500; }
         #topNavigator > .nav-wrapper > .nav-category > .item:hover,
         #topNavigator > .nav-wrapper > .nav-user > .item:hover {
           opacity: 0.9;
@@ -362,7 +384,7 @@ ol, ul {
     width: 10rem;
     height: 100vh;
     background: #A4DDB0;
-    padding: 6rem 1rem 2rem;
+    padding: 3rem 1rem 2rem;
     transition: right 0.3s ease;
     z-index: 90; }
     #topNavigator > .mobile-menu > * {
@@ -387,16 +409,26 @@ ol, ul {
       gap: 0;
       justify-content: center;
       width: 100%;
+      padding-top: 1.5rem;
       color: white;
       font-size: 1.75rem;
       font-weight: 400;
-      text-align: center; }
+      text-align: center;
+      /*      &::before,
+            &::after {
+              content: "";
+              flex: 1;
+              height: 1px;
+              background-color: white;
+            }*/ }
       #topNavigator > .mobile-menu > .nav-caption > * {
         flex-grow: 0;
         flex-shrink: 0; }
       #topNavigator > .mobile-menu > .nav-caption > .-flex-stretch {
         flex-grow: 1;
         flex-shrink: 1; }
+      #topNavigator > .mobile-menu > .nav-caption.user {
+        border-top: 0.0625rem solid #ffffff; }
     #topNavigator > .mobile-menu > .nav-category,
     #topNavigator > .mobile-menu > .nav-user {
       align-items: center;
@@ -416,7 +448,9 @@ ol, ul {
       #topNavigator > .mobile-menu > .nav-user > a {
         color: white;
         font-size: 1.25rem;
-        text-decoration: none; }
+        text-decoration: none;
+        font-family: "GMarketSans";
+        font-weight: 500; }
 
 @media (max-width: 1024px) {
   #topNavigator > .nav-wrapper > .nav-category,
