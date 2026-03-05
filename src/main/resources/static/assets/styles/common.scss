@@ -259,6 +259,7 @@ ol, ul {
   @include flex(row, flex-end, space-between, clamp(0.5rem, 2vw, 1rem));
   width: 100%;
   padding-bottom: 1rem;
+  margin-bottom: 1rem;
 
   > .menu {
     position: relative;
