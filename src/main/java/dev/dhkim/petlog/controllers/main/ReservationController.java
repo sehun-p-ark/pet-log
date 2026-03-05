@@ -20,9 +20,7 @@ public class ReservationController {
             @RequestBody ReservationDto reservation,
             @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
-        // 1. 출력 순서 변경 (sessionUser가 null일 때 getUserId() 호출하면 터짐)
-        System.out.println("수신된 데이터: " + reservation);
-        System.out.println("세션 유저 정보: " + sessionUser);
+
 
         // 2. 세션 체크를 최상단으로 이동
         if (sessionUser == null) {
@@ -31,9 +29,7 @@ public class ReservationController {
 
             // [테스트용] 로그인 없이 테스트하려면 아래 주석을 해제하세요.
             reservation.setUserId(9999); //
-            System.out.println(" 세션이 없어 임시 유저(1)로 진행합니다.");
         } else {
-            System.out.println("접속 유저 ID: " + sessionUser.getUserId());
             reservation.setUserId(sessionUser.getUserId());
         }
 

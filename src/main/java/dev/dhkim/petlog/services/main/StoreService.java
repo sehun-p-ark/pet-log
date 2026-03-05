@@ -71,7 +71,7 @@ public class StoreService {
         storeDto.setLng(latLng[1]);
 
         StoreEntity entity = dtoToEntity(storeDto);
-        storeMapper.insert(entity); // 👈 이제 postal_code가 채워져서 에러가 안 날 겁니다.
+        storeMapper.insert(entity); //  이제 postal_code가 채워져서 에러가 안 날 겁니다.
 
         return entityToDto(entity);
     }
@@ -97,8 +97,6 @@ public class StoreService {
                 store.setLng(latLng[1]);
                 storeMapper.updateStoreLatLng(store.getStoreId(), latLng[0], latLng[1]);
 
-                System.out.println("[DEBUG] 좌표 업데이트, storeId=" + store.getStoreId()
-                        + ", lat=" + latLng[0] + ", lng=" + latLng[1]);
             }
         }
     }
@@ -111,7 +109,6 @@ public class StoreService {
         double lat = centerLat + (Math.random() - 0.5) * 0.02;
         double lng = centerLng + (Math.random() - 0.5) * 0.02;
 
-        System.out.println("[DEBUG] 임의 좌표 생성, lat=" + lat + ", lng=" + lng);
         return new double[]{lat, lng};
     }
 
@@ -162,13 +159,10 @@ public class StoreService {
         // 주소 합치기
         String fullAddress = storeDto.getAddressPrimary().trim();
 
-        // 🚩 API 호출 전 주소 확인
-        System.out.println("🔍 [Service] 좌표 변환 시도 주소: " + fullAddress);
+
 
         double[] latLng = kakaoGeoCodingService.getLatLng(fullAddress);
 
-        // 🚩 API 결과 확인
-        System.out.println("📍 [Service] 추출된 좌표 -> Lat: " + latLng[0] + ", Lng: " + latLng[1]);
 
         storeDto.setLat(latLng[0]);
         storeDto.setLng(latLng[1]);
@@ -177,7 +171,7 @@ public class StoreService {
         storeMapper.updateStore(entity);
 
         int result = storeMapper.updateStore(entity);
-        System.out.println("🚩 실제로 수정된 행의 개수: " + result); // 이게 0이면 ID가 틀린 것임
+
     }
 
     // StoreService 클래스 내부 최하단쯤에 있습니다.

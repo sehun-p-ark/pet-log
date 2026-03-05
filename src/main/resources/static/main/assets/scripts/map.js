@@ -485,15 +485,13 @@ async function showCategory(category) {
             list = await res.json();
         }
 
-        // 2. 💡 내가 직접 DB에 넣은 데이터도 가져와서 합치기
+        // 2.  내가 직접 DB에 넣은 데이터도 가져와서 합치기
         // (직접 등록한 데이터는 모두 /api/stores 에 카테고리별로 저장되어 있다고 가정)
         const dbRes = await fetch(`/api/stores?category=${encodeURIComponent(category)}`);
         const dbList = await dbRes.json();
 
         // 3. 두 리스트 합치기
         const combinedList = [...list, ...dbList];
-
-        console.log("카테고리:", category, "전체 데이터(API+DB):", combinedList);
 
         renderPlaces(combinedList, category);
 
@@ -942,7 +940,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 const confirmBtn = modal.querySelector('.btn.confirm');
                 if (confirmBtn) {
                     confirmBtn.dataset.storeId = storeId;
-                    console.log("전송 준비된 storeId:", storeId);
                 }
 
                 resetModalInputs();
@@ -1004,7 +1001,6 @@ window.addEventListener('DOMContentLoaded', () => {
                     requestText: document.getElementById('reserveRequest').value,
                     paymentMethod: 'OFFLINE'
                 };
-                console.log(payload)
 
 
                 try {

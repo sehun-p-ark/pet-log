@@ -36,11 +36,6 @@ public class StoreController {
     @PatchMapping("/my/store/modify")
     @ResponseBody
     public String modifyStore(StoreDto storeDto) {
-        // 🚩 이 세상에서 제일 잘 보이는 로그를 넣습니다.
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println("🚨 [REAL TIME] 컨트롤러 접속 성공: " + storeDto.getStoreId());
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
         try {
             storeService.updateStore(storeDto);
             return "{\"result\": \"SUCCESS\"}";

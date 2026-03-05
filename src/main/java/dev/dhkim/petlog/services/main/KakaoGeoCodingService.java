@@ -20,8 +20,7 @@ public class KakaoGeoCodingService {
 
     public double[] getLatLng(String address) {
         try {
-            System.out.println("[DEBUG] 카카오 API 호출 주소: " + address);
-            System.out.println("[DEBUG] 카카오 키: " + kakaoRestKey);
+
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "KakaoAK " + kakaoRestKey);
@@ -35,7 +34,6 @@ public class KakaoGeoCodingService {
             );
 
             JSONObject json = new JSONObject(response.getBody());
-            System.out.println("[DEBUG] 응답: " + response.getBody());
             if (json.getJSONArray("documents").length() == 0) {
                 return new double[]{0.0, 0.0};
             }
