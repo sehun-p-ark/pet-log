@@ -25,7 +25,7 @@ public class MainController {
             @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
 
-        // ✅ ADMIN이면 고객센터(/cs)로 강제 이동
+        //  ADMIN이면 고객센터(/cs)로 강제 이동
         if (sessionUser != null && "ADMIN".equals(sessionUser.getUserType())) {
             modelAndView.setViewName("redirect:/cs");
             return modelAndView;

@@ -29,7 +29,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/my")
-public class MyPageController {
+public class        MyPageController {
     private final MyPageService myPageService;
     private final ReviewMapper reviewMapper;
     private final CouponMapper couponMapper;

@@ -39,13 +39,6 @@ public class HospitalService {
     @Value("${public-data.service.key}")
     private String serviceKey;
 
-    @PostConstruct
-    public void checkKey() {
-        // 서버 실행 시 콘솔창에 키가 출력됩니다.
-        System.out.println("✅ 환경 변수 로드 성공: " + serviceKey);
-    }
-    /*
-     */
 
     /**
      * 전체 데이터 삭제 (테스트용)
@@ -64,8 +57,6 @@ public class HospitalService {
         int totalCount = firstBody.path("totalCount").asInt();
         int totalPages = (totalCount + NUM_OF_ROWS - 1) / NUM_OF_ROWS;
 
-        System.out.println("총 데이터 수: " + totalCount);
-        System.out.println("총 페이지 수: " + totalPages);
 
         for (int pageNo = 1; pageNo <= totalPages; pageNo++) {
 
@@ -75,7 +66,6 @@ public class HospitalService {
             if (itemsNode.isMissingNode()
                     || itemsNode.isNull()
                     || (itemsNode.isTextual() && itemsNode.asText().isEmpty())) {
-                System.out.println("페이지 " + pageNo + " 데이터 없음 → 중단");
                 break;
             }
 
@@ -97,20 +87,15 @@ public class HospitalService {
                     continue;
                 }
 
-
                 // 중복 체크
                 if (hospitalMapper.existsByManageNo(hospital.getManageNo())) {
                     continue;
                 }
-
                 hospitalMapper.insertHospital(hospital);
                 totalSaved++;
             }
-
-            System.out.println("페이지 " + pageNo + " 저장 완료 (" + batch.size() + "건)");
         }
 
-        System.out.println("전체 저장 완료: " + totalSaved + "건");
         return totalSaved;
     }
     //“API에서 받은 JSON 병원 1건 → DB에 저장할 HospitalEntity 객체로 변환

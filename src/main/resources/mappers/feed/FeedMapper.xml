@@ -65,7 +65,7 @@
                 ON `t3`.`user_id` = `t1`.`user_id`
                     AND `t3`.is_primary = 1
             LEFT JOIN `petlog`.`address` `t4`
-                ON `t4`.`user_id` = `t1`.`user_id`
+                ON `t4`.`user_id` = `t1`.`user_id` AND `t4`.is_default = 1
         <!-- 전체 조회 -->
         WHERE 1=1
 
@@ -128,7 +128,7 @@
                            ON `t1`.user_id = `t3`.user_id
                                AND `t3`.is_primary = 1
                  LEFT JOIN `petlog`.`address` AS `t4`
-                           ON `t1`.`user_id` = `t4`.`user_id`
+                           ON `t1`.`user_id` = `t4`.`user_id` AND `t4`.is_default = 1
         WHERE `t1`.`id` = #{id}
     </select>
     <select id="selectFeedByAddress" resultType="dev.dhkim.petlog.dto.feed.FeedDto">
@@ -150,7 +150,7 @@
                            ON `t1`.user_id = `t3`.user_id
                                AND `t3`.is_primary = 1
                  LEFT JOIN `petlog`.`address` AS `t4`
-                           ON `t1`.`user_id` = `t4`.`user_id`
+                           ON `t1`.`user_id` = `t4`.`user_id` AND `t4`.is_default = 1
         WHERE SUBSTRING_INDEX(`t4`.`address_primary`, ' ', 1) LIKE CONCAT(#{address}, '%')
           AND t1.id != #{id}
         ORDER BY t1.created_at DESC

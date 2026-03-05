@@ -3,6 +3,7 @@ package dev.dhkim.petlog.controllers.main;
 import dev.dhkim.petlog.dto.main.HospitalDto;
 import dev.dhkim.petlog.dto.main.SalonDto;
 import dev.dhkim.petlog.services.main.SalonService;
+import dev.dhkim.petlog.services.main.StoreService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,6 +20,7 @@ import java.util.List;
 @RestController
 public class SalonController {
     private SalonService salonService;
+    private StoreService storeService;
 
 
 
@@ -44,7 +47,21 @@ public class SalonController {
     //미용실 목록 내보내기
     @GetMapping("/salon")
     public List<SalonDto> getSalon() {
+        List<SalonDto> result = new ArrayList<>(salonService.getAllSalonsForMap());
 
-        return salonService.getAllSalonsForMap(); // DB에서 DTO 리스트 반환
+        // store 테이블에서 카테고리 '미용실'인 것 합치기
+        storeService.getStoresByCategory("미용실").forEach(s ->
+                result.add(new SalonDto(
+                        s.getStoreName(),
+                        s.getAddressPrimary(),
+                        s.getStorePhone(),
+                        null,
+                        "영업/정상",
+                        s.getLat(),
+                        s.getLng()
+                ))
+        );
+
+        return result;
     }
 }

@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const selectedMedia = [];
 
+    let draggedItem = null;
+
     /* ==============================
         수정 모드 기존 데이터 세팅
     ============================== */
@@ -41,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         setMainMedia(selectedMedia[0]);
+        updateUploadButton();
     }
 
     /* ==============================
@@ -52,31 +55,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addFile(e) {
 
-        const file = e.target.files[0];
-        if (!file) return;
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
 
-        if (!file.type.startsWith('image') && !file.type.startsWith('video')) {
-            showMessage('이미지 또는 동영상만 업로드 가능합니다.');
-            e.target.value = '';
-            return;
-        }
+        files.forEach((file) => {
+            if (selectedMedia.length >= 10) { // 업로드 갯수 제한
+                showMessage("미디어는 최대 10개까지 업로드할 수 있습니다.");
+                e.target.value = '';
+                return;
+            }
 
-        const blobURL = URL.createObjectURL(file);
-        const type = file.type.startsWith('image') ? 'image' : 'video';
+            if (!file.type.startsWith('image') && !file.type.startsWith('video')) {
+                showMessage('이미지 또는 동영상만 업로드 가능합니다.');
+                e.target.value = '';
+                return;
+            }
 
-        const mediaObj = {
-            isNew: true,
-            mediaId: null,
-            file: file,
-            type: type,
-            src: blobURL
-        };
+            const blobURL = URL.createObjectURL(file);
+            const type = file.type.startsWith('image') ? 'image' : 'video';
 
-        selectedMedia.push(mediaObj);
+            const mediaObj = {
+                isNew: true,
+                mediaId: null,
+                file: file,
+                type: type,
+                src: blobURL
+            };
 
-        addPreviewItem(mediaObj);
-        setMainMedia(mediaObj);
+            selectedMedia.push(mediaObj);
 
+            addPreviewItem(mediaObj); // 미리보기에 추가하기
+            if (setMainMedia.length === 1) { // 첫번째 사진을 대표사진으로
+                setMainMedia(mediaObj);
+            }
+        });
+
+        updateUploadButton();
         e.target.value = '';
     }
 
@@ -109,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 setMainMedia(selectedMedia[0]);
             }
-
+            updateUploadButton();
             return;
         }
 
@@ -123,6 +137,56 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!media) return;
 
         setMainMedia(media);
+    });
+
+    /* ==============================
+        드래그 앤 드롭
+    ============================== */
+    // 드래그 시작
+    $preview.addEventListener('dragstart', (e) => {
+        const item = e.target.closest('.content');
+        if (!item) return;
+
+        draggedItem = item;
+    });
+    // 드롭 허용해주기
+    $preview.addEventListener('dragover', (e) => {
+        e.preventDefault();
+
+        const target = e.target.closest('.content');
+        if (!target || target === draggedItem) return;
+
+        document
+            .querySelectorAll('.content.drag-over')
+            .forEach(el => el.classList.remove('drag-over'));
+
+        target.classList.add('drag-over');
+    });
+    // 드롭
+    $preview.addEventListener('drop', (e) => {
+        e.preventDefault();
+
+        const target = e.target.closest('.content');
+        if (!target || target === draggedItem) return;
+
+        const items = [...$preview.querySelectorAll('.content')];
+        const draggedIndex = items.indexOf(draggedItem);
+        const targetIndex = items.indexOf(target);
+
+        if (draggedIndex < targetIndex) {
+            target.after(draggedItem);
+        } else {
+            target.before(draggedItem);
+        }
+        document.querySelectorAll('.content.drag-over')
+            .forEach($el => $el.classList.remove('drag-over'));
+        updateMediaOrder();
+    });
+    // 드래그 끝
+    $preview.addEventListener('dragend', () => {
+        document
+            .querySelectorAll('.content.drag-over')
+            .forEach(el => el.classList.remove('drag-over'));
     });
 
     /* ==============================
@@ -145,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (title.length > 50) {
             showMessage("제목의 최대길이는 50자입니다.")
+            return;
         }
         if (!description || description.length === 0) {
             showMessage("내용을 입력해주세요.");
@@ -207,18 +272,16 @@ document.addEventListener('DOMContentLoaded', () => {
         유틸 함수
     ============================== */
 
+    // 미리보기 사진 띄우기
     function addPreviewItem(media) {
 
         const $li = document.createElement('li');
         $li.classList.add('content');
         $li.dataset.src = media.src;
         $li.dataset.type = media.type;
+        $li.draggable = true;
 
-        if (media.type === 'image') {
-            $li.style.backgroundImage = `url("${media.src}")`;
-        } else {
-            $li.style.backgroundImage = `url("${media.src}")`;
-        }
+        $li.style.backgroundImage = `url("${media.src}")`;
 
         const $button = document.createElement('button');
         $button.type = 'button';
@@ -226,11 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
         $button.innerHTML = '×';
 
         $li.appendChild($button);
-        $preview.insertBefore($li, $liNewContent);
+        $preview.appendChild($li);
         $preview.classList.add('active');
     }
 
-    function addExistingPreview(media) {
+    function addExistingPreview(media) { // 미디어 상태 확인(새로 추가한건지?, 타입, src, ...)
 
         const mediaObj = {
             isNew: false,
@@ -243,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addPreviewItem(mediaObj);
     }
 
-    function setMainMedia(media) {
+    function setMainMedia(media) { // 메인 미디어 설정
 
         $basicContent.style.display = 'none';
         $preview.classList.add('active');
@@ -259,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function resetMainMedia() {
+    function resetMainMedia() { // 미디어 초기화 시키기
         $basicContent.style.display = 'flex';
         $preview.classList.remove('active');
         $image.src = '';
@@ -268,4 +331,28 @@ document.addEventListener('DOMContentLoaded', () => {
         $video.style.display = 'none';
     }
 
+    function updateUploadButton() { // 게시물 10개까지만 가능하도록 버튼 제어
+        if (selectedMedia.length >= 10) {
+            $liNewContent.style.display = 'none';
+        } else {
+            $liNewContent.style.display = 'flex';
+        }
+
+        if (selectedMedia.length === 0) {
+            $basicContent.style.display = 'flex';
+        }
+    }
+
+    function updateMediaOrder() { // 미디어 순서 정렬
+
+        const items = [...$preview.querySelectorAll('.content')];
+
+        const newOrder = items.map(item => {
+            const src = item.dataset.src;
+            return selectedMedia.find(m => m.src === src);
+        });
+
+        selectedMedia.length = 0;
+        selectedMedia.push(...newOrder);
+    }
 });

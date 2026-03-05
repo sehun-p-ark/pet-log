@@ -38,16 +38,6 @@ public class SalonService {
     @Value("${public-data.service.key}")
     private String serviceKey;
 
-
-    @PostConstruct
-    public void checkKey() {
-        // 서버 실행 시 콘솔창에 키가 출력됩니다.
-        System.out.println("✅ 환경 변수 로드 성공: " + serviceKey);
-    }
-    /* =======================
-       공공데이터 API 호출 관련
-       ======================= */
-
     private String buildUrl(int pageNo) {
         return "https://apis.data.go.kr/1741000/pet_grooming/info"
                 + "?serviceKey=" + serviceKey
@@ -143,8 +133,6 @@ public class SalonService {
                     + "&input_coord=WTM"
                     + "&output_coord=WGS84";
 
-            System.out.println("API 호출 URL: " + url);
-
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "KakaoAK " + kakaoRestKey);
             HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -152,7 +140,6 @@ public class SalonService {
             ResponseEntity<JsonNode> response =
                     restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class);
 
-            System.out.println("응답 상태: " + response.getStatusCode());
 
             JsonNode docs = response.getBody().path("documents");
 
@@ -163,17 +150,12 @@ public class SalonService {
                 double lng = doc.path("x").asDouble();
                 double lat = doc.path("y").asDouble();
 
-                System.out.println("API 응답 값 → lat=" + lat + ", lng=" + lng);
-
                 if (lat != 0.0 && lng != 0.0) {
                     return new Double[]{lat, lng};
                 }
-            } else {
-                System.out.println("documents 비어있음");
             }
-
         } catch (Exception e) {
-            System.out.println("API 호출 중 예외 발생");
+
             e.printStackTrace();
         }
 
@@ -189,8 +171,6 @@ public class SalonService {
 
         List<SalonEntity> salons = salonMapper.findInvalidCoords();
 
-        System.out.println("=== 전체 대상 개수: " + salons.size());
-
         int successCount = 0;
         int failCount = 0;
         int nullCoordCount = 0;
@@ -201,16 +181,10 @@ public class SalonService {
 
             try {
 
-                System.out.println("--------------------------------------------------");
-                System.out.println("ID: " + salon.getId());
-                System.out.println("CRD_X: " + salon.getCrdX());
-                System.out.println("CRD_Y: " + salon.getCrdY());
-
                 Double x = salon.getCrdX();
                 Double y = salon.getCrdY();
 
                 if (x == null || y == null || x == 0.0 || y == 0.0) {
-                    System.out.println("▶ 좌표 자체가 null 또는 0");
                     nullCoordCount++;
                     failCount++;
                     continue;
@@ -221,10 +195,7 @@ public class SalonService {
                 Double lat = converted[0];
                 Double lng = converted[1];
 
-                System.out.println("변환 결과 → LAT: " + lat + ", LNG: " + lng);
-
                 if (lat == null || lng == null) {
-                    System.out.println("▶ API 변환 실패");
                     apiFailCount++;
                     failCount++;
                     continue;
@@ -235,8 +206,6 @@ public class SalonService {
                         lat,
                         lng
                 );
-
-                System.out.println("UPDATE 결과 row count = " + updateResult);
 
                 if (updateResult == 1) {
                     successCount++;
@@ -251,12 +220,6 @@ public class SalonService {
             }
         }
 
-        System.out.println("======================================");
-        System.out.println("성공: " + successCount);
-        System.out.println("실패: " + failCount);
-        System.out.println("좌표 null/0: " + nullCoordCount);
-        System.out.println("API 변환 실패: " + apiFailCount);
-        System.out.println("UPDATE 0건: " + updateZeroCount);
     }
 
     /* =======================

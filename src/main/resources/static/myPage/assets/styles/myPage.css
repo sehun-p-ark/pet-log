@@ -5976,7 +5976,10 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   height: 5rem;
   object-fit: cover;
   border-radius: 999rem;
+<<<<<<< HEAD
   padding: 0.2rem;
+=======
+>>>>>>> origin/hj
   background-color: #ffffff;
 }
 .content > .personalInformation .profile-wrapper .left-wrapper .profile-text {
@@ -6951,6 +6954,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .reservationManagement > .reservation-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+<<<<<<< HEAD
   gap: 1.5rem;
   /* ---------------- 일반 펫 카드 ---------------- */
 }
@@ -6965,6 +6969,11 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   width: 100%;
   min-width: 0;
 }
+=======
+  gap: 2rem;
+  /* ---------------- 일반 펫 카드 ---------------- */
+}
+>>>>>>> origin/hj
 .content > .petInformation > .pet-grid > .pet-card,
 .content > .petInformation > .pet-grid > .reservation-card,
 .content > .petInformation > .reservation-grid > .pet-card,
@@ -7066,6 +7075,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
   border-color: #e0e0e0;
   opacity: 0.6;
 }
+<<<<<<< HEAD
 .content > .petInformation > .pet-grid > .pet-card.past,
 .content > .petInformation > .pet-grid > .reservation-card.past,
 .content > .petInformation > .reservation-grid > .pet-card.past,
@@ -7124,6 +7134,8 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .reservationManagement > .reservation-grid > .reservation-card.past .cancel-btn {
   opacity: 0;
 }
+=======
+>>>>>>> origin/hj
 .content > .petInformation > .pet-grid > .pet-card.add-card,
 .content > .petInformation > .pet-grid > .reservation-card.add-card,
 .content > .petInformation > .reservation-grid > .pet-card.add-card,
@@ -8486,8 +8498,12 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .reservationManagement > .pet-grid > .reservation-card .request,
 .content > .reservationManagement > .reservation-grid > .pet-card .request,
 .content > .reservationManagement > .reservation-grid > .reservation-card .request {
+<<<<<<< HEAD
   margin-top: 0.35rem;
   width: 100%;
+=======
+  margin-top: 1rem;
+>>>>>>> origin/hj
 }
 .content > .petInformation > .pet-grid > .pet-card .request .label,
 .content > .petInformation > .pet-grid > .reservation-card .request .label,
@@ -8526,6 +8542,7 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .reservationManagement > .reservation-grid > .reservation-card .request .text {
   margin: 0;
   font-size: 1rem;
+<<<<<<< HEAD
   line-height: 1.1;
   width: 100%;
   max-height: 3.5rem;
@@ -8589,6 +8606,9 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 .content > .reservationManagement > .reservation-grid > .pet-card .request .text::-webkit-scrollbar-track,
 .content > .reservationManagement > .reservation-grid > .reservation-card .request .text::-webkit-scrollbar-track {
   background-color: transparent;
+=======
+  overflow: hidden;
+>>>>>>> origin/hj
 }
 .content > .petInformation > .pet-grid > .pet-card,
 .content > .petInformation > .pet-grid > .reservation-card,
@@ -9763,7 +9783,10 @@ body:has(> .deliveryAddressDeleteMessage.visible) > .cover {
 @media (max-width: 1330px) {
   .content {
     border-radius: 0;
+<<<<<<< HEAD
     margin-bottom: 3rem;
+=======
+>>>>>>> origin/hj
   }
   .myPage-wrapper {
     border-radius: 0;

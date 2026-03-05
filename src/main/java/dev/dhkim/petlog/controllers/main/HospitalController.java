@@ -3,11 +3,13 @@ package dev.dhkim.petlog.controllers.main;
 
 import dev.dhkim.petlog.dto.main.HospitalDto;
 import dev.dhkim.petlog.services.main.HospitalService;
+import dev.dhkim.petlog.services.main.StoreService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class HospitalController {
 
     private final HospitalService hospitalService;
+    private final StoreService storeService;
 
     @GetMapping("/test/hospital/reset")
     public String resetHospitalData() {
@@ -40,8 +43,22 @@ public class HospitalController {
     //병원 목록 내보내기
     @GetMapping("/hospital")
     public List<HospitalDto> getHospital() {
+        List<HospitalDto> result = new ArrayList<>(hospitalService.getAllHospitalsForMap());
 
-        return hospitalService.getAllHospitalsForMap(); // DB에서 DTO 리스트 반환
+        // store 테이블에서 카테고리 '병원'인 것 합치기
+        storeService.getStoresByCategory("병원").forEach(s ->
+                result.add(new HospitalDto(
+                        s.getStoreName(),
+                        s.getAddressPrimary(),
+                        s.getStorePhone(),
+                        null,
+                        "영업/정상",
+                        s.getLat(),
+                        s.getLng()
+                ))
+        );
+
+        return result;
     }
 
 }

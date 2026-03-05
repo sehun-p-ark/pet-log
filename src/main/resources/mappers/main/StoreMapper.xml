@@ -103,4 +103,20 @@
               ORDER BY store_name
        </select>
 
+       <update id="updateStore" parameterType="dev.dhkim.petlog.entities.user.StoreEntity">
+              UPDATE petlog.store
+              SET store_name = #{storeName},
+                  category = #{category},
+                  address_primary = #{addressPrimary},
+                  address_secondary = #{addressSecondary},
+                  postal_code = #{postalCode},
+                  lat = #{lat},   lng = #{lng},   store_phone = #{storePhone},
+                  updated_at = NOW()
+              WHERE store_id = #{storeId}
+              AND user_id = #{userId}</update>
+
+       <delete id="deleteById">
+              DELETE FROM petlog.store WHERE store_id  = #{storeId}
+       </delete>
+
 </mapper>

@@ -159,7 +159,6 @@ public class FeedApiController {
                                              @RequestBody Map<String, String> request,
                                              @SessionAttribute(value = "sessionUser", required = false) SessionUser sessionUser
     ) {
-        System.out.println("컨트롤러 진입");
         if (sessionUser == null) {
             return Map.of("result", "LOGIN_REQUIRED");
         }

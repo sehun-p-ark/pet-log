@@ -27,8 +27,6 @@ public class FriendController {
 
         Integer userId = sessionUser.getUserId();
 
-        // [중요] 좌표가 제대로 들어오는지 디버깅 로그 한 줄 추가
-        System.out.println("컨트롤러 좌표 수신: lat=" + lat + ", lng=" + lng);
         return friendService.getNearbyFriends(userId, lat, lng);
     }
 }

@@ -6,10 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const storePanel = document.querySelector('.store-panel');
     const container = document.getElementById('descriptionContainer');
 
+    // 서버에서 로그인 여부를 JS로 전달
     const sessionUser = /*[[${sessionUser != null}]]*/ false;
 
     // ==================== 탭 전환 ====================
     if (friendTab && storeTab) {
+
         friendTab.addEventListener('click', () => {
             friendTab.classList.add('active');
             storeTab.classList.remove('active');
@@ -108,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.textContent = '팔로우';
                 }
             }
+
         } catch (err) {
             console.error('팔로우 토글 실패', err);
             alert('팔로우 상태 변경에 실패했습니다.');
@@ -143,6 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 container.dataset.openId = '';
                 return;
             }
+            // 유저 닉네임 가져옴
+            const nickname = item.querySelector('.nickname').textContent || '무명';
 
             // 펫 이름을 가져옴 (data-pet-name)
             const petName = item.dataset.petName || '이름 없음';
@@ -164,20 +169,22 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             container.innerHTML = `
-                <div class="friend description">
-                    <button type="button" class="close-btn">X</button>
-                    <div class="text-wrapper">
-                        <div class="image"><img src="${image}"></div>
-                        <div class="caption-wrapper">
-                            <div><strong>펫 이름:</strong> ${petName}</div>
-                            <div><strong>타입:</strong> ${species}</div>
-                            <div><strong>생년월일:</strong> ${birthDate} (${calculateAge(birthDate)}살)</div>
-                            <div><strong>성별:</strong> ${gender}</div>
-                            <div><strong>한줄 소개:</strong> ${introduction}</div>
-                        </div>
+            <div class="friend description">
+                <button type="button" class="close-btn">X</button>
+                <div class="text-wrapper">
+                    <div class="detail-image">
+                        <a href="/feed/profile/${nickname}"><img src="${image}"></a>
+                    </div>
+                    <div class="caption-wrapper">
+                        <div><strong>펫 이름:</strong> ${petName}</div>
+                        <div><strong>타입:</strong> ${species}</div>
+                        <div><strong>생년월일:</strong> ${birthDate} (${calculateAge(birthDate)}살)</div>
+                        <div><strong>성별:</strong> ${gender}</div>
+                        <div><strong>한줄 소개:</strong> ${introduction}</div>
                     </div>
                 </div>
-            `;
+            </div>
+        `;
 
             container.style.display = "block";
             container.dataset.openId = userId;

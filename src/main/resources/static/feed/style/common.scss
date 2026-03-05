@@ -33,8 +33,9 @@
             > .profile {
                 width: 2rem;
                 height: 2rem;
+                padding: 0.2rem;
                 border: 1px solid darken($global-gray-background-color, 20%);
-                border-radius: 50%;
+                border-radius: 999rem;
                 object-fit: cover;
             }
 

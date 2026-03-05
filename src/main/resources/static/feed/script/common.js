@@ -77,4 +77,17 @@
             }
         });
     }
+
+    // 댓글 버튼 클릭 이벤트
+    if ($feedContainer) {
+        $feedContainer.addEventListener('click', (e) => {
+            const $commentBtn = e.target.closest('.action.comment');
+            if (!$commentBtn) return;
+
+            const $card = e.target.closest('.feed-card');
+            const feedId = $card.dataset.id;
+
+            window.location.href = `/feed/${feedId}?comment=true`;
+        });
+    }
 })();

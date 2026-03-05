@@ -17,10 +17,19 @@
         </foreach>
     </insert>
     <update id="updateSortOrders">
-        <foreach collection="list" item="m" separator=";">
-            UPDATE `petlog`.`feed_media`
-            SET `sort_order` = #{m.sortOrder}
-            WHERE `id` = #{m.id}
+        UPDATE `petlog`.`feed_media`
+        SET `sort_order` = CASE `id`
+        <foreach collection="list" item="m">
+            WHEN #{m.id} THEN #{m.sortOrder}
+        </foreach>
+        END
+        WHERE `id` IN
+        <foreach collection="list"
+                 item="m"
+                 open="("
+                 separator=","
+                 close=")">
+            #{m.id}
         </foreach>
     </update>
     <delete id="deleteNotIn">

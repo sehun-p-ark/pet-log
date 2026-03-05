@@ -2,6 +2,7 @@ package dev.dhkim.petlog.services.user;
 
 import dev.dhkim.petlog.dto.user.PetDto;
 import dev.dhkim.petlog.dto.user.RegisterDto;
+import dev.dhkim.petlog.dto.user.StoreDto;
 import dev.dhkim.petlog.entities.user.BusinessUserEntity;
 import dev.dhkim.petlog.entities.user.EmailVerificationEntity;
 import dev.dhkim.petlog.entities.user.PersonalUserEntity;
@@ -10,6 +11,7 @@ import dev.dhkim.petlog.enums.user.EmailVerificationType;
 import dev.dhkim.petlog.mappers.user.EmailVerificationMapper;
 import dev.dhkim.petlog.mappers.user.UserMapper;
 import dev.dhkim.petlog.results.*;
+import dev.dhkim.petlog.services.main.StoreService;
 import dev.dhkim.petlog.validators.UserValidator;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -54,6 +56,7 @@ UserService {
     private final EmailVerificationMapper emailVerificationMapper;
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
+    private final StoreService storeService;
 
 
     @Transactional
@@ -143,11 +146,18 @@ UserService {
             if (dbBusinessInsert < 1) {
                 return RegisterResult.FAILURE;
             }
+            //주석 하고 밑에 코드 넣은 이유 매퍼 말고 서비스 호출 이유 서비스 안에
+            //위도 경도, 가공 하는 코드를 이용해서 값을 넣기 위해 직접 db 에 바로 넣는것 보다 로직 이용을 위한것
             if (dto.getStore() != null) {
-                int dbStoreInsert = userMapper.insertStore(userId, dto.getStore());
+               int dbStoreInsert = userMapper.insertStore(userId, dto.getStore());
                 if (dbStoreInsert < 1) {
                     return RegisterResult.FAILURE;
                 }
+               /* dto.getStore().setUserId(userId);
+                StoreDto saved = storeService.registerStore(dto.getStore());
+                if (saved == null) {
+                    return RegisterResult.FAILURE;
+                }*/
             }
         }
 

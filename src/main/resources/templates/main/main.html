@@ -62,9 +62,10 @@
                                  th:attr="data-user-id=${friend.userId},
                       data-birth=${friend.birthDate},
                      data-gender=${friend.gender.label},
-                      data-introduction=${friend.introduction}">
+                      data-introduction=${friend.introduction},
+                    data-nickname=${friend.name}">
 
-                                <div class="image">
+                            <div class="image">
                                     <img th:src="${friend.imageUrl != null ? friend.imageUrl : '/images/defaultPetImage.png'}"
                                          alt="user profile"/>
                                 </div>
@@ -187,6 +188,9 @@
         <div class="modal-footer">
             <button class="btn cancel">취소</button>
             <button th:if="${sessionUser!= null}" class="btn confirm" data-store-id="">예약 확정</button>
+            <th:block th:unless="${sessionUser != null}">
+                <a th:href="@{/user/login}" class="btn login-confirm">로그인 후 예약해주세요</a>
+            </th:block>
         </div>
     </div>
 </div>

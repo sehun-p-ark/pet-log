@@ -1,5 +1,12 @@
+let geocoder;
+
+kakao.maps.load(function () {
+    geocoder = new kakao.maps.services.Geocoder();
+});
+
 // 사이드바 메뉴 클릭 시 active 이동
 const sidebarItems = document.querySelectorAll('.sidebar .menu');
+
 
 const myPageWrapper = document.getElementById('myPage');
 const content = myPageWrapper.querySelector(':scope > .content');
@@ -1699,8 +1706,12 @@ if (businessInformation) {
         });
 
         // 모달에서 가게수정 버튼
-        modifyStoreButton.addEventListener('click', () => {
+        // [수정] (e) 추가 : 이벤트를 인자로 받아야 새로고침을 막습니다.
+        modifyStoreButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
             const modifyStorePhone = modifyStoreLocalNumber.value + modifyStoreMiddleNumber.value + modifyStoreLastNumber.value;
+            const address = modifyStoreAddressPrimaryInput.value;
 
             if (modifyStoreNameInput.value === '') {
                 showMessage('가게명을 입력해주세요.');
@@ -1743,51 +1754,85 @@ if (businessInformation) {
             }
 
 
-            const xhr = new XMLHttpRequest();
-            const formData = new FormData();
-            formData.append('storeId', selectedStoreId);
-            formData.append('storeName', modifyStoreNameInput.value);
-            formData.append('storePhone', modifyStorePhone);
-            formData.append('postalCode', modifyStoreAddressPostalInput.value);
-            formData.append('addressPrimary', modifyStoreAddressPrimaryInput.value);
-            if (modifyStoreAddressSecondaryInput.value !== '') {
-                formData.append('addressSecondary', modifyStoreAddressSecondaryInput.value);
+            if (!geocoder) {
+                console.error("Geocoder 준비 안됨");
+                return;
             }
-            formData.append('category', modifyStoreAddressCategory.value);
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== XMLHttpRequest.DONE) {
-                    return;
-                }
-                if (xhr.status < 200 || xhr.status >= 400) {
 
+            geocoder.addressSearch(address, function (result, status) {
+
+                if (status !== kakao.maps.services.Status.OK) {
+                    alert("주소 검색 실패");
                     return;
                 }
-                const response = JSON.parse(xhr.responseText);
-                switch (response.result) {
-                    case 'FAILURE':
-                        showMessage('가게 수정에 실패하였습니다 정보를 다시 확인해주세요.');
-                        break;
-                    case 'FAILURE_SESSION_EXPIRED':
+
+                const lat = result[0].y;
+                const lng = result[0].x;
+
+                console.log("위도:", lat);
+                console.log("경도:", lng);
+
+                console.log("🚀 [JS] 수정 버튼 클릭됨! selectedStoreId:", selectedStoreId);
+
+                const modifyStorePhone =
+                    modifyStoreLocalNumber.value +
+                    modifyStoreMiddleNumber.value +
+                    modifyStoreLastNumber.value;
+
+                const xhr = new XMLHttpRequest();
+                const formData = new FormData();
+
+                formData.append('storeId', selectedStoreId);
+                formData.append('storeName', modifyStoreNameInput.value);
+                formData.append('storePhone', modifyStorePhone);
+                formData.append('postalCode', modifyStoreAddressPostalInput.value);
+                formData.append('addressPrimary', address);
+
+                if (modifyStoreAddressSecondaryInput.value !== '') {
+                    formData.append('addressSecondary', modifyStoreAddressSecondaryInput.value);
+                }
+
+                formData.append('category', modifyStoreAddressCategory.value);
+
+                // 🔥 여기서 lat/lng 추가
+                formData.append('lat', lat);
+                formData.append('lng', lng);
+
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState !== XMLHttpRequest.DONE) return;
+
+                    console.log("🚀 [JS] 서버 응답 도착:", xhr.status, xhr.responseText);
+
+                    if (xhr.status < 200 || xhr.status >= 400) {
+                        console.error("❌ 서버 통신 에러");
+                        return;
+                    }
+
+                    const response = JSON.parse(xhr.responseText);
+
+                    if (response.result === 'SUCCESS') {
+                        location.href = '/my?menu=' + getCurrentMenuIndex();
+                    } else if (response.result === "FAILURE_SESSION_EXPIRED"){
                         showMessage('로그인을 해주세요.', () => {
                             location.href = '/user/login';
                         });
-                        break;
-                    case 'SUCCESS':
-                        modifyStoreModal.classList.remove('visible');
-                        resetStoreModal();
-                        location.href = '/my?menu=' + getCurrentMenuIndex();
-                        break;
-                    default:
-                        showMessage('알 수 없는 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
-                }
+                    } else {
+                        showMessage('가게 수정에 실패하였습니다 정보를 다시 확인해주세요.');
+                    }
+                };
 
-            };
-            xhr.open('PATCH', '/my/store/modify');
-            xhr.send(formData);
+                console.log("🚀 [JS] 서버로 PATCH 요청 보냅니다");
+                // 주소 컨트롤러 기준 store
+                xhr.open('PATCH', '/api/stores/my/store/modify');
+                xhr.send(formData);
+
+            });
+
         });
+    }
         // endregion
     }
-}
+
 
 
 // 공통 변경

@@ -33,4 +33,6 @@ public interface StoreMapper {
 
     // 좌표가 없는 스토어 목록 조회 (스케줄러나 관리용)
     List<StoreEntity> findStoresWithoutCoords();
+
+    int updateStore(StoreEntity entity);
 }

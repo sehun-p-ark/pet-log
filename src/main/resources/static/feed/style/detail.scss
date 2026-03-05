@@ -1,5 +1,5 @@
 @import "../../assets/styles/def";
-@import "../../assets/styles/def";
+@use "sass:color";
 
 // 전체 페이지
 .page {
@@ -78,13 +78,13 @@
 
 .detail-user {
     @include flex(row, center, flex-start, 0.8rem);
-    flex: 1;
 
     .avatar {
         width: 2.6rem;
         height: 2.6rem;
         border-radius: 50%;
         object-fit: cover;
+        padding: 0.2rem;
         border: 1px solid $global-border-color;
     }
 
@@ -320,6 +320,8 @@
         height: 2rem;
         border-radius: 50%;
         object-fit: cover;
+        padding: 0.2rem;
+        border: 1px solid $global-border-color;
     }
 
     .comment-body {
@@ -406,6 +408,9 @@
     .avatar.sm {
         width: 1.8rem;
         height: 1.8rem;
+        border-radius: 50%;
+        padding: 0.2rem;
+        border: 1px solid $global-border-color;
     }
 
     .comment-body {

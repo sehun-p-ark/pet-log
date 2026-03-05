@@ -116,4 +116,9 @@
         FROM `petlog`.`chat_message`
         WHERE `room_id` = #{roomId}
     </select>
+    <select id="selectMemberUserIdsByRoomId" resultType="java.lang.Integer">
+        SELECT `user_id`
+        FROM `petlog`.`chat_room_member`
+        WHERE `room_id` = #{roomId}
+    </select>
 </mapper>

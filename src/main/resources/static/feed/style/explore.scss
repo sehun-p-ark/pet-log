@@ -10,12 +10,11 @@
 }
 
 .options {
-    @include flex(row, center, flex-start, 1.25rem);
+    @include flex(row, center, center, 1.25rem);
     width: 100%;
     padding: 0.5rem 0 0 0;
     margin-top: 0.65rem;
     background-color: inherit;
-    flex-wrap: wrap;
 }
 
 // 검색
@@ -66,10 +65,12 @@
     color: $global-black-text-color;
 
     > img {
-        border-radius: 999rem;
+        width: 3rem;
+        height: 3rem;
+        padding: 0.2rem;
         background-color: #DBF0DF;
-        width: 2rem;
-        height: 2rem;
+        border: 1px solid darken($global-gray-background-color, 20%);
+        border-radius: 999rem;
         color: inherit;
     }
 
@@ -89,6 +90,7 @@
     @include flex(row, center, center);
     position: relative;
     align-self: flex-end;
+    margin-bottom: 0.4rem;
 
     // 정렬 기준 버튼
     [data-object=button] {
@@ -170,6 +172,15 @@
     > #scroll-sentinel {
         height: 1px;
     }
+
+    &.empty {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 40vh;
+        font-size: 1.1rem;
+        color: $global-gray-text-color;
+    }
 }
 
 .reload-wrapper {
@@ -186,6 +197,42 @@
     }
     &.hidden {
         display: none;
+    }
+}
+
+.reload-wrapper {
+    @include flex(column, center, center, 0.6rem);
+    width: 100%;
+    text-align: center;
+
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        height: 1px;
+        background: #d9e3de;
+        width: 100%;
+        margin: 1.2rem 0;
+    }
+
+    > .reload-text {
+        font-size: 0.95rem;
+        color: #6b7c76;
+        margin-bottom: 0.5rem;
+    }
+
+    > .reload-btn {
+        border: none;
+        background: #f7c66a;
+        color: white;
+        padding: 0.5rem 1.2rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        cursor: pointer;
+
+        &:hover {
+            background: color.adjust($global-color-concept, $lightness: -8%);
+        }
     }
 }
 
