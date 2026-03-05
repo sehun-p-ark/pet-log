@@ -273,13 +273,12 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        height: auto;
+        height: 17.5rem;
         background: #fff;
         box-shadow: 0 -0.75rem 2rem rgba(0, 0, 0, 0.12);
         z-index: 10;
         overflow-y: auto;
-        border-radius: 1.2rem 1.2rem 0 0;
-        padding: 0 0 1rem 0; }
+        border-radius: 1.2rem 1.2rem 0 0; }
         #main > .content-wrapper .tab-list-container #descriptionContainer .place.description .close-btn {
           position: absolute;
           top: 0.5rem;

@@ -472,7 +472,7 @@ ol, ul {
   justify-content: space-between;
   width: 100%;
   padding-bottom: 1rem;
-  margin-bottom: 1; }
+  margin-bottom: 1rem; }
   #category > * {
     flex-grow: 0;
     flex-shrink: 0; }

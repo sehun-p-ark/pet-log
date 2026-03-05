@@ -231,7 +231,7 @@
         cursor: pointer;
 
         &:hover {
-            background: color.adjust($global-color-concept, $lightness: -8%);
+          background: darken($global-color-concept, 8%);
         }
     }
 }
