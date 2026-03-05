@@ -133,8 +133,6 @@ public class SalonService {
                     + "&input_coord=WTM"
                     + "&output_coord=WGS84";
 
-            System.out.println("API 호출 URL: " + url);
-
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "KakaoAK " + kakaoRestKey);
             HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -142,7 +140,6 @@ public class SalonService {
             ResponseEntity<JsonNode> response =
                     restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class);
 
-            System.out.println("응답 상태: " + response.getStatusCode());
 
             JsonNode docs = response.getBody().path("documents");
 
@@ -156,12 +153,9 @@ public class SalonService {
                 if (lat != 0.0 && lng != 0.0) {
                     return new Double[]{lat, lng};
                 }
-            } else {
-                System.out.println("documents 비어있음");
             }
-
         } catch (Exception e) {
-            System.out.println("API 호출 중 예외 발생");
+
             e.printStackTrace();
         }
 
@@ -176,8 +170,6 @@ public class SalonService {
     public void updateAllSalonsLatLng() {
 
         List<SalonEntity> salons = salonMapper.findInvalidCoords();
-
-        System.out.println("=== 전체 대상 개수: " + salons.size());
 
         int successCount = 0;
         int failCount = 0;

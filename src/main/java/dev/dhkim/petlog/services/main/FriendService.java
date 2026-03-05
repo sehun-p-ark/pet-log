@@ -29,7 +29,6 @@ public class FriendService {
     public List<FriendListDto> getNearbyFriends(Integer userId, double myLat, double myLng) {
 
         if (userId == null) {
-            System.out.println("⚠️ [FAIL] userId가 null입니다.");
             return List.of();
         }
 

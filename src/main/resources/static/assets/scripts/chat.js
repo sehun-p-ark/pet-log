@@ -2,6 +2,8 @@ let friendCache = []; // 친구 리스트 (정렬에 따라 받을 예정)
 let roomsCache = []; // 채팅방 리스트 (껌색에 따라 받을 예정)
 
 document.addEventListener("DOMContentLoaded", () => {
+    // 토픽 연결하기
+    connectOnce();
 
     const $launcher = document.getElementById("chatBtn");
     const $listModal = document.getElementById("chatListModal");
@@ -211,11 +213,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         sendMessageWs(roomId, text);
         chatInput.value = "";
+        chatInput.focus();
     });
 
     // 전송 엔터키 이벤트
     chatInput.addEventListener("keydown", (e) => {
+        // 엔터 키 눌렀을 때
         if (e.key === "Enter") {
+            if (e.shiftKey) { // 쉬프트도 같이 누르면 줄 바꿈
+                return;
+            }
+            e.preventDefault(); // textarea 줄 바꿈 방지 기능
             chatSendBtn.click();
         }
     });
@@ -247,14 +255,13 @@ async function openChatRoom(roomId, nickname, imageUrl) {
         markRoomAsReadBeacon(currentRoomId);
     }
 
+    // 방 구독만 교체하기
+    // stompClient는 "한 번 연결하면 유지"해야함 (유저 토픽 사용)
     if (currentSub) {
         currentSub.unsubscribe();
         currentSub = null;
     }
-    if (stompClient) {
-        stompClient.disconnect();
-        stompClient = null;
-    }
+
     currentRoomId = roomId;
 
     // 현재 오픈한 채팅방 정보 기억해두기
@@ -294,7 +301,7 @@ async function openChatRoom(roomId, nickname, imageUrl) {
         if (badge) badge.remove();
     }
     await loadMessages(roomId);
-    connectWebSocket(roomId);
+    subscribeRoom(roomId);
     await fetch(`/api/chat/room/${roomId}/read`, {
         method: "POST"
     });
@@ -404,13 +411,13 @@ function renderChatRooms(list){
     const chatList = document.querySelector(".chat-list");
     chatList.innerHTML = "";
 
-    if (!data.rooms || data.rooms.length === 0) {
+    if (!list.rooms || list.rooms.length === 0) {
         chatList.innerHTML =
             "<li class='empty'>채팅방이 없습니다.</li>";
         return;
     }
 
-    data.rooms.forEach(room => {
+    list.rooms.forEach(room => {
 
         const li = document.createElement("li");
         li.className = "item";
@@ -507,7 +514,10 @@ function updateRoomPreview(msg) {
         `li.item[data-room-id="${msg.roomId}"]`
     );
 
-    if (!roomItem) return;
+    if (!roomItem) { // 채팅방 없으면
+        loadChatRooms(); // 다시 로딩 (유저 토픽이 있기 때문에 새로운 방 생성)
+        return;
+    }
 
     // 마지막 메시지 텍스트 업데이트
     const contentEl = roomItem.querySelector(".room-content");
@@ -566,11 +576,17 @@ function formatTime(dateStr) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 let stompClient = null;
-let currentSub = null;
-let currentRoomId = null;
+let currentSub = null; // 방 구독
+let userSub = null; // 유저 구독
+let currentRoomId = null; // 현재 열려있는 채팅 방
 
-// 웹 소켓 연결
-function connectWebSocket(roomId) {
+// WebSocket 연결은 앱 시작 시 1번만 실시(유저 토픽을 상시 구독)
+// 상대방이 메세지를 보내도 리스트 갱신 가능함
+function connectOnce() {
+    if (stompClient) return; // 이미 연결되어 있으면 다시 연결 X
+
+    const userId = Number(document.getElementById("chatRoot").dataset.userId);
+    if (!userId) return; // 로그인 필수
 
     const socket = new SockJS("/ws-chat");
     stompClient = Stomp.over(socket);
@@ -578,17 +594,36 @@ function connectWebSocket(roomId) {
 
     stompClient.connect({}, () => {
 
-        currentSub = stompClient.subscribe(
-            `/topic/chat.room.${roomId}`,
-            (frame) => {
-                const msg = JSON.parse(frame.body);
-                renderMessage(msg);
-                updateRoomPreview(msg);
-            }
-        );
+        // 유저 토픽 상시 유지
+        userSub = stompClient.subscribe(`/topic/chat.user.${userId}`, async (frame) => {
+            const payload = JSON.parse(frame.body); // ChatNotifyDto 받기
+
+            await loadChatRooms(); // 이벤트 발생하면 다시 로드하기
+
+            // (선택) 리스트가 열려 있지 않아도 캐시는 갱신되니 OK
+            // 나중에 UX 더 올리고 싶으면 payload.roomId만 뱃지 +1 하는 최적화도 가능
+        });
 
     }, (err) => {
         console.error("웹소켓 연결 실패:", err);
+        stompClient = null;
+    });
+}
+// 채팅방 바꿀 떄 방 토픽만 교체하기 (연결은 유지해야함)
+function subscribeRoom(roomId) {
+    if (!stompClient) return;
+
+    // 기존 방 구독 해제
+    if (currentSub) {
+        currentSub.unsubscribe();
+        currentSub = null;
+    }
+
+    // 새 방 구독
+    currentSub = stompClient.subscribe(`/topic/chat.room.${roomId}`, (frame) => {
+        const msg = JSON.parse(frame.body);
+        renderMessage(msg);
+        updateRoomPreview(msg);
     });
 }
 

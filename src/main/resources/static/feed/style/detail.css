@@ -109,14 +109,12 @@
   flex-grow: 1;
   flex-shrink: 1;
 }
-.detail-user {
-  flex: 1;
-}
 .detail-user .avatar {
   width: 2.6rem;
   height: 2.6rem;
   border-radius: 50%;
   object-fit: cover;
+  padding: 0.2rem;
   border: 1px solid #e7e5e4;
 }
 .detail-user .user-meta {
@@ -394,6 +392,8 @@
   height: 2rem;
   border-radius: 50%;
   object-fit: cover;
+  padding: 0.2rem;
+  border: 1px solid #e7e5e4;
 }
 .comment .comment-body {
   align-items: stretch;
@@ -508,6 +508,9 @@
 .comment.reply .avatar.sm {
   width: 1.8rem;
   height: 1.8rem;
+  border-radius: 50%;
+  padding: 0.2rem;
+  border: 1px solid #e7e5e4;
 }
 .comment.reply .comment-body {
   font-size: 0.75rem;

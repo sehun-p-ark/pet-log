@@ -61,9 +61,10 @@
                                  th:attr="data-user-id=${friend.userId},
                       data-birth=${friend.birthDate},
                      data-gender=${friend.gender.label},
-                      data-introduction=${friend.introduction}">
+                      data-introduction=${friend.introduction},
+                    data-nickname=${friend.name}">
 
-                                <div class="image">
+                            <div class="image">
                                     <img th:src="${friend.imageUrl != null ? friend.imageUrl : '/images/defaultPetImage.png'}"
                                          alt="user profile"/>
                                 </div>

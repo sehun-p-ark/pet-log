@@ -63,9 +63,4 @@ public interface FeedMapper {
     // 댓글 갯수 감소
     int decreaseCommentCount(@Param("feedId") int feedId,
                              @Param("count") int count);
-
-    // 검색 기능
-    List<FeedSearchDto> searchFeeds(@Param("keyword") String keyword,
-                                    @Param("sort") String sort,
-                                    @Param("userId") Integer userId);
 }

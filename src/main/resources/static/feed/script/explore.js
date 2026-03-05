@@ -60,7 +60,14 @@ $searchButton.addEventListener('click', () => {
     observer.observe($sentinel);
 });
 
+$searchInput.addEventListener('keydown', (e) => {
 
+    if (e.key === 'Enter') {
+        e.preventDefault(); // form submit 방지
+        $searchButton.click(); // 기존 검색 버튼 로직 실행
+    }
+
+});
 /* ================= 피드 로딩 ================= */
 async function loadFeeds(reset = false) {
 
@@ -74,6 +81,7 @@ async function loadFeeds(reset = false) {
         $lastCreatedAt = null;
         $hasNext = true;
         $reloadWrapper.classList.add('hidden');
+        $feedContainer.classList.remove('empty');
     }
 
     let url = `/api/feed?size=${size}&sort=${$sort}`;
@@ -105,7 +113,13 @@ async function loadFeeds(reset = false) {
         $lastLikeCount = data.lastLikeCount;
         $lastCreatedAt = data.lastCreatedAt;
 
-        $reloadWrapper.classList.toggle('hidden', $hasNext);
+        const hasFeedCards = $feedContainer.querySelector('.feed-card') !== null;
+
+        if (!hasFeedCards) {
+            $reloadWrapper.classList.add('hidden');
+        } else {
+            $reloadWrapper.classList.toggle('hidden', $hasNext);
+        }
 
     } catch (e) {
         console.error("피드 로딩 실패", e);
@@ -119,12 +133,18 @@ async function loadFeeds(reset = false) {
 function renderFeeds(feeds) {
 
     if (!feeds || feeds.length === 0) {
-        if ($feedContainer.children.length === 0) {
+        const hasFeedCards = $feedContainer.querySelector('.feed-card') !== null;
+
+        if (!hasFeedCards) {
+            $feedContainer.classList.add("empty");
+
             $feedContainer.innerHTML =
                 `<p style="text-align:center;padding:3rem 0;">게시물이 없습니다.</p>`;
         }
         return;
     }
+
+    $feedContainer.classList.remove("empty");
 
     feeds.forEach(feed => {
 

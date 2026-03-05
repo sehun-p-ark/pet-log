@@ -31,24 +31,39 @@ document.addEventListener('DOMContentLoaded', async () => {
     const commentSection = detailArea.querySelector('.comments');
     const commentCount = actionBox.querySelector('.count.comment');
 
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("comment") === "true") {
+        if (commentForm && detailArea) {
+
+            detailArea.scrollTo({
+                top: commentForm.offsetTop,
+                behavior: 'smooth'
+            });
+
+            commentInput.focus();
+        }
+    }
+
+
     if ($moreWrap) {
         const $moreBtn = document.querySelector('.feed-more-btn');
         const $moreMenu = document.querySelector('.feed-more-menu');
         const $moreEditBtn = $moreMenu.querySelector('.feed-more-edit');
         const $moreDeleteBtn = $moreMenu.querySelector('.feed-more-delete');
 
-        // 피드 더보기 버튼
+        // 게시글 더보기 버튼
         $moreBtn.addEventListener('click', () => {
             $moreMenu.classList.toggle('hidden');
         });
 
-        // 수정하기 버튼
+        // 게시글 수정하기 버튼
         $moreEditBtn.addEventListener('click', () => {
             window.location.href = `/feed/${feedId}/edit`;
             $moreMenu.classList.add("hidden");
         });
 
-        // 삭제하기 버튼
+        // 게시글 삭제하기 버튼
         $moreDeleteBtn.addEventListener('click', async () => {
             $moreMenu.classList.add("hidden");
             const confirmed = await showConfirm("삭제된 게시글은 되돌릴 수 없습니다. 게시글을 삭제하시겠습니까?");
@@ -66,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     showMessage("삭제에 실패하였습니다. 다시 시도해주세요.");
                     return;
                 }
-                showMessage("삭제되었습니다.");
                 window.location.href = `/feed/profile/${userNickname}`;
             } catch (e) {
                 console.log("에러발생" + e);
@@ -181,6 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             commentCount.textContent = parseInt(commentCount.textContent) + 1;
             // 입력창 비워주기
             commentInput.value = '';
+            commentInput.focus();
         } catch (error) {
         console.error('댓글 등록 오류:', error);
         showMessage('서버 오류가 발생했습니다. 다시 시도해주세요');
@@ -197,35 +212,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 답글 달기 및 댓글 삭제
     commentSection.addEventListener('click', async (e) => {
-        // 답글 버튼 클릭
+        // 답글 더보기 버튼 클릭
         const replyBtn = e.target.closest('.reply-btn');
         if (replyBtn) {
-            const comment = replyBtn.closest('.comment'); // 댓글 element
-            const replyList = comment.querySelector('.reply-list'); // 답글 영역
-            const replyForm = comment.querySelector('.reply-form'); // 답글 작성 영역
-            const replyInput = comment.querySelector('.reply-input'); // 답글 작성
+            const comment = replyBtn.closest('.comment');
+            const replyList = comment.querySelector('.reply-list');
+            const replyForm = comment.querySelector('.reply-form');
+            const replyInput = comment.querySelector('.reply-input');
 
-            replyList.classList.toggle('active');
+            const hasReplies = replyList.children.length > 0;
 
-            replyBtn.textContent =
-                replyList.classList.contains('active')
-                    ? '댓글 숨기기'
-                    : '댓글 더보기';
+            const isOpen = replyList.classList.toggle('active');
 
-            replyForm.classList.toggle('hidden');
-            if (!replyForm.classList.contains('hidden')) {
+            replyForm.classList.toggle('hidden', !isOpen);
+
+            if (isOpen) {
                 replyInput.focus();
+                replyBtn.textContent = '댓글 숨기기';
+            } else {
+                replyBtn.textContent = hasReplies ? '댓글 더보기' : '답글 달기';
             }
+
             return;
         }
 
         // 답글 등록 버튼 클릭
-        const replySubmit = e.target.closest('.reply-submit');
-        if (replySubmit) {
-            const comment = replySubmit.closest('.comment');
+        const writeReplyBtn = e.target.closest('.reply-submit');
+        if (writeReplyBtn) {
+            const comment = writeReplyBtn.closest('.comment');
             const commentId = comment.dataset.id;
-            const input = comment.querySelector('.reply-input');
-            const content = input.value.trim();
+            const replyInput = comment.querySelector('.reply-input');
+            const content = replyInput.value.trim();
 
             if (!content) {
                 showMessage('답글을 입력하세요');
@@ -252,8 +269,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
 
                 addReplyToUI(comment, data.reply);
-                input.value = '';
-                comment.querySelector('.reply-form').classList.add('hidden');
+                replyInput.value = '';
+                replyInput.focus();
 
             } catch (err) {
                 console.error(err);
@@ -261,7 +278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // 삭제 버튼 클릭
+        // 댓글 삭제 버튼 클릭
         const deleteBtn = e.target.closest('.comment-delete-btn');
         if (deleteBtn) {
             const comment = deleteBtn.closest('.comment');
@@ -296,8 +313,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             return;
         }
+    });
 
-
+    // 엔터로 답글 달기
+    commentSection.addEventListener('keydown', (e) => {
+        const input = e.target.closest('.reply-input');
+        if (!input) return;
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const comment = input.closest('.comment');
+            const submitBtn = comment.querySelector('.reply-submit');
+            submitBtn.click();
+        }
     });
 
     function updateIndicators() {
@@ -333,12 +360,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             <button class="comment-delete-btn">삭제</button>
         </div>
         <p class="comment-text">${comment.content}</p>
-        <button class="reply-btn">댓글 더보기</button>
+        <button class="reply-btn">답글 달기</button>
+        <div class="reply-list"></div>
         <div class="reply-form hidden">
             <input type="text" class="reply-input" placeholder="답글을 입력하세요">
             <button class="reply-submit">등록</button>
         </div>
-        <div class="reply-list"></div>
         </div>`;
 
         commentSection.appendChild(article);
@@ -349,7 +376,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const replyList = commentElement.querySelector('.reply-list');
         const article = document.createElement('article');
         article.className = 'comment reply';
-        article.dataset.id = reply.id;
+        article.dataset.id = reply.commentId;
 
         article.innerHTML = `
         <img class="avatar sm"
@@ -368,6 +395,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// 화면 이동 시 input값 초기화
+window.addEventListener('pageshow', () => {
+    document.querySelectorAll('.comment-input, .reply-input').forEach(input => {
+        input.value = '';
+    });
+});
 
 function renderFeedDetail(feeds) {
     const $feedContainer = document.getElementById("feed-container");

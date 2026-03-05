@@ -25,7 +25,7 @@
   display: flex;
   flex-direction: row;
   gap: 1.25rem;
-  justify-content: flex-start;
+  justify-content: center;
 }
 .options > * {
   flex-grow: 0;
@@ -40,7 +40,6 @@
   padding: 0.5rem 0 0 0;
   margin-top: 0.65rem;
   background-color: inherit;
-  flex-wrap: wrap;
 }
 
 #search-bar {
@@ -123,10 +122,12 @@
   color: #000000;
 }
 .my-profile > img {
-  border-radius: 999rem;
+  width: 3rem;
+  height: 3rem;
+  padding: 0.2rem;
   background-color: #DBF0DF;
-  width: 2rem;
-  height: 2rem;
+  border: 1px solid #c6c6c6;
+  border-radius: 999rem;
   color: inherit;
 }
 .my-profile:hover img {
@@ -154,6 +155,7 @@
 .sort-dropdown {
   position: relative;
   align-self: flex-end;
+  margin-bottom: 0.4rem;
 }
 .sort-dropdown [data-object=button] {
   border-radius: 999rem;
@@ -220,6 +222,14 @@
 #feed-container > #scroll-sentinel {
   height: 1px;
 }
+#feed-container.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  font-size: 1.1rem;
+  color: #565656;
+}
 
 .reload-wrapper {
   text-align: center;
@@ -250,6 +260,51 @@
 }
 .reload-wrapper.hidden {
   display: none;
+}
+
+.reload-wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.reload-wrapper > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.reload-wrapper > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.reload-wrapper {
+  width: 100%;
+  text-align: center;
+}
+.reload-wrapper::before, .reload-wrapper::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: #d9e3de;
+  width: 100%;
+  margin: 1.2rem 0;
+}
+.reload-wrapper > .reload-text {
+  font-size: 0.95rem;
+  color: #6b7c76;
+  margin-bottom: 0.5rem;
+}
+.reload-wrapper > .reload-btn {
+  border: none;
+  background: #f7c66a;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.reload-wrapper > .reload-btn:hover {
+  background: rgb(252.4293706294, 194.5902097902, 73.7706293706);
 }
 
 @media (max-width: 1023px) {

@@ -93,8 +93,16 @@ public class ChatService {
 
     // 채팅 읽음 처리하기
     public void markAsRead(int roomId, int userId) {
-        int lastMessageId = chatMapper.selectLastMessageIdInRoom(roomId);
 
-        chatMapper.updateLastReadMessageId(roomId, userId, lastMessageId);
+        Integer lastMessageId = chatMapper.selectLastMessageIdInRoom(roomId);
+
+        int safeLastId = (lastMessageId == null) ? 0 : lastMessageId;
+
+        chatMapper.updateLastReadMessageId(roomId, userId, safeLastId);
+    }
+
+    // 채팅방 멤버 조회하기
+    public List<Integer> getRoomMemberUserIds(int roomId) {
+        return chatMapper.selectMemberUserIdsByRoomId(roomId);
     }
 }

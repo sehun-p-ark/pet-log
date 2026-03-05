@@ -57,6 +57,7 @@
                         <div class="place" th:text="${feed.address}">서울</div>
                     </div>
                 </a>
+                <div class="-flex-stretch"></div>
                 <div th:if="${feed.isWriter}" class="feed-more-wrap">
                     <button type="button" class="feed-more-btn">
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
@@ -129,18 +130,12 @@
                                  alt="댓글 프로필">
                             <div class="comment-body -flex-stretch">
                                 <div class="comment-top">
-                                    <span class="comment-user" th:text="${comment.nickname}">nana</span>
-                                    <span class="comment-time"
-                                          th:text="${comment.timeAgo}">
-                                    </span>
-                                    <button class="comment-delete-btn"
-                                            th:if="${comment.userId == loginUserId}">삭제</button>
+                                    <span class="comment-user" th:text="${comment.nickname}"></span>
+                                    <span class="comment-time" th:text="${comment.timeAgo}"></span>
+                                    <button class="comment-delete-btn" th:if="${comment.userId == loginUserId}">삭제</button>
                                 </div>
-                                <p class="comment-text" th:text="${comment.content}">너무 귀여워요 ㅠㅠ</p>
-                                <button class="reply-btn"
-                                        th:if="${#lists.size(comment.replies) > 0}">
-                                    댓글 더보기
-                                </button>
+                                <p class="comment-text" th:text="${comment.content}"></p>
+                                <button class="reply-btn" th:text="${#lists.size(comment.replies) > 0 ? '댓글 더보기' : '댓글 달기'}"></button>
                                 <!--대댓글-->
                                 <div class="reply-list">
                                     <article class="comment reply"

@@ -51,5 +51,8 @@ public interface ChatMapper {
     List<ChatRoomListDto> selectChatRooms (int userId);
 
     // 방의 마지막 메세지 ID 가져오기
-    int selectLastMessageIdInRoom(int roomId);
+    Integer selectLastMessageIdInRoom(int roomId);
+
+    // ROOM ID로 방 참여자 조회
+    List<Integer> selectMemberUserIdsByRoomId(@Param("roomId") int roomId);
 }
