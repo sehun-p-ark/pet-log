@@ -328,7 +328,6 @@
             width: 100%;
             aspect-ratio: 1;
             object-fit: cover;
-            background-color: #89CC96;
             transition: transform 0.3s ease;
             transform-origin: center center;
             display: block; }

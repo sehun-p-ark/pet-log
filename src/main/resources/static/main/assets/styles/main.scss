@@ -262,17 +262,21 @@
           padding-top: 1rem;
           margin-bottom: 2.5rem;
 
-          img {
-            width: 4.5rem;
-            height: 4.5rem;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #fff;
-            box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
-            position: absolute;
-            bottom: -2.2rem;
-            background-color: #ffffff;
-            padding: 0.2rem;
+          a {
+            @include flex(row, center, center);
+
+            img {
+              width: 4.5rem;
+              height: 4.5rem;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 3px solid #fff;
+              box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+              position: absolute;
+              bottom: -2.2rem;
+              background-color: #ffffff;
+              padding: 0.2rem;
+            }
           }
         }
 
